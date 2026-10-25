@@ -8,6 +8,12 @@ pub struct Recipe {
     pub name: String,
     /// Path to a .cube LUT, resolved by the caller relative to the recipe file.
     pub base_lut: Option<String>,
+    /// Blend of the base LUT stage: 1.0 = full look (default), 0.0 = no LUT.
+    /// Exists because the bundled sim LUTs carry strong baked-in contrast —
+    /// on an already-contrasty render, 0.7-0.85 tames shadow crush while
+    /// keeping the sim's character (verification round 2, 2026-10-25).
+    #[serde(default = "default_strength")]
+    pub strength: f32,
     #[serde(default)]
     pub grain: Grain,
     #[serde(default)]
@@ -60,6 +66,10 @@ pub struct WhiteBalance {
     /// -1 (green) .. +1 (magenta)
     #[serde(default)]
     pub tint_shift: f32,
+}
+
+fn default_strength() -> f32 {
+    1.0
 }
 
 impl Recipe {
