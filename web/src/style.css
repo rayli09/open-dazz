@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
-/* Design language borrowed from opencode.ai (studied 2026-10-25):
-   warm near-white surfaces, one mono voice (IBM Plex Mono), hairline
-   warm-gray borders, flat — no shadows, no decoration — and a pale
-   chartreuse wash reserved for interactive/selection states. */
+/* Design language: opencode.ai's restraint (mono voice, hairlines,
+   flat squared UI) warmed up per Ray's direction — rice-white paper,
+   visible paper grain, heavier warm rules, a vintage workshop feel.
+   Tokens: warm cream paper, warm brown-ink, pale warm chartreuse. */
 @theme {
-  --color-paper: hsl(0, 20%, 99%);
-  --color-paper2: hsl(0, 8%, 97%);
-  --color-mat: #ffffff;
-  --color-ink: hsl(0, 5%, 12%);
-  --color-ink2: hsl(0, 2%, 49%);
-  --color-rule: hsl(30, 2%, 81%);
-  --color-stamp: hsl(0, 5%, 22%);
-  --color-accent: hsl(62, 84%, 88%);
+  --color-paper: #f2ecdc;
+  --color-paper2: #eae1c9;
+  --color-mat: #fbf8ef;
+  --color-ink: #29211a;
+  --color-ink2: #87785f;
+  --color-rule: #cfc09c;
+  --color-stamp: #3a2f24;
+  --color-accent: #e3edb2;
   --font-display: "IBM Plex Mono", ui-monospace, monospace;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --font-sans: "Instrument Sans", "Noto Sans SC", system-ui, sans-serif;
@@ -23,9 +23,31 @@
 
 html, body { background: var(--color-paper); color: var(--color-ink); }
 
-/* flat bench — no graph paper, no shadows in this language */
-.bench-grid { background: var(--color-paper2); }
-.hard-shadow, .hard-shadow-sm { box-shadow: none; }
+/* paper grain over everything (non-interactive, very subtle) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0.05'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* the bench: warm ledger paper */
+.bench-grid {
+  background-color: var(--color-paper2);
+  background-image:
+    linear-gradient(rgba(41, 33, 26, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41, 33, 26, 0.055) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* the print sits heavy on the bench */
+.stage-shadow { box-shadow: 5px 5px 0 rgba(41, 33, 26, 0.14); }
+.look-card { transition: box-shadow 0.15s ease, border-color 0.15s ease; }
+.look-card:hover { box-shadow: 3px 3px 0 rgba(41, 33, 26, 0.13); }
 
 /* square range sliders */
 input[type="range"] {
