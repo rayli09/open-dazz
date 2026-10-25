@@ -36,13 +36,13 @@ input[type="range"] {
   background: transparent;
   cursor: pointer;
 }
-input[type="range"]::-webkit-slider-runnable-track { height: 1px; background: var(--color-ink2); }
+input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: var(--color-ink2); }
 input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; appearance: none; margin-top: -6px;
-  width: 13px; height: 13px; background: var(--color-ink); border: none;
+  -webkit-appearance: none; appearance: none; margin-top: -7px;
+  width: 16px; height: 16px; background: var(--color-ink); border: none;
 }
-input[type="range"]::-moz-range-track { height: 1px; background: var(--color-ink2); }
-input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; background: var(--color-ink); border: none; }
+input[type="range"]::-moz-range-track { height: 2px; background: var(--color-ink2); }
+input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: var(--color-ink); border: none; }
 
 /* thin square scrollbar */
 .cabinet-scroll::-webkit-scrollbar { width: 8px; }

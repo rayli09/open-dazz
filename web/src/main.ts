@@ -30,6 +30,22 @@ const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)
 
 let catalog: Catalog;
 let current: LookEntry | null = null;
+let activeBrand: string | null = null;
+type TypeFilter = "all" | "official" | "bw" | "video" | "color";
+let activeType: TypeFilter = "all";
+
+function lookType(l: LookEntry): "bw" | "video" | "color" {
+  if (/video/i.test(l.name)) return "video";
+  if (/acros|monochrome|sepia/i.test(l.baseFilm ?? "") || /\b(b&w|bw|monochrome)\b/i.test(l.name) || l.brand === "ilford") return "bw";
+  return "color";
+}
+function lookMatches(l: LookEntry, f: string): boolean {
+  if (activeBrand && l.brand !== activeBrand) return false;
+  if (activeType === "official" && l.tier !== "official") return false;
+  if (activeType !== "all" && activeType !== "official" && lookType(l) !== activeType) return false;
+  return !f || l.name.toLowerCase().includes(f);
+}
+const thumbUrl = (id: string) => `/thumbs/${id.replaceAll("/", "__")}.webp`;
 let recipe: Record<string, any> | null = null;
 const cubeCache = new Map<string, Promise<string>>();
 let origPixels: Uint8ClampedArray | null = null;
@@ -55,6 +71,12 @@ function layout() {
     <!-- THE CABINET -->
     <aside class="border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
       <div class="px-3 pt-3 pb-1">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">1</span>
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">PICK A LOOK</span>
+        </div>
+        <div id="chips" class="mb-2"></div>
         <div class="relative">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink2 pointer-events-none"></i>
           <input id="search" type="text" placeholder="Search looks…"
@@ -67,9 +89,9 @@ function layout() {
     <!-- THE BENCH -->
     <section class="bench-grid relative flex flex-col min-h-[60vh]">
       <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
-        <button id="btn-load" class="flex items-center gap-2 font-mono text-[11px] bg-ink text-paper px-3 py-2 hover:bg-stamp transition-colors"><i data-lucide="upload" class="w-4 h-4"></i>Photo</button>
-        <button id="btn-s1" class="flex items-center gap-2 font-mono text-[11px] border border-rule bg-mat px-3 py-2 hover:bg-paper2 transition-colors"><i data-lucide="package" class="w-4 h-4"></i>Sample I</button>
-        <button id="btn-s2" class="flex items-center gap-2 font-mono text-[11px] border border-rule bg-mat px-3 py-2 hover:bg-paper2 transition-colors"><i data-lucide="mountain" class="w-4 h-4"></i>Sample II</button>
+        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors"><i data-lucide="upload" class="w-[18px] h-[18px]"></i>Photo</button>
+        <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="package" class="w-[18px] h-[18px]"></i>Sample I</button>
+        <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="mountain" class="w-[18px] h-[18px]"></i>Sample II</button>
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
         <input id="file" type="file" accept="image/*" class="hidden" />
       </div>
@@ -91,6 +113,11 @@ function layout() {
 
     <!-- THE LEDGER -->
     <aside class="border-t lg:border-t-0 lg:border-l border-rule px-4 py-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">3</span>
+        <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+        <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">ADJUST &amp; EXPORT</span>
+      </div>
       <h1 id="led-name" class="font-display text-[22px] leading-tight font-semibold">—</h1>
       <div id="led-meta" class="font-mono text-[10.5px] leading-relaxed tracking-[0.06em] text-ink2 mt-1"></div>
       <div id="led-note" class="text-[12px] leading-relaxed mt-2 text-ink2"></div>
@@ -148,34 +175,76 @@ function renderSliders() {
   });
 }
 
+const TYPE_CHIPS: { key: TypeFilter; icon: string; label: string }[] = [
+  { key: "all", icon: "layers", label: "All" },
+  { key: "official", icon: "badge-check", label: "Official" },
+  { key: "color", icon: "palette", label: "Color" },
+  { key: "bw", icon: "contrast", label: "B&W" },
+  { key: "video", icon: "video", label: "Video" },
+];
+
+function renderChips() {
+  const host = $("#chips");
+  const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
+  const chip = (active: boolean) =>
+    active ? "bg-accent border-ink font-medium" : "bg-mat border-rule hover:bg-paper2";
+  let html = `<div class="flex flex-wrap gap-1.5 mb-1.5">
+    <button data-brand="" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] ${chip(activeBrand === null)}"><i data-lucide="layers" class="w-3.5 h-3.5"></i>All</button>`;
+  for (const b of brands) {
+    html += `<button data-brand="${b}" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] capitalize ${chip(activeBrand === b)}"><i data-lucide="${BRAND_ICONS[b] ?? "swatch-book"}" class="w-3.5 h-3.5"></i>${b === "emulsion" ? "Emulsion" : b}</button>`;
+  }
+  html += `</div><div class="flex flex-wrap gap-1.5">`;
+  for (const t of TYPE_CHIPS) {
+    html += `<button data-type="${t.key}" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] ${chip(activeType === t.key)}"><i data-lucide="${t.icon}" class="w-3.5 h-3.5"></i>${t.label}</button>`;
+  }
+  html += `</div>`;
+  host.innerHTML = html;
+  host.querySelectorAll<HTMLButtonElement>("[data-brand]").forEach((b) =>
+    b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
+  host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
+    b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
+  createIcons();
+}
+
 function renderCabinet(filter = "") {
   const host = $("#cabinet");
   const f = filter.trim().toLowerCase();
   const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
   let html = "";
   for (const brand of brands) {
+    if (activeBrand && brand !== activeBrand) continue;
     const data = catalog.brands[brand];
-    let rows = "";
+    let groups = "";
     for (const tier of ["official", "community"]) {
-      const looks = (data.tiers[tier] ?? []).filter((l) => !f || l.name.toLowerCase().includes(f));
+      const looks = (data.tiers[tier] ?? []).filter((l) => lookMatches(l, f));
       if (!looks.length) continue;
-      rows += `<div class="flex items-center gap-1.5 font-mono text-[9.5px] tracking-[0.18em] text-ink2 px-2 pt-3 pb-1">
-        <i data-lucide="${tier === "official" ? "badge-check" : "users"}" class="w-3 h-3"></i>${tier === "official" ? "Official" : "Community"} · ${looks.length}</div>`;
+      let cards = "";
       for (const look of looks) {
         const sel = current?.id === look.id;
-        rows += `<button data-look="${look.id}" class="look-row w-full flex items-center gap-2 px-2 py-[5px] text-left ${sel ? "bg-accent text-ink font-medium" : "hover:bg-paper2"}">
-          <i data-lucide="${lookIcon(look)}" class="w-3.5 h-3.5 shrink-0 ${sel ? "text-ink/70" : "text-ink2"}"></i>
-          <span class="text-[12.5px] leading-tight flex-1">${look.name}</span>
+        cards += `<button data-look="${look.id}" class="look-card text-left border ${sel ? "border-ink" : "border-rule"} bg-mat hover:border-ink transition-colors">
+          <span class="relative block">
+            <img loading="lazy" src="${thumbUrl(look.id)}" alt="" class="w-full aspect-[3/2] object-cover block" />
+            ${look.tier === "official" ? '<span class="absolute top-1 left-1 bg-paper/90 p-[3px]"><i data-lucide="badge-check" class="w-3.5 h-3.5 block"></i></span>' : ""}
+          </span>
+          <span class="block px-2 py-1.5 ${sel ? "bg-accent" : ""}">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="${lookIcon(look)}" class="w-3.5 h-3.5 shrink-0 text-ink2"></i>
+              <span class="text-[11.5px] leading-tight font-medium truncate">${look.name}</span>
+            </span>
+          </span>
         </button>`;
       }
+      groups += `<div class="flex items-center gap-1.5 font-mono text-[9.5px] tracking-[0.18em] text-ink2 px-1 pt-3 pb-1.5">
+        <i data-lucide="${tier === "official" ? "badge-check" : "users"}" class="w-3 h-3"></i>${tier === "official" ? "Official" : "Community"} · ${looks.length}</div>
+        <div class="grid grid-cols-2 gap-2">${cards}</div>`;
     }
-    if (rows) html += `<div class="mt-1"><div class="flex items-center gap-2 px-2 pt-2">
+    if (groups) html += `<div><div class="flex items-center gap-2 px-1 pt-3">
       <i data-lucide="${BRAND_ICONS[brand] ?? "swatch-book"}" class="w-4 h-4"></i>
       <span class="font-display font-semibold text-[14px] capitalize flex-1">${brand === "emulsion" ? "Emulsion" : brand}</span>
-      <span class="font-mono text-[9.5px] text-ink2">${data.total}</span></div>${rows}</div>`;
+      <span class="font-mono text-[9.5px] text-ink2">${data.total}</span></div>${groups}</div>`;
   }
-  host.innerHTML = html || `<div class="px-3 py-4 font-mono text-[11px] text-ink2">No matches.</div>`;
-  host.querySelectorAll<HTMLButtonElement>(".look-row").forEach((b) =>
+  host.innerHTML = html || `<div class="px-3 py-6 text-center"><i data-lucide="search" class="w-6 h-6 text-ink2 inline-block"></i><div class="font-mono text-[11px] text-ink2 mt-2">No matches.</div></div>`;
+  host.querySelectorAll<HTMLButtonElement>(".look-card").forEach((b) =>
     b.addEventListener("click", () => selectLook(b.dataset.look!)));
   createIcons();
 }
@@ -258,6 +327,7 @@ async function boot() {
   createIcons();
   catalog = await (await fetch("/library/catalog.json")).json();
   $("#hdr-count").textContent = `${catalog.totalLooks} looks · v${engine_version()}`;
+  renderChips();
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
