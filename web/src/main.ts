@@ -65,8 +65,12 @@ type TypeFilter = "all" | "official" | "bw" | "video" | "color";
 let activeType: TypeFilter = "all";
 
 function lookType(l: LookEntry): "bw" | "video" | "color" {
-  if (/video/i.test(l.name)) return "video";
-  if (/acros|monochrome|sepia/i.test(l.baseFilm ?? "") || /\b(b&w|bw|monochrome)\b/i.test(l.name) || l.brand === "ilford") return "bw";
+  if (/cine|vision|movie|video/i.test(`${l.id} ${l.name}`)) return "video";
+  const s = `${l.name} ${l.baseFilm ?? ""}`;
+  if (
+    /acros|monochrome|sepia|b&w|black|tri-?x|hp5|t-?max|delta|neopan|ortho|panatomic|plus-?x|verichrome|fomapan|pancro|bwxx|berlin kino|potsdam|retro|\bbw\b|\bchs\b/i.test(s) ||
+    l.brand === "ilford" || l.brand === "kentmere"
+  ) return "bw";
   return "color";
 }
 function lookMatches(l: LookEntry, f: string): boolean {
