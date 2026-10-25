@@ -160,10 +160,18 @@ function layout() {
           </figcaption>
         </figure>
       </div>
+      <div class="simple-only items-center gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
+        <span class="font-mono text-[10px] tracking-[0.18em] text-ink2 shrink-0">STRENGTH</span>
+        <input id="s-strength-simple" type="range" min="0" max="1.5" step="0.01" value="1" class="slider flex-1" />
+        <span id="v-strength-simple" class="font-mono text-[11px] w-10 text-right shrink-0">100%</span>
+        <button id="btn-export-simple" class="bg-ink text-paper font-mono text-[12px] px-3.5 py-2 hover:bg-stamp transition-colors flex items-center gap-2 shrink-0">
+          <i data-lucide="download" class="w-4 h-4"></i>Export
+        </button>
+      </div>
     </section>
 
     <!-- THE LEDGER -->
-    <aside class="order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4">
+    <aside class="ledger order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4">
       <div class="flex items-center gap-2 mb-2">
         <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">3</span>
         <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
@@ -487,7 +495,7 @@ async function boot() {
   store.set(modeAtom, document.documentElement.dataset.mode === "pro" ? "pro" : "simple");
   $<HTMLButtonElement>("#mode-simple").addEventListener("click", () => store.set(modeAtom, "simple" as Mode));
   $<HTMLButtonElement>("#mode-pro").addEventListener("click", () => store.set(modeAtom, "pro" as Mode));
-  $<HTMLInputElement>("#s-strength-simple").addEventListener("input", (e) => {
+  document.querySelector<HTMLInputElement>("#s-strength-simple")?.addEventListener("input", (e) => {
     const v = parseFloat((e.target as HTMLInputElement).value);
     if (recipe) (recipe as any).strength = v;
     $("#v-strength-simple").textContent = `${Math.round(v * 100)}%`;
