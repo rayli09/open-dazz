@@ -8,6 +8,7 @@
         var t = localStorage.getItem("of-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
         if (t === "dark") document.documentElement.dataset.theme = "dark";
         document.documentElement.dataset.mode = localStorage.getItem("of-mode") === "pro" ? "pro" : "simple";
+        var pl = localStorage.getItem("of-palette"); if (pl) document.documentElement.dataset.palette = pl;
       } catch (e) {}
     </script>
     <title>open-fuji — Photo Workshop</title>
