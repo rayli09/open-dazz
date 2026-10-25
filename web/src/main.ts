@@ -245,6 +245,7 @@ function layout() {
         <div id="strip" class="flex gap-2 overflow-x-auto cabinet-scroll pb-1"></div>
       </div>
       <div class="simple-only items-center gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
+        <span id="print-chips-simple" class="flex items-center gap-1.5 shrink-0"></span>
         <span class="font-mono text-[10px] tracking-[0.18em] text-ink2 shrink-0">STRENGTH</span>
         <input id="s-strength-simple" type="range" min="0" max="1.5" step="0.01" value="1" class="slider flex-1" />
         <span id="v-strength-simple" class="font-mono text-[11px] w-10 text-right shrink-0">100%</span>
@@ -271,7 +272,11 @@ function layout() {
         <button data-gsize="small" class="gsize font-mono text-[11px] border border-ink px-2 py-1">SMALL</button>
         <button data-gsize="large" class="gsize font-mono text-[11px] border border-ink px-2 py-1">LARGE</button>
       </div>
-      <button id="btn-export" class="mt-5 w-full bg-ink text-paper font-mono text-[12px] py-3 hover:bg-stamp transition-colors flex items-center justify-center gap-2"><i data-lucide="download" class="w-4 h-4"></i>Export PNG</button>
+      <div class="mt-5 pt-4 border-t border-rule">
+        <div class="font-mono text-[10px] tracking-[0.18em] text-ink2 mb-2">PRINT</div>
+        <div id="print-chips-pro" class="flex flex-wrap gap-1.5"></div>
+      </div>
+      <button id="btn-export" class="mt-4 w-full bg-ink text-paper font-mono text-[12px] py-3 hover:bg-stamp transition-colors flex items-center justify-center gap-2"><i data-lucide="download" class="w-4 h-4"></i>Print PNG</button>
     </aside>
   </main>
 
@@ -596,8 +601,69 @@ function showError(msg: string) {
   console.error("[open-fuji]", msg);
 }
 
+// --- P1: the print ritual — frame, date imprint, aspect, applied at export ---
+type PrintOpts = { frame: "none" | "white" | "black"; date: boolean; ratio: "native" | "1:1" | "4:5" };
+let printOpts: PrintOpts = { frame: "white", date: false, ratio: "native" };
+try { Object.assign(printOpts, JSON.parse(localStorage.getItem("of-print") ?? "{}")); } catch {}
+function savePrint() { try { localStorage.setItem("of-print", JSON.stringify(printOpts)); } catch {} }
+function renderPrintChips() {
+  const keys = ["frame", "date", "ratio"] as const;
+  const html = keys.map((k) => `<button data-pchip="${k}" type="button"></button>`).join("");
+  for (const sel of ["#print-chips-simple", "#print-chips-pro"]) {
+    const h = document.querySelector(sel);
+    if (h) h.innerHTML = html;
+  }
+  syncPrintUI();
+}
+function syncPrintUI() {
+  document.querySelectorAll<HTMLButtonElement>("[data-pchip]").forEach((b) => {
+    const k = b.dataset.pchip!;
+    const val = k === "frame" ? { none: "OFF", white: "WHT", black: "BLK" }[printOpts.frame]
+      : k === "date" ? (printOpts.date ? "ON" : "OFF")
+      : { native: "FULL", "1:1": "1:1", "4:5": "4:5" }[printOpts.ratio];
+    const active = k === "frame" ? printOpts.frame !== "none" : k === "date" ? printOpts.date : printOpts.ratio !== "native";
+    b.textContent = `${k.toUpperCase()} · ${val}`;
+    b.className = `font-mono text-[10px] px-2 py-1.5 border transition-colors ${active ? "bg-accent text-accentink border-ink font-semibold" : "border-rule hover:border-ink"}`;
+  });
+}
+function cyclePrint(k: string) {
+  if (k === "frame") printOpts.frame = printOpts.frame === "none" ? "white" : printOpts.frame === "white" ? "black" : "none";
+  else if (k === "date") printOpts.date = !printOpts.date;
+  else if (k === "ratio") printOpts.ratio = printOpts.ratio === "native" ? "1:1" : printOpts.ratio === "1:1" ? "4:5" : "native";
+  savePrint(); syncPrintUI();
+}
+
 function exportPNG() {
-  $<HTMLCanvasElement>("#after").toBlob((b) => {
+  const src = $<HTMLCanvasElement>("#after");
+  let sw = src.width, sh = src.height, sx = 0, sy = 0;
+  const target = printOpts.ratio === "1:1" ? 1 : printOpts.ratio === "4:5" ? 4 / 5 : null;
+  if (target) {
+    if (sw / sh > target) { const nw = Math.round(sh * target); sx = Math.round((sw - nw) / 2); sw = nw; }
+    else { const nh = Math.round(sw / target); sy = Math.round((sh - nh) / 2); sh = nh; }
+  }
+  const border = printOpts.frame === "none" ? 0 : Math.round(Math.max(sw, sh) * 0.045);
+  const bottomX = printOpts.frame === "white" ? Math.round(border * 0.7) : 0;
+  const out = document.createElement("canvas");
+  out.width = sw + border * 2; out.height = sh + border * 2 + bottomX;
+  const ctx = out.getContext("2d")!;
+  if (printOpts.frame !== "none") {
+    ctx.fillStyle = printOpts.frame === "black" ? "#141210" : "#faf7ee";
+    ctx.fillRect(0, 0, out.width, out.height);
+  }
+  ctx.drawImage(src, sx, sy, sw, sh, border, border, sw, sh);
+  if (printOpts.date) {
+    const d = new Date();
+    const stamp = `'${String(d.getFullYear()).slice(2)} ${String(d.getMonth() + 1).padStart(2, "0")} ${String(d.getDate()).padStart(2, "0")}`;
+    const fs = Math.round(Math.max(sw, sh) * 0.03);
+    ctx.font = `${fs}px "IBM Plex Mono", monospace`;
+    ctx.textAlign = "right";
+    ctx.shadowColor = "rgba(255, 90, 0, 0.6)";
+    ctx.shadowBlur = fs * 0.4;
+    ctx.fillStyle = "#ff7a1a";
+    ctx.fillText(stamp, border + sw - fs * 0.7, border + sh - fs * 0.7);
+    ctx.fillText(stamp, border + sw - fs * 0.7, border + sh - fs * 0.7);
+  }
+  out.toBlob((b) => {
     if (!b) return;
     const a = document.createElement("a");
     a.href = URL.createObjectURL(b);
@@ -668,6 +734,11 @@ async function boot() {
     renderCabinet($<HTMLInputElement>("#search").value);
   });
   addEventListener("resize", () => fitStage());
+  renderPrintChips();
+  document.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-pchip]");
+    if (b?.dataset.pchip) cyclePrint(b.dataset.pchip);
+  });
   $("#btn-export-simple").addEventListener("click", exportPNG);
   const wrap = $("#printwrap");
   const drag = (e: PointerEvent) => {
