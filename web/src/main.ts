@@ -115,7 +115,7 @@ function layout() {
 
   <main class="grid grid-cols-1 lg:grid-cols-[292px_minmax(0,1fr)_300px]">
     <!-- THE CABINET -->
-    <aside class="order-2 lg:order-1 border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
+    <aside class="cabinet-aside order-2 lg:order-1 border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
       <div class="px-3 pt-3 pb-1">
         <div class="flex items-center gap-2 mb-2">
           <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">1</span>
@@ -151,6 +151,10 @@ function layout() {
               <div class="font-mono text-[10px] tracking-[0.2em] text-ink2">LOADING THE BENCH…</div>
             </div>
             <canvas id="before" class="block w-full h-auto absolute inset-0"></canvas>
+            <span class="vf absolute top-2 left-2 w-5 h-5 border-t-2 border-l-2 border-ink pointer-events-none z-10"></span>
+            <span class="vf absolute top-2 right-2 w-5 h-5 border-t-2 border-r-2 border-ink pointer-events-none z-10"></span>
+            <span class="vf absolute bottom-2 left-2 w-5 h-5 border-b-2 border-l-2 border-ink pointer-events-none z-10"></span>
+            <span class="vf absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-ink pointer-events-none z-10"></span>
             <div id="divider" class="absolute top-0 bottom-0 w-[2px] bg-ink pointer-events-none">
               <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] bg-mat border border-ink flex items-center justify-center"><i data-lucide="chevrons-left-right" class="w-4 h-4"></i></div>
             </div>
@@ -159,6 +163,10 @@ function layout() {
             <span class="flex items-center gap-2"><span id="spin" class="hidden w-[13px] h-[13px] border-2 border-rule border-t-ink animate-spin shrink-0"></span><span id="cap-file">—</span></span><span id="cap-state"></span>
           </figcaption>
         </figure>
+      </div>
+      <div class="simple-only flex-col gap-2 mx-4 mb-3">
+        <div id="strip-chips"></div>
+        <div id="strip" class="flex gap-2 overflow-x-auto cabinet-scroll pb-1"></div>
       </div>
       <div class="simple-only items-center gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
         <span class="font-mono text-[10px] tracking-[0.18em] text-ink2 shrink-0">STRENGTH</span>
@@ -252,24 +260,27 @@ const TYPE_CHIPS: { key: TypeFilter; icon: string; label: string }[] = [
   { key: "video", icon: "video", label: "Video" },
 ];
 
-let openDD: "brand" | "type" | null = null;
-
 function closeDDs() {
-  openDD = null;
   document.querySelectorAll(".dd-panel").forEach((p) => p.classList.remove("open"));
   document.querySelectorAll(".dd").forEach((d) => d.classList.remove("open"));
 }
-function toggleDD(which: "brand" | "type") {
-  const willOpen = openDD !== which;
+function toggleDD(which: "brand" | "type", btn?: HTMLElement) {
+  const dd = btn?.closest(".dd") as HTMLElement | null;
+  const willOpen = !dd?.classList.contains("open");
   closeDDs();
-  if (!willOpen) return;
-  openDD = which;
-  document.querySelector(`.dd[data-dd="${which}"]`)?.classList.add("open");
-  document.querySelector(`.dd[data-dd="${which}"] .dd-panel`)?.classList.add("open");
+  if (!willOpen || !dd) return;
+  dd.classList.add("open");
+  dd.querySelector(".dd-panel")?.classList.add("open");
 }
 
 function renderChips() {
-  const host = $("#chips");
+  for (const host of [$("#chips"), $("#strip-chips")]) {
+    if (host) buildChips(host);
+  }
+  icons();
+}
+
+function buildChips(host: HTMLElement) {
   const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
   const brandName = (b: string) => (b === "emulsion" ? "Emulsion" : b);
   const type = TYPE_CHIPS.find((t) => t.key === activeType)!;
@@ -299,7 +310,7 @@ function renderChips() {
     </div>
   </div>`;
   host.querySelectorAll<HTMLButtonElement>("[data-dd-btn]").forEach((b) =>
-    b.addEventListener("pointerdown", (e) => { e.preventDefault(); toggleDD(b.dataset.ddBtn as "brand" | "type"); }));
+    b.addEventListener("pointerdown", (e) => { e.preventDefault(); toggleDD(b.dataset.ddBtn as "brand" | "type", b); }));
   host.querySelectorAll<HTMLButtonElement>("[data-brand]").forEach((b) =>
     b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
@@ -348,6 +359,33 @@ function renderCabinet(filter = "") {
   host.querySelectorAll<HTMLButtonElement>(".look-card").forEach((b) =>
     b.addEventListener("click", () => selectLook(b.dataset.look!)));
   icons();
+  renderStrip();
+}
+
+function renderStrip() {
+  const host = $("#strip");
+  if (!host) return;
+  const f = $<HTMLInputElement>("#search").value.trim().toLowerCase();
+  const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
+  let html = "";
+  for (const brand of brands) {
+    if (activeBrand && brand !== activeBrand) continue;
+    for (const tier of ["official", "community"]) {
+      for (const l of (catalog.brands[brand].tiers[tier] ?? []).filter((x) => lookMatches(x, f))) {
+        const sel = current?.id === l.id;
+        html += `<button data-look="${l.id}" class="strip-card shrink-0 w-[92px] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
+          <img src="/thumbs/${l.id.replaceAll("/", "__")}.webp" alt="" loading="lazy" class="w-full h-[62px] object-cover block" />
+          <span class="block px-1.5 py-1 font-mono text-[9px] leading-tight truncate ${sel ? "bg-accent text-accentink font-semibold" : ""}">${l.name}</span>
+        </button>`;
+      }
+    }
+  }
+  host.innerHTML = html || `<div class="font-mono text-[11px] text-ink2 py-3">No matches.</div>`;
+  host.querySelectorAll<HTMLButtonElement>(".strip-card").forEach((b) =>
+    b.addEventListener("click", () => {
+      selectLook(b.dataset.look!);
+      b.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+    }));
 }
 
 function findLook(id: string): LookEntry | undefined {

@@ -135,3 +135,11 @@ button { touch-action: manipulation; }
 @media (min-width: 1024px) {
   [data-mode="simple"] main { grid-template-columns: 300px minmax(0, 1fr); }
 }
+
+/* simple mode = the camera: cabinet away, bench takes the whole stage */
+[data-mode="simple"] .cabinet-aside { display: none; }
+@media (min-width: 1024px) {
+  [data-mode="simple"] main { grid-template-columns: minmax(0, 1fr); }
+}
+.vf { display: none; }
+[data-mode="simple"] .vf { display: block; }
