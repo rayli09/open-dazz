@@ -1,0 +1,25 @@
+{
+  "name": "Fuji FP-100c 4 Alt",
+  "baseLut": "../luts/rt-fuji-fp-100c-4-alt.cube",
+  "grain": {
+    "amount": 0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "RawTherapee Film Simulation Collection (Pat David et al.) \u2014 HaldCLUT converted by tools/ingest_rt.py",
+  "license": "CC BY-SA 4.0",
+  "provenance": {
+    "category": "Color",
+    "sourceFile": "Color/Fuji/Fuji FP-100c 4 Alt.png",
+    "sourceUrl": "http://rawtherapee.com/shared/HaldCLUT.zip"
+  }
+}

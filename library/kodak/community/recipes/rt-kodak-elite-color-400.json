@@ -1,0 +1,25 @@
+{
+  "name": "Kodak Elite Color 400",
+  "baseLut": "../luts/rt-kodak-elite-color-400.cube",
+  "grain": {
+    "amount": 0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "RawTherapee Film Simulation Collection (Pat David et al.) \u2014 HaldCLUT converted by tools/ingest_rt.py",
+  "license": "CC BY-SA 4.0",
+  "provenance": {
+    "category": "Color",
+    "sourceFile": "Color/Kodak/Kodak Elite Color 400.png",
+    "sourceUrl": "http://rawtherapee.com/shared/HaldCLUT.zip"
+  }
+}
