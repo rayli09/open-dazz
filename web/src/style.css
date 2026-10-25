@@ -50,3 +50,5 @@ input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; background: v
 .cabinet-scroll::-webkit-scrollbar-thumb { background: var(--color-rule); }
 
 ::selection { background: var(--color-accent); }
+
+.pixelated { image-rendering: pixelated; }
