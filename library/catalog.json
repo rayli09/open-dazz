@@ -4494,42 +4494,6 @@
             "license": "MIT"
           },
           {
-            "id": "fuji/community/rt-fuji-160c",
-            "name": "Fuji 160C",
-            "brand": "fuji",
-            "tier": "community",
-            "recipe": "library/fuji/community/recipes/rt-fuji-160c.json",
-            "baseLut": "../luts/rt-fuji-160c.cube",
-            "hasLut": true,
-            "baseFilm": null,
-            "creator": null,
-            "license": "CC BY-SA 4.0"
-          },
-          {
-            "id": "fuji/community/rt-fuji-400h",
-            "name": "Fuji 400H",
-            "brand": "fuji",
-            "tier": "community",
-            "recipe": "library/fuji/community/recipes/rt-fuji-400h.json",
-            "baseLut": "../luts/rt-fuji-400h.cube",
-            "hasLut": true,
-            "baseFilm": null,
-            "creator": null,
-            "license": "CC BY-SA 4.0"
-          },
-          {
-            "id": "fuji/community/rt-fuji-800z",
-            "name": "Fuji 800Z",
-            "brand": "fuji",
-            "tier": "community",
-            "recipe": "library/fuji/community/recipes/rt-fuji-800z.json",
-            "baseLut": "../luts/rt-fuji-800z.cube",
-            "hasLut": true,
-            "baseFilm": null,
-            "creator": null,
-            "license": "CC BY-SA 4.0"
-          },
-          {
             "id": "fuji/community/066-fuji-acros-hendrik-hazeu",
             "name": "Fuji Acros",
             "brand": "fuji",
@@ -4782,6 +4746,18 @@
             "license": "MIT"
           },
           {
+            "id": "fuji/community/rt-fuji-160c",
+            "name": "Fuji Pro 160C",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-160c.json",
+            "baseLut": "../luts/rt-fuji-160c.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "fuji/community/fuji-pro-160ns",
             "name": "Fuji Pro 160NS",
             "brand": "fuji",
@@ -4794,6 +4770,18 @@
             "license": "MIT"
           },
           {
+            "id": "fuji/community/rt-fuji-400h",
+            "name": "Fuji Pro 400H",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-400h.json",
+            "baseLut": "../luts/rt-fuji-400h.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "fuji/community/fuji-pro-800z",
             "name": "Fuji Pro 800Z",
             "brand": "fuji",
@@ -4804,6 +4792,18 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "fuji/community/rt-fuji-800z",
+            "name": "Fuji Pro 800Z",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-800z.json",
+            "baseLut": "../luts/rt-fuji-800z.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "fuji/community/rt-fuji-provia-100-generic",
