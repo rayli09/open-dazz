@@ -24,6 +24,10 @@ enum Cmd {
         /// Library root used for --look resolution.
         #[arg(long, default_value = ".")]
         root: PathBuf,
+        /// Run the NTSC/VHS composite simulation (ntsc-rs) after the
+        /// look: broadcast | vhs | vhs-heavy.
+        #[arg(long)]
+        vhs: Option<String>,
     },
     /// Print a recipe's parsed parameters.
     Info {
@@ -172,7 +176,7 @@ fn load_recipe(path: &Path) -> Result<openfuji_core::Recipe, String> {
         .map_err(|e| format!("cannot parse recipe {}: {}", path.display(), e))
 }
 
-fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path) -> Result<String, String> {
+fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path, vhs: Option<openfuji_core::vhs::VhsPreset>) -> Result<String, String> {
     let r = load_recipe(recipe_path)?;
     let lut = match &r.base_lut {
         Some(rel) => {
@@ -188,7 +192,11 @@ fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path) -> Result<
     let img = image::open(input)
         .map_err(|e| format!("cannot open {}: {}", input.display(), e))?
         .to_rgb8();
-    let out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
+    let mut out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
+    if let Some(preset) = vhs {
+        let (w, h) = out.dimensions();
+        openfuji_core::vhs::apply_vhs(out.as_mut(), w as usize, h as usize, preset, 0);
+    }
     out.save(output)
         .map_err(|e| format!("cannot save {}: {}", output.display(), e))?;
     Ok(r.name)
@@ -244,7 +252,7 @@ fn run() -> Result<(), String> {
             println!("{}", serde_json::to_string_pretty(&r).unwrap());
             Ok(())
         }
-        Cmd::Apply { input, output, recipe, look, root } => {
+        Cmd::Apply { input, output, recipe, look, root, vhs } => {
             let recipe_path = match (recipe, look) {
                 (Some(p), _) => p,
                 (None, Some(q)) => {
@@ -265,7 +273,14 @@ fn run() -> Result<(), String> {
                 }
                 (None, None) => return Err("pass --recipe <path> or --look <name|id>".into()),
             };
-            let name = apply_with_recipe(&input, &output, &recipe_path)?;
+            let vhs = match &vhs {
+                Some(v) => Some(
+                    openfuji_core::vhs::VhsPreset::parse(v)
+                        .ok_or_else(|| format!("unknown --vhs preset \"{v}\" (broadcast | vhs | vhs-heavy)"))?,
+                ),
+                None => None,
+            };
+            let name = apply_with_recipe(&input, &output, &recipe_path, vhs)?;
             println!("{} -> {} (look: {})", input.display(), output.display(), name);
             Ok(())
         }

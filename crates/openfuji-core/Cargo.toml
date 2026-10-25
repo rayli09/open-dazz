@@ -9,3 +9,4 @@ description = "Film simulation engine core: recipes + 3D LUTs, native and WASM."
 image = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+ntsc-rs = { path = "../ntsc-rs", default-features = false, features = ["std"] }
