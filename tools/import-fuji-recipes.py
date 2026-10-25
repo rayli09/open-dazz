@@ -20,6 +20,16 @@ SRC = Path(sys.argv[1]) / "src/stores/data/recipes.js"
 OUT = Path(__file__).resolve().parent.parent / "library/fuji/community/recipes"
 
 FILM_TO_LUT = {
+    # B&W bases: Sowerby Hald conversions (GPL-3.0, segregated folder)
+    "ACROS": "../hald-bases/luts/acros.cube",
+    "ACROS +Y": "../hald-bases/luts/acros-ye.cube",
+    "ACROS +R": "../hald-bases/luts/acros-r.cube",
+    "ACROS +G": "../hald-bases/luts/acros-g.cube",
+    "MONOCHROME": "../hald-bases/luts/mono.cube",
+    "MONOCHROME +Y": "../hald-bases/luts/mono-ye.cube",
+    "MONOCHROME +R": "../hald-bases/luts/mono-r.cube",
+    "MONOCHROME +G": "../hald-bases/luts/mono-g.cube",
+    "SEPIA": "../hald-bases/luts/sepia.cube",
     "PROVIA/Standard": "provia_sRGB.cube",
     "VELVIA/Vivid": "velvia_sRGB.cube",
     "ASTIA/Soft": "astia_sRGB.cube",
@@ -51,7 +61,7 @@ def main():
         lut = FILM_TO_LUT.get(film)
         recipe = {
             "name": r["name"],
-            "baseLut": f"../../official/luts/{lut}" if lut else None,
+            "baseLut": (lut if "/" in lut else f"../../official/luts/{lut}") if lut else None,
             "grain": {"amount": GRAIN.get(g, 0.0), "size": size},
             "halation": 0,
             "tone": {

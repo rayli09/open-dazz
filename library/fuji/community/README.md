@@ -23,3 +23,9 @@ counterpart and survive only in `provenance`.
 > Note: this directory also holds EmulsionPresets bakes for Fujifilm
 > stocks (slug-named files, MIT) alongside the numbered Fuji X Weekly
 > recipes above; each file's `source`/`provenance` says which it is.
+
+> Update 2026-10-25: the 56 Acros/Monochrome/Sepia recipes are no longer
+> params-only — they join base LUTs converted from Stuart Sowerby's
+> X-Trans III HaldCLUT set, kept segregated in `hald-bases/` under
+> **GPL-3.0** (the rest of this tier stays Apache-2.0 data; a recipe
+> joining a Hald base carries the GPL terms for the base at render time).

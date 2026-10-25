@@ -49,9 +49,11 @@ for the layout contract and `library/catalog.json` for the machine index.
   .cube LUTs (from FujifilmCameraProfiles) + a bare recipe each.
   **CC BY-NC-SA 4.0** (non-commercial, share-alike), segregated on purpose.
 - **`library/fuji/community/`** — 204 community recipes imported from
-  open-fuji-recipes (Apache-2.0) by `tools/import-fuji-recipes.py`:
-  148 joined to an official base LUT, 56 params-only (Acros/Monochrome/
-  Sepia bases pending a Hald->cube converter).
+  open-fuji-recipes (Apache-2.0) by `tools/import-fuji-recipes.py`, now
+  **all 204 joined to a base LUT**: color sims join the official pack;
+  the 56 Acros/Monochrome/Sepia recipes join Hald-converted bases
+  (Stuart Sowerby's X-Trans III set, **GPL-3.0**, segregated in
+  `library/fuji/community/hald-bases/`).
 
 - **`library/<brand>/community/` for 14 more brands** — kodak (80 looks),
   ilford (18), agfa (11), cinestill (4), rollei, foma, lomography, adox,

@@ -1,6 +1,6 @@
 {
   "name": "Black & White Infrared",
-  "baseLut": null,
+  "baseLut": "../hald-bases/luts/acros-r.cube",
   "grain": {
     "amount": 0.55,
     "size": "large"
@@ -34,6 +34,6 @@
     "nr": -4,
     "sourceId": 22,
     "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
-    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only. No base LUT available yet for this film sim (B&W family) — params only."
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
   }
 }
