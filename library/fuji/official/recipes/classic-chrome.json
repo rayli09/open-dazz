@@ -18,6 +18,7 @@
   "source": "abpy/FujifilmCameraProfiles \u2014 DCP LookTable baked to .cube",
   "license": "CC BY-NC-SA 4.0",
   "provenance": {
-    "note": "Bare simulation LUT, all engine params zero. Upstream notes these assume a linear-contrast input; on contrasty JPEGs expect a stronger look than in-camera."
+    "note": "Bare simulation LUT, all engine params zero. Upstream notes these assume a linear-contrast input; on contrasty JPEGs expect a stronger look than in-camera.",
+    "rebased": "Upstream cube is authored for linear-light input; re-based to display-referred sRGB by composition (tools/fix_official_fuji.py) after the direct application measured ~+0.2 chroma hot across the family (Provia 1.26)."
   }
 }
