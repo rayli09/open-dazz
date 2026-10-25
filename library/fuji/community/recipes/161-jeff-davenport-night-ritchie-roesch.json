@@ -1,0 +1,39 @@
+{
+  "name": "Jeff Davenport Night",
+  "baseLut": "../../official/luts/pro neg hi_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 1,
+    "shadow": 0,
+    "color": 2
+  },
+  "whiteBalance": {
+    "tempShift": -0.444,
+    "tintShift": -0.111
+  },
+  "source": "open-fuji-recipes: Pro Neg Hi recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Pro Neg Hi",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "2650k",
+    "wbr": -1,
+    "wbb": 4,
+    "dr": "DR400",
+    "ev": 0,
+    "ccfx": "strong",
+    "ccfxb": "off",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 161,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

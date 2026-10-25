@@ -1,0 +1,39 @@
+{
+  "name": "Cross Process",
+  "baseLut": "../../official/luts/classic chrome_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 1,
+    "shadow": 2,
+    "color": -1
+  },
+  "whiteBalance": {
+    "tempShift": 0.889,
+    "tintShift": -0.333
+  },
+  "source": "open-fuji-recipes: Classic Chrome recipe by Eric Manten",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Chrome",
+    "creator": "Eric Manten",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "auto",
+    "wbr": -3,
+    "wbb": -8,
+    "dr": "DR200",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -3,
+    "sourceId": 48,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

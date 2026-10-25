@@ -1,0 +1,39 @@
+{
+  "name": "Kodak Portra 160",
+  "baseLut": "../../official/luts/classic chrome_sRGB.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": 0,
+    "color": 2
+  },
+  "whiteBalance": {
+    "tempShift": 0.111,
+    "tintShift": -0.111
+  },
+  "source": "open-fuji-recipes: Classic Chrome recipe by Piotr Skrzypek",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Chrome",
+    "creator": "Piotr Skrzypek",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "fl light 1",
+    "wbr": -1,
+    "wbb": -1,
+    "dr": "AUTO",
+    "ev": "+1/1",
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": -2,
+    "clarity": 0,
+    "nr": -2,
+    "sourceId": 121,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

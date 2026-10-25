@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Import matthieurobin/open-fuji-recipes (204 camera-setting recipes) into
-open-fuji recipe JSONs under packs/fuji-recipes/recipes/.
+open-fuji recipe JSONs under library/fuji/community/recipes/.
 
 Usage: python3 tools/import-fuji-recipes.py /path/to/open-fuji-recipes
 
@@ -17,7 +17,7 @@ import json, re, sys, unicodedata
 from pathlib import Path
 
 SRC = Path(sys.argv[1]) / "src/stores/data/recipes.js"
-OUT = Path(__file__).resolve().parent.parent / "packs/fuji-recipes/recipes"
+OUT = Path(__file__).resolve().parent.parent / "library/fuji/community/recipes"
 
 FILM_TO_LUT = {
     "PROVIA/Standard": "provia_sRGB.cube",
@@ -51,7 +51,7 @@ def main():
         lut = FILM_TO_LUT.get(film)
         recipe = {
             "name": r["name"],
-            "baseLut": f"../../fuji-simulations/luts/{lut}" if lut else None,
+            "baseLut": f"../../official/luts/{lut}" if lut else None,
             "grain": {"amount": GRAIN.get(g, 0.0), "size": size},
             "halation": 0,
             "tone": {

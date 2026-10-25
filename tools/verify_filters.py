@@ -26,12 +26,12 @@ CLI = ROOT / "target/release/openfuji"
 RENDERED = ROOT / "tests/images/rendered"
 OUT = ROOT / "tools/verify-out"
 DOCS = ROOT / "docs/verification"
-SIM_DIR = ROOT / "packs/fuji-simulations/recipes"
-LUT_DIR = ROOT / "packs/fuji-simulations/luts"
+SIM_DIR = ROOT / "library/fuji/official/recipes"
+LUT_DIR = ROOT / "library/fuji/official/luts"
 RECIPES = [
-    "packs/fuji-recipes/recipes/005-docu-classic-chrome-john-peltier.json",
-    "packs/fuji-recipes/recipes/017-provia-natural-mark-g-adams.json",
-    "packs/fuji-recipes/recipes/021-kodak-vision3-500t-piotr-skrzypek.json",
+    "library/fuji/community/recipes/005-docu-classic-chrome-john-peltier.json",
+    "library/fuji/community/recipes/017-provia-natural-mark-g-adams.json",
+    "library/fuji/community/recipes/021-kodak-vision3-500t-piotr-skrzypek.json",
 ]
 
 def load_cube(path: Path):

@@ -1,0 +1,39 @@
+{
+  "name": "Astia",
+  "baseLut": "../../official/luts/astia_sRGB.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": -4
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.222
+  },
+  "source": "open-fuji-recipes: ASTIA/Soft recipe by Michael Tam",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ASTIA/Soft",
+    "creator": "Michael Tam",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 2,
+    "wbb": 0,
+    "dr": "WEAK",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 0,
+    "clarity": 0,
+    "nr": 0,
+    "sourceId": 93,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

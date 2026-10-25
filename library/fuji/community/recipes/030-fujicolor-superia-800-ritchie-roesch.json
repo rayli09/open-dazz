@@ -1,0 +1,39 @@
+{
+  "name": "Fujicolor Superia 800",
+  "baseLut": "../../official/luts/classic neg_sRGB.cube",
+  "grain": {
+    "amount": 0.55,
+    "size": "large"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -1,
+    "shadow": 1,
+    "color": -1
+  },
+  "whiteBalance": {
+    "tempShift": 0.333,
+    "tintShift": -0.111
+  },
+  "source": "open-fuji-recipes: Classic Neg recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Neg",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "daylight",
+    "wbr": -1,
+    "wbb": -3,
+    "dr": "DR400",
+    "ev": "+2/3",
+    "ccfx": "strong",
+    "ccfxb": "weak",
+    "sharp": -1,
+    "clarity": -4,
+    "nr": -4,
+    "sourceId": 30,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

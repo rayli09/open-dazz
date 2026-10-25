@@ -1,0 +1,39 @@
+{
+  "name": "Docu Classic Chrome",
+  "baseLut": "../../official/luts/classic chrome_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "large"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 1,
+    "shadow": 0,
+    "color": 2
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: Classic Chrome recipe by John Peltier",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Chrome",
+    "creator": "John Peltier",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "AUTO",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "weak",
+    "sharp": 0,
+    "clarity": 2,
+    "nr": -2,
+    "sourceId": 5,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

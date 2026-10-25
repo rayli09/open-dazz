@@ -1,0 +1,39 @@
+{
+  "name": "Fujichrome Sensia 100",
+  "baseLut": "../../official/luts/provia_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 2,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.333,
+    "tintShift": -0.111
+  },
+  "source": "open-fuji-recipes: PROVIA/Standard recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "PROVIA/Standard",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "fl light 2",
+    "wbr": -1,
+    "wbb": -3,
+    "dr": "DR400",
+    "ev": "+2/3",
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 154,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

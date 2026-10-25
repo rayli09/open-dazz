@@ -1,0 +1,39 @@
+{
+  "name": "Polaroid",
+  "baseLut": "../../official/luts/eterna_sRGB.cube",
+  "grain": {
+    "amount": 0.55,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 4,
+    "shadow": -2,
+    "color": -2
+  },
+  "whiteBalance": {
+    "tempShift": 0.556,
+    "tintShift": 0.556
+  },
+  "source": "open-fuji-recipes: ETERNA/Cinema recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ETERNA/Cinema",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 5,
+    "wbb": -5,
+    "dr": "DR400",
+    "ev": "+1/1",
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": -1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 178,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

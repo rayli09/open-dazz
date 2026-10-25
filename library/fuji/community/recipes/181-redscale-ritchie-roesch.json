@@ -1,0 +1,39 @@
+{
+  "name": "Redscale",
+  "baseLut": "../../official/luts/astia_sRGB.cube",
+  "grain": {
+    "amount": 0.55,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 1,
+    "shadow": 2,
+    "color": -2
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 1.0
+  },
+  "source": "open-fuji-recipes: ASTIA/Soft recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ASTIA/Soft",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "10000k",
+    "wbr": 9,
+    "wbb": 0,
+    "dr": "DR200",
+    "ev": 0,
+    "ccfx": "strong",
+    "ccfxb": "off",
+    "sharp": -2,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 181,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}
