@@ -3,10 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      try {
+        var t = localStorage.getItem("of-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (t === "dark") document.documentElement.dataset.theme = "dark";
+      } catch (e) {}
+    </script>
     <title>open-fuji — Photo Workshop</title>
     <meta name="description" content="An open film-simulation workshop: 600+ film looks, a Rust engine in WebAssembly, everything developed locally in your browser." />
     <link rel="icon" type="image/png" href="/logo-64.png" />
-    <meta name="theme-color" content="#fdfcfc" />
+    <meta name="theme-color" content="#f2ecdc" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
