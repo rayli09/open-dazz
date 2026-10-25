@@ -264,7 +264,7 @@ function closeDDs() {
   document.querySelectorAll(".dd-panel").forEach((p) => p.classList.remove("open"));
   document.querySelectorAll(".dd").forEach((d) => d.classList.remove("open"));
 }
-function toggleDD(which: "brand" | "type", btn?: HTMLElement) {
+function toggleDD(btn?: HTMLElement) {
   const dd = btn?.closest(".dd") as HTMLElement | null;
   const willOpen = !dd?.classList.contains("open");
   closeDDs();
@@ -310,7 +310,7 @@ function buildChips(host: HTMLElement) {
     </div>
   </div>`;
   host.querySelectorAll<HTMLButtonElement>("[data-dd-btn]").forEach((b) =>
-    b.addEventListener("pointerdown", (e) => { e.preventDefault(); toggleDD(b.dataset.ddBtn as "brand" | "type", b); }));
+    b.addEventListener("pointerdown", (e) => { e.preventDefault(); toggleDD(b); }));
   host.querySelectorAll<HTMLButtonElement>("[data-brand]").forEach((b) =>
     b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
