@@ -1,0 +1,40 @@
+{
+  "name": "Kodak Tri-X 400 +2",
+  "baseLut": "../luts/kodak-tri-minus-x-400-plus-2.cube",
+  "grain": {
+    "amount": 0.747,
+    "size": "large"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Black & White Film",
+    "treatment": "Monochrome",
+    "sourceFile": "Presets/Black-White/Kodak Tri-X 400 +2.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "GrayMixer (approx)"
+    ],
+    "droppedFields": [
+      "sharpening"
+    ],
+    "description": "Push +2 (EI 1600), aggressive grain, concert/low-light photojournalism staple",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}

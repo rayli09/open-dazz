@@ -1,0 +1,46 @@
+{
+  "name": "Cyberpunk Neon City",
+  "baseLut": "../luts/cyberpunk-neon-city.cube",
+  "grain": {
+    "amount": 0.405,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Creative / Cinematic",
+    "treatment": "Color",
+    "sourceFile": "Presets/Creative/Cyberpunk Neon City.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Exposure2012",
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "Saturation/Vibrance (approx)",
+      "HSL adjustments (approx)",
+      "ColorGrade tints (approx)"
+    ],
+    "droppedFields": [
+      "Clarity2012",
+      "Dehaze",
+      "sharpening",
+      "vignette"
+    ],
+    "description": "A comprehensive analysis of the visual language, color theory, and technical qualities that define the Cyberpunk Neon City aesthetic in photography and film.",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}

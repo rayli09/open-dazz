@@ -1,0 +1,43 @@
+{
+  "name": "Fuji NPS 160 Pulled",
+  "baseLut": "../luts/fuji-nps-160-pulled.cube",
+  "grain": {
+    "amount": 0.162,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Color Negative Film",
+    "treatment": "Color",
+    "sourceFile": "Presets/Color-Negative/Fuji NPS 160 Pulled.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Exposure2012",
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "Saturation/Vibrance (approx)",
+      "HSL adjustments (approx)",
+      "ColorGrade tints (approx)"
+    ],
+    "droppedFields": [
+      "sharpening"
+    ],
+    "description": "Fujicolor NPS 160 pulled 1 stop (overexposed + reduced development). Low contrast, low saturation, cooler color balance, finer grain, soft contrast portrait film.",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}

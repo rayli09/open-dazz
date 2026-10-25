@@ -1,0 +1,40 @@
+{
+  "name": "Adox Silvermax 21",
+  "baseLut": "../luts/adox-silvermax-21.cube",
+  "grain": {
+    "amount": 0.072,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Black & White Film",
+    "treatment": "Monochrome",
+    "sourceFile": "Presets/Black-White/Adox Silvermax 21.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "GrayMixer (approx)"
+    ],
+    "droppedFields": [
+      "sharpening"
+    ],
+    "description": "Adox Silvermax 21 is an ultra-slow, ultra-fine-grain black-and-white negative film produced by Adox (Germany).",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}

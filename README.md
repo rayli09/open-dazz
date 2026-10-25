@@ -53,6 +53,15 @@ for the layout contract and `library/catalog.json` for the machine index.
   148 joined to an official base LUT, 56 params-only (Acros/Monochrome/
   Sepia bases pending a Hald->cube converter).
 
+- **`library/<brand>/community/` for 14 more brands** — kodak (80 looks),
+  ilford (18), agfa (11), cinestill (4), rollei, foma, lomography, adox,
+  polaroid, ricoh, bergger, kentmere, orwo, plus the `emulsion` brand for
+  creative styles — baked from Lightroom XMP presets (EmulsionPresets,
+  **MIT**) by `tools/bake_emulsion.py`. Fuji stocks from the same source
+  (38) joined the fuji community tier. Each bake is a display-referred
+  approximation; per-recipe `provenance` records what was captured and
+  what was dropped. Round-3 spot checks: `docs/verification/`.
+
 ```sh
 openfuji list                                  # grouped by brand, official first
 openfuji apply in.png out.png --look "Docu Classic Chrome"

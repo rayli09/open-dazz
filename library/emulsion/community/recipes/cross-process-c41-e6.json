@@ -1,0 +1,43 @@
+{
+  "name": "Cross Process C41→E6",
+  "baseLut": "../luts/cross-process-c41-e6.cube",
+  "grain": {
+    "amount": 0.252,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Alternative Processes",
+    "treatment": "Color",
+    "sourceFile": "Presets/Alternative-Process/Cross Process C41→E6.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "Saturation/Vibrance (approx)",
+      "HSL adjustments (approx)",
+      "ColorGrade tints (approx)"
+    ],
+    "droppedFields": [
+      "sharpening",
+      "vignette"
+    ],
+    "description": "C-41 negative film in E-6 chemistry, high contrast with warm-orange shift",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}

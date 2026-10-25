@@ -1,0 +1,43 @@
+{
+  "name": "Cinematic Dream - Tuned",
+  "baseLut": "../luts/cinematic-dream-minus-tuned.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Creative / Cinematic",
+    "treatment": "Color",
+    "sourceFile": "Presets/Creative/Cinematic Dream - Tuned.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Exposure2012",
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "Saturation/Vibrance (approx)",
+      "HSL adjustments (approx)",
+      "ColorGrade tints (approx)"
+    ],
+    "droppedFields": [
+      "absolute Temperature/Tint"
+    ],
+    "description": "User-provided creator-tuned variant of the \"Cinematic Dream\" aesthetic. Likely sourced from a 2017-2018 YouTube/content creator preset pack era. No specific author identified.",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}

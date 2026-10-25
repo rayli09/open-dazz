@@ -1,0 +1,46 @@
+{
+  "name": "High-Key Candy Architecture",
+  "baseLut": "../luts/high-minus-key-candy-architecture.cube",
+  "grain": {
+    "amount": 0.09,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Creative / Cinematic",
+    "treatment": "Color",
+    "sourceFile": "Presets/Creative/High-Key Candy Architecture.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Exposure2012",
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "Saturation/Vibrance (approx)",
+      "HSL adjustments (approx)",
+      "ColorGrade tints (approx)"
+    ],
+    "droppedFields": [
+      "Clarity2012",
+      "absolute Temperature/Tint",
+      "calibration primaries",
+      "sharpening"
+    ],
+    "description": "Creator-tuned preset (first 26 of Presets/Creative/). No prior research folder existed; this file was created during the 2026-10-21 validation sweep.",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}

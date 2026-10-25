@@ -1,0 +1,43 @@
+{
+  "name": "Kodak Portra 400UC",
+  "baseLut": "../luts/kodak-portra-400uc.cube",
+  "grain": {
+    "amount": 0.225,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Color Negative Film",
+    "treatment": "Color",
+    "sourceFile": "Presets/Color-Negative/Kodak Portra 400UC.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Exposure2012",
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "Saturation/Vibrance (approx)",
+      "HSL adjustments (approx)",
+      "ColorGrade tints (approx)"
+    ],
+    "droppedFields": [
+      "sharpening"
+    ],
+    "description": "\"Ultra Color\" / \"Vivid Color\" — Portra 400 with the saturation turned up. The choice for fashion, editorial, and vibrant commercial work.",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}
