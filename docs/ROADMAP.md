@@ -90,6 +90,21 @@ none of the _identity_.
   style face via font or SVG digits) and engraved-label styling
   (letterspaced, ink2, slight inset shadow) for chrome labels.
 
+## Status (2026-10-25)
+
+- **P0 shelf + identity — shipped** (4416f39): FEATURED shelf of 16
+  cameras, camera glyphs, film counter, develop-in, shutter button;
+  simple mode later gained the left/right rail layout (eb546fe).
+- **P1 print ritual — shipped** (127e03e): frame / date burn-in /
+  ratio chips in both modes, pixel-verified from a captured print.
+- **P2 asset library — shipped**: hand-drawn sigils ×15 + controls,
+  texture pack, app icons + manifest, this design doc; Lucide retired
+  from the chrome.
+- **Next: GPU preview spike (vgpu/WebGPU)** — Ray sequenced it after
+  P2 on 2026-10-25: GPU LUT pass + grain + true halation bloom as the
+  interactive preview, CPU/WASM engine stays as fallback and as the
+  print path. Then P3 camera behaviors.
+
 ## Phases
 
 **P0 — Shelf + identity basics** (the 80/20 of the Dazz feel)

@@ -141,6 +141,31 @@ button { touch-action: manipulation; }
 @media (min-width: 1024px) {
   [data-mode="simple"] main { grid-template-columns: 300px minmax(0, 1fr); }
 }
+/* ---- texture pack (P2): paper grain lives on body::after; these three
+   are the reusable material classes ---- */
+/* film leader: a punched sprocket row, for rail/section edges */
+.tex-filmleader {
+  height: 12px;
+  background-image: radial-gradient(circle at 50% 50%, var(--color-ink) 2.4px, transparent 2.8px);
+  background-size: 18px 12px;
+  background-position: center;
+  opacity: 0.55;
+}
+/* brushed metal: fine vertical streaks, for the shutter/print control */
+.tex-metal {
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px);
+}
+/* leatherette: a tight cross piqué, for quiet header bands */
+.tex-leather {
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 4px);
+}
+[data-theme="dark"] .tex-leather {
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 4px);
+}
 /* the shelf rail exists only in simple mode */
 .shelf-rail { display: none; }
 [data-mode="simple"] .shelf-rail { display: flex; }
