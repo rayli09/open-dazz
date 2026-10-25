@@ -1,0 +1,10 @@
+{
+  "name": "Faded Warm (example)",
+  "baseLut": "../luts/example-faded-warm/faded-warm.cube",
+  "grain": { "amount": 0.35, "size": "large" },
+  "halation": 0.35,
+  "tone": { "highlight": -1, "shadow": 1, "color": -1 },
+  "whiteBalance": { "tempShift": 0.2, "tintShift": 0 },
+  "source": "hand-authored example wired to the bundled toy LUT",
+  "license": "MIT"
+}

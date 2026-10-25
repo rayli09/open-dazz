@@ -1,0 +1,11 @@
+[package]
+name = "openfuji-core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Film simulation engine core: recipes + 3D LUTs, native and WASM."
+
+[dependencies]
+image = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

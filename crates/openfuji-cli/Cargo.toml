@@ -1,0 +1,15 @@
+[package]
+name = "openfuji-cli"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[[bin]]
+name = "openfuji"
+path = "src/main.rs"
+
+[dependencies]
+openfuji-core = { path = "../openfuji-core" }
+image = { workspace = true }
+serde_json = { workspace = true }
+clap = { workspace = true }

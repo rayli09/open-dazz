@@ -1,0 +1,15 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: clippy
+      - run: cargo test --workspace
+      - run: cargo clippy --workspace -- -D warnings
+      - name: Core must stay WASM-clean
+        run: cargo build -p openfuji-core --target wasm32-unknown-unknown

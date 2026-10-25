@@ -16,3 +16,6 @@ A recipe is a JSON object. Camera-agnostic: parameters are engine-relative, not 
 ```
 
 Open questions: how to represent camera-style recipes (Fuji X Weekly format) — translate into engine params at import time, keep the original alongside for provenance.
+
+Path resolution: `baseLut` is resolved relative to the recipe file's own
+directory. The CLI implements this; the web app maps it to a bundled pack.

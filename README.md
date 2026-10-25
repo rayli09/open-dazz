@@ -6,7 +6,33 @@ Pick a look (Kodak Portra, Classic Chrome, CineStill 800T, a VHS/camcorder vibe,
 
 ## Status
 
-Scaffolding — repo created 2026-10-25. Design and a v0 recipe schema are being sketched; no app code yet.
+M1 scaffold is live (2026-10-25): Rust workspace with a working core + CLI,
+an end-to-end example, and a Vite web shell. Tests + clippy + a WASM build
+check run in CI.
+
+## Architecture
+
+One Rust core, three surfaces:
+
+- **`crates/openfuji-core`** — the engine: recipe parsing, `.cube` 3D LUT
+  (trilinear), white balance, tone, halation, grain. No file IO; operates on
+  image buffers, and is kept WASM-clean (CI builds it for
+  `wasm32-unknown-unknown` on every push).
+- **`crates/openfuji-cli`** — `openfuji apply in.png out.png --recipe r.json`
+  (batch work, pipeline testing, golden-image diffs).
+- **`web/`** — Vite + TypeScript app; the same core compiled to WASM runs
+  in-browser (M2). Static hosting only (GitHub Pages / Cloudflare Pages) —
+  free, and images never leave the user's machine.
+
+Later surfaces (Tauri desktop, mobile via FFI) reuse the same core instead of
+reimplementing the look in another language.
+
+Try the CLI:
+
+```sh
+cargo run -p openfuji-cli -- apply examples/test-scene.png /tmp/out.png \
+  --recipe recipes/example-faded-warm.json
+```
 
 ## Design principles
 
@@ -27,12 +53,14 @@ Scaffolding — repo created 2026-10-25. Design and a v0 recipe schema are being
 - `recipes/` — recipe JSON files + schema notes
 - `luts/` — bundled LUT packs (each with its own LICENSE/attribution)
 
-## Roadmap (draft)
+## Roadmap
 
-1. Recipe schema v0 (see `recipes/README.md`)
-2. Reference engine prototype: apply recipe + LUT to a still image, CLI first
-3. App shell (platform TBD)
-4. Importers: Fuji X Weekly recipes, Lightroom preset packs, HaldCLUT packs
+1. ✅ Recipe schema v0 + reference engine + CLI (M1)
+2. WASM build of the core wired into the web app: drag-drop, recipe picker,
+   before/after slider, export (M2)
+3. Importers: Fuji X Weekly recipes, EmulsionPresets / Lightroom packs,
+   HaldCLUT packs (M3)
+4. Video: frame pipeline via the CLI + ffmpeg (M4, exploratory)
 
 ## Name
 
