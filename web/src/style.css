@@ -145,11 +145,11 @@ button { touch-action: manipulation; }
    are the reusable material classes ---- */
 /* film leader: a punched sprocket row, for rail/section edges */
 .tex-filmleader {
-  height: 12px;
-  background-image: radial-gradient(circle at 50% 50%, var(--color-ink) 2.4px, transparent 2.8px);
-  background-size: 18px 12px;
+  height: 14px;
+  background-image: radial-gradient(circle at 50% 50%, var(--color-ink) 3.2px, transparent 3.7px);
+  background-size: 17px 14px;
   background-position: center;
-  opacity: 0.55;
+  opacity: 0.85;
 }
 /* brushed metal: fine vertical streaks, for the shutter/print control */
 .tex-metal {
