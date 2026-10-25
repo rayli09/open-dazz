@@ -37,22 +37,35 @@ impl VhsPreset {
     }
 
     fn effect(self) -> NtscEffect {
-        let mut fx = NtscEffect::default();
+        // Built on ntsc-rs's EASY-mode defaults, converted to the
+        // standard settings — that conversion is the profile the
+        // ntsc-rs app itself opens with and produces its showcase
+        // images from. The raw NtscEffect::default() is a different,
+        // much hotter profile (composite sharpening 1.0 vs 0.25,
+        // luma smear 0.5 vs 0.2, LP tape, heavier noise blocks):
+        // usable as an extreme, wrong as a default. (Found by
+        // diffing settings/easy.rs against settings/standard.rs.)
+        let mut fx = NtscEffect::from(&ntsc_rs::settings::easy::EasyMode::default());
         match self {
             VhsPreset::Broadcast => {
+                // The easy chassis with the tape blocks off.
                 fx.vhs_settings.enabled = false;
+                fx.head_switching.enabled = false;
+                fx.tracking_noise.enabled = false;
             }
             VhsPreset::Vhs => {
-                fx.vhs_settings.enabled = true;
+                // Exactly the app's default state: SP tape,
+                // head-switching 6, edge wave 0.5, gentle noise.
             }
             VhsPreset::VhsHeavy => {
-                fx.vhs_settings.enabled = true;
+                // The same chassis, worn harder: EP tape, real
+                // chroma loss, noise and snow up, a little more smear.
                 fx.vhs_settings.settings.tape_speed = VHSTapeSpeed::EP;
-                fx.vhs_settings.settings.chroma_loss = 0.65;
-                fx.composite_noise.settings.intensity = 0.5;
-                fx.luma_noise.settings.intensity = 0.45;
-                fx.chroma_noise.settings.intensity = 0.8;
-                fx.snow_intensity = 0.35;
+                fx.vhs_settings.settings.chroma_loss = 0.5;
+                fx.luma_noise.settings.intensity = 0.06;
+                fx.chroma_noise.settings.intensity = 0.35;
+                fx.snow_intensity = 0.01;
+                fx.luma_smear = 0.35;
             }
         }
         fx
