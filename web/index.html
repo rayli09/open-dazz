@@ -17,5 +17,19 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
-  </body>
+  <script>
+  // Independent watchdog: if the app bundle stalls, say so on screen.
+  setTimeout(function () {
+    var sl = document.querySelector("#stage-load");
+    if (sl && !sl.classList.contains("hidden")) {
+      var t = sl.querySelector("div");
+      if (t) t.textContent = "STILL LOADING — the app bundle or data did not arrive. Try a hard reload.";
+    }
+    if (!document.querySelector(".look-card")) {
+      var cab = document.querySelector("#cabinet");
+      if (cab && cab.querySelector(".skel")) cab.insertAdjacentHTML("beforeend", '<div class="px-3 py-3 font-mono text-[11px]" style="color:#a83c26">Still loading — if this persists, the bundle did not arrive.</div>');
+    }
+  }, 20000);
+</script>
+</body>
 </html>

@@ -152,7 +152,7 @@ function layout() {
 
   <div class="border-t border-rule" aria-hidden="true"></div>
   <footer class="px-4 md:px-6 py-3 font-mono text-[9.5px] tracking-[0.14em] text-ink2">
-    open-fuji — open film simulations · not affiliated with Fujifilm Corp.
+    open-fuji — open film simulations · not affiliated with Fujifilm Corp. · <span id="build-stamp"></span>
   </footer>`;
 }
 
@@ -383,6 +383,7 @@ async function boot() {
   createIcons();
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
+  const bs = $("#build-stamp"); if (bs) bs.textContent = `build ${new Date().toISOString().slice(0, 16).replace("T", " ")}Z`;
   progress(45);
   catalog = await fetchCatalog();
   $("#hdr-count").textContent = `${catalog.totalLooks} looks`;
