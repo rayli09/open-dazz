@@ -22,7 +22,7 @@
 }
 
 /* squared, always */
-*, *::before, *::after { border-radius: 0 !important; }
+/* (the old squared-everything reset retired with the Dazz copy) */
 
 html, body { background: var(--color-paper); color: var(--color-ink); }
 
