@@ -168,6 +168,7 @@ function layout() {
 
     <!-- THE SHELF RAIL (simple mode: left on desktop, under the photo on mobile) -->
     <aside class="shelf-rail order-2 lg:order-1 flex-col min-h-0 border-t lg:border-t-0 lg:border-r border-rule">
+      <div class="tex-filmleader shrink-0 border-b border-rule" aria-hidden="true"></div>
       <div class="px-3 pt-3 pb-2 flex flex-col gap-2 shrink-0">
         <div class="flex items-center gap-2">
           <div class="flex border border-ink font-mono text-[10px]">
