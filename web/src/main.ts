@@ -2,6 +2,20 @@
 // Engine: openfuji-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
 import { apply as wasmApply, engine_version } from "./pkg/openfuji_wasm.js";
+import { createIcons } from "lucide";
+
+const BRAND_ICONS: Record<string, string> = {
+  fuji: "mountain-snow", kodak: "film", ilford: "contrast", cinestill: "clapperboard",
+  agfa: "aperture", lomography: "camera", rollei: "circle-dot", foma: "layers",
+  adox: "flask-conical", polaroid: "image", bergger: "moon", kentmere: "landmark",
+  orwo: "globe", ricoh: "focus", emulsion: "sparkles",
+};
+function lookIcon(l: LookEntry): string {
+  if (l.tier === "official") return "badge-check";
+  if (/video/i.test(l.name)) return "video";
+  if (/acros|monochrome|sepia/i.test(l.baseFilm ?? "") || /\b(b&w|bw|monochrome)\b/i.test(l.name) || l.brand === "ilford") return "contrast";
+  return "swatch-book";
+}
 import "./style.css";
 
 interface LookEntry {
@@ -26,28 +40,26 @@ let applyTimer: ReturnType<typeof setTimeout> | undefined;
 function layout() {
   $("#app").innerHTML = `
   <header class="border-b border-rule">
-    <div class="flex flex-wrap items-end justify-between gap-3 px-4 py-3 md:px-6">
-      <div>
-        <div class="font-display text-[26px] leading-none font-semibold tracking-tight">OPEN—FUJI</div>
-        <div class="font-mono text-[10px] tracking-[0.22em] text-ink2 mt-1">PHOTO WORKSHOP · FILM SIMULATION BENCH · EST. 2026</div>
-      </div>
+    <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
-        <div class="font-mono text-[10px] tracking-[0.18em] text-ink2 text-right leading-relaxed">
-          <span id="hdr-count">— LOOKS</span> · ENGINE v<span id="hdr-ver">–</span> (RUST → WASM)<br/>NO UPLOAD — DEVELOPED ON YOUR BENCH
-        </div>
-        <a href="https://github.com/rayli09/open-fuji" target="_blank" rel="noreferrer"
-           class="font-mono text-[11px] tracking-[0.14em] border border-ink px-3 py-2 hover:bg-ink hover:text-paper transition-colors">GITHUB ↗</a>
+        <img src="/logo.png" alt="" class="w-9 h-9 pixelated" />
+        <span class="font-display text-[20px] font-semibold tracking-tight">open-fuji</span>
+        <span class="font-mono text-[10px] text-ink2" id="hdr-count"></span>
       </div>
+      <a href="https://github.com/rayli09/open-fuji" target="_blank" rel="noreferrer"
+         class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-1.5 hover:bg-paper2 transition-colors">GitHub <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
     </div>
   </header>
 
   <main class="grid grid-cols-1 lg:grid-cols-[292px_minmax(0,1fr)_300px]">
     <!-- THE CABINET -->
     <aside class="border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
-      <div class="px-4 pt-4 pb-2">
-        <div class="font-mono text-[10px] tracking-[0.22em] text-ink2">THE CABINET — 档案柜</div>
-        <input id="search" type="text" placeholder="SEARCH THE CABINET…"
-          class="mt-2 w-full bg-mat border border-ink px-3 py-2 font-mono text-[12px] placeholder:text-ink2/70 focus:outline-none focus:ring-2 focus:ring-ink" />
+      <div class="px-3 pt-3 pb-1">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink2 pointer-events-none"></i>
+          <input id="search" type="text" placeholder="Search looks…"
+            class="w-full bg-mat border border-rule pl-9 pr-3 py-2 font-mono text-[12px] placeholder:text-ink2/80 focus:outline-none focus:border-ink" />
+        </div>
       </div>
       <div id="cabinet" class="cabinet-scroll overflow-y-auto px-2 pb-4 lg:max-h-[calc(100vh-210px)] max-h-72"></div>
     </aside>
@@ -55,10 +67,10 @@ function layout() {
     <!-- THE BENCH -->
     <section class="bench-grid relative flex flex-col min-h-[60vh]">
       <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
-        <button id="btn-load" class="font-mono text-[11px] tracking-[0.14em] bg-ink text-paper px-3 py-2 hover:bg-stamp transition-colors">LOAD A PHOTOGRAPH</button>
-        <button id="btn-s1" class="font-mono text-[11px] tracking-[0.14em] border border-ink px-3 py-2 hover:bg-ink hover:text-paper transition-colors">SAMPLE I</button>
-        <button id="btn-s2" class="font-mono text-[11px] tracking-[0.14em] border border-ink px-3 py-2 hover:bg-ink hover:text-paper transition-colors">SAMPLE II</button>
-        <span class="font-mono text-[10px] tracking-[0.18em] text-ink2 ml-auto" id="split-label">BEFORE | AFTER — DRAG THE PRINT</span>
+        <button id="btn-load" class="flex items-center gap-2 font-mono text-[11px] bg-ink text-paper px-3 py-2 hover:bg-stamp transition-colors"><i data-lucide="upload" class="w-4 h-4"></i>Photo</button>
+        <button id="btn-s1" class="flex items-center gap-2 font-mono text-[11px] border border-rule bg-mat px-3 py-2 hover:bg-paper2 transition-colors"><i data-lucide="package" class="w-4 h-4"></i>Sample I</button>
+        <button id="btn-s2" class="flex items-center gap-2 font-mono text-[11px] border border-rule bg-mat px-3 py-2 hover:bg-paper2 transition-colors"><i data-lucide="mountain" class="w-4 h-4"></i>Sample II</button>
+        <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
         <input id="file" type="file" accept="image/*" class="hidden" />
       </div>
       <div class="flex-1 flex items-start justify-center p-4 md:p-8">
@@ -67,41 +79,34 @@ function layout() {
             <canvas id="after" class="block w-full h-auto"></canvas>
             <canvas id="before" class="block w-full h-auto absolute inset-0"></canvas>
             <div id="divider" class="absolute top-0 bottom-0 w-[2px] bg-ink pointer-events-none">
-              <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] bg-paper border-2 border-ink font-mono text-[10px] flex items-center justify-center">◂▸</div>
+              <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] bg-mat border border-ink flex items-center justify-center"><i data-lucide="chevrons-left-right" class="w-4 h-4"></i></div>
             </div>
           </div>
           <figcaption class="flex flex-wrap justify-between gap-2 pt-3 font-mono text-[10px] tracking-[0.16em] text-ink2">
-            <span id="cap-file">—</span><span id="cap-state">READY</span><span id="cap-look">—</span>
+            <span id="cap-file">—</span><span id="cap-state"></span>
           </figcaption>
         </figure>
       </div>
-      <p class="px-4 pb-4 font-mono text-[10px] tracking-[0.14em] text-ink2">TIP — DRAG &amp; DROP A PHOTO ANYWHERE ON THE BENCH. JPEG/PNG, DEVELOPED AT UP TO ${MAX_DIM}px HERE; FULL-RES LIVES IN THE CLI.</p>
     </section>
 
     <!-- THE LEDGER -->
     <aside class="border-t lg:border-t-0 lg:border-l border-rule px-4 py-4">
-      <div class="font-mono text-[10px] tracking-[0.22em] text-ink2">THE LEDGER — 冲洗记录</div>
-      <h1 id="led-name" class="font-display text-[24px] leading-tight font-bold mt-2">—</h1>
+      <h1 id="led-name" class="font-display text-[22px] leading-tight font-semibold">—</h1>
       <div id="led-meta" class="font-mono text-[10.5px] leading-relaxed tracking-[0.06em] text-ink2 mt-1"></div>
       <div id="led-note" class="text-[12px] leading-relaxed mt-2 text-ink2"></div>
       <div class="border-t border-rule mt-4 pt-3 space-y-3" id="sliders"></div>
       <div class="flex items-center gap-2 mt-3">
-        <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">GRAIN SIZE</span>
+        <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">GRAIN</span>
         <button data-gsize="small" class="gsize font-mono text-[11px] border border-ink px-2 py-1">SMALL</button>
         <button data-gsize="large" class="gsize font-mono text-[11px] border border-ink px-2 py-1">LARGE</button>
       </div>
-      <button id="btn-export" class="mt-5 w-full bg-ink text-paper font-mono text-[12px] tracking-[0.2em] py-3 hover:bg-stamp transition-colors">EXPORT THE PRINT ↓ PNG</button>
-      <div class="mt-4 font-mono text-[9.5px] leading-relaxed tracking-[0.08em] text-ink2">
-        EVERY LOOK CARRIES ITS PROVENANCE — SOURCE, LICENSE, AND WHAT ITS
-        CONVERSION COULD NOT CAPTURE. READ THE FINE PRINT IN THE REPO.
-      </div>
+      <button id="btn-export" class="mt-5 w-full bg-ink text-paper font-mono text-[12px] py-3 hover:bg-stamp transition-colors flex items-center justify-center gap-2"><i data-lucide="download" class="w-4 h-4"></i>Export PNG</button>
     </aside>
   </main>
 
   <div class="border-t border-rule" aria-hidden="true"></div>
-  <footer class="flex flex-wrap justify-between gap-2 px-4 md:px-6 py-3 font-mono text-[9.5px] tracking-[0.18em] text-ink2">
-    <span>OPEN-FUJI — AN OPEN FILM-SIMULATION WORKSHOP</span>
-    <span>FUJI = FUJIFILM TRADEMARK OF FUJIFILM CORP. NOT AFFILIATED. OTHER MARKS BELONG TO THEIR OWNERS.</span>
+  <footer class="px-4 md:px-6 py-3 font-mono text-[9.5px] tracking-[0.14em] text-ink2">
+    open-fuji — open film simulations · not affiliated with Fujifilm Corp.
   </footer>`;
 }
 
@@ -119,11 +124,11 @@ function renderSliders() {
   const g = R.grain ?? { amount: 0, size: "small" };
   const wb = R.whiteBalance ?? { tempShift: 0, tintShift: 0 };
   $("#sliders").innerHTML = [
-    sliderRow("strength", "STRENGTH 强度", 0, 1.5, 0.01, R.strength ?? 1, (v) => `${Math.round(v * 100)}%`),
-    sliderRow("grain", "GRAIN 颗粒", 0, 0.9, 0.01, g.amount ?? 0, (v) => v.toFixed(2)),
-    sliderRow("halation", "HALATION 光晕", 0, 1, 0.01, R.halation ?? 0, (v) => v.toFixed(2)),
-    sliderRow("temp", "TEMP 色温", -1, 1, 0.01, wb.tempShift ?? 0, (v) => (v >= 0 ? "+" : "") + v.toFixed(2)),
-    sliderRow("tint", "TINT 色调", -1, 1, 0.01, wb.tintShift ?? 0, (v) => (v >= 0 ? "+" : "") + v.toFixed(2)),
+    sliderRow("strength", "STRENGTH", 0, 1.5, 0.01, R.strength ?? 1, (v) => `${Math.round(v * 100)}%`),
+    sliderRow("grain", "GRAIN", 0, 0.9, 0.01, g.amount ?? 0, (v) => v.toFixed(2)),
+    sliderRow("halation", "HALATION", 0, 1, 0.01, R.halation ?? 0, (v) => v.toFixed(2)),
+    sliderRow("temp", "TEMP", -1, 1, 0.01, wb.tempShift ?? 0, (v) => (v >= 0 ? "+" : "") + v.toFixed(2)),
+    sliderRow("tint", "TINT", -1, 1, 0.01, wb.tintShift ?? 0, (v) => (v >= 0 ? "+" : "") + v.toFixed(2)),
   ].join("");
   const on = (key: string, fn: (v: number) => void) => {
     $<HTMLInputElement>(`#sl-${key}`).addEventListener("input", (e) => {
@@ -150,28 +155,29 @@ function renderCabinet(filter = "") {
   let html = "";
   for (const brand of brands) {
     const data = catalog.brands[brand];
-    let n = 0; let rows = "";
+    let rows = "";
     for (const tier of ["official", "community"]) {
       const looks = (data.tiers[tier] ?? []).filter((l) => !f || l.name.toLowerCase().includes(f));
       if (!looks.length) continue;
-      rows += `<div class="font-mono text-[9.5px] tracking-[0.22em] text-ink2 px-2 pt-3 pb-1">${tier.toUpperCase()} — ${looks.length}</div>`;
+      rows += `<div class="flex items-center gap-1.5 font-mono text-[9.5px] tracking-[0.18em] text-ink2 px-2 pt-3 pb-1">
+        <i data-lucide="${tier === "official" ? "badge-check" : "users"}" class="w-3 h-3"></i>${tier === "official" ? "Official" : "Community"} · ${looks.length}</div>`;
       for (const look of looks) {
-        n += 1;
         const sel = current?.id === look.id;
-        rows += `<button data-look="${look.id}" class="look-row w-full flex items-baseline gap-2 px-2 py-[5px] text-left ${sel ? "bg-accent text-ink font-medium" : "hover:bg-paper2"}">
-          <span class="font-mono text-[9.5px] ${sel ? "text-ink/60" : "text-ink2"} w-7 shrink-0">№${String(n).padStart(3, "0")}</span>
+        rows += `<button data-look="${look.id}" class="look-row w-full flex items-center gap-2 px-2 py-[5px] text-left ${sel ? "bg-accent text-ink font-medium" : "hover:bg-paper2"}">
+          <i data-lucide="${lookIcon(look)}" class="w-3.5 h-3.5 shrink-0 ${sel ? "text-ink/70" : "text-ink2"}"></i>
           <span class="text-[12.5px] leading-tight flex-1">${look.name}</span>
-          <span class="font-mono text-[8.5px] tracking-[0.1em] ${sel ? "text-ink/60" : "text-ink2"}">${look.hasLut ? "LUT" : "PARAMS"}</span>
         </button>`;
       }
     }
-    if (rows) html += `<div class="mt-1"><div class="flex items-baseline justify-between px-2 pt-2">
-      <span class="font-display font-bold text-[15px] capitalize">${brand === "emulsion" ? "Emulsion — house styles" : brand}</span>
-      <span class="font-mono text-[9.5px] text-ink2">${data.total} LOOKS</span></div>${rows}</div>`;
+    if (rows) html += `<div class="mt-1"><div class="flex items-center gap-2 px-2 pt-2">
+      <i data-lucide="${BRAND_ICONS[brand] ?? "swatch-book"}" class="w-4 h-4"></i>
+      <span class="font-display font-semibold text-[14px] capitalize flex-1">${brand === "emulsion" ? "Emulsion" : brand}</span>
+      <span class="font-mono text-[9.5px] text-ink2">${data.total}</span></div>${rows}</div>`;
   }
-  host.innerHTML = html || `<div class="px-3 py-4 font-mono text-[11px] text-ink2">NOTHING IN THE CABINET MATCHES.</div>`;
+  host.innerHTML = html || `<div class="px-3 py-4 font-mono text-[11px] text-ink2">No matches.</div>`;
   host.querySelectorAll<HTMLButtonElement>(".look-row").forEach((b) =>
     b.addEventListener("click", () => selectLook(b.dataset.look!)));
+  createIcons();
 }
 
 function findLook(id: string): LookEntry | undefined {
@@ -184,21 +190,19 @@ async function selectLook(id: string) {
   const entry = findLook(id); if (!entry) return;
   current = entry;
   renderCabinet($<HTMLInputElement>("#search").value);
-  $("#cap-state").textContent = "FETCHING THE RECIPE…";
+  $("#cap-state").textContent = "LOADING…";
   const recipeUrl = "/" + entry.recipe;
   const rj: Record<string, any> = await (await fetch(recipeUrl)).json();
   recipe = rj;
   renderSliders();
   const prov = rj.provenance ?? {};
   $("#led-name").textContent = entry.name;
+  const base = entry.baseFilm ?? prov.film;
   $("#led-meta").innerHTML = [
-    `${entry.brand.toUpperCase()} / ${entry.tier.toUpperCase()}`,
-    entry.baseFilm ? `BASE FILM — ${entry.baseFilm}` : prov.film ? `BASE FILM — ${prov.film}` : "",
-    prov.creator ? `RECIPE BY — ${prov.creator}` : prov.category ? `CLASS — ${prov.category}` : "",
-    `LICENSE — ${rj.license ?? entry.license ?? "SEE REPO"}`,
+    `${entry.brand}${base ? ` · ${base}` : ""}${prov.creator ? ` · ${prov.creator}` : ""}`,
+    `${rj.license ?? entry.license ?? ""}`,
   ].filter(Boolean).join("<br/>");
   $("#led-note").textContent = prov.description ?? rj.source ?? "";
-  $("#cap-look").textContent = entry.id.toUpperCase();
   scheduleApply();
 }
 
@@ -213,7 +217,7 @@ function setSplit(pct: number) {
   split = Math.min(100, Math.max(0, pct));
   $("#before").style.clipPath = `inset(0 ${100 - split}% 0 0)`;
   ($("#divider") as HTMLElement).style.left = `calc(${split}% - 1px)`;
-  $("#split-label").textContent = `BEFORE ${Math.round(split)}% | AFTER ${Math.round(100 - split)}%`;
+  $("#split-label").textContent = `${Math.round(split)} / ${Math.round(100 - split)}`;
 }
 
 function scheduleApply() {
@@ -229,7 +233,7 @@ async function applyNow() {
   const out = wasmApply(input, imgW, imgH, JSON.stringify(recipe), cube);
   const ctx = $<HTMLCanvasElement>("#after").getContext("2d")!;
   ctx.putImageData(new ImageData(new Uint8ClampedArray(out), imgW, imgH), 0, 0);
-  $("#cap-state").textContent = "READY — DEVELOPED LOCALLY";
+  $("#cap-state").textContent = "READY";
 }
 
 async function loadPhoto(source: Blob | string, name: string) {
@@ -251,9 +255,9 @@ async function loadPhoto(source: Blob | string, name: string) {
 
 async function boot() {
   layout();
-  $("#hdr-ver").textContent = engine_version();
+  createIcons();
   catalog = await (await fetch("/library/catalog.json")).json();
-  $("#hdr-count").textContent = `${catalog.totalLooks} LOOKS`;
+  $("#hdr-count").textContent = `${catalog.totalLooks} looks · v${engine_version()}`;
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
