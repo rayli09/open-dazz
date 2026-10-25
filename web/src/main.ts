@@ -1,8 +1,19 @@
 // open-fuji Photo Workshop — a film-development bench in the browser.
 // Engine: openfuji-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
-import { apply as wasmApply, engine_version } from "./pkg/openfuji_wasm.js";
 import { createIcons } from "lucide";
+
+// The WASM engine loads lazily in the background so the shell, cabinet
+// and photo paint immediately; develops queue until it lands.
+type Engine = typeof import("./pkg/openfuji_wasm.js");
+let engine: Engine | null = null;
+const engineP: Promise<Engine> = import("./pkg/openfuji_wasm.js");
+engineP.then((m) => {
+  engine = m;
+  if (catalog) $("#hdr-count").textContent = `${catalog.totalLooks} looks · v${m.engine_version()}`;
+  progress(90);
+  applyNow();
+});
 
 const BRAND_ICONS: Record<string, string> = {
   fuji: "mountain-snow", kodak: "film", ilford: "contrast", cinestill: "clapperboard",
@@ -55,6 +66,7 @@ let applyTimer: ReturnType<typeof setTimeout> | undefined;
 
 function layout() {
   $("#app").innerHTML = `
+  <div id="topbar" class="fixed top-0 left-0 h-[2px] bg-accent z-50 transition-all duration-500" style="width:12%"></div>
   <header class="border-b border-rule">
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
@@ -69,7 +81,7 @@ function layout() {
 
   <main class="grid grid-cols-1 lg:grid-cols-[292px_minmax(0,1fr)_300px]">
     <!-- THE CABINET -->
-    <aside class="border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
+    <aside class="order-2 lg:order-1 border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
       <div class="px-3 pt-3 pb-1">
         <div class="flex items-center gap-2 mb-2">
           <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">1</span>
@@ -83,11 +95,13 @@ function layout() {
             class="w-full bg-mat border border-rule pl-9 pr-3 py-2 font-mono text-[12px] placeholder:text-ink2/80 focus:outline-none focus:border-ink" />
         </div>
       </div>
-      <div id="cabinet" class="cabinet-scroll overflow-y-auto px-2 pb-4 lg:max-h-[calc(100vh-210px)] max-h-72"></div>
+      <div id="cabinet" class="cabinet-scroll overflow-y-auto px-3 pb-4 lg:max-h-[calc(100vh-210px)] max-h-[55vh]">
+        ${Array.from({ length: 8 }, () => `<div class="mt-3"><div class="skel h-[92px] w-full"></div><div class="skel h-3 w-2/3 mt-2"></div></div>`).join("")}
+      </div>
     </aside>
 
     <!-- THE BENCH -->
-    <section class="bench-grid relative flex flex-col min-h-[60vh]">
+    <section class="order-1 lg:order-2 bench-grid relative flex flex-col lg:min-h-[60vh]">
       <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
         <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors"><i data-lucide="upload" class="w-[18px] h-[18px]"></i>Photo</button>
         <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="package" class="w-[18px] h-[18px]"></i>Sample I</button>
@@ -98,21 +112,25 @@ function layout() {
       <div class="flex-1 flex items-start justify-center p-4 md:p-8">
         <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-rule max-w-full select-none touch-none">
           <div id="printwrap" class="relative overflow-hidden bg-paper2">
-            <canvas id="after" class="block w-full h-auto"></canvas>
+            <canvas id="after" class="block w-full h-auto max-h-[62vh] lg:max-h-none object-contain"></canvas>
+            <div id="stage-load" class="absolute inset-0 bg-mat/80 flex flex-col items-center justify-center gap-3">
+              <img src="/logo.png" alt="" class="w-12 h-12 pixelated skel-pulse" />
+              <div class="font-mono text-[10px] tracking-[0.2em] text-ink2">LOADING THE BENCH…</div>
+            </div>
             <canvas id="before" class="block w-full h-auto absolute inset-0"></canvas>
             <div id="divider" class="absolute top-0 bottom-0 w-[2px] bg-ink pointer-events-none">
               <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] bg-mat border border-ink flex items-center justify-center"><i data-lucide="chevrons-left-right" class="w-4 h-4"></i></div>
             </div>
           </div>
           <figcaption class="flex flex-wrap justify-between gap-2 pt-3 font-mono text-[10px] tracking-[0.16em] text-ink2">
-            <span id="cap-file">—</span><span id="cap-state"></span>
+            <span class="flex items-center gap-2"><span id="spin" class="hidden w-[13px] h-[13px] border-2 border-rule border-t-ink animate-spin shrink-0"></span><span id="cap-file">—</span></span><span id="cap-state"></span>
           </figcaption>
         </figure>
       </div>
     </section>
 
     <!-- THE LEDGER -->
-    <aside class="border-t lg:border-t-0 lg:border-l border-rule px-4 py-4">
+    <aside class="order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4">
       <div class="flex items-center gap-2 mb-2">
         <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">3</span>
         <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
@@ -188,12 +206,12 @@ function renderChips() {
   const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
   const chip = (active: boolean) =>
     active ? "bg-accent border-ink font-medium" : "bg-mat border-rule hover:bg-paper2";
-  let html = `<div class="flex flex-wrap gap-1.5 mb-1.5">
+  let html = `<div class="flex gap-1.5 mb-1.5 overflow-x-auto lg:flex-wrap no-scrollbar -mx-1 px-1">
     <button data-brand="" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] ${chip(activeBrand === null)}"><i data-lucide="layers" class="w-3.5 h-3.5"></i>All</button>`;
   for (const b of brands) {
     html += `<button data-brand="${b}" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] capitalize ${chip(activeBrand === b)}"><i data-lucide="${BRAND_ICONS[b] ?? "swatch-book"}" class="w-3.5 h-3.5"></i>${b === "emulsion" ? "Emulsion" : b}</button>`;
   }
-  html += `</div><div class="flex flex-wrap gap-1.5">`;
+  html += `</div><div class="flex gap-1.5 overflow-x-auto lg:flex-wrap no-scrollbar -mx-1 px-1">`;
   for (const t of TYPE_CHIPS) {
     html += `<button data-type="${t.key}" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] ${chip(activeType === t.key)}"><i data-lucide="${t.icon}" class="w-3.5 h-3.5"></i>${t.label}</button>`;
   }
@@ -236,7 +254,7 @@ function renderCabinet(filter = "") {
       }
       groups += `<div class="flex items-center gap-1.5 font-mono text-[9.5px] tracking-[0.18em] text-ink2 px-1 pt-3 pb-1.5">
         <i data-lucide="${tier === "official" ? "badge-check" : "users"}" class="w-3 h-3"></i>${tier === "official" ? "Official" : "Community"} · ${looks.length}</div>
-        <div class="grid grid-cols-2 gap-2">${cards}</div>`;
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">${cards}</div>`;
     }
     if (groups) html += `<div><div class="flex items-center gap-2 px-1 pt-3">
       <i data-lucide="${BRAND_ICONS[brand] ?? "swatch-book"}" class="w-4 h-4"></i>
@@ -289,6 +307,21 @@ function setSplit(pct: number) {
   $("#split-label").textContent = `${Math.round(split)} / ${Math.round(100 - split)}`;
 }
 
+function setBusy(b: boolean) {
+  $("#spin")?.classList.toggle("hidden", !b);
+  $("#cap-state").textContent = b ? "DEVELOPING…" : "READY";
+  const ex = $<HTMLButtonElement>("#btn-export");
+  ex.disabled = b;
+  ex.classList.toggle("opacity-50", b);
+}
+function progress(p: number) {
+  const bar = $("#topbar") as HTMLDivElement | null;
+  if (!bar) return;
+  bar.style.width = `${p}%`;
+  if (p >= 100) setTimeout(() => bar.classList.add("opacity-0"), 300);
+}
+function hideStageLoad() { $("#stage-load")?.classList.add("hidden"); }
+
 function scheduleApply() {
   clearTimeout(applyTimer);
   applyTimer = setTimeout(applyNow, 90);
@@ -296,13 +329,16 @@ function scheduleApply() {
 
 async function applyNow() {
   if (!origPixels || !recipe || !current) return;
-  $("#cap-state").textContent = "DEVELOPING…";
+  if (!engine) { setBusy(true); return; } // engineP.then re-invokes applyNow
+  setBusy(true);
   const cube = await cubeFor(current);
   const input = new Uint8Array(origPixels);
-  const out = wasmApply(input, imgW, imgH, JSON.stringify(recipe), cube);
+  const out = engine.apply(input, imgW, imgH, JSON.stringify(recipe), cube);
   const ctx = $<HTMLCanvasElement>("#after").getContext("2d")!;
   ctx.putImageData(new ImageData(new Uint8ClampedArray(out), imgW, imgH), 0, 0);
-  $("#cap-state").textContent = "READY";
+  setBusy(false);
+  hideStageLoad();
+  progress(100);
 }
 
 async function loadPhoto(source: Blob | string, name: string) {
@@ -325,8 +361,9 @@ async function loadPhoto(source: Blob | string, name: string) {
 async function boot() {
   layout();
   createIcons();
+  progress(45);
   catalog = await (await fetch("/library/catalog.json")).json();
-  $("#hdr-count").textContent = `${catalog.totalLooks} looks · v${engine_version()}`;
+  $("#hdr-count").textContent = `${catalog.totalLooks} looks`;
   renderChips();
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
