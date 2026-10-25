@@ -8,6 +8,7 @@ import { createIcons } from "lucide";
 type Engine = typeof import("./pkg/openfuji_wasm.js");
 let engine: Engine | null = null;
 const engineP: Promise<Engine> = import("./pkg/openfuji_wasm.js");
+engineP.catch((e) => showError(`engine failed to load (${(e as Error)?.message ?? e})`));
 engineP.then((m) => {
   engine = m;
   if (catalog) $("#hdr-count").textContent = `${catalog.totalLooks} looks · v${m.engine_version()}`;
@@ -358,13 +359,28 @@ async function loadPhoto(source: Blob | string, name: string) {
   applyNow();
 }
 
+function showError(msg: string) {
+  const el = $("#cap-state");
+  if (el) el.textContent = `ERROR — ${msg}`.slice(0, 140);
+  const sl = $("#stage-load div");
+  if (sl) sl.textContent = `SOMETHING BROKE — ${msg}`.slice(0, 140);
+  console.error("[open-fuji]", msg);
+}
+
 async function boot() {
   layout();
   createIcons();
+  addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
+  addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
   progress(45);
-  catalog = await (await fetch("/library/catalog.json")).json();
+  try {
+    catalog = await (await fetch("/library/catalog.json")).json();
+  } catch (e) {
+    showError(`catalog failed to load (${(e as Error)?.message ?? e})`);
+    throw e;
+  }
   $("#hdr-count").textContent = `${catalog.totalLooks} looks`;
-  renderChips();
+  try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
