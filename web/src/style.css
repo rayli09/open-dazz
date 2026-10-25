@@ -1,51 +1,33 @@
 @import "tailwindcss";
 
+/* Design language borrowed from opencode.ai (studied 2026-10-25):
+   warm near-white surfaces, one mono voice (IBM Plex Mono), hairline
+   warm-gray borders, flat — no shadows, no decoration — and a pale
+   chartreuse wash reserved for interactive/selection states. */
 @theme {
-  --color-paper: #f4edda;
-  --color-paper2: #ece1c6;
-  --color-mat: #faf6ea;
-  --color-ink: #211c14;
-  --color-ink2: #5c5342;
-  --color-rule: #c8b995;
-  --color-stamp: #a83c26;
-  --font-display: "Fraunces", "Noto Serif SC", Georgia, serif;
+  --color-paper: hsl(0, 20%, 99%);
+  --color-paper2: hsl(0, 8%, 97%);
+  --color-mat: #ffffff;
+  --color-ink: hsl(0, 5%, 12%);
+  --color-ink2: hsl(0, 2%, 49%);
+  --color-rule: hsl(30, 2%, 81%);
+  --color-stamp: hsl(0, 5%, 22%);
+  --color-accent: hsl(62, 84%, 88%);
+  --font-display: "IBM Plex Mono", ui-monospace, monospace;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --font-sans: "Instrument Sans", "Noto Sans SC", system-ui, sans-serif;
 }
 
-/* The workshop rule: nothing is rounded. Ever. */
+/* squared, always */
 *, *::before, *::after { border-radius: 0 !important; }
 
-html { background: var(--color-paper); }
-body { background: var(--color-paper); color: var(--color-ink); }
+html, body { background: var(--color-paper); color: var(--color-ink); }
 
-/* graph-paper bench surface */
-.bench-grid {
-  background-color: var(--color-paper2);
-  background-image:
-    linear-gradient(to right, rgb(33 28 20 / 0.055) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(33 28 20 / 0.055) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
+/* flat bench — no graph paper, no shadows in this language */
+.bench-grid { background: var(--color-paper2); }
+.hard-shadow, .hard-shadow-sm { box-shadow: none; }
 
-.hard-shadow { box-shadow: 8px 8px 0 0 var(--color-ink); }
-.hard-shadow-sm { box-shadow: 4px 4px 0 0 var(--color-ink); }
-
-/* film strip band: ink strip, paper sprocket holes (squares, of course) */
-.filmstrip {
-  background-color: var(--color-ink);
-  background-image: linear-gradient(to right, var(--color-paper) 0 14px, transparent 14px);
-  background-size: 44px 100%;
-  background-repeat: repeat-x;
-  background-position: center;
-  height: 22px;
-  border-top: 5px solid var(--color-ink);
-  border-bottom: 5px solid var(--color-ink);
-  box-sizing: content-box;
-  opacity: 1;
-}
-
-/* square range sliders, like a lab instrument scale */
+/* square range sliders */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -54,38 +36,17 @@ input[type="range"] {
   background: transparent;
   cursor: pointer;
 }
-input[type="range"]::-webkit-slider-runnable-track {
-  height: 2px;
-  background: var(--color-ink);
-}
+input[type="range"]::-webkit-slider-runnable-track { height: 1px; background: var(--color-ink2); }
 input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  margin-top: -7px;
-  width: 16px;
-  height: 16px;
-  background: var(--color-paper);
-  border: 2px solid var(--color-ink);
+  -webkit-appearance: none; appearance: none; margin-top: -6px;
+  width: 13px; height: 13px; background: var(--color-ink); border: none;
 }
-input[type="range"]::-moz-range-track {
-  height: 2px;
-  background: var(--color-ink);
-}
-input[type="range"]::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  background: var(--color-paper);
-  border: 2px solid var(--color-ink);
-}
+input[type="range"]::-moz-range-track { height: 1px; background: var(--color-ink2); }
+input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; background: var(--color-ink); border: none; }
 
-/* thin square scrollbar for the cabinet */
-.cabinet-scroll::-webkit-scrollbar { width: 10px; }
+/* thin square scrollbar */
+.cabinet-scroll::-webkit-scrollbar { width: 8px; }
 .cabinet-scroll::-webkit-scrollbar-track { background: var(--color-paper2); }
-.cabinet-scroll::-webkit-scrollbar-thumb { background: var(--color-ink); border: 2px solid var(--color-paper2); }
+.cabinet-scroll::-webkit-scrollbar-thumb { background: var(--color-rule); }
 
-.stamp {
-  color: var(--color-stamp);
-  border: 1.5px solid var(--color-stamp);
-  padding: 1px 6px;
-  letter-spacing: 0.14em;
-}
+::selection { background: var(--color-accent); }
