@@ -25,10 +25,10 @@ let applyTimer: ReturnType<typeof setTimeout> | undefined;
 
 function layout() {
   $("#app").innerHTML = `
-  <header class="border-b-2 border-ink">
+  <header class="border-b border-rule">
     <div class="flex flex-wrap items-end justify-between gap-3 px-4 py-3 md:px-6">
       <div>
-        <div class="font-display text-[30px] leading-none font-black tracking-tight">OPEN—FUJI</div>
+        <div class="font-display text-[26px] leading-none font-semibold tracking-tight">OPEN—FUJI</div>
         <div class="font-mono text-[10px] tracking-[0.22em] text-ink2 mt-1">PHOTO WORKSHOP · FILM SIMULATION BENCH · EST. 2026</div>
       </div>
       <div class="flex items-center gap-3">
@@ -43,7 +43,7 @@ function layout() {
 
   <main class="grid grid-cols-1 lg:grid-cols-[292px_minmax(0,1fr)_300px]">
     <!-- THE CABINET -->
-    <aside class="border-b-2 lg:border-b-0 lg:border-r-2 border-ink flex flex-col min-h-0">
+    <aside class="border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
       <div class="px-4 pt-4 pb-2">
         <div class="font-mono text-[10px] tracking-[0.22em] text-ink2">THE CABINET — 档案柜</div>
         <input id="search" type="text" placeholder="SEARCH THE CABINET…"
@@ -62,7 +62,7 @@ function layout() {
         <input id="file" type="file" accept="image/*" class="hidden" />
       </div>
       <div class="flex-1 flex items-start justify-center p-4 md:p-8">
-        <figure id="stage" class="relative bg-mat p-3 md:p-4 hard-shadow max-w-full select-none touch-none">
+        <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-rule max-w-full select-none touch-none">
           <div id="printwrap" class="relative overflow-hidden bg-paper2">
             <canvas id="after" class="block w-full h-auto"></canvas>
             <canvas id="before" class="block w-full h-auto absolute inset-0"></canvas>
@@ -79,7 +79,7 @@ function layout() {
     </section>
 
     <!-- THE LEDGER -->
-    <aside class="border-t-2 lg:border-t-0 lg:border-l-2 border-ink px-4 py-4">
+    <aside class="border-t lg:border-t-0 lg:border-l border-rule px-4 py-4">
       <div class="font-mono text-[10px] tracking-[0.22em] text-ink2">THE LEDGER — 冲洗记录</div>
       <h1 id="led-name" class="font-display text-[24px] leading-tight font-bold mt-2">—</h1>
       <div id="led-meta" class="font-mono text-[10.5px] leading-relaxed tracking-[0.06em] text-ink2 mt-1"></div>
@@ -98,7 +98,7 @@ function layout() {
     </aside>
   </main>
 
-  <div class="filmstrip" aria-hidden="true"></div>
+  <div class="border-t border-rule" aria-hidden="true"></div>
   <footer class="flex flex-wrap justify-between gap-2 px-4 md:px-6 py-3 font-mono text-[9.5px] tracking-[0.18em] text-ink2">
     <span>OPEN-FUJI — AN OPEN FILM-SIMULATION WORKSHOP</span>
     <span>FUJI = FUJIFILM TRADEMARK OF FUJIFILM CORP. NOT AFFILIATED. OTHER MARKS BELONG TO THEIR OWNERS.</span>
@@ -158,10 +158,10 @@ function renderCabinet(filter = "") {
       for (const look of looks) {
         n += 1;
         const sel = current?.id === look.id;
-        rows += `<button data-look="${look.id}" class="look-row w-full flex items-baseline gap-2 px-2 py-[5px] text-left ${sel ? "bg-ink text-paper" : "hover:bg-paper2"}">
-          <span class="font-mono text-[9.5px] ${sel ? "text-paper/70" : "text-ink2"} w-7 shrink-0">№${String(n).padStart(3, "0")}</span>
+        rows += `<button data-look="${look.id}" class="look-row w-full flex items-baseline gap-2 px-2 py-[5px] text-left ${sel ? "bg-accent text-ink font-medium" : "hover:bg-paper2"}">
+          <span class="font-mono text-[9.5px] ${sel ? "text-ink/60" : "text-ink2"} w-7 shrink-0">№${String(n).padStart(3, "0")}</span>
           <span class="text-[12.5px] leading-tight flex-1">${look.name}</span>
-          <span class="font-mono text-[8.5px] tracking-[0.1em] ${sel ? "text-paper/70" : "text-ink2"}">${look.hasLut ? "LUT" : "PARAMS"}</span>
+          <span class="font-mono text-[8.5px] tracking-[0.1em] ${sel ? "text-ink/60" : "text-ink2"}">${look.hasLut ? "LUT" : "PARAMS"}</span>
         </button>`;
       }
     }
