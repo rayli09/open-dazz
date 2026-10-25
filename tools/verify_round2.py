@@ -22,7 +22,7 @@ import rawpy
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
-LUT_DIR = ROOT / "packs/fuji-simulations/luts"
+LUT_DIR = ROOT / "library/fuji/official/luts"
 OUT = ROOT / "tools/verify-out"
 DOCS = ROOT / "docs/verification"
 SIMS = {"Provia/Standard": "provia_sRGB.cube", "Classic Chrome": "classic chrome_sRGB.cube",

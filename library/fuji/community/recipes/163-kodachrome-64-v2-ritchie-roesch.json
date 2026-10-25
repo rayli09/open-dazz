@@ -1,0 +1,39 @@
+{
+  "name": "Kodachrome 64 V2",
+  "baseLut": "../../official/luts/classic chrome_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 2
+  },
+  "whiteBalance": {
+    "tempShift": 0.556,
+    "tintShift": 0.222
+  },
+  "source": "open-fuji-recipes: Classic Chrome recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Chrome",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "daylight",
+    "wbr": 2,
+    "wbb": -5,
+    "dr": "DR200",
+    "ev": "+2/3",
+    "ccfx": "strong",
+    "ccfxb": "weak",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 163,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

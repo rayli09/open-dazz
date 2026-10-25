@@ -1,0 +1,39 @@
+{
+  "name": "Fujicolor Reala 100",
+  "baseLut": "../../official/luts/classic neg_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -1,
+    "shadow": -1,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: Classic Neg recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Neg",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "daylight",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "DR400",
+    "ev": "+1/1",
+    "ccfx": "strong",
+    "ccfxb": "strong",
+    "sharp": -2,
+    "clarity": -3,
+    "nr": -4,
+    "sourceId": 27,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

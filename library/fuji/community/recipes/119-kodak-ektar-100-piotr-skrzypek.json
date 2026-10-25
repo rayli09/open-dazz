@@ -1,0 +1,39 @@
+{
+  "name": "Kodak Ektar 100",
+  "baseLut": "../../official/luts/astia_sRGB.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 1,
+    "color": 3
+  },
+  "whiteBalance": {
+    "tempShift": -0.333,
+    "tintShift": -0.111
+  },
+  "source": "open-fuji-recipes: ASTIA/Soft recipe by Piotr Skrzypek",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ASTIA/Soft",
+    "creator": "Piotr Skrzypek",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "5900k",
+    "wbr": -1,
+    "wbb": 3,
+    "dr": "AUTO",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 0,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 119,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

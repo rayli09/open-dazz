@@ -40,18 +40,24 @@ cargo run -p openfuji-cli -- apply examples/test-scene.png /tmp/out.png \
 - **Engine-agnostic core.** The rendering core consumes standard formats — `.cube` and HaldCLUT — so existing open LUT packs drop in unchanged (ffmpeg `lut3d`/`haldclut` compatible).
 - **Open data, credited.** Seed material comes from open sources (see below); every imported pack keeps its license and attribution.
 
-## Bundled packs
+## The library (organized filters)
 
-- **`packs/fuji-simulations/`** — 11 base film-simulation LUTs (.cube, sRGB)
-  from FujifilmCameraProfiles, each with a bare recipe. **CC BY-NC-SA 4.0**
-  (non-commercial, share-alike) — kept segregated on purpose.
-- **`packs/fuji-recipes/`** — 204 community camera recipes imported from
+Looks are grouped **by brand, official first** — see `library/README.md`
+for the layout contract and `library/catalog.json` for the machine index.
+
+- **`library/fuji/official/`** — Fujifilm's own 11 film simulations as
+  .cube LUTs (from FujifilmCameraProfiles) + a bare recipe each.
+  **CC BY-NC-SA 4.0** (non-commercial, share-alike), segregated on purpose.
+- **`library/fuji/community/`** — 204 community recipes imported from
   open-fuji-recipes (Apache-2.0) by `tools/import-fuji-recipes.py`:
-  148 joined to a base LUT, 56 params-only (Acros/Monochrome/Sepia bases
-  pending a Hald->cube converter). Original camera settings preserved in
-  each file's `provenance` block.
+  148 joined to an official base LUT, 56 params-only (Acros/Monochrome/
+  Sepia bases pending a Hald->cube converter).
 
-Browse them with `openfuji list`, apply with `openfuji apply`.
+```sh
+openfuji list                                  # grouped by brand, official first
+openfuji apply in.png out.png --look "Docu Classic Chrome"
+openfuji apply in.png out.png --recipe path/to/recipe.json
+```
 
 ## Seed sources (not yet imported)
 

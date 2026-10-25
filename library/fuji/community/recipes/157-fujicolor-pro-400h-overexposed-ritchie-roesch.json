@@ -1,0 +1,39 @@
+{
+  "name": "Fujicolor Pro 400H OverExposed",
+  "baseLut": "../../official/luts/provia_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": 4,
+    "color": 1
+  },
+  "whiteBalance": {
+    "tempShift": -0.222,
+    "tintShift": 0.222
+  },
+  "source": "open-fuji-recipes: PROVIA/Standard recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "PROVIA/Standard",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 2,
+    "wbb": 2,
+    "dr": "DR400",
+    "ev": "+1/1",
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 157,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

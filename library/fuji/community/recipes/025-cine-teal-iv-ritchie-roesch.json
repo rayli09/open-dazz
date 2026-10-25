@@ -1,0 +1,39 @@
+{
+  "name": "Cine Teal (IV)",
+  "baseLut": "../../official/luts/eterna_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "large"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": 4,
+    "color": -1
+  },
+  "whiteBalance": {
+    "tempShift": 1.0,
+    "tintShift": 0.111
+  },
+  "source": "open-fuji-recipes: ETERNA/Cinema recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ETERNA/Cinema",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "4550k",
+    "wbr": 1,
+    "wbb": -9,
+    "dr": "DR200",
+    "ev": "+2/3",
+    "ccfx": "weak",
+    "ccfxb": "strong",
+    "sharp": -2,
+    "clarity": -5,
+    "nr": -4,
+    "sourceId": 25,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}
