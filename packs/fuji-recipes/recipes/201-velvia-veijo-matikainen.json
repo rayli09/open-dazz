@@ -1,0 +1,39 @@
+{
+  "name": "Velvia",
+  "baseLut": "../../fuji-simulations/luts/velvia_sRGB.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": -1,
+    "color": 2
+  },
+  "whiteBalance": {
+    "tempShift": 0.111,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: VELVIA/Vivid recipe by Veijo Matikainen",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "VELVIA/Vivid",
+    "creator": "Veijo Matikainen",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": -1,
+    "dr": "DR100",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 2,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 201,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

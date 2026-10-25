@@ -1,0 +1,39 @@
+{
+  "name": "The Cinema",
+  "baseLut": "../../fuji-simulations/luts/eterna_sRGB.cube",
+  "grain": {
+    "amount": 0.55,
+    "size": "large"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 1,
+    "shadow": 2,
+    "color": 2
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: ETERNA/Cinema recipe by Gajan Balan",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ETERNA/Cinema",
+    "creator": "Gajan Balan",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "DR100",
+    "ev": 0,
+    "ccfx": "weak",
+    "ccfxb": "weak",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -2,
+    "sourceId": 62,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

@@ -40,7 +40,20 @@ cargo run -p openfuji-cli -- apply examples/test-scene.png /tmp/out.png \
 - **Engine-agnostic core.** The rendering core consumes standard formats — `.cube` and HaldCLUT — so existing open LUT packs drop in unchanged (ffmpeg `lut3d`/`haldclut` compatible).
 - **Open data, credited.** Seed material comes from open sources (see below); every imported pack keeps its license and attribution.
 
-## Seed sources
+## Bundled packs
+
+- **`packs/fuji-simulations/`** — 11 base film-simulation LUTs (.cube, sRGB)
+  from FujifilmCameraProfiles, each with a bare recipe. **CC BY-NC-SA 4.0**
+  (non-commercial, share-alike) — kept segregated on purpose.
+- **`packs/fuji-recipes/`** — 204 community camera recipes imported from
+  open-fuji-recipes (Apache-2.0) by `tools/import-fuji-recipes.py`:
+  148 joined to a base LUT, 56 params-only (Acros/Monochrome/Sepia bases
+  pending a Hald->cube converter). Original camera settings preserved in
+  each file's `provenance` block.
+
+Browse them with `openfuji list`, apply with `openfuji apply`.
+
+## Seed sources (not yet imported)
 
 - [open-fuji-recipes](https://github.com/matthieurobin/open-fuji-recipes) — Fujifilm film simulation recipes as data
 - [EmulsionPresets](https://github.com/peva3/EmulsionPresets) — 451 open-source film emulation presets (Kodak, Fuji, Ilford, CineStill, ...)
@@ -56,9 +69,10 @@ cargo run -p openfuji-cli -- apply examples/test-scene.png /tmp/out.png \
 ## Roadmap
 
 1. ✅ Recipe schema v0 + reference engine + CLI (M1)
-2. Recipe collection: importers for community-curated packs (Fuji X Weekly
-   recipes via open-fuji-recipes, EmulsionPresets / Lightroom packs,
-   HaldCLUT packs), usable from the CLI (M2, in progress)
+2. Recipe collection (M2): ✅ fuji-simulations LUT pack + 204 fuji-recipes
+   imported and CLI-usable. Next: EmulsionPresets XMP baker (451 Lightroom
+   presets, MIT); Sowerby HaldCLUT set for the B&W sims (GPL — fetch-time
+   conversion only, derivatives never committed)
 3. WASM build of the core wired into the web app: drag-drop, recipe picker,
    before/after slider, export (M3, deferred by decision 2026-10-25 — the
    Vite starter in web/ stands until then)

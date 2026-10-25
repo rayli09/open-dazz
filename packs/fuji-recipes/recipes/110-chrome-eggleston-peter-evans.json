@@ -1,0 +1,39 @@
+{
+  "name": "Chrome Eggleston",
+  "baseLut": "../../fuji-simulations/luts/classic chrome_sRGB.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 2,
+    "shadow": 2,
+    "color": -2
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: Classic Chrome recipe by Peter Evans",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Chrome",
+    "creator": "Peter Evans",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "AUTO",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": -1,
+    "clarity": 0,
+    "nr": -3,
+    "sourceId": 110,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

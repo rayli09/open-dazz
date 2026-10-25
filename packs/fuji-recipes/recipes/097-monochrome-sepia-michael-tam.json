@@ -1,0 +1,39 @@
+{
+  "name": "Monochrome Sepia",
+  "baseLut": null,
+  "grain": {
+    "amount": 0.55,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: SEPIA recipe by Michael Tam",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "SEPIA",
+    "creator": "Michael Tam",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "STRONG",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": -4,
+    "clarity": 0,
+    "nr": 4,
+    "sourceId": 97,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only. No base LUT available yet for this film sim (B&W family) — params only."
+  }
+}

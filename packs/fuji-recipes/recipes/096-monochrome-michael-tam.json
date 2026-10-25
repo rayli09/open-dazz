@@ -1,0 +1,39 @@
+{
+  "name": "Monochrome",
+  "baseLut": null,
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: MONOCHROME recipe by Michael Tam",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "MONOCHROME",
+    "creator": "Michael Tam",
+    "type": "blackWhite",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "DR100",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 0,
+    "clarity": 0,
+    "nr": 0,
+    "sourceId": 96,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only. No base LUT available yet for this film sim (B&W family) — params only."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Acros Agfa APX 400",
+  "baseLut": null,
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": 4,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.111
+  },
+  "source": "open-fuji-recipes: ACROS recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ACROS",
+    "creator": "Ritchie Roesch",
+    "type": "blackWhite",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 1,
+    "wbb": 0,
+    "dr": "DR400",
+    "ev": "+2/3",
+    "ccfx": "strong",
+    "ccfxb": "off",
+    "sharp": 4,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 124,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only. No base LUT available yet for this film sim (B&W family) — params only."
+  }
+}

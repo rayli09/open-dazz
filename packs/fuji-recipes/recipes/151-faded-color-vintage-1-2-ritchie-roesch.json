@@ -1,0 +1,39 @@
+{
+  "name": "Faded Color Vintage 1/2",
+  "baseLut": "../../fuji-simulations/luts/pro neg hi_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 4,
+    "shadow": 4,
+    "color": 4
+  },
+  "whiteBalance": {
+    "tempShift": -0.556,
+    "tintShift": -0.556
+  },
+  "source": "open-fuji-recipes: Pro Neg Hi recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Pro Neg Hi",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": -5,
+    "wbb": 5,
+    "dr": "DR200",
+    "ev": "+2/3",
+    "ccfx": "strong",
+    "ccfxb": "off",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 151,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

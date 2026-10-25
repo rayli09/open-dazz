@@ -1,0 +1,39 @@
+{
+  "name": "Lomography Color 100",
+  "baseLut": "../../fuji-simulations/luts/velvia_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 1,
+    "shadow": 1,
+    "color": -3
+  },
+  "whiteBalance": {
+    "tempShift": -0.778,
+    "tintShift": -0.333
+  },
+  "source": "open-fuji-recipes: VELVIA/Vivid recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "VELVIA/Vivid",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "shade",
+    "wbr": -3,
+    "wbb": 7,
+    "dr": "DR400",
+    "ev": "+1/3",
+    "ccfx": "weak",
+    "ccfxb": "off",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 177,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

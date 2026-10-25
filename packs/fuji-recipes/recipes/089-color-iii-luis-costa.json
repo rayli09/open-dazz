@@ -1,0 +1,39 @@
+{
+  "name": "Color (III)",
+  "baseLut": "../../fuji-simulations/luts/classic chrome_sRGB.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 1,
+    "shadow": 1,
+    "color": 3
+  },
+  "whiteBalance": {
+    "tempShift": 0.556,
+    "tintShift": 0.444
+  },
+  "source": "open-fuji-recipes: Classic Chrome recipe by Luis Costa",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Chrome",
+    "creator": "Luis Costa",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "auto",
+    "wbr": 4,
+    "wbb": -5,
+    "dr": "DR200",
+    "ev": "-1/3",
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 0,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 89,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

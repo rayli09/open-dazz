@@ -1,0 +1,39 @@
+{
+  "name": "Kodak Ektar 100",
+  "baseLut": "../../fuji-simulations/luts/classic chrome_sRGB.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 1,
+    "shadow": -2,
+    "color": 4
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.333
+  },
+  "source": "open-fuji-recipes: Classic Chrome recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "Classic Chrome",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "6050k",
+    "wbr": 3,
+    "wbb": 0,
+    "dr": "AUTO",
+    "ev": "+2/3",
+    "ccfx": "strong",
+    "ccfxb": "weak",
+    "sharp": 0,
+    "clarity": 3,
+    "nr": -4,
+    "sourceId": 32,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

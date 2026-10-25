@@ -1,0 +1,39 @@
+{
+  "name": "Leica M10 Monochrome",
+  "baseLut": null,
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": 2,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": -0.778,
+    "tintShift": -0.333
+  },
+  "source": "open-fuji-recipes: MONOCHROME +G recipe by Mark G. Adams",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "MONOCHROME +G",
+    "creator": "Mark G. Adams",
+    "type": "blackWhite",
+    "sensor": 3,
+    "wbMode": "5600k",
+    "wbr": -3,
+    "wbb": 7,
+    "dr": "DR100",
+    "ev": "+1/3",
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 4,
+    "clarity": 0,
+    "nr": 2,
+    "sourceId": 15,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only. No base LUT available yet for this film sim (B&W family) — params only."
+  }
+}
