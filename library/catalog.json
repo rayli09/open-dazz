@@ -6249,6 +6249,38 @@
       },
       "total": 253
     },
+    "hasselblad": {
+      "tiers": {
+        "official": [],
+        "community": [
+          {
+            "id": "hasselblad/community/hasselblad-nature",
+            "name": "Hasselblad Nature (HNCS)",
+            "brand": "hasselblad",
+            "tier": "community",
+            "recipe": "library/hasselblad/community/recipes/hasselblad-nature.json",
+            "baseLut": "../luts/hasselblad-nature.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "Apache-2.0"
+          },
+          {
+            "id": "hasselblad/community/hasselblad-standard",
+            "name": "Hasselblad Standard (HNCS)",
+            "brand": "hasselblad",
+            "tier": "community",
+            "recipe": "library/hasselblad/community/recipes/hasselblad-standard.json",
+            "baseLut": "../luts/hasselblad-standard.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "Apache-2.0"
+          }
+        ]
+      },
+      "total": 2
+    },
     "ilford": {
       "tiers": {
         "official": [],
@@ -7634,5 +7666,5 @@
       "total": 3
     }
   },
-  "totalLooks": 626
+  "totalLooks": 628
 }
