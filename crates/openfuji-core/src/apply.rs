@@ -20,12 +20,13 @@ pub fn apply_recipe(img: &RgbImage, recipe: &Recipe, lut: Option<&Lut3d>) -> Rgb
         b *= 1.0 - 0.10 * wb.temp_shift;
         g *= 1.0 - 0.08 * wb.tint_shift;
 
-        // Base LUT.
+        // Base LUT, blended by recipe strength.
         if let Some(lut) = lut {
             let s = lut.sample(r, g, b);
-            r = s[0];
-            g = s[1];
-            b = s[2];
+            let k = recipe.strength.clamp(0.0, 1.0);
+            r += (s[0] - r) * k;
+            g += (s[1] - g) * k;
+            b += (s[2] - b) * k;
         }
 
         // Tone: shadow/highlight offsets weighted by luminance; color = saturation.
@@ -125,6 +126,22 @@ mod tests {
         let recipe: Recipe = serde_json::from_str(r#"{"name":"noop"}"#).unwrap();
         let out = apply_recipe(&img, &recipe, None);
         assert_eq!(out.get_pixel(0, 0), img.get_pixel(0, 0));
+    }
+
+    #[test]
+    fn strength_zero_disables_lut() {
+        // A LUT that maps everything to red must have no effect at strength 0.
+        let cube = "LUT_3D_SIZE 2\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n";
+        let lut = crate::lut::Lut3d::parse_cube(cube).unwrap();
+        let img = RgbImage::from_pixel(2, 2, image::Rgb([10, 20, 30]));
+        let recipe: Recipe =
+            serde_json::from_str(r#"{"name":"s0","strength":0.0}"#).unwrap();
+        let out = apply_recipe(&img, &recipe, Some(&lut));
+        assert_eq!(out.get_pixel(0, 0), img.get_pixel(0, 0));
+        let full: Recipe =
+            serde_json::from_str(r#"{"name":"s1","strength":1.0}"#).unwrap();
+        let out = apply_recipe(&img, &full, Some(&lut));
+        assert_eq!(*out.get_pixel(0, 0), image::Rgb([255, 0, 0]));
     }
 
     #[test]
