@@ -128,17 +128,13 @@ function layout() {
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
         <img src="/logo.png" alt="" class="logo-light w-9 h-9 pixelated" /><img src="/logo-dark.png" alt="" class="logo-dark w-9 h-9 pixelated" />
-        <span class="font-display text-[20px] font-semibold tracking-tight">open-fuji</span>
+        <span class="font-display text-[20px] font-bold tracking-tight">open-fuji</span>
       </div>
       <div class="flex items-center gap-2">
-        <div class="flex border border-ink font-mono text-[11px]" role="group" aria-label="Mode">
+        <div class="seg flex border border-ink font-mono text-[11px]" role="group" aria-label="Mode">
           <button id="mode-simple" class="px-2.5 py-2 tracking-wide">SIMPLE</button>
           <button id="mode-pro" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button>
         </div>
-        <button id="btn-theme" title="Toggle dark mode" class="border border-rule p-2 hover:bg-paper2 transition-colors">
-          <span class="block dark:hidden">${icon("moon", "w-4 h-4 block")}</span>
-          <span class="hidden dark:block">${icon("sun", "w-4 h-4 block")}</span>
-        </button>
         <a href="https://github.com/rayli09/open-fuji" target="_blank" rel="noreferrer"
            class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-2 hover:bg-paper2 transition-colors">GitHub ${icon("arrow-up-right", "w-3.5 h-3.5")}</a>
       </div>
@@ -170,11 +166,11 @@ function layout() {
       <div class="tex-filmleader shrink-0 border-b border-rule" aria-hidden="true"></div>
       <div class="px-3 pt-3 pb-2 flex flex-col gap-2 shrink-0">
         <div class="flex items-center gap-2">
-          <div class="flex border border-ink font-mono text-[10px]">
+          <div class="seg flex border border-ink font-mono text-[10px]">
             <button id="shelf-on" class="px-2 py-1">SHELF</button>
             <button id="shelf-all" class="px-2 py-1 border-l border-ink">ALL FILMS</button>
           </div>
-          <span id="film-counter" class="ml-auto font-mono text-[10px] bg-ink text-accent px-1.5 py-0.5"></span>
+          <span id="film-counter" class="ml-auto font-mono text-[10px] bg-ink text-accentink px-1.5 py-0.5"></span>
         </div>
         <div id="strip-chips"></div>
       </div>
@@ -204,7 +200,7 @@ function layout() {
             <span class="vf absolute bottom-2 left-2 w-5 h-5 border-b-2 border-l-2 border-ink pointer-events-none z-10"></span>
             <span class="vf absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-ink pointer-events-none z-10"></span>
             <div id="divider" class="absolute top-0 bottom-0 w-[2px] bg-ink pointer-events-none">
-              <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] bg-mat border border-ink flex items-center justify-center">${icon("compare", "w-4 h-4")}</div>
+              <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] rounded-full bg-mat border border-ink flex items-center justify-center">${icon("compare", "w-4 h-4")}</div>
             </div>
           </div>
           <figcaption class="w-full shrink-0 flex flex-wrap justify-between gap-2 pt-3 font-mono text-[10px] tracking-[0.16em] text-ink2">
@@ -606,13 +602,6 @@ async function boot() {
   });
   addEventListener("pointerdown", (e) => { if (!(e.target as HTMLElement).closest(".dd")) closeDDs(); });
   addEventListener("keydown", (e) => { if (e.key === "Escape") closeDDs(); });
-  $("#btn-theme").addEventListener("click", () => {
-    const dark = document.documentElement.dataset.theme !== "dark";
-    if (dark) document.documentElement.dataset.theme = "dark";
-    else delete document.documentElement.dataset.theme;
-    try { localStorage.setItem("of-theme", dark ? "dark" : "light"); } catch {}
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#181209" : "#efe5cd");
-  });
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
   $<HTMLInputElement>("#file").addEventListener("change", (e) => {
     const f = (e.target as HTMLInputElement).files?.[0];

@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       try {
-        var t = localStorage.getItem("of-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-        if (t === "dark") document.documentElement.dataset.theme = "dark";
         document.documentElement.dataset.mode = localStorage.getItem("of-mode") === "pro" ? "pro" : "simple";
       } catch (e) {}
     </script>
@@ -15,12 +13,12 @@
     <link rel="icon" type="image/png" href="/logo-64.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#efe5cd" />
-    <meta name="theme-color" content="#efe5cd" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#000000" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
   </head>

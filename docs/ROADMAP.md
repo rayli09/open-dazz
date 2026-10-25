@@ -103,6 +103,9 @@ none of the _identity_.
 - **P2 asset library — shipped**: hand-drawn sigils ×15 + controls,
   texture pack, app icons + manifest, this design doc; Lucide retired
   from the chrome.
+- **Dazz black reskin — shipped** (Ray's full-copy call): black
+  stage, grotesque type, rounded surfaces, zero shadows; the cream
+  vintage palette and the palette switcher both retired.
 - **Next: GPU preview spike (vgpu/WebGPU)** — Ray sequenced it after
   P2 on 2026-10-25: GPU LUT pass + grain + true halation bloom as the
   interactive preview, CPU/WASM engine stays as fallback and as the
