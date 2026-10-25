@@ -4,15 +4,15 @@
 import {
   createIcons, MountainSnow, Film, Contrast, Clapperboard, Aperture, Camera,
   CircleDot, Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus,
-  Sparkles, BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download,
+  BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download, Sun,
   ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight,
 } from "lucide";
 
 const ICONS = {
   MountainSnow, Film, Contrast, Clapperboard, Aperture, Camera, CircleDot,
-  Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus, Sparkles,
+  Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus,
   BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download,
-  ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight,
+  ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight, Sun,
 };
 function icons() {
   try { createIcons({ icons: ICONS }); }
@@ -36,7 +36,7 @@ const BRAND_ICONS: Record<string, string> = {
   fuji: "mountain-snow", kodak: "film", ilford: "contrast", cinestill: "clapperboard",
   agfa: "aperture", lomography: "camera", rollei: "circle-dot", foma: "layers",
   adox: "flask-conical", polaroid: "image", bergger: "moon", kentmere: "landmark",
-  orwo: "globe", ricoh: "focus", emulsion: "sparkles",
+  orwo: "globe", ricoh: "focus", emulsion: "palette",
 };
 function lookIcon(l: LookEntry): string {
   if (l.tier === "official") return "badge-check";
@@ -87,12 +87,18 @@ function layout() {
   <header class="border-b-2 border-ink">
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
-        <img src="/logo.png" alt="" class="w-9 h-9 pixelated" />
+        <img src="/logo.png" alt="" class="logo-light w-9 h-9 pixelated" /><img src="/logo-dark.png" alt="" class="logo-dark w-9 h-9 pixelated" />
         <span class="font-display text-[20px] font-semibold tracking-tight">open-fuji</span>
         <span class="font-mono text-[10px] text-ink2" id="hdr-count"></span>
       </div>
-      <a href="https://github.com/rayli09/open-fuji" target="_blank" rel="noreferrer"
-         class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-1.5 hover:bg-paper2 transition-colors">GitHub <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+      <div class="flex items-center gap-2">
+        <button id="btn-theme" title="Toggle dark mode" class="border border-rule p-2 hover:bg-paper2 transition-colors">
+          <span class="block dark:hidden"><i data-lucide="moon" class="w-4 h-4 block"></i></span>
+          <span class="hidden dark:block"><i data-lucide="sun" class="w-4 h-4 block"></i></span>
+        </button>
+        <a href="https://github.com/rayli09/open-fuji" target="_blank" rel="noreferrer"
+           class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-2 hover:bg-paper2 transition-colors">GitHub <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+      </div>
     </div>
   </header>
 
@@ -102,7 +108,6 @@ function layout() {
       <div class="px-3 pt-3 pb-1">
         <div class="flex items-center gap-2 mb-2">
           <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">1</span>
-          <i data-lucide="sparkles" class="w-4 h-4"></i>
           <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">PICK A LOOK</span>
         </div>
         <div id="chips" class="mb-2"></div>
@@ -131,7 +136,7 @@ function layout() {
           <div id="printwrap" class="relative overflow-hidden bg-paper2">
             <canvas id="after" class="block w-full h-auto max-h-[62vh] lg:max-h-none object-contain"></canvas>
             <div id="stage-load" class="absolute inset-0 bg-mat/80 flex flex-col items-center justify-center gap-3">
-              <img src="/logo.png" alt="" class="w-12 h-12 pixelated skel-pulse" />
+              <img src="/logo.png" alt="" class="logo-light w-12 h-12 pixelated skel-pulse" /><img src="/logo-dark.png" alt="" class="logo-dark w-12 h-12 pixelated skel-pulse" />
               <div class="font-mono text-[10px] tracking-[0.2em] text-ink2">LOADING THE BENCH…</div>
             </div>
             <canvas id="before" class="block w-full h-auto absolute inset-0"></canvas>
@@ -222,7 +227,7 @@ function renderChips() {
   const host = $("#chips");
   const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
   const chip = (active: boolean) =>
-    active ? "bg-accent border-ink font-medium" : "bg-mat border-rule hover:bg-paper2";
+    active ? "bg-accent border-ink font-medium text-accentink" : "bg-mat border-rule hover:bg-paper2";
   let html = `<div class="flex gap-1.5 mb-1.5 overflow-x-auto lg:flex-wrap no-scrollbar -mx-1 px-1">
     <button data-brand="" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] ${chip(activeBrand === null)}"><i data-lucide="layers" class="w-3.5 h-3.5"></i>All</button>`;
   for (const b of brands) {
@@ -261,7 +266,7 @@ function renderCabinet(filter = "") {
             <img loading="lazy" src="${thumbUrl(look.id)}" alt="" class="w-full aspect-[3/2] object-cover block" />
             ${look.tier === "official" ? '<span class="absolute top-1 left-1 bg-paper/90 p-[3px]"><i data-lucide="badge-check" class="w-3.5 h-3.5 block"></i></span>' : ""}
           </span>
-          <span class="block px-2 py-1.5 ${sel ? "bg-accent" : ""}">
+          <span class="block px-2 py-1.5 ${sel ? "bg-accent text-accentink" : ""}">
             <span class="flex items-center gap-1.5">
               <i data-lucide="${lookIcon(look)}" class="w-3.5 h-3.5 shrink-0 text-ink2"></i>
               <span class="text-[11.5px] leading-tight font-medium truncate">${look.name}</span>
@@ -406,6 +411,13 @@ async function boot() {
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
+  $("#btn-theme").addEventListener("click", () => {
+    const dark = document.documentElement.dataset.theme !== "dark";
+    if (dark) document.documentElement.dataset.theme = "dark";
+    else delete document.documentElement.dataset.theme;
+    try { localStorage.setItem("of-theme", dark ? "dark" : "light"); } catch {}
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#171310" : "#f2ecdc");
+  });
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
   $<HTMLInputElement>("#file").addEventListener("change", (e) => {
     const f = (e.target as HTMLInputElement).files?.[0];
