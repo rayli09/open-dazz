@@ -8,7 +8,6 @@
         var t = localStorage.getItem("of-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
         if (t === "dark") document.documentElement.dataset.theme = "dark";
         document.documentElement.dataset.mode = localStorage.getItem("of-mode") === "pro" ? "pro" : "simple";
-        var pl = localStorage.getItem("of-palette"); if (pl) document.documentElement.dataset.palette = pl;
       } catch (e) {}
     </script>
     <title>open-fuji — Photo Workshop</title>
@@ -16,8 +15,8 @@
     <link rel="icon" type="image/png" href="/logo-64.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#f2ecdc" />
-    <meta name="theme-color" content="#f2ecdc" />
+    <meta name="theme-color" content="#efe5cd" />
+    <meta name="theme-color" content="#efe5cd" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

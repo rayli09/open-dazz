@@ -135,7 +135,6 @@ function layout() {
           <button id="mode-simple" class="px-2.5 py-2 tracking-wide">SIMPLE</button>
           <button id="mode-pro" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button>
         </div>
-        <div id="palettes" class="flex items-center border border-rule" role="group" aria-label="Palette"></div>
         <button id="btn-theme" title="Toggle dark mode" class="border border-rule p-2 hover:bg-paper2 transition-colors">
           <span class="block dark:hidden">${icon("moon", "w-4 h-4 block")}</span>
           <span class="hidden dark:block">${icon("sun", "w-4 h-4 block")}</span>
@@ -607,36 +606,12 @@ async function boot() {
   });
   addEventListener("pointerdown", (e) => { if (!(e.target as HTMLElement).closest(".dd")) closeDDs(); });
   addEventListener("keydown", (e) => { if (e.key === "Escape") closeDDs(); });
-  const PALETTES: { id: string; title: string; paper: string; accent: string }[] = [
-    { id: "", title: "Original — warm paper + lime", paper: "#f2ecdc", accent: "#e3edb2" },
-    { id: "vsco", title: "VSCO — neutral mono", paper: "#f6f6f4", accent: "#111111" },
-    { id: "te", title: "TE — lab grey + signal orange", paper: "#e3e3df", accent: "#ff4d00" },
-    { id: "dazz", title: "Dazz — cream + red-orange", paper: "#efe5cd", accent: "#f04e23" },
-  ];
-  const renderPalettes = () => {
-    const host = document.querySelector("#palettes");
-    if (!host) return;
-    const cur = document.documentElement.dataset.palette ?? "";
-    host.innerHTML = PALETTES.map((p) => `
-      <button data-pal="${p.id}" title="${p.title}" aria-label="${p.title}"
-        class="relative w-[26px] h-[26px] ${p.id === cur ? "outline outline-2 outline-ink -outline-offset-2" : "opacity-70 hover:opacity-100"} transition-opacity"
-        style="background:${p.paper}"><span class="absolute right-[3px] bottom-[3px] w-[9px] h-[9px]" style="background:${p.accent}"></span></button>`).join("");
-    host.querySelectorAll<HTMLButtonElement>("[data-pal]").forEach((b) =>
-      b.addEventListener("click", () => {
-        const v = b.dataset.pal!;
-        if (v) document.documentElement.dataset.palette = v;
-        else delete document.documentElement.dataset.palette;
-        try { localStorage.setItem("of-palette", v); } catch {}
-        renderPalettes();
-      }));
-  };
-  renderPalettes();
   $("#btn-theme").addEventListener("click", () => {
     const dark = document.documentElement.dataset.theme !== "dark";
     if (dark) document.documentElement.dataset.theme = "dark";
     else delete document.documentElement.dataset.theme;
     try { localStorage.setItem("of-theme", dark ? "dark" : "light"); } catch {}
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#171310" : "#f2ecdc");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#181209" : "#efe5cd");
   });
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
   $<HTMLInputElement>("#file").addEventListener("change", (e) => {

@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
-/* Design language: opencode.ai's restraint (mono voice, hairlines,
-   flat squared UI) warmed up per Ray's direction — rice-white paper,
-   visible paper grain, heavier warm rules, a vintage workshop feel.
-   Tokens: warm cream paper, warm brown-ink, pale warm chartreuse. */
+/* Design language: a vintage film-box palette (decided with Ray,
+   2026-10-25) — cream paper, warm black ink, and one hot accent in
+   the red-orange of film packaging and halation. Mono voice,
+   hairlines, flat squared UI, visible paper grain. */
 @theme {
-  --color-paper: #f2ecdc;
-  --color-paper2: #eae1c9;
-  --color-mat: #fbf8ef;
-  --color-ink: #29211a;
-  --color-ink2: #87785f;
-  --color-rule: #cfc09c;
-  --color-stamp: #3a2f24;
-  --color-accent: #e3edb2;
-  --color-accentink: #29211a;
+  --color-paper: #efe5cd;
+  --color-paper2: #e4d7b8;
+  --color-mat: #faf3e0;
+  --color-ink: #201a13;
+  --color-ink2: #8d7a58;
+  --color-rule: #d2bf94;
+  --color-stamp: #2a2115;
+  --color-accent: #f04e23;
+  --color-accentink: #fff6e6;
   --font-display: "IBM Plex Mono", ui-monospace, monospace;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --font-sans: "Instrument Sans", "Noto Sans SC", system-ui, sans-serif;
@@ -85,15 +85,15 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: v
 
 /* ---------- dark theme: warm charcoal paper ---------- */
 [data-theme="dark"] {
-  --color-paper: #171310;
-  --color-paper2: #201913;
-  --color-mat: #241c15;
-  --color-ink: #ede6d6;
-  --color-ink2: #9a8a6e;
-  --color-rule: #453829;
-  --color-stamp: #cfc2a4;
-  --color-accent: #e3edb2;
-  --color-accentink: #29211a;
+  --color-paper: #181209;
+  --color-paper2: #20180e;
+  --color-mat: #251c10;
+  --color-ink: #f0e6cf;
+  --color-ink2: #97835f;
+  --color-rule: #3f3220;
+  --color-stamp: #f0e6cf;
+  --color-accent: #ff5a26;
+  --color-accentink: #fff6e6;
 }
 [data-theme="dark"] body::after { mix-blend-mode: overlay; opacity: 0.3; }
 [data-theme="dark"] .bench-grid {
@@ -141,43 +141,6 @@ button { touch-action: manipulation; }
 @media (min-width: 1024px) {
   [data-mode="simple"] main { grid-template-columns: 300px minmax(0, 1fr); }
 }
-/* ---- copycat palettes (Ray asked to try mature references live) ----
-   Each palette restates every token; [data-palette] on <html> wins over
-   the base themes. "Original" = no attribute. */
-/* 1 — VSCO: photo-editor minimalism, pure neutrals, black is the accent */
-:root[data-palette="vsco"] {
-  --color-paper: #f6f6f4; --color-paper2: #e9e9e6; --color-mat: #ffffff;
-  --color-ink: #111111; --color-ink2: #8a8a85; --color-rule: #dddcd8;
-  --color-stamp: #111111; --color-accent: #111111; --color-accentink: #f6f6f4;
-}
-:root[data-palette="vsco"][data-theme="dark"] {
-  --color-paper: #0f0f0f; --color-paper2: #161616; --color-mat: #1b1b1b;
-  --color-ink: #f2f2ef; --color-ink2: #8f8f89; --color-rule: #2b2b2b;
-  --color-stamp: #000000; --color-accent: #f2f2ef; --color-accentink: #0f0f0f;
-}
-/* 2 — TE: teenage-engineering lab instrument, cool greys + signal orange */
-:root[data-palette="te"] {
-  --color-mat: #edede9;
-  --color-ink: #1a1a1a; --color-ink2: #74746c; --color-rule: #c2c2ba;
-  --color-stamp: #1a1a1a; --color-accent: #ff4d00; --color-accentink: #ffffff;
-}
-:root[data-palette="te"][data-theme="dark"] {
-  --color-paper: #161615; --color-paper2: #1d1d1c; --color-mat: #222221;
-  --color-ink: #ececea; --color-ink2: #8e8e84; --color-rule: #333330;
-  --color-stamp: #ececea; --color-accent: #ff4d00; --color-accentink: #ffffff;
-}
-/* 3 — DAZZ: the camera app's own cream + black + red-orange */
-:root[data-palette="dazz"] {
-  --color-paper: #efe5cd; --color-paper2: #e4d7b8; --color-mat: #faf3e0;
-  --color-ink: #201a13; --color-ink2: #8d7a58; --color-rule: #d2bf94;
-  --color-stamp: #2a2115; --color-accent: #f04e23; --color-accentink: #fff6e6;
-}
-:root[data-palette="dazz"][data-theme="dark"] {
-  --color-paper: #181209; --color-paper2: #20180e; --color-mat: #251c10;
-  --color-ink: #f0e6cf; --color-ink2: #97835f; --color-rule: #3f3220;
-  --color-stamp: #f0e6cf; --color-accent: #ff5a26; --color-accentink: #fff6e6;
-}
-
 /* ---- texture pack (P2): paper grain lives on body::after; these three
    are the reusable material classes ---- */
 /* film leader: a punched sprocket row, for rail/section edges */
