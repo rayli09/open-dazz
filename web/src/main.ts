@@ -243,9 +243,7 @@ function layout() {
   </main>
 
   <div class="border-t border-rule" aria-hidden="true"></div>
-  <footer class="shrink-0 px-4 md:px-6 py-3 font-mono text-[9.5px] tracking-[0.14em] text-ink2">
-    open-fuji — open film simulations · not affiliated with Fujifilm Corp.
-  </footer>`;
+`;
 }
 
 function sliderRow(key: string, label: string, min: number, max: number, step: number, val: number, fmt: (v: number) => string) {
