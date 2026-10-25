@@ -3,6 +3,7 @@
 // every photograph is developed locally on this machine.
 import { store, modeAtom, type Mode } from "./state";
 import { icon, brandSigil, glyphSvg } from "./icons";
+import { shelfArt } from "./shelf-art";
 
 // The WASM engine loads lazily in the background so the shell, cabinet
 // and photo paint immediately; develops queue until it lands.
@@ -418,9 +419,9 @@ function renderStrip() {
   host.innerHTML = items.length ? items.map(({ look: l, label }) => {
     const sel = current?.id === l.id;
     return `<button data-look="${l.id}" class="strip-card shrink-0 w-[92px] lg:w-full text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
-      <img src="/thumbs/${l.id.replaceAll("/", "__")}.webp" alt="" loading="lazy" class="w-full h-[62px] lg:h-[76px] object-cover block" />
+      ${shelfArt(l.id) ?? `<img src="/thumbs/${l.id.replaceAll("/", "__")}.webp" alt="" loading="lazy" class="w-full h-[62px] lg:h-[76px] object-cover block" />`}
       <span class="flex items-center gap-1 px-1.5 py-1 ${sel ? "bg-accent text-accentink font-semibold" : ""}">
-        <span class="w-3.5 h-3.5 shrink-0 ${sel ? "" : "text-ink2"}">${glyphFor(l)}</span>
+        ${shelfArt(l.id) ? "" : `<span class="w-3.5 h-3.5 shrink-0 ${sel ? "" : "text-ink2"}">${glyphFor(l)}</span>`}
         <span class="font-mono text-[9px] leading-tight truncate">${label}</span>
       </span>
     </button>`;
