@@ -55,40 +55,100 @@ function stage(a: ArtSpec, inner: string): string {
     <radialGradient id="ls${i}" cx="0.35" cy="0.35" r="0.95">
       <stop offset="0" stop-color="#b9ccd8"/><stop offset="0.45" stop-color="#33465a"/><stop offset="1" stop-color="#0a0f14"/>
     </radialGradient>
-    <pattern id="lt${i}" width="5" height="5" patternUnits="userSpaceOnUse">
-      <circle cx="1.6" cy="1.6" r="1.1" fill="rgba(0,0,0,0.20)"/>
+    <pattern id="lt${i}" width="4" height="4" patternUnits="userSpaceOnUse">
+      <circle cx="1.3" cy="1.3" r="0.85" fill="rgba(0,0,0,0.22)"/>
+      <circle cx="3.3" cy="3.3" r="0.85" fill="rgba(255,255,255,0.05)"/>
     </pattern>
+    <linearGradient id="pl${i}" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="${a.base}"/><stop offset="0.5" stop-color="${a.top}"/><stop offset="1" stop-color="${a.base}"/>
+    </linearGradient>
+    <filter id="soft${i}" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3.5"/>
+    </filter>
   </defs>
   <rect width="320" height="200" fill="url(#bg${i})"/>
   <circle cx="160" cy="90" r="98" fill="url(#gl${i})"/>
-  <ellipse cx="160" cy="170" rx="98" ry="9" fill="#000" opacity="0.38"/>
+  <ellipse cx="160" cy="170" rx="98" ry="9" fill="#000" opacity="0.38" filter="url(#soft{i})"/>
   ${inner.replaceAll("{i}", String(i))}
 </svg>`;
 }
 
 function body(a: ArtSpec): string {
   const inkLine = a.dark || a.base === "#e9e6df" ? "rgba(0,0,0,0.35)" : "rgba(0,0,0,0.25)";
+  const engrave = a.dark ? "rgba(255,255,255,0.55)" : "rgba(0,0,0,0.5)";
+  // shutter-dial ticks
+  let ticks = "";
+  for (let k = 0; k < 12; k++) {
+    const t = (k * 30 * Math.PI) / 180;
+    const x1 = 232 + 12.5 * Math.cos(t), y1 = 60 + 12.5 * Math.sin(t);
+    const x2 = 232 + 15 * Math.cos(t), y2 = 60 + 15 * Math.sin(t);
+    ticks += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${engrave}" stroke-width="0.8"/>`;
+  }
+  // aperture engravings around the lens ring
+  const aps = ["1.4", "2", "2.8", "4", "5.6", "8", "11", "16"];
+  let apText = "";
+  aps.forEach((v, k) => {
+    const t = ((-150 + k * 43) * Math.PI) / 180;
+    const x = 160 + 30.5 * Math.cos(t), y = 118 + 30.5 * Math.sin(t);
+    apText += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="4.6" font-weight="600" fill="#c9ced4" transform="rotate(${-150 + k * 43 + 90} ${x.toFixed(1)} ${y.toFixed(1)})">${v}</text>`;
+  });
+  // knurled focus ring
+  let knurl = "";
+  for (let k = 0; k < 40; k++) {
+    const t = (k * 9 * Math.PI) / 180;
+    const x = 160 + 25.8 * Math.cos(t), y = 118 + 25.8 * Math.sin(t);
+    knurl += `<rect x="${(x - 1).toFixed(1)}" y="${(y - 2.4).toFixed(1)}" width="2" height="4.8" rx="0.8" fill="#33373d" transform="rotate(${k * 9 + 90} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+  }
   const stripe = a.rainbow
-    ? `<g>${["#e84a3a", "#f28c28", "#e3c53a", "#2fbf71", "#1fa8c9", "#2438d8"].map((c, k) => `<rect x="${118 + k * 14}" y="86" width="14" height="72" fill="${c}"/>`).join("")}</g>`
+    ? `<g>${["#e84a3a", "#f28c28", "#e3c53a", "#2fbf71", "#1fa8c9", "#2438d8"].map((c, k) => `<rect x="${112 + k * 13}" y="88" width="13" height="66" fill="${c}"/>`).join("")}</g>`
     : "";
   return stage(a, `
-  <rect x="58" y="64" width="204" height="94" rx="10" fill="url(#mt{i})"/>
-  <rect x="58" y="88" width="204" height="70" rx="10" fill="url(#lt{i})"/>
-  <rect x="58" y="64" width="204" height="22" rx="10" fill="${a.top}"/>
-  <rect x="58" y="76" width="204" height="10" fill="${a.top}"/>
-  <circle cx="84" cy="62" r="9" fill="${a.top}" stroke="${inkLine}"/>
-  <circle cx="236" cy="62" r="9" fill="${a.top}" stroke="${inkLine}"/>
-  <circle cx="212" cy="60" r="4.5" fill="${a.accent}"/>
-  <rect x="196" y="70" width="36" height="13" rx="3" fill="#10151a"/>
-  <rect x="200" y="73" width="12" height="3" fill="rgba(255,255,255,0.35)"/>
-  <rect x="70" y="70" width="17" height="13" rx="3" fill="#10151a"/>
+  <rect x="54" y="62" width="212" height="98" rx="10" fill="url(#mt{i})"/>
+  <rect x="54" y="88" width="212" height="72" rx="10" fill="url(#lt{i})"/>
+  <rect x="54" y="62" width="212" height="24" rx="10" fill="url(#pl{i})"/>
+  <rect x="54" y="76" width="212" height="10" fill="url(#pl{i})"/>
+  <line x1="58" y1="86.5" x2="262" y2="86.5" stroke="rgba(0,0,0,0.35)" stroke-width="0.8"/>
+  <text x="66" y="78" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-style="italic" font-weight="600" font-size="8.5" letter-spacing="0.4" fill="${engrave}">open fuji</text>
+  <path d="M252 58 l13 -5 -1.5 7 -11 3 z" fill="${a.top}" stroke="${inkLine}" stroke-width="0.7"/>
+  ${ticks}
+  <circle cx="232" cy="60" r="10.5" fill="url(#pl{i})" stroke="${inkLine}"/>
+  <circle cx="232" cy="60" r="4" fill="none" stroke="${engrave}" stroke-width="0.8"/>
+  <text x="232" y="44" text-anchor="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="4.8" font-weight="600" fill="${engrave}">125</text>
+  <rect x="150" y="57" width="20" height="4.5" rx="1" fill="#14161a"/>
+  <rect x="150" y="57" width="20" height="1.6" fill="rgba(255,255,255,0.28)"/>
+  <circle cx="90" cy="59" r="6.5" fill="url(#pl{i})" stroke="${inkLine}"/>
+  <circle cx="90" cy="59" r="3.6" fill="${a.band}"/>
+  <rect x="196" y="66" width="15" height="8" rx="1.5" fill="#10151a"/>
+  <text x="203.5" y="72.5" text-anchor="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="5" font-weight="700" fill="#e8b13a">24</text>
+  <rect x="62" y="70" width="42" height="15" rx="3.5" fill="url(#ls{i})" stroke="rgba(255,255,255,0.22)" stroke-width="0.7"/>
+  <rect x="68" y="74" width="30" height="8" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="0.6"/>
+  <path d="M64 84 L84 71 L90 71 L70 84 Z" fill="rgba(255,255,255,0.14)"/>
+  <rect x="196" y="70" width="19" height="15" rx="3" fill="url(#ls{i})" stroke="rgba(255,255,255,0.22)" stroke-width="0.7"/>
+  <circle cx="226" cy="77" r="3" fill="#d43a2a"/>
+  <circle cx="226" cy="77" r="5.5" fill="#d43a2a" opacity="0.25"/>
   ${stripe}
-  <circle cx="160" cy="116" r="35" fill="#14161a"/>
-  <circle cx="160" cy="116" r="28" fill="none" stroke="#c8c8c8" stroke-width="2.5" opacity="0.85"/>
-  <circle cx="160" cy="116" r="21" fill="url(#ls{i})"/>
-  <circle cx="152" cy="108" r="5.5" fill="rgba(255,255,255,0.75)"/>
-  <circle cx="160" cy="116" r="2.6" fill="#06090c"/>
-  <rect x="66" y="146" width="30" height="5" rx="2.5" fill="${a.accent}" opacity="0.9"/>`);
+  <circle cx="160" cy="118" r="38.5" fill="#101216"/>
+  <circle cx="160" cy="118" r="38.5" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="0.8"/>
+  ${[0, 90, 180, 270].map((deg) => { const t = (deg * Math.PI) / 180; const x = 160 + 36 * Math.cos(t), y = 118 + 36 * Math.sin(t); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.3" fill="#3c4046"/>`; }).join("")}
+  <circle cx="160" cy="118" r="33" fill="#1b1e23"/>
+  ${apText}
+  <circle cx="160" cy="79.5" r="1.9" fill="${a.accent}"/>
+  ${knurl}
+  <circle cx="160" cy="118" r="23.5" fill="#0c0e11"/>
+  <circle cx="160" cy="118" r="19.5" fill="url(#ls{i})"/>
+  <ellipse cx="149" cy="107" rx="9.5" ry="6" fill="#7a4fd0" opacity="0.20" transform="rotate(-24 149 107)"/>
+  <ellipse cx="171" cy="129" rx="7.5" ry="4.6" fill="#3fd08a" opacity="0.15" transform="rotate(-24 171 129)"/>
+  <circle cx="152" cy="109.5" r="4.4" fill="rgba(255,255,255,0.85)"/>
+  <circle cx="160" cy="118" r="2.6" fill="#05070a"/>
+  <path d="M118 138 l7 -3 1.8 5 -7 3 z" fill="${a.top}" stroke="${inkLine}" stroke-width="0.6"/>
+  <rect x="238" y="98" width="3" height="34" rx="1.5" fill="rgba(0,0,0,0.28)"/>
+  <rect x="244" y="98" width="3" height="34" rx="1.5" fill="rgba(0,0,0,0.28)"/>
+  <circle cx="66" cy="150" r="2.2" fill="none" stroke="${engrave}" stroke-width="0.8"/>
+  <line x1="64.6" y1="151.4" x2="67.4" y2="148.6" stroke="${engrave}" stroke-width="0.8"/>
+  <circle cx="254" cy="150" r="2.2" fill="none" stroke="${engrave}" stroke-width="0.8"/>
+  <line x1="252.6" y1="148.6" x2="255.4" y2="151.4" stroke="${engrave}" stroke-width="0.8"/>
+  <text x="66" y="156" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="5.2" font-weight="600" letter-spacing="0.6" fill="${engrave}">OPEN FUJI</text>
+  <rect x="222" y="147" width="30" height="4.6" rx="2.3" fill="${a.accent}" opacity="0.9"/>`);
 }
 
 function box(a: ArtSpec): string {
