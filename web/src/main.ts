@@ -202,6 +202,21 @@ function layout() {
       </div>
     </aside>
 
+    <!-- THE SHELF RAIL (simple mode: left on desktop, under the photo on mobile) -->
+    <aside class="shelf-rail order-2 lg:order-1 flex-col min-h-0 border-t lg:border-t-0 lg:border-r border-rule">
+      <div class="px-3 pt-3 pb-2 flex flex-col gap-2 shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="flex border border-ink font-mono text-[10px]">
+            <button id="shelf-on" class="px-2 py-1">SHELF</button>
+            <button id="shelf-all" class="px-2 py-1 border-l border-ink">ALL FILMS</button>
+          </div>
+          <span id="film-counter" class="ml-auto font-mono text-[10px] bg-ink text-accent px-1.5 py-0.5"></span>
+        </div>
+        <div id="strip-chips"></div>
+      </div>
+      <div id="strip" class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto cabinet-scroll px-3 pb-3 lg:flex-1 lg:min-h-0"></div>
+    </aside>
+
     <!-- THE BENCH -->
     <section class="order-1 lg:order-2 bench-grid relative flex flex-col min-h-0">
       <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
@@ -232,17 +247,6 @@ function layout() {
             <span class="flex items-center gap-2"><span id="spin" class="hidden w-[13px] h-[13px] border-2 border-rule border-t-ink animate-spin shrink-0"></span><span id="cap-file">—</span></span><span id="cap-state"></span>
           </figcaption>
         </figure>
-      </div>
-      <div class="simple-only flex-col gap-2 mx-4 mb-3">
-        <div class="flex items-center gap-2">
-          <div class="flex border border-ink font-mono text-[10px]">
-            <button id="shelf-on" class="px-2 py-1">SHELF</button>
-            <button id="shelf-all" class="px-2 py-1 border-l border-ink">ALL FILMS</button>
-          </div>
-          <span id="film-counter" class="ml-auto font-mono text-[10px] bg-ink text-accent px-1.5 py-0.5"></span>
-        </div>
-        <div id="strip-chips"></div>
-        <div id="strip" class="flex gap-2 overflow-x-auto cabinet-scroll pb-1"></div>
       </div>
       <div class="simple-only items-center gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
         <span id="print-chips-simple" class="flex items-center gap-1.5 shrink-0"></span>
@@ -463,8 +467,8 @@ function renderStrip() {
   }
   host.innerHTML = items.length ? items.map(({ look: l, label }) => {
     const sel = current?.id === l.id;
-    return `<button data-look="${l.id}" class="strip-card shrink-0 w-[92px] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
-      <img src="/thumbs/${l.id.replaceAll("/", "__")}.webp" alt="" loading="lazy" class="w-full h-[62px] object-cover block" />
+    return `<button data-look="${l.id}" class="strip-card shrink-0 w-[92px] lg:w-full text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
+      <img src="/thumbs/${l.id.replaceAll("/", "__")}.webp" alt="" loading="lazy" class="w-full h-[62px] lg:h-[76px] object-cover block" />
       <span class="flex items-center gap-1 px-1.5 py-1 ${sel ? "bg-accent text-accentink font-semibold" : ""}">
         <span class="w-3.5 h-3.5 shrink-0 ${sel ? "" : "text-ink2"}">${glyphFor(l)}</span>
         <span class="font-mono text-[9px] leading-tight truncate">${label}</span>
