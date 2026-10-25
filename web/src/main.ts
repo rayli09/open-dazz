@@ -2,6 +2,7 @@
 // Engine: openfuji-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
 import { apply as wasmApply, engine_version } from "./pkg/openfuji_wasm.js";
+import "./style.css";
 
 interface LookEntry {
   id: string; name: string; brand: string; tier: string;
