@@ -359,6 +359,17 @@ async function loadPhoto(source: Blob | string, name: string) {
   applyNow();
 }
 
+async function fetchCatalog(): Promise<Catalog> {
+  const attempt = async (url: string) => {
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), 9000);
+    try { return await (await fetch(url, { signal: ctl.signal })).json(); }
+    finally { clearTimeout(t); }
+  };
+  try { return await attempt("/library/catalog.json"); }
+  catch { return await attempt(`/library/catalog.json?retry=${Date.now()}`); }
+}
+
 function showError(msg: string) {
   const el = $("#cap-state");
   if (el) el.textContent = `ERROR — ${msg}`.slice(0, 140);
@@ -373,12 +384,7 @@ async function boot() {
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
   progress(45);
-  try {
-    catalog = await (await fetch("/library/catalog.json")).json();
-  } catch (e) {
-    showError(`catalog failed to load (${(e as Error)?.message ?? e})`);
-    throw e;
-  }
+  catalog = await fetchCatalog();
   $("#hdr-count").textContent = `${catalog.totalLooks} looks`;
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
@@ -409,6 +415,10 @@ async function boot() {
     addEventListener("pointermove", mv); addEventListener("pointerup", up); });
   addEventListener("dragover", (e) => e.preventDefault());
   addEventListener("drop", (e) => { e.preventDefault(); const f = e.dataTransfer?.files?.[0]; if (f) loadPhoto(f, f.name); });
+  setTimeout(() => {
+    if (!$("#stage-load")?.classList.contains("hidden") && !origPixels)
+      showError("boot timed out — the catalog or engine did not arrive; try reloading");
+  }, 15000);
   await loadPhoto("/samples/sample-1.jpg", "Sample I — the parcel");
   await selectLook("fuji/official/classic-chrome");
 }
