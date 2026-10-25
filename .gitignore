@@ -6,3 +6,6 @@ build/
 __pycache__/
 .venv/
 target/
+tests/images/src/
+tests/images/rendered/
+tools/verify-out/
