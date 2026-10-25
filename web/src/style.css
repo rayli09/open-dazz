@@ -127,3 +127,11 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: v
 /* mobile-native basics (Emil Kowalski's mobile-native skill) */
 * { -webkit-tap-highlight-color: transparent; }
 button { touch-action: manipulation; }
+
+/* mode: simple hides the pro ledger; the simple bar only exists in simple mode */
+.simple-only { display: none; }
+[data-mode="simple"] .simple-only { display: flex; }
+[data-mode="simple"] .ledger { display: none; }
+@media (min-width: 1024px) {
+  [data-mode="simple"] main { grid-template-columns: 300px minmax(0, 1fr); }
+}

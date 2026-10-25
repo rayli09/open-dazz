@@ -1,6 +1,7 @@
 // open-fuji Photo Workshop — a film-development bench in the browser.
 // Engine: openfuji-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
+import { store, modeAtom, type Mode } from "./state";
 import {
   createIcons, MountainSnow, Film, Contrast, Clapperboard, Aperture, Camera,
   CircleDot, Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus,
@@ -98,6 +99,10 @@ function layout() {
         <span class="font-mono text-[10px] text-ink2" id="hdr-count"></span>
       </div>
       <div class="flex items-center gap-2">
+        <div class="flex border border-ink font-mono text-[11px]" role="group" aria-label="Mode">
+          <button id="mode-simple" class="px-2.5 py-2 tracking-wide">SIMPLE</button>
+          <button id="mode-pro" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button>
+        </div>
         <button id="btn-theme" title="Toggle dark mode" class="border border-rule p-2 hover:bg-paper2 transition-colors">
           <span class="block dark:hidden"><i data-lucide="moon" class="w-4 h-4 block"></i></span>
           <span class="hidden dark:block"><i data-lucide="sun" class="w-4 h-4 block"></i></span>
@@ -209,7 +214,7 @@ function renderSliders() {
       fn(v); scheduleApply();
     });
   };
-  on("strength", (v) => { R.strength = v; $("#val-strength").textContent = `${Math.round(v * 100)}%`; });
+  on("strength", (v) => { R.strength = v; $("#val-strength").textContent = `${Math.round(v * 100)}%`; syncSimpleStrength(); });
   on("grain", (v) => { R.grain = { ...(R.grain ?? {}), amount: v, size: R.grain?.size ?? "small" }; $("#val-grain").textContent = v.toFixed(2); });
   on("halation", (v) => { R.halation = v; $("#val-halation").textContent = v.toFixed(2); });
   on("temp", (v) => { R.whiteBalance = { ...(R.whiteBalance ?? {}), tempShift: v }; $("#val-temp").textContent = (v >= 0 ? "+" : "") + v.toFixed(2); });
@@ -219,6 +224,16 @@ function renderSliders() {
     b.classList.toggle("bg-ink", active); b.classList.toggle("text-paper", active);
     b.onclick = () => { R.grain = { ...(R.grain ?? { amount: 0 }), size: b.dataset.gsize }; renderSliders(); scheduleApply(); };
   });
+  syncSimpleStrength();
+}
+
+function syncSimpleStrength() {
+  const inp = document.querySelector<HTMLInputElement>("#s-strength-simple");
+  if (!inp) return;
+  const v = (recipe as any)?.strength ?? 1;
+  inp.value = String(v);
+  const lbl = document.querySelector("#v-strength-simple");
+  if (lbl) lbl.textContent = `${Math.round(v * 100)}%`;
 }
 
 const TYPE_CHIPS: { key: TypeFilter; icon: string; label: string }[] = [
@@ -437,6 +452,16 @@ function showError(msg: string) {
   console.error("[open-fuji]", msg);
 }
 
+function exportPNG() {
+  $<HTMLCanvasElement>("#after").toBlob((b) => {
+    if (!b) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(b);
+    a.download = `openfuji-${(current?.name ?? "print").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
+    a.click(); URL.revokeObjectURL(a.href);
+  }, "image/png");
+}
+
 async function boot() {
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
@@ -449,6 +474,27 @@ async function boot() {
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
+  // Mode (simple/pro) — state lives in the Jotai store; DOM follows it.
+  const applyMode = () => {
+    const m = store.get(modeAtom);
+    document.documentElement.dataset.mode = m;
+    try { localStorage.setItem("of-mode", m); } catch {}
+    const on = "bg-ink text-paper", off = "hover:bg-paper2";
+    $<HTMLButtonElement>("#mode-simple").className = `px-2.5 py-2 tracking-wide ${m === "simple" ? on : off}`;
+    $<HTMLButtonElement>("#mode-pro").className = `px-2.5 py-2 tracking-wide border-l border-ink ${m === "pro" ? on : off}`;
+  };
+  store.sub(modeAtom, applyMode);
+  store.set(modeAtom, document.documentElement.dataset.mode === "pro" ? "pro" : "simple");
+  $<HTMLButtonElement>("#mode-simple").addEventListener("click", () => store.set(modeAtom, "simple" as Mode));
+  $<HTMLButtonElement>("#mode-pro").addEventListener("click", () => store.set(modeAtom, "pro" as Mode));
+  $<HTMLInputElement>("#s-strength-simple").addEventListener("input", (e) => {
+    const v = parseFloat((e.target as HTMLInputElement).value);
+    if (recipe) (recipe as any).strength = v;
+    $("#v-strength-simple").textContent = `${Math.round(v * 100)}%`;
+    const pro = document.querySelector<HTMLInputElement>("#sl-strength");
+    if (pro) { pro.value = String(v); $("#val-strength").textContent = `${Math.round(v * 100)}%`; }
+    scheduleApply();
+  });
   addEventListener("pointerdown", (e) => { if (!(e.target as HTMLElement).closest(".dd")) closeDDs(); });
   addEventListener("keydown", (e) => { if (e.key === "Escape") closeDDs(); });
   $("#btn-theme").addEventListener("click", () => {
@@ -465,15 +511,8 @@ async function boot() {
   });
   $("#btn-s1").addEventListener("click", () => loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait"));
   $("#btn-s2").addEventListener("click", () => loadPhoto("/samples/sample-2.jpg", "Sample II — the lake"));
-  $("#btn-export").addEventListener("click", () => {
-    $<HTMLCanvasElement>("#after").toBlob((b) => {
-      if (!b) return;
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(b);
-      a.download = `openfuji-${(current?.name ?? "print").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
-      a.click(); URL.revokeObjectURL(a.href);
-    }, "image/png");
-  });
+  $("#btn-export").addEventListener("click", exportPNG);
+  $("#btn-export-simple").addEventListener("click", exportPNG);
   const wrap = $("#printwrap");
   const drag = (e: PointerEvent) => {
     const r = wrap.getBoundingClientRect();

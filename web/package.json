@@ -19,6 +19,7 @@
     "vite-plugin-wasm": "^3.6.0"
   },
   "dependencies": {
+    "jotai": "^3.0.1",
     "lucide": "^1.61.0"
   }
 }
