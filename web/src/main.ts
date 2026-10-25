@@ -335,7 +335,7 @@ function buildChips(host: HTMLElement) {
         ${activeBrand ? brandSigil(activeBrand, "w-4 h-4 shrink-0") : icon("layers", "w-4 h-4 shrink-0")}
         <span class="flex-1 text-left capitalize">${activeBrand ? brandName(activeBrand) : "All brands"}</span>
         ${icon("chevron-down", "dd-chev w-4 h-4 shrink-0")}</button>
-      <div class="dd-panel absolute left-0 right-0 top-[calc(100%+4px)] z-30 bg-mat border border-ink stage-shadow max-h-72 overflow-y-auto cabinet-scroll">
+      <div class="dd-panel absolute left-0 right-0 top-[calc(100%+4px)] z-30 bg-mat border border-ink stage-shadow h-72 overflow-y-auto cabinet-scroll">
         ${opt(activeBrand === null, icon("layers", "w-4 h-4 shrink-0"), "All brands", 'data-brand=""')}
         ${brands.map((b) => opt(activeBrand === b, brandSigil(b, "w-4 h-4 shrink-0"), brandName(b), `data-brand="${b}"`)).join("")}
       </div>
@@ -345,7 +345,7 @@ function buildChips(host: HTMLElement) {
         ${icon(type.icon, "w-4 h-4 shrink-0")}
         <span class="flex-1 text-left">${type.label}</span>
         ${icon("chevron-down", "dd-chev w-4 h-4 shrink-0")}</button>
-      <div class="dd-panel absolute left-0 right-0 top-[calc(100%+4px)] z-30 bg-mat border border-ink stage-shadow">
+      <div class="dd-panel absolute left-0 right-0 top-[calc(100%+4px)] z-30 bg-mat border border-ink stage-shadow h-72 overflow-y-auto cabinet-scroll">
         ${TYPE_CHIPS.map((t) => opt(activeType === t.key, icon(t.icon, "w-4 h-4 shrink-0"), t.label, `data-type="${t.key}"`)).join("")}
       </div>
     </div>
