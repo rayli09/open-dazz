@@ -1,0 +1,10 @@
+{
+  "name": "Portra 400 (example)",
+  "baseLut": null,
+  "grain": { "amount": 0.30, "size": "large" },
+  "halation": 0.15,
+  "tone": { "highlight": 0, "shadow": 0, "color": 0 },
+  "whiteBalance": { "tempShift": 0, "tintShift": 0 },
+  "source": "hand-authored example for schema v0",
+  "license": "MIT"
+}
