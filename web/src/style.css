@@ -111,3 +111,19 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: v
 
 /* dark: variant follows the data-theme attribute, not the OS */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* dropdown panels — quick spring-like ease, grow from the trigger */
+.dd-panel {
+  opacity: 0;
+  transform: translateY(-3px) scale(0.98);
+  transform-origin: top center;
+  pointer-events: none;
+  transition: opacity 0.16s cubic-bezier(0.32, 0.72, 0.24, 1), transform 0.16s cubic-bezier(0.32, 0.72, 0.24, 1);
+}
+.dd-panel.open { opacity: 1; transform: none; pointer-events: auto; }
+.dd .dd-chev { transition: transform 0.16s ease; }
+.dd.open .dd-chev { transform: rotate(180deg); }
+
+/* mobile-native basics (Emil Kowalski's mobile-native skill) */
+* { -webkit-tap-highlight-color: transparent; }
+button { touch-action: manipulation; }
