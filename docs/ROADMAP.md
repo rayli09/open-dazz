@@ -95,8 +95,11 @@ none of the _identity_.
 - **P0 shelf + identity — shipped** (4416f39): FEATURED shelf of 16
   cameras, camera glyphs, film counter, develop-in, shutter button;
   simple mode later gained the left/right rail layout (eb546fe).
-- **P1 print ritual — shipped** (127e03e): frame / date burn-in /
-  ratio chips in both modes, pixel-verified from a captured print.
+- **P1 print ritual — shipped, then CUT the same day at Ray's
+  direction** ("just simple export"): frame / date burn-in / ratio
+  are gone; export is the plain developed PNG in both modes. The
+  develop-in animation and the shelf stay — the ritual that did not
+  survive contact was the decorated print itself.
 - **P2 asset library — shipped**: hand-drawn sigils ×15 + controls,
   texture pack, app icons + manifest, this design doc; Lucide retired
   from the chrome.

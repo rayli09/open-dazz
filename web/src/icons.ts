@@ -12,6 +12,7 @@ const CONTROLS: Record<string, string> = {
   check: '<path d="M4.5 12.5l5 5L19.5 7"/>',
   sun: '<circle cx="12" cy="12" r="3.6"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.2 5.2l1.8 1.8M17 17l1.8 1.8M18.8 5.2L17 7M7 17l-1.8 1.8"/>',
   moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  download: '<path d="M12 4v11.2M6.6 10.4L12 15.8l5.4-5.4"/><path d="M4 15v5h16v-5"/>',
   upload: '<path d="M12 16V4.8M6.6 10L12 4.6 17.4 10"/><path d="M4 15v5h16v-5"/>',
   print: '<path d="M7 8.5V3.8h10v4.7"/><rect x="4" y="8.5" width="16" height="8"/><path d="M7 13.8h10v6.4H7z"/>',
   user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20c1-3.8 3.6-5.6 7-5.6s6 1.8 7 5.6"/>',
