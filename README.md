@@ -56,10 +56,12 @@ cargo run -p openfuji-cli -- apply examples/test-scene.png /tmp/out.png \
 ## Roadmap
 
 1. ✅ Recipe schema v0 + reference engine + CLI (M1)
-2. WASM build of the core wired into the web app: drag-drop, recipe picker,
-   before/after slider, export (M2)
-3. Importers: Fuji X Weekly recipes, EmulsionPresets / Lightroom packs,
-   HaldCLUT packs (M3)
+2. Recipe collection: importers for community-curated packs (Fuji X Weekly
+   recipes via open-fuji-recipes, EmulsionPresets / Lightroom packs,
+   HaldCLUT packs), usable from the CLI (M2, in progress)
+3. WASM build of the core wired into the web app: drag-drop, recipe picker,
+   before/after slider, export (M3, deferred by decision 2026-10-25 — the
+   Vite starter in web/ stands until then)
 4. Video: frame pipeline via the CLI + ffmpeg (M4, exploratory)
 
 ## Name
