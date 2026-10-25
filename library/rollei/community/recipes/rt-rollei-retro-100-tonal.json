@@ -1,0 +1,25 @@
+{
+  "name": "Rollei Retro 100 Tonal",
+  "baseLut": "../luts/rt-rollei-retro-100-tonal.cube",
+  "grain": {
+    "amount": 0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "RawTherapee Film Simulation Collection (Pat David et al.) \u2014 HaldCLUT converted by tools/ingest_rt.py",
+  "license": "CC BY-SA 4.0",
+  "provenance": {
+    "category": "Black-and-White",
+    "sourceFile": "Black-and-White/Rollei/Rollei Retro 100 Tonal.png",
+    "sourceUrl": "http://rawtherapee.com/shared/HaldCLUT.zip"
+  }
+}

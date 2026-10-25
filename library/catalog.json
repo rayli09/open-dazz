@@ -97,6 +97,18 @@
             "license": "MIT"
           },
           {
+            "id": "agfa/community/rt-agfa-precisa-100",
+            "name": "Agfa Precisa 100",
+            "brand": "agfa",
+            "tier": "community",
+            "recipe": "library/agfa/community/recipes/rt-agfa-precisa-100.json",
+            "baseLut": "../luts/rt-agfa-precisa-100.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "agfa/community/agfa-scala-200",
             "name": "Agfa Scala 200",
             "brand": "agfa",
@@ -119,6 +131,18 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "agfa/community/rt-agfa-ultra-color-100",
+            "name": "Agfa Ultra Color 100",
+            "brand": "agfa",
+            "tier": "community",
+            "recipe": "library/agfa/community/recipes/rt-agfa-ultra-color-100.json",
+            "baseLut": "../luts/rt-agfa-ultra-color-100.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "agfa/community/agfa-vista-100",
@@ -170,7 +194,7 @@
           }
         ]
       },
-      "total": 11
+      "total": 13
     },
     "bergger": {
       "tiers": {
@@ -4470,6 +4494,42 @@
             "license": "MIT"
           },
           {
+            "id": "fuji/community/rt-fuji-160c",
+            "name": "Fuji 160C",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-160c.json",
+            "baseLut": "../luts/rt-fuji-160c.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-400h",
+            "name": "Fuji 400H",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-400h.json",
+            "baseLut": "../luts/rt-fuji-400h.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-800z",
+            "name": "Fuji 800Z",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-800z.json",
+            "baseLut": "../luts/rt-fuji-800z.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "fuji/community/066-fuji-acros-hendrik-hazeu",
             "name": "Fuji Acros",
             "brand": "fuji",
@@ -4494,6 +4554,18 @@
             "license": "Apache-2.0 (per upstream package.json)"
           },
           {
+            "id": "fuji/community/rt-fuji-astia-100-generic",
+            "name": "Fuji Astia 100 Generic",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-astia-100-generic.json",
+            "baseLut": "../luts/rt-fuji-astia-100-generic.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "fuji/community/fuji-astia-100f",
             "name": "Fuji Astia 100F",
             "brand": "fuji",
@@ -4504,6 +4576,126 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-100c",
+            "name": "Fuji FP-100c",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-100c.json",
+            "baseLut": "../luts/rt-fuji-fp-100c.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-100c-4-alt",
+            "name": "Fuji FP-100c 4 Alt",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-100c-4-alt.json",
+            "baseLut": "../luts/rt-fuji-fp-100c-4-alt.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-100c-7-alt",
+            "name": "Fuji FP-100c 7 ++ Alt",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-100c-7-alt.json",
+            "baseLut": "../luts/rt-fuji-fp-100c-7-alt.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-100c-cool",
+            "name": "Fuji FP-100c Cool",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-100c-cool.json",
+            "baseLut": "../luts/rt-fuji-fp-100c-cool.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-100c-negative",
+            "name": "Fuji FP-100c Negative",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-100c-negative.json",
+            "baseLut": "../luts/rt-fuji-fp-100c-negative.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-100c-negative-6-alt",
+            "name": "Fuji FP-100c Negative 6 ++ Alt",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-100c-negative-6-alt.json",
+            "baseLut": "../luts/rt-fuji-fp-100c-negative-6-alt.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-3000b",
+            "name": "Fuji FP-3000b",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-3000b.json",
+            "baseLut": "../luts/rt-fuji-fp-3000b.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-3000b-hc",
+            "name": "Fuji FP-3000b HC",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-3000b-hc.json",
+            "baseLut": "../luts/rt-fuji-fp-3000b-hc.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-3000b-negative",
+            "name": "Fuji FP-3000b Negative",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-3000b-negative.json",
+            "baseLut": "../luts/rt-fuji-fp-3000b-negative.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-fp-3000b-negative-early",
+            "name": "Fuji FP-3000b Negative Early",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-fp-3000b-negative-early.json",
+            "baseLut": "../luts/rt-fuji-fp-3000b-negative-early.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "fuji/community/fuji-fortia-sp-50",
@@ -4566,6 +4758,18 @@
             "license": "MIT"
           },
           {
+            "id": "fuji/community/rt-fuji-neopan-acros-100",
+            "name": "Fuji Neopan Acros 100",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-neopan-acros-100.json",
+            "baseLut": "../luts/rt-fuji-neopan-acros-100.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "fuji/community/fuji-pro-160c",
             "name": "Fuji Pro 160C",
             "brand": "fuji",
@@ -4600,6 +4804,18 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "fuji/community/rt-fuji-provia-100-generic",
+            "name": "Fuji Provia 100 Generic",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-provia-100-generic.json",
+            "baseLut": "../luts/rt-fuji-provia-100-generic.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "fuji/community/fuji-provia-100f",
@@ -4710,6 +4926,30 @@
             "license": "MIT"
           },
           {
+            "id": "fuji/community/rt-fuji-superia-200-xpro",
+            "name": "Fuji Superia 200 XPRO",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-superia-200-xpro.json",
+            "baseLut": "../luts/rt-fuji-superia-200-xpro.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "fuji/community/rt-fuji-superia-400",
+            "name": "Fuji Superia 400",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-superia-400.json",
+            "baseLut": "../luts/rt-fuji-superia-400.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "fuji/community/105-fuji-superia-800-nz-digital",
             "name": "Fuji Superia 800",
             "brand": "fuji",
@@ -4746,6 +4986,18 @@
             "license": "MIT"
           },
           {
+            "id": "fuji/community/rt-fuji-superia-reala-100",
+            "name": "Fuji Superia Reala 100",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-superia-reala-100.json",
+            "baseLut": "../luts/rt-fuji-superia-reala-100.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "fuji/community/fuji-superia-x-minus-tra-400",
             "name": "Fuji Superia X-TRA 400",
             "brand": "fuji",
@@ -4770,6 +5022,18 @@
             "license": "MIT"
           },
           {
+            "id": "fuji/community/rt-fuji-superia-x-tra-800",
+            "name": "Fuji Superia X-Tra 800",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-superia-x-tra-800.json",
+            "baseLut": "../luts/rt-fuji-superia-x-tra-800.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "fuji/community/fuji-velvia-100",
             "name": "Fuji Velvia 100",
             "brand": "fuji",
@@ -4780,6 +5044,18 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "fuji/community/rt-fuji-velvia-100-generic",
+            "name": "Fuji Velvia 100 Generic",
+            "brand": "fuji",
+            "tier": "community",
+            "recipe": "library/fuji/community/recipes/rt-fuji-velvia-100-generic.json",
+            "baseLut": "../luts/rt-fuji-velvia-100-generic.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "fuji/community/fuji-velvia-50",
@@ -6247,7 +6523,7 @@
           }
         ]
       },
-      "total": 253
+      "total": 274
     },
     "hasselblad": {
       "tiers": {
@@ -6358,6 +6634,18 @@
             "license": "MIT"
           },
           {
+            "id": "ilford/community/rt-ilford-hp5",
+            "name": "Ilford HP5",
+            "brand": "ilford",
+            "tier": "community",
+            "recipe": "library/ilford/community/recipes/rt-ilford-hp5.json",
+            "baseLut": "../luts/rt-ilford-hp5.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "ilford/community/ilford-hp5-plus",
             "name": "Ilford HP5 Plus",
             "brand": "ilford",
@@ -6406,6 +6694,18 @@
             "license": "MIT"
           },
           {
+            "id": "ilford/community/rt-ilford-hp5-plus-400",
+            "name": "Ilford HP5 Plus 400",
+            "brand": "ilford",
+            "tier": "community",
+            "recipe": "library/ilford/community/recipes/rt-ilford-hp5-plus-400.json",
+            "baseLut": "../luts/rt-ilford-hp5-plus-400.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "ilford/community/ilford-hp5-plus-dd-minus-x",
             "name": "Ilford HP5 Plus DD-X",
             "brand": "ilford",
@@ -6440,6 +6740,18 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "ilford/community/rt-ilford-hps-800",
+            "name": "Ilford HPS 800",
+            "brand": "ilford",
+            "tier": "community",
+            "recipe": "library/ilford/community/recipes/rt-ilford-hps-800.json",
+            "baseLut": "../luts/rt-ilford-hps-800.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "ilford/community/ilford-mg-warmtone",
@@ -6490,6 +6802,18 @@
             "license": "MIT"
           },
           {
+            "id": "ilford/community/rt-ilford-xp2",
+            "name": "Ilford XP2",
+            "brand": "ilford",
+            "tier": "community",
+            "recipe": "library/ilford/community/recipes/rt-ilford-xp2.json",
+            "baseLut": "../luts/rt-ilford-xp2.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "ilford/community/ilford-xp2-super",
             "name": "Ilford XP2 Super",
             "brand": "ilford",
@@ -6503,7 +6827,7 @@
           }
         ]
       },
-      "total": 18
+      "total": 22
     },
     "kentmere": {
       "tiers": {
@@ -6674,6 +6998,18 @@
             "license": "MIT"
           },
           {
+            "id": "kodak/community/rt-kodak-bw-400-cn",
+            "name": "Kodak BW 400 CN",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-bw-400-cn.json",
+            "baseLut": "../luts/rt-kodak-bw-400-cn.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "kodak/community/kodak-colorplus-200",
             "name": "Kodak ColorPlus 200",
             "brand": "kodak",
@@ -6684,6 +7020,42 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "kodak/community/rt-kodak-e-100-gx-ektachrome-100",
+            "name": "Kodak E-100 GX Ektachrome 100",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-e-100-gx-ektachrome-100.json",
+            "baseLut": "../luts/rt-kodak-e-100-gx-ektachrome-100.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-ektachrome-100-vs",
+            "name": "Kodak Ektachrome 100 VS",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-ektachrome-100-vs.json",
+            "baseLut": "../luts/rt-kodak-ektachrome-100-vs.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-ektachrome-100-vs-generic",
+            "name": "Kodak Ektachrome 100 VS Generic",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-ektachrome-100-vs-generic.json",
+            "baseLut": "../luts/rt-kodak-ektachrome-100-vs-generic.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "kodak/community/kodak-ektachrome-100vs",
@@ -6782,6 +7154,30 @@
             "license": "MIT"
           },
           {
+            "id": "kodak/community/rt-kodak-elite-100-xpro",
+            "name": "Kodak Elite 100 XPRO",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-elite-100-xpro.json",
+            "baseLut": "../luts/rt-kodak-elite-100-xpro.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-elite-chrome-200",
+            "name": "Kodak Elite Chrome 200",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-elite-chrome-200.json",
+            "baseLut": "../luts/rt-kodak-elite-chrome-200.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "kodak/community/kodak-elite-chrome-400",
             "name": "Kodak Elite Chrome 400",
             "brand": "kodak",
@@ -6792,6 +7188,42 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "kodak/community/rt-kodak-elite-color-200",
+            "name": "Kodak Elite Color 200",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-elite-color-200.json",
+            "baseLut": "../luts/rt-kodak-elite-color-200.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-elite-color-400",
+            "name": "Kodak Elite Color 400",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-elite-color-400.json",
+            "baseLut": "../luts/rt-kodak-elite-color-400.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-elite-extracolor-100",
+            "name": "Kodak Elite ExtraColor 100",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-elite-extracolor-100.json",
+            "baseLut": "../luts/rt-kodak-elite-extracolor-100.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "kodak/community/kodak-farbwelt-200-expired",
@@ -6890,6 +7322,18 @@
             "license": "MIT"
           },
           {
+            "id": "kodak/community/rt-kodak-hie-hs-infra",
+            "name": "Kodak HIE (HS Infra)",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-hie-hs-infra.json",
+            "baseLut": "../luts/rt-kodak-hie-hs-infra.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "kodak/community/kodak-high-definition-plus-200",
             "name": "Kodak High Definition Plus 200",
             "brand": "kodak",
@@ -6900,6 +7344,54 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "kodak/community/rt-kodak-kodachrome-200",
+            "name": "Kodak Kodachrome 200",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-kodachrome-200.json",
+            "baseLut": "../luts/rt-kodak-kodachrome-200.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-kodachrome-25",
+            "name": "Kodak Kodachrome 25",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-kodachrome-25.json",
+            "baseLut": "../luts/rt-kodak-kodachrome-25.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-kodachrome-64",
+            "name": "Kodak Kodachrome 64",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-kodachrome-64.json",
+            "baseLut": "../luts/rt-kodak-kodachrome-64.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-kodachrome-64-generic",
+            "name": "Kodak Kodachrome 64 Generic",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-kodachrome-64-generic.json",
+            "baseLut": "../luts/rt-kodak-kodachrome-64-generic.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "kodak/community/kodak-max-800",
@@ -6948,6 +7440,30 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "kodak/community/rt-kodak-portra-160-nc",
+            "name": "Kodak Portra 160 NC",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-portra-160-nc.json",
+            "baseLut": "../luts/rt-kodak-portra-160-nc.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-portra-160-vc",
+            "name": "Kodak Portra 160 VC",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-portra-160-vc.json",
+            "baseLut": "../luts/rt-kodak-portra-160-vc.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "kodak/community/kodak-portra-160nc",
@@ -7058,6 +7574,18 @@
             "license": "MIT"
           },
           {
+            "id": "kodak/community/rt-kodak-portra-400-nc",
+            "name": "Kodak Portra 400 NC",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-portra-400-nc.json",
+            "baseLut": "../luts/rt-kodak-portra-400-nc.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "kodak/community/kodak-portra-400-noritsu",
             "name": "Kodak Portra 400 Noritsu",
             "brand": "kodak",
@@ -7068,6 +7596,30 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "kodak/community/rt-kodak-portra-400-uc",
+            "name": "Kodak Portra 400 UC",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-portra-400-uc.json",
+            "baseLut": "../luts/rt-kodak-portra-400-uc.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-portra-400-vc",
+            "name": "Kodak Portra 400 VC",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-portra-400-vc.json",
+            "baseLut": "../luts/rt-kodak-portra-400-vc.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "kodak/community/kodak-portra-400nc",
@@ -7140,6 +7692,18 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "kodak/community/rt-kodak-portra-800-hc",
+            "name": "Kodak Portra 800 HC",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-portra-800-hc.json",
+            "baseLut": "../luts/rt-kodak-portra-800-hc.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "kodak/community/kodak-pro-image-100",
@@ -7224,6 +7788,42 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "kodak/community/rt-kodak-tmax-3200",
+            "name": "Kodak TMAX 3200",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-tmax-3200.json",
+            "baseLut": "../luts/rt-kodak-tmax-3200.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-tmax-3200-3-alt",
+            "name": "Kodak TMAX 3200 3 Alt",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-tmax-3200-3-alt.json",
+            "baseLut": "../luts/rt-kodak-tmax-3200-3-alt.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "kodak/community/rt-kodak-tri-x-400-3-alt",
+            "name": "Kodak TRI-X 400 3 Alt",
+            "brand": "kodak",
+            "tier": "community",
+            "recipe": "library/kodak/community/recipes/rt-kodak-tri-x-400-3-alt.json",
+            "baseLut": "../luts/rt-kodak-tri-x-400-3-alt.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           },
           {
             "id": "kodak/community/kodak-technical-pan",
@@ -7491,7 +8091,7 @@
           }
         ]
       },
-      "total": 80
+      "total": 103
     },
     "lomography": {
       "tiers": {
@@ -7532,10 +8132,34 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "lomography/community/rt-lomography-redscale-100",
+            "name": "Lomography Redscale 100",
+            "brand": "lomography",
+            "tier": "community",
+            "recipe": "library/lomography/community/recipes/rt-lomography-redscale-100.json",
+            "baseLut": "../luts/rt-lomography-redscale-100.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "lomography/community/rt-lomography-x-pro-slide-200",
+            "name": "Lomography X-Pro Slide 200",
+            "brand": "lomography",
+            "tier": "community",
+            "recipe": "library/lomography/community/recipes/rt-lomography-x-pro-slide-200.json",
+            "baseLut": "../luts/rt-lomography-x-pro-slide-200.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           }
         ]
       },
-      "total": 3
+      "total": 5
     },
     "orwo": {
       "tiers": {
@@ -7562,6 +8186,258 @@
         "official": [],
         "community": [
           {
+            "id": "polaroid/community/rt-polaroid-664",
+            "name": "Polaroid 664",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-664.json",
+            "baseLut": "../luts/rt-polaroid-664.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-665",
+            "name": "Polaroid 665",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-665.json",
+            "baseLut": "../luts/rt-polaroid-665.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-665-negative",
+            "name": "Polaroid 665 Negative",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-665-negative.json",
+            "baseLut": "../luts/rt-polaroid-665-negative.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-665-negative-hc",
+            "name": "Polaroid 665 Negative HC",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-665-negative-hc.json",
+            "baseLut": "../luts/rt-polaroid-665-negative-hc.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-667",
+            "name": "Polaroid 667",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-667.json",
+            "baseLut": "../luts/rt-polaroid-667.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-669",
+            "name": "Polaroid 669",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-669.json",
+            "baseLut": "../luts/rt-polaroid-669.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-669-cold",
+            "name": "Polaroid 669 Cold",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-669-cold.json",
+            "baseLut": "../luts/rt-polaroid-669-cold.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-672",
+            "name": "Polaroid 672",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-672.json",
+            "baseLut": "../luts/rt-polaroid-672.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-690",
+            "name": "Polaroid 690",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-690.json",
+            "baseLut": "../luts/rt-polaroid-690.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-690-cold",
+            "name": "Polaroid 690 Cold",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-690-cold.json",
+            "baseLut": "../luts/rt-polaroid-690-cold.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-690-warm",
+            "name": "Polaroid 690 Warm",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-690-warm.json",
+            "baseLut": "../luts/rt-polaroid-690-warm.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-100uv-cold",
+            "name": "Polaroid PX-100UV+ Cold",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-100uv-cold.json",
+            "baseLut": "../luts/rt-polaroid-px-100uv-cold.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-100uv-warm",
+            "name": "Polaroid PX-100UV+ Warm",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-100uv-warm.json",
+            "baseLut": "../luts/rt-polaroid-px-100uv-warm.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-680",
+            "name": "Polaroid PX-680",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-680.json",
+            "baseLut": "../luts/rt-polaroid-px-680.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-680-cold",
+            "name": "Polaroid PX-680 Cold",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-680-cold.json",
+            "baseLut": "../luts/rt-polaroid-px-680-cold.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-680-cold-6-alt",
+            "name": "Polaroid PX-680 Cold 6 ++ Alt",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-680-cold-6-alt.json",
+            "baseLut": "../luts/rt-polaroid-px-680-cold-6-alt.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-680-warm",
+            "name": "Polaroid PX-680 Warm",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-680-warm.json",
+            "baseLut": "../luts/rt-polaroid-px-680-warm.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-70",
+            "name": "Polaroid PX-70",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-70.json",
+            "baseLut": "../luts/rt-polaroid-px-70.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-70-cold",
+            "name": "Polaroid PX-70 Cold",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-70-cold.json",
+            "baseLut": "../luts/rt-polaroid-px-70-cold.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-px-70-warm",
+            "name": "Polaroid PX-70 Warm",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-px-70-warm.json",
+            "baseLut": "../luts/rt-polaroid-px-70-warm.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-polachrome",
+            "name": "Polaroid Polachrome",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-polachrome.json",
+            "baseLut": "../luts/rt-polaroid-polachrome.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "polaroid/community/polaroid-sx-minus-70",
             "name": "Polaroid SX-70",
             "brand": "polaroid",
@@ -7584,10 +8460,34 @@
             "baseFilm": null,
             "creator": null,
             "license": "MIT"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-time-zero-expired",
+            "name": "Polaroid Time Zero (Expired)",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-time-zero-expired.json",
+            "baseLut": "../luts/rt-polaroid-time-zero-expired.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "polaroid/community/rt-polaroid-time-zero-expired-cold",
+            "name": "Polaroid Time Zero (Expired) Cold",
+            "brand": "polaroid",
+            "tier": "community",
+            "recipe": "library/polaroid/community/recipes/rt-polaroid-time-zero-expired-cold.json",
+            "baseLut": "../luts/rt-polaroid-time-zero-expired-cold.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
           }
         ]
       },
-      "total": 2
+      "total": 25
     },
     "ricoh": {
       "tiers": {
@@ -7638,6 +8538,42 @@
             "license": "MIT"
           },
           {
+            "id": "rollei/community/rt-rollei-ir-400",
+            "name": "Rollei IR 400",
+            "brand": "rollei",
+            "tier": "community",
+            "recipe": "library/rollei/community/recipes/rt-rollei-ir-400.json",
+            "baseLut": "../luts/rt-rollei-ir-400.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "rollei/community/rt-rollei-ortho-25",
+            "name": "Rollei Ortho 25",
+            "brand": "rollei",
+            "tier": "community",
+            "recipe": "library/rollei/community/recipes/rt-rollei-ortho-25.json",
+            "baseLut": "../luts/rt-rollei-ortho-25.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
+            "id": "rollei/community/rt-rollei-retro-100-tonal",
+            "name": "Rollei Retro 100 Tonal",
+            "brand": "rollei",
+            "tier": "community",
+            "recipe": "library/rollei/community/recipes/rt-rollei-retro-100-tonal.json",
+            "baseLut": "../luts/rt-rollei-retro-100-tonal.cube",
+            "hasLut": true,
+            "baseFilm": null,
+            "creator": null,
+            "license": "CC BY-SA 4.0"
+          },
+          {
             "id": "rollei/community/rollei-retro-400s",
             "name": "Rollei Retro 400S",
             "brand": "rollei",
@@ -7663,8 +8599,8 @@
           }
         ]
       },
-      "total": 3
+      "total": 6
     }
   },
-  "totalLooks": 628
+  "totalLooks": 706
 }
