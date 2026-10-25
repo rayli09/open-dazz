@@ -2,25 +2,7 @@
 // Engine: openfuji-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
 import { store, modeAtom, type Mode } from "./state";
-import {
-  createIcons, MountainSnow, Film, Contrast, Clapperboard, Aperture, Camera,
-  CircleDot, Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus,
-  BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download, Sun,
-  ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight,
-  ChevronDown, Check, User,
-} from "lucide";
-
-const ICONS = {
-  MountainSnow, Film, Contrast, Clapperboard, Aperture, Camera, CircleDot,
-  Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus,
-  BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download,
-  ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight,
-  ChevronDown, Check, User, Sun,
-};
-function icons() {
-  try { createIcons({ icons: ICONS }); }
-  catch (e) { console.error("icons failed", e); }
-}
+import { icon, brandSigil, glyphSvg } from "./icons";
 
 // The WASM engine loads lazily in the background so the shell, cabinet
 // and photo paint immediately; develops queue until it lands.
@@ -35,12 +17,6 @@ engineP.then((m) => {
   applyNow();
 });
 
-const BRAND_ICONS: Record<string, string> = {
-  fuji: "mountain-snow", kodak: "film", ilford: "contrast", cinestill: "clapperboard",
-  agfa: "aperture", lomography: "camera", rollei: "circle-dot", foma: "layers",
-  adox: "flask-conical", polaroid: "image", bergger: "moon", kentmere: "landmark",
-  orwo: "globe", ricoh: "focus", emulsion: "palette",
-};
 import "./style.css";
 
 interface LookEntry {
@@ -80,17 +56,6 @@ let developFx = false;
 let flatIds: string[] = [];
 
 // --- P0: hand-drawn camera body glyphs (squared, stroke style) ---
-const GLYPHS: Record<string, string> = {
-  rangefinder: '<rect x="2" y="7" width="20" height="11"/><path d="M4.5 7V5.2h5V7"/><circle cx="10.5" cy="12.5" r="3.1"/><rect x="16.8" y="9.2" width="3.4" height="2.3"/><circle cx="18.6" cy="15.4" r="0.9" fill="currentColor" stroke="none"/>',
-  slr: '<path d="M9.2 9L11 5.4h2L14.8 9"/><rect x="2" y="9" width="20" height="9.5"/><circle cx="12" cy="13.8" r="3.3"/><circle cx="5.2" cy="12" r="0.9" fill="currentColor" stroke="none"/>',
-  compact: '<rect x="3" y="8" width="18" height="11"/><circle cx="12" cy="13.5" r="2.9"/><rect x="16.8" y="10" width="2.7" height="1.8"/><rect x="4.8" y="10" width="3" height="1.8"/>',
-  instant: '<rect x="5" y="2.5" width="14" height="17"/><circle cx="12" cy="8.6" r="2.6"/><rect x="14.8" y="5" width="2.4" height="1.8"/><path d="M8 13.4h8"/><rect x="8.6" y="15" width="6.8" height="3"/>',
-  cine: '<rect x="2" y="9.5" width="13.5" height="8.5"/><circle cx="6.4" cy="5.2" r="2.3"/><circle cx="12.4" cy="5.2" r="2.3"/><path d="M15.5 11.8l5.5-2.1v8.1l-5.5-2.1"/>',
-  halfframe: '<rect x="2.5" y="8" width="19" height="11"/><circle cx="9" cy="13.5" r="2.3"/><circle cx="15.5" cy="13.5" r="2.3"/><rect x="4.6" y="10" width="2.6" height="1.7"/>',
-};
-function glyphSvg(kind: string): string {
-  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="w-full h-full">${GLYPHS[kind] ?? GLYPHS.compact}</svg>`;
-}
 function glyphFor(l: LookEntry): string {
   const s = `${l.id} ${l.name}`.toLowerCase();
   let kind = "compact";
@@ -173,11 +138,11 @@ function layout() {
           <button id="mode-pro" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button>
         </div>
         <button id="btn-theme" title="Toggle dark mode" class="border border-rule p-2 hover:bg-paper2 transition-colors">
-          <span class="block dark:hidden"><i data-lucide="moon" class="w-4 h-4 block"></i></span>
-          <span class="hidden dark:block"><i data-lucide="sun" class="w-4 h-4 block"></i></span>
+          <span class="block dark:hidden">${icon("moon", "w-4 h-4 block")}</span>
+          <span class="hidden dark:block">${icon("sun", "w-4 h-4 block")}</span>
         </button>
         <a href="https://github.com/rayli09/open-fuji" target="_blank" rel="noreferrer"
-           class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-2 hover:bg-paper2 transition-colors">GitHub <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a>
+           class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-2 hover:bg-paper2 transition-colors">GitHub ${icon("arrow-up-right", "w-3.5 h-3.5")}</a>
       </div>
     </div>
   </header>
@@ -192,7 +157,7 @@ function layout() {
         </div>
         <div id="chips" class="mb-2"></div>
         <div class="relative">
-          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink2 pointer-events-none"></i>
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-ink2 pointer-events-none">${icon("search", "w-4 h-4 block")}</span>
           <input id="search" type="text" placeholder="Search looks…"
             class="w-full bg-mat border border-rule pl-9 pr-3 py-2 font-mono text-[16px] lg:text-[12px] placeholder:text-ink2/80 focus:outline-none focus:border-ink" />
         </div>
@@ -220,9 +185,9 @@ function layout() {
     <!-- THE BENCH -->
     <section class="order-1 lg:order-2 bench-grid relative flex flex-col min-h-0">
       <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
-        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors"><i data-lucide="upload" class="w-[18px] h-[18px]"></i>Photo</button>
-        <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="user" class="w-[18px] h-[18px]"></i>Sample I</button>
-        <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="mountain" class="w-[18px] h-[18px]"></i>Sample II</button>
+        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}Photo</button>
+        <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("user", "w-[18px] h-[18px]")}Sample I</button>
+        <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("mountain", "w-[18px] h-[18px]")}Sample II</button>
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
         <input id="file" type="file" accept="image/*" class="hidden" />
       </div>
@@ -240,7 +205,7 @@ function layout() {
             <span class="vf absolute bottom-2 left-2 w-5 h-5 border-b-2 border-l-2 border-ink pointer-events-none z-10"></span>
             <span class="vf absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-ink pointer-events-none z-10"></span>
             <div id="divider" class="absolute top-0 bottom-0 w-[2px] bg-ink pointer-events-none">
-              <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] bg-mat border border-ink flex items-center justify-center"><i data-lucide="chevrons-left-right" class="w-4 h-4"></i></div>
+              <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] bg-mat border border-ink flex items-center justify-center">${icon("compare", "w-4 h-4")}</div>
             </div>
           </div>
           <figcaption class="w-full shrink-0 flex flex-wrap justify-between gap-2 pt-3 font-mono text-[10px] tracking-[0.16em] text-ink2">
@@ -253,7 +218,7 @@ function layout() {
         <span class="font-mono text-[10px] tracking-[0.18em] text-ink2 shrink-0">STRENGTH</span>
         <input id="s-strength-simple" type="range" min="0" max="1.5" step="0.01" value="1" class="slider flex-1" />
         <span id="v-strength-simple" class="font-mono text-[11px] w-10 text-right shrink-0">100%</span>
-        <button id="btn-export-simple" title="Print" class="bg-ink text-paper px-3 py-1.5 hover:bg-stamp transition-all flex items-center gap-2 shrink-0 active:scale-95">
+        <button id="btn-export-simple" title="Print" class="tex-metal bg-ink text-paper px-3 py-1.5 hover:bg-stamp transition-all flex items-center gap-2 shrink-0 active:scale-95">
           <span class="relative w-6 h-6 rounded-full border-2 border-paper shrink-0"><span class="absolute inset-[5px] rounded-full bg-accent"></span></span>
           <span class="font-mono text-[10px] tracking-[0.2em]">PRINT</span>
         </button>
@@ -264,7 +229,7 @@ function layout() {
     <aside class="ledger order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4 lg:min-h-0 lg:overflow-y-auto">
       <div class="flex items-center gap-2 mb-2">
         <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">3</span>
-        <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+        ${icon("sliders", "w-4 h-4")}
         <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">ADJUST &amp; EXPORT</span>
       </div>
       <h1 id="led-name" class="font-display text-[22px] leading-tight font-semibold">—</h1>
@@ -280,7 +245,7 @@ function layout() {
         <div class="font-mono text-[10px] tracking-[0.18em] text-ink2 mb-2">PRINT</div>
         <div id="print-chips-pro" class="flex flex-wrap gap-1.5"></div>
       </div>
-      <button id="btn-export" class="mt-4 w-full bg-ink text-paper font-mono text-[12px] py-3 hover:bg-stamp transition-colors flex items-center justify-center gap-2"><i data-lucide="download" class="w-4 h-4"></i>Print PNG</button>
+      <button id="btn-export" class="mt-4 w-full bg-ink text-paper font-mono text-[12px] py-3 hover:bg-stamp transition-colors flex items-center justify-center gap-2">${icon("print", "w-4 h-4")}Print PNG</button>
     </aside>
   </main>
 
@@ -363,35 +328,34 @@ function renderChips() {
   for (const host of [$("#chips"), $("#strip-chips")]) {
     if (host) buildChips(host);
   }
-  icons();
 }
 
 function buildChips(host: HTMLElement) {
   const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
   const brandName = (b: string) => (b === "emulsion" ? "Emulsion" : b);
   const type = TYPE_CHIPS.find((t) => t.key === activeType)!;
-  const opt = (active: boolean, icon: string, label: string, attrs: string) =>
+  const opt = (active: boolean, mark: string, label: string, attrs: string) =>
     `<button ${attrs} class="w-full flex items-center gap-2 px-2.5 py-2 text-[12.5px] text-left capitalize ${active ? "bg-accent text-accentink font-medium" : "hover:bg-paper2"}">
-       <i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i><span class="flex-1">${label}</span>
-       ${active ? '<i data-lucide="check" class="w-4 h-4 shrink-0"></i>' : ""}</button>`;
+       ${mark}<span class="flex-1">${label}</span>
+       ${active ? icon("check", "w-4 h-4 shrink-0") : ""}</button>`;
   host.innerHTML = `<div class="flex gap-2">
     <div class="dd relative flex-1" data-dd="brand">
       <button class="dd-btn w-full flex items-center gap-2 border border-rule bg-mat px-2.5 py-2 font-mono text-[12px] hover:border-ink transition-colors" data-dd-btn="brand">
-        <i data-lucide="${activeBrand ? (BRAND_ICONS[activeBrand] ?? "swatch-book") : "layers"}" class="w-4 h-4 shrink-0"></i>
+        ${activeBrand ? brandSigil(activeBrand, "w-4 h-4 shrink-0") : icon("layers", "w-4 h-4 shrink-0")}
         <span class="flex-1 text-left capitalize">${activeBrand ? brandName(activeBrand) : "All brands"}</span>
-        <i data-lucide="chevron-down" class="dd-chev w-4 h-4 shrink-0"></i></button>
+        ${icon("chevron-down", "dd-chev w-4 h-4 shrink-0")}</button>
       <div class="dd-panel absolute left-0 right-0 top-[calc(100%+4px)] z-30 bg-mat border border-ink stage-shadow max-h-72 overflow-y-auto cabinet-scroll">
-        ${opt(activeBrand === null, "layers", "All brands", 'data-brand=""')}
-        ${brands.map((b) => opt(activeBrand === b, BRAND_ICONS[b] ?? "swatch-book", brandName(b), `data-brand="${b}"`)).join("")}
+        ${opt(activeBrand === null, icon("layers", "w-4 h-4 shrink-0"), "All brands", 'data-brand=""')}
+        ${brands.map((b) => opt(activeBrand === b, brandSigil(b, "w-4 h-4 shrink-0"), brandName(b), `data-brand="${b}"`)).join("")}
       </div>
     </div>
     <div class="dd relative flex-1" data-dd="type">
       <button class="dd-btn w-full flex items-center gap-2 border border-rule bg-mat px-2.5 py-2 font-mono text-[12px] hover:border-ink transition-colors" data-dd-btn="type">
-        <i data-lucide="${type.icon}" class="w-4 h-4 shrink-0"></i>
+        ${icon(type.icon, "w-4 h-4 shrink-0")}
         <span class="flex-1 text-left">${type.label}</span>
-        <i data-lucide="chevron-down" class="dd-chev w-4 h-4 shrink-0"></i></button>
+        ${icon("chevron-down", "dd-chev w-4 h-4 shrink-0")}</button>
       <div class="dd-panel absolute left-0 right-0 top-[calc(100%+4px)] z-30 bg-mat border border-ink stage-shadow">
-        ${TYPE_CHIPS.map((t) => opt(activeType === t.key, t.icon, t.label, `data-type="${t.key}"`)).join("")}
+        ${TYPE_CHIPS.map((t) => opt(activeType === t.key, icon(t.icon, "w-4 h-4 shrink-0"), t.label, `data-type="${t.key}"`)).join("")}
       </div>
     </div>
   </div>`;
@@ -401,7 +365,6 @@ function buildChips(host: HTMLElement) {
     b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; shelfMode = false; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
     b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; shelfMode = false; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
-  icons();
 }
 
 function renderCabinet(filter = "") {
@@ -422,7 +385,7 @@ function renderCabinet(filter = "") {
         cards += `<button data-look="${look.id}" class="look-card active:scale-[0.98] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat hover:border-ink transition-colors">
           <span class="relative block">
             <img loading="lazy" src="${thumbUrl(look.id)}" alt="" class="w-full aspect-[3/2] object-cover block" />
-            ${look.tier === "official" ? '<span class="absolute top-1 left-1 bg-paper/90 p-[3px]"><i data-lucide="badge-check" class="w-3.5 h-3.5 block"></i></span>' : ""}
+            ${look.tier === "official" ? `<span class="absolute top-1 left-1 bg-paper/90 p-[3px]">${icon("badge-check", "w-3.5 h-3.5 block")}</span>` : ""}
           </span>
           <span class="block px-2 py-1.5 ${sel ? "bg-accent text-accentink" : ""}">
             <span class="flex items-center gap-1.5">
@@ -433,18 +396,17 @@ function renderCabinet(filter = "") {
         </button>`;
       }
       groups += `<div class="flex items-center gap-1.5 font-mono text-[9.5px] tracking-[0.18em] text-ink2 px-1 pt-3 pb-1.5">
-        <i data-lucide="${tier === "official" ? "badge-check" : "users"}" class="w-3 h-3"></i>${tier === "official" ? "Official" : "Community"} · ${looks.length}</div>
+        ${icon(tier === "official" ? "badge-check" : "users", "w-3 h-3")}${tier === "official" ? "Official" : "Community"} · ${looks.length}</div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">${cards}</div>`;
     }
     if (groups) html += `<div><div class="flex items-center gap-2 px-1 pt-3">
-      <i data-lucide="${BRAND_ICONS[brand] ?? "swatch-book"}" class="w-4 h-4"></i>
+      ${brandSigil(brand, "w-4 h-4")}
       <span class="font-display font-semibold text-[14px] capitalize flex-1">${brand === "emulsion" ? "Emulsion" : brand}</span>
       <span class="font-mono text-[9.5px] text-ink2">${data.total}</span></div>${groups}</div>`;
   }
-  host.innerHTML = html || `<div class="px-3 py-6 text-center"><i data-lucide="search" class="w-6 h-6 text-ink2 inline-block"></i><div class="font-mono text-[11px] text-ink2 mt-2">No matches.</div></div>`;
+  host.innerHTML = html || `<div class="px-3 py-6 text-center">${icon("search", "w-6 h-6 text-ink2 inline-block")}<div class="font-mono text-[11px] text-ink2 mt-2">No matches.</div></div>`;
   host.querySelectorAll<HTMLButtonElement>(".look-card").forEach((b) =>
     b.addEventListener("click", () => selectLook(b.dataset.look!)));
-  icons();
   renderStrip();
 }
 
@@ -680,7 +642,6 @@ async function boot() {
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
   layout();
-  icons();
   const bs = $("#build-stamp"); if (bs) bs.textContent = `build ${new Date().toISOString().slice(0, 16).replace("T", " ")}Z`;
   progress(45);
   catalog = await fetchCatalog();
