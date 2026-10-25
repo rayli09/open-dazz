@@ -1,7 +1,23 @@
 // open-fuji Photo Workshop — a film-development bench in the browser.
 // Engine: openfuji-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
-import { createIcons } from "lucide";
+import {
+  createIcons, MountainSnow, Film, Contrast, Clapperboard, Aperture, Camera,
+  CircleDot, Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus,
+  Sparkles, BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download,
+  ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight,
+} from "lucide";
+
+const ICONS = {
+  MountainSnow, Film, Contrast, Clapperboard, Aperture, Camera, CircleDot,
+  Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus, Sparkles,
+  BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download,
+  ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight,
+};
+function icons() {
+  try { createIcons({ icons: ICONS }); }
+  catch (e) { console.error("icons failed", e); }
+}
 
 // The WASM engine loads lazily in the background so the shell, cabinet
 // and photo paint immediately; develops queue until it lands.
@@ -68,7 +84,7 @@ let applyTimer: ReturnType<typeof setTimeout> | undefined;
 function layout() {
   $("#app").innerHTML = `
   <div id="topbar" class="fixed top-0 left-0 h-[2px] bg-accent z-50 transition-all duration-500" style="width:12%"></div>
-  <header class="border-b border-rule">
+  <header class="border-b-2 border-ink">
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
         <img src="/logo.png" alt="" class="w-9 h-9 pixelated" />
@@ -111,7 +127,7 @@ function layout() {
         <input id="file" type="file" accept="image/*" class="hidden" />
       </div>
       <div class="flex-1 flex items-start justify-center p-4 md:p-8">
-        <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-rule max-w-full select-none touch-none">
+        <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-ink/60 stage-shadow max-w-full select-none touch-none">
           <div id="printwrap" class="relative overflow-hidden bg-paper2">
             <canvas id="after" class="block w-full h-auto max-h-[62vh] lg:max-h-none object-contain"></canvas>
             <div id="stage-load" class="absolute inset-0 bg-mat/80 flex flex-col items-center justify-center gap-3">
@@ -222,7 +238,7 @@ function renderChips() {
     b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
     b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
-  createIcons();
+  icons();
 }
 
 function renderCabinet(filter = "") {
@@ -265,7 +281,7 @@ function renderCabinet(filter = "") {
   host.innerHTML = html || `<div class="px-3 py-6 text-center"><i data-lucide="search" class="w-6 h-6 text-ink2 inline-block"></i><div class="font-mono text-[11px] text-ink2 mt-2">No matches.</div></div>`;
   host.querySelectorAll<HTMLButtonElement>(".look-card").forEach((b) =>
     b.addEventListener("click", () => selectLook(b.dataset.look!)));
-  createIcons();
+  icons();
 }
 
 function findLook(id: string): LookEntry | undefined {
@@ -379,10 +395,10 @@ function showError(msg: string) {
 }
 
 async function boot() {
-  layout();
-  createIcons();
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
+  layout();
+  icons();
   const bs = $("#build-stamp"); if (bs) bs.textContent = `build ${new Date().toISOString().slice(0, 16).replace("T", " ")}Z`;
   progress(45);
   catalog = await fetchCatalog();
