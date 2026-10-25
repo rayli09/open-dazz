@@ -4,8 +4,8 @@
   "description": "626 film looks, developed locally in your browser.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f2ecdc",
-  "theme_color": "#f2ecdc",
+  "background_color": "#efe5cd",
+  "theme_color": "#efe5cd",
   "icons": [
     {
       "src": "/icon-192.png",
