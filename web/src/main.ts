@@ -12,7 +12,6 @@ const engineP: Promise<Engine> = import("./pkg/openfuji_wasm.js");
 engineP.catch((e) => showError(`engine failed to load (${(e as Error)?.message ?? e})`));
 engineP.then((m) => {
   engine = m;
-  if (catalog) $("#hdr-count").textContent = `${catalog.totalLooks} looks · v${m.engine_version()}`;
   progress(90);
   applyNow();
 });
@@ -77,7 +76,7 @@ function updateCounter() {
   const el = document.querySelector("#film-counter");
   if (!el) return;
   const i = current ? flatIds.indexOf(current.id) : -1;
-  el.textContent = i >= 0 ? `No. ${String(i + 1).padStart(3, "0")} / ${flatIds.length}` : `— / ${flatIds.length}`;
+  el.textContent = i >= 0 ? `No. ${String(i + 1).padStart(3, "0")}` : "—";
 }
 function syncShelfUI() {
   const on = $<HTMLButtonElement>("#shelf-on"), all = $<HTMLButtonElement>("#shelf-all");
@@ -130,7 +129,6 @@ function layout() {
       <div class="flex items-center gap-3">
         <img src="/logo.png" alt="" class="logo-light w-9 h-9 pixelated" /><img src="/logo-dark.png" alt="" class="logo-dark w-9 h-9 pixelated" />
         <span class="font-display text-[20px] font-semibold tracking-tight">open-fuji</span>
-        <span class="font-mono text-[10px] text-ink2" id="hdr-count"></span>
       </div>
       <div class="flex items-center gap-2">
         <div class="flex border border-ink font-mono text-[11px]" role="group" aria-label="Mode">
@@ -246,7 +244,7 @@ function layout() {
 
   <div class="border-t border-rule" aria-hidden="true"></div>
   <footer class="shrink-0 px-4 md:px-6 py-3 font-mono text-[9.5px] tracking-[0.14em] text-ink2">
-    open-fuji — open film simulations · not affiliated with Fujifilm Corp. · <span id="build-stamp"></span>
+    open-fuji — open film simulations · not affiliated with Fujifilm Corp.
   </footer>`;
 }
 
@@ -391,13 +389,13 @@ function renderCabinet(filter = "") {
         </button>`;
       }
       groups += `<div class="flex items-center gap-1.5 font-mono text-[9.5px] tracking-[0.18em] text-ink2 px-1 pt-3 pb-1.5">
-        ${icon(tier === "official" ? "badge-check" : "users", "w-3 h-3")}${tier === "official" ? "Official" : "Community"} · ${looks.length}</div>
+        ${icon(tier === "official" ? "badge-check" : "users", "w-3 h-3")}${tier === "official" ? "Official" : "Community"}</div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">${cards}</div>`;
     }
     if (groups) html += `<div><div class="flex items-center gap-2 px-1 pt-3">
       ${brandSigil(brand, "w-4 h-4")}
       <span class="font-display font-semibold text-[14px] capitalize flex-1">${brand === "emulsion" ? "Emulsion" : brand}</span>
-      <span class="font-mono text-[9.5px] text-ink2">${data.total}</span></div>${groups}</div>`;
+      </div>${groups}</div>`;
   }
   host.innerHTML = html || `<div class="px-3 py-6 text-center">${icon("search", "w-6 h-6 text-ink2 inline-block")}<div class="font-mono text-[11px] text-ink2 mt-2">No matches.</div></div>`;
   host.querySelectorAll<HTMLButtonElement>(".look-card").forEach((b) =>
@@ -578,12 +576,10 @@ async function boot() {
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
   layout();
-  const bs = $("#build-stamp"); if (bs) bs.textContent = `build ${new Date().toISOString().slice(0, 16).replace("T", " ")}Z`;
   progress(45);
   catalog = await fetchCatalog();
   buildFlat();
   updateCounter();
-  $("#hdr-count").textContent = `${catalog.totalLooks} looks`;
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
