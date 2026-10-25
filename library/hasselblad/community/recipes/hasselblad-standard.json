@@ -1,0 +1,25 @@
+{
+  "name": "Hasselblad Standard (HNCS)",
+  "baseLut": "../luts/hasselblad-standard.cube",
+  "grain": {
+    "amount": 0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "shenmintao/V-Log-Alchemy \u2014 HNCS (Phocus X2D) cube, re-based V-Log -> sRGB input by tools/bake_hasselblad.py",
+  "license": "Apache-2.0",
+  "provenance": {
+    "treatment": "Hasselblad Natural Colour Solution rendering (Standard/Nature Phocus preset), reverse-engineered from Phocus 4.0.1 / X2D output",
+    "sourceRepo": "https://github.com/shenmintao/V-Log-Alchemy",
+    "note": "Upstream cube expects V-Log/V-Gamut input; this copy is composed with the published Panasonic V-Log transform so it applies directly to sRGB stills. Daylight white balance baked upstream."
+  }
+}
