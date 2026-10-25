@@ -1,5 +1,5 @@
 {
-  "name": "Fuji 400H",
+  "name": "Fuji Pro 400H",
   "baseLut": "../luts/rt-fuji-400h.cube",
   "grain": {
     "amount": 0,

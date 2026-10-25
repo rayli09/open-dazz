@@ -1,5 +1,5 @@
 {
-  "name": "Fuji 160C",
+  "name": "Fuji Pro 160C",
   "baseLut": "../luts/rt-fuji-160c.cube",
   "grain": {
     "amount": 0,
