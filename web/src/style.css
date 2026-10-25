@@ -52,3 +52,10 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: v
 ::selection { background: var(--color-accent); }
 
 .pixelated { image-rendering: pixelated; }
+
+/* skeletons + helpers */
+.skel { background: var(--color-paper2); animation: skel-pulse 1.15s ease-in-out infinite; }
+@keyframes skel-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.skel-pulse { animation: skel-pulse 1.15s ease-in-out infinite; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
