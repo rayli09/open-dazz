@@ -143,3 +143,13 @@ button { touch-action: manipulation; }
 }
 .vf { display: none; }
 [data-mode="simple"] .vf { display: block; }
+
+/* the document itself never scrolls — regions manage their own overflow */
+html, body { height: 100%; }
+
+/* develop-in: a fresh print resolving out of the chemistry */
+@keyframes develop {
+  from { filter: blur(7px) sepia(0.55) brightness(1.18) contrast(0.92); }
+  to { filter: blur(0) sepia(0) brightness(1) contrast(1); }
+}
+.developing { animation: develop 0.65s cubic-bezier(0.25, 0.7, 0.3, 1); }

@@ -41,12 +41,6 @@ const BRAND_ICONS: Record<string, string> = {
   adox: "flask-conical", polaroid: "image", bergger: "moon", kentmere: "landmark",
   orwo: "globe", ricoh: "focus", emulsion: "palette",
 };
-function lookIcon(l: LookEntry): string {
-  if (l.tier === "official") return "badge-check";
-  if (/video/i.test(l.name)) return "video";
-  if (/acros|monochrome|sepia/i.test(l.baseFilm ?? "") || /\b(b&w|bw|monochrome)\b/i.test(l.name) || l.brand === "ilford") return "contrast";
-  return "swatch-book";
-}
 import "./style.css";
 
 interface LookEntry {
@@ -61,6 +55,81 @@ const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)
 
 let catalog: Catalog;
 let current: LookEntry | null = null;
+
+// --- P0: the camera shelf (curated cameras for simple mode) ---
+const FEATURED: [string, string][] = [
+  ["fuji/official/classic-chrome", "Chrome"],
+  ["fuji/official/velvia", "Velvia"],
+  ["fuji/official/classic-neg", "Classic Neg."],
+  ["fuji/official/astia", "Astia"],
+  ["fuji/official/provia", "Provia"],
+  ["fuji/official/eterna", "Eterna"],
+  ["fuji/community/fujifilm-acros", "Acros"],
+  ["kodak/community/kodak-portra-400", "Portra 400"],
+  ["kodak/community/kodak-ektar-100", "Ektar 100"],
+  ["kodak/community/kodachrome-64", "Kodachrome"],
+  ["kodak/community/kodak-gold-200", "Gold 200"],
+  ["kodak/community/kodak-tri-minus-x-400", "Tri-X"],
+  ["ilford/community/ilford-hp5-plus", "HP5"],
+  ["cinestill/community/cinestill-800t", "800T"],
+  ["polaroid/community/polaroid-sx-minus-70", "SX-70"],
+  ["agfa/community/agfa-vista-200", "Vista"],
+];
+let shelfMode = true;
+let developFx = false;
+let flatIds: string[] = [];
+
+// --- P0: hand-drawn camera body glyphs (squared, stroke style) ---
+const GLYPHS: Record<string, string> = {
+  rangefinder: '<rect x="2" y="7" width="20" height="11"/><path d="M4.5 7V5.2h5V7"/><circle cx="10.5" cy="12.5" r="3.1"/><rect x="16.8" y="9.2" width="3.4" height="2.3"/><circle cx="18.6" cy="15.4" r="0.9" fill="currentColor" stroke="none"/>',
+  slr: '<path d="M9.2 9L11 5.4h2L14.8 9"/><rect x="2" y="9" width="20" height="9.5"/><circle cx="12" cy="13.8" r="3.3"/><circle cx="5.2" cy="12" r="0.9" fill="currentColor" stroke="none"/>',
+  compact: '<rect x="3" y="8" width="18" height="11"/><circle cx="12" cy="13.5" r="2.9"/><rect x="16.8" y="10" width="2.7" height="1.8"/><rect x="4.8" y="10" width="3" height="1.8"/>',
+  instant: '<rect x="5" y="2.5" width="14" height="17"/><circle cx="12" cy="8.6" r="2.6"/><rect x="14.8" y="5" width="2.4" height="1.8"/><path d="M8 13.4h8"/><rect x="8.6" y="15" width="6.8" height="3"/>',
+  cine: '<rect x="2" y="9.5" width="13.5" height="8.5"/><circle cx="6.4" cy="5.2" r="2.3"/><circle cx="12.4" cy="5.2" r="2.3"/><path d="M15.5 11.8l5.5-2.1v8.1l-5.5-2.1"/>',
+  halfframe: '<rect x="2.5" y="8" width="19" height="11"/><circle cx="9" cy="13.5" r="2.3"/><circle cx="15.5" cy="13.5" r="2.3"/><rect x="4.6" y="10" width="2.6" height="1.7"/>',
+};
+function glyphSvg(kind: string): string {
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="w-full h-full">${GLYPHS[kind] ?? GLYPHS.compact}</svg>`;
+}
+function glyphFor(l: LookEntry): string {
+  const s = `${l.id} ${l.name}`.toLowerCase();
+  let kind = "compact";
+  if (/video|cine|vision|movie/.test(s)) kind = "cine";
+  else if (/instant|polaroid|sx-70|sx70/.test(s)) kind = "instant";
+  else if (/half/.test(s)) kind = "halfframe";
+  else if (l.brand === "fuji") kind = "rangefinder";
+  else if (l.brand === "polaroid") kind = "instant";
+  else if (l.brand === "cinestill" || l.brand === "orwo") kind = "cine";
+  else if (["kodak", "ilford", "kentmere", "foma", "bergger", "adox", "rollei"].includes(l.brand)) kind = "slr";
+  return glyphSvg(kind);
+}
+function buildFlat() {
+  flatIds = [];
+  const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
+  for (const b of brands) for (const t of ["official", "community"]) for (const l of catalog.brands[b].tiers[t] ?? []) flatIds.push(l.id);
+}
+function updateCounter() {
+  const el = document.querySelector("#film-counter");
+  if (!el) return;
+  const i = current ? flatIds.indexOf(current.id) : -1;
+  el.textContent = i >= 0 ? `No. ${String(i + 1).padStart(3, "0")} / ${flatIds.length}` : `— / ${flatIds.length}`;
+}
+function syncShelfUI() {
+  const on = $<HTMLButtonElement>("#shelf-on"), all = $<HTMLButtonElement>("#shelf-all");
+  if (!on || !all) return;
+  on.className = `px-2 py-1 ${shelfMode ? "bg-ink text-paper" : "hover:bg-paper2"}`;
+  all.className = `px-2 py-1 border-l border-ink ${!shelfMode ? "bg-ink text-paper" : "hover:bg-paper2"}`;
+}
+function fitStage() {
+  const wrap = document.querySelector<HTMLElement>("#stage-wrap");
+  const pw = document.querySelector<HTMLElement>("#printwrap");
+  if (!wrap || !pw || !imgW || !imgH) return;
+  const r = wrap.getBoundingClientRect();
+  const availW = Math.max(50, r.width - 56), availH = Math.max(50, r.height - 104);
+  const scale = Math.min(availW / imgW, availH / imgH);
+  pw.style.width = `${Math.floor(imgW * scale)}px`;
+  pw.style.height = `${Math.floor(imgH * scale)}px`;
+}
 let activeBrand: string | null = null;
 type TypeFilter = "all" | "official" | "bw" | "video" | "color";
 let activeType: TypeFilter = "all";
@@ -91,7 +160,7 @@ let applyTimer: ReturnType<typeof setTimeout> | undefined;
 function layout() {
   $("#app").innerHTML = `
   <div id="topbar" class="fixed top-0 left-0 h-[2px] bg-accent z-50 transition-all duration-500" style="width:12%"></div>
-  <header class="border-b-2 border-ink">
+  <header class="shrink-0 border-b-2 border-ink">
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
         <img src="/logo.png" alt="" class="logo-light w-9 h-9 pixelated" /><img src="/logo-dark.png" alt="" class="logo-dark w-9 h-9 pixelated" />
@@ -113,7 +182,7 @@ function layout() {
     </div>
   </header>
 
-  <main class="grid grid-cols-1 lg:grid-cols-[292px_minmax(0,1fr)_300px]">
+  <main class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[292px_minmax(0,1fr)_300px] overflow-y-auto lg:overflow-hidden">
     <!-- THE CABINET -->
     <aside class="cabinet-aside order-2 lg:order-1 border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
       <div class="px-3 pt-3 pb-1">
@@ -128,13 +197,13 @@ function layout() {
             class="w-full bg-mat border border-rule pl-9 pr-3 py-2 font-mono text-[16px] lg:text-[12px] placeholder:text-ink2/80 focus:outline-none focus:border-ink" />
         </div>
       </div>
-      <div id="cabinet" class="cabinet-scroll overflow-y-auto px-3 pb-4 lg:max-h-[calc(100vh-210px)] max-h-[55vh]">
+      <div id="cabinet" class="cabinet-scroll overflow-y-auto px-3 pb-4 flex-1 min-h-0 max-h-[55vh] lg:max-h-none">
         ${Array.from({ length: 8 }, () => `<div class="mt-3"><div class="skel h-[92px] w-full"></div><div class="skel h-3 w-2/3 mt-2"></div></div>`).join("")}
       </div>
     </aside>
 
     <!-- THE BENCH -->
-    <section class="order-1 lg:order-2 bench-grid relative flex flex-col lg:min-h-[60vh]">
+    <section class="order-1 lg:order-2 bench-grid relative flex flex-col min-h-0">
       <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
         <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors"><i data-lucide="upload" class="w-[18px] h-[18px]"></i>Photo</button>
         <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="user" class="w-[18px] h-[18px]"></i>Sample I</button>
@@ -142,10 +211,10 @@ function layout() {
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
         <input id="file" type="file" accept="image/*" class="hidden" />
       </div>
-      <div class="flex-1 flex items-start justify-center p-4 md:p-8">
-        <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-ink/60 stage-shadow max-w-full select-none touch-none">
+      <div id="stage-wrap" class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-6 overflow-hidden">
+        <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-ink/60 stage-shadow max-w-full select-none touch-none inline-flex flex-col">
           <div id="printwrap" class="relative overflow-hidden bg-paper2">
-            <canvas id="after" class="block w-full h-auto max-h-[62vh] lg:max-h-none object-contain"></canvas>
+            <canvas id="after" class="absolute inset-0 w-full h-full block"></canvas>
             <div id="stage-load" class="absolute inset-0 bg-mat/80 flex flex-col items-center justify-center gap-3">
               <img src="/logo.png" alt="" class="logo-light w-12 h-12 pixelated skel-pulse" /><img src="/logo-dark.png" alt="" class="logo-dark w-12 h-12 pixelated skel-pulse" />
               <div class="font-mono text-[10px] tracking-[0.2em] text-ink2">LOADING THE BENCH…</div>
@@ -159,12 +228,19 @@ function layout() {
               <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] bg-mat border border-ink flex items-center justify-center"><i data-lucide="chevrons-left-right" class="w-4 h-4"></i></div>
             </div>
           </div>
-          <figcaption class="flex flex-wrap justify-between gap-2 pt-3 font-mono text-[10px] tracking-[0.16em] text-ink2">
+          <figcaption class="w-full shrink-0 flex flex-wrap justify-between gap-2 pt-3 font-mono text-[10px] tracking-[0.16em] text-ink2">
             <span class="flex items-center gap-2"><span id="spin" class="hidden w-[13px] h-[13px] border-2 border-rule border-t-ink animate-spin shrink-0"></span><span id="cap-file">—</span></span><span id="cap-state"></span>
           </figcaption>
         </figure>
       </div>
       <div class="simple-only flex-col gap-2 mx-4 mb-3">
+        <div class="flex items-center gap-2">
+          <div class="flex border border-ink font-mono text-[10px]">
+            <button id="shelf-on" class="px-2 py-1">SHELF</button>
+            <button id="shelf-all" class="px-2 py-1 border-l border-ink">ALL FILMS</button>
+          </div>
+          <span id="film-counter" class="ml-auto font-mono text-[10px] bg-ink text-accent px-1.5 py-0.5"></span>
+        </div>
         <div id="strip-chips"></div>
         <div id="strip" class="flex gap-2 overflow-x-auto cabinet-scroll pb-1"></div>
       </div>
@@ -172,14 +248,15 @@ function layout() {
         <span class="font-mono text-[10px] tracking-[0.18em] text-ink2 shrink-0">STRENGTH</span>
         <input id="s-strength-simple" type="range" min="0" max="1.5" step="0.01" value="1" class="slider flex-1" />
         <span id="v-strength-simple" class="font-mono text-[11px] w-10 text-right shrink-0">100%</span>
-        <button id="btn-export-simple" class="bg-ink text-paper font-mono text-[12px] px-3.5 py-2 hover:bg-stamp transition-colors flex items-center gap-2 shrink-0">
-          <i data-lucide="download" class="w-4 h-4"></i>Export
+        <button id="btn-export-simple" title="Print" class="bg-ink text-paper px-3 py-1.5 hover:bg-stamp transition-all flex items-center gap-2 shrink-0 active:scale-95">
+          <span class="relative w-6 h-6 rounded-full border-2 border-paper shrink-0"><span class="absolute inset-[5px] rounded-full bg-accent"></span></span>
+          <span class="font-mono text-[10px] tracking-[0.2em]">PRINT</span>
         </button>
       </div>
     </section>
 
     <!-- THE LEDGER -->
-    <aside class="ledger order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4">
+    <aside class="ledger order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4 lg:min-h-0 lg:overflow-y-auto">
       <div class="flex items-center gap-2 mb-2">
         <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">3</span>
         <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
@@ -199,7 +276,7 @@ function layout() {
   </main>
 
   <div class="border-t border-rule" aria-hidden="true"></div>
-  <footer class="px-4 md:px-6 py-3 font-mono text-[9.5px] tracking-[0.14em] text-ink2">
+  <footer class="shrink-0 px-4 md:px-6 py-3 font-mono text-[9.5px] tracking-[0.14em] text-ink2">
     open-fuji — open film simulations · not affiliated with Fujifilm Corp. · <span id="build-stamp"></span>
   </footer>`;
 }
@@ -312,9 +389,9 @@ function buildChips(host: HTMLElement) {
   host.querySelectorAll<HTMLButtonElement>("[data-dd-btn]").forEach((b) =>
     b.addEventListener("pointerdown", (e) => { e.preventDefault(); toggleDD(b); }));
   host.querySelectorAll<HTMLButtonElement>("[data-brand]").forEach((b) =>
-    b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
+    b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; shelfMode = false; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
-    b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
+    b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; shelfMode = false; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   icons();
 }
 
@@ -340,7 +417,7 @@ function renderCabinet(filter = "") {
           </span>
           <span class="block px-2 py-1.5 ${sel ? "bg-accent text-accentink" : ""}">
             <span class="flex items-center gap-1.5">
-              <i data-lucide="${lookIcon(look)}" class="w-3.5 h-3.5 shrink-0 text-ink2"></i>
+              <span class="w-4 h-4 shrink-0 text-ink2">${glyphFor(look)}</span>
               <span class="text-[11.5px] leading-tight font-medium truncate">${look.name}</span>
             </span>
           </span>
@@ -365,22 +442,30 @@ function renderCabinet(filter = "") {
 function renderStrip() {
   const host = $("#strip");
   if (!host) return;
-  const f = $<HTMLInputElement>("#search").value.trim().toLowerCase();
-  const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
-  let html = "";
-  for (const brand of brands) {
-    if (activeBrand && brand !== activeBrand) continue;
-    for (const tier of ["official", "community"]) {
-      for (const l of (catalog.brands[brand].tiers[tier] ?? []).filter((x) => lookMatches(x, f))) {
-        const sel = current?.id === l.id;
-        html += `<button data-look="${l.id}" class="strip-card shrink-0 w-[92px] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
-          <img src="/thumbs/${l.id.replaceAll("/", "__")}.webp" alt="" loading="lazy" class="w-full h-[62px] object-cover block" />
-          <span class="block px-1.5 py-1 font-mono text-[9px] leading-tight truncate ${sel ? "bg-accent text-accentink font-semibold" : ""}">${l.name}</span>
-        </button>`;
+  syncShelfUI();
+  const items: { look: LookEntry; label: string }[] = [];
+  if (shelfMode) {
+    for (const [id, short] of FEATURED) { const l = findLook(id); if (l) items.push({ look: l, label: short }); }
+  } else {
+    const f = $<HTMLInputElement>("#search").value.trim().toLowerCase();
+    const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
+    for (const brand of brands) {
+      if (activeBrand && brand !== activeBrand) continue;
+      for (const tier of ["official", "community"]) {
+        for (const l of (catalog.brands[brand].tiers[tier] ?? []).filter((x) => lookMatches(x, f))) items.push({ look: l, label: l.name });
       }
     }
   }
-  host.innerHTML = html || `<div class="font-mono text-[11px] text-ink2 py-3">No matches.</div>`;
+  host.innerHTML = items.length ? items.map(({ look: l, label }) => {
+    const sel = current?.id === l.id;
+    return `<button data-look="${l.id}" class="strip-card shrink-0 w-[92px] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
+      <img src="/thumbs/${l.id.replaceAll("/", "__")}.webp" alt="" loading="lazy" class="w-full h-[62px] object-cover block" />
+      <span class="flex items-center gap-1 px-1.5 py-1 ${sel ? "bg-accent text-accentink font-semibold" : ""}">
+        <span class="w-3.5 h-3.5 shrink-0 ${sel ? "" : "text-ink2"}">${glyphFor(l)}</span>
+        <span class="font-mono text-[9px] leading-tight truncate">${label}</span>
+      </span>
+    </button>`;
+  }).join("") : `<div class="font-mono text-[11px] text-ink2 py-3">No matches.</div>`;
   host.querySelectorAll<HTMLButtonElement>(".strip-card").forEach((b) =>
     b.addEventListener("click", () => {
       selectLook(b.dataset.look!);
@@ -396,7 +481,9 @@ function findLook(id: string): LookEntry | undefined {
 
 async function selectLook(id: string) {
   const entry = findLook(id); if (!entry) return;
+  developFx = true;
   current = entry;
+  updateCounter();
   renderCabinet($<HTMLInputElement>("#search").value);
   $("#cap-state").textContent = "LOADING…";
   const recipeUrl = "/" + entry.recipe;
@@ -460,6 +547,17 @@ async function applyNow() {
   setBusy(false);
   hideStageLoad();
   progress(100);
+  fitStage();
+  if (developFx) {
+    developFx = false;
+    if (store.get(modeAtom) === "simple") {
+      const c = $<HTMLCanvasElement>("#after");
+      c.classList.remove("developing");
+      void c.offsetWidth;
+      c.classList.add("developing");
+      setTimeout(() => c.classList.remove("developing"), 750);
+    }
+  }
 }
 
 async function loadPhoto(source: Blob | string, name: string) {
@@ -516,6 +614,8 @@ async function boot() {
   const bs = $("#build-stamp"); if (bs) bs.textContent = `build ${new Date().toISOString().slice(0, 16).replace("T", " ")}Z`;
   progress(45);
   catalog = await fetchCatalog();
+  buildFlat();
+  updateCounter();
   $("#hdr-count").textContent = `${catalog.totalLooks} looks`;
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
@@ -525,6 +625,7 @@ async function boot() {
     const m = store.get(modeAtom);
     document.documentElement.dataset.mode = m;
     try { localStorage.setItem("of-mode", m); } catch {}
+    requestAnimationFrame(() => fitStage());
     const on = "bg-ink text-paper", off = "hover:bg-paper2";
     $<HTMLButtonElement>("#mode-simple").className = `px-2.5 py-2 tracking-wide ${m === "simple" ? on : off}`;
     $<HTMLButtonElement>("#mode-pro").className = `px-2.5 py-2 tracking-wide border-l border-ink ${m === "pro" ? on : off}`;
@@ -558,6 +659,15 @@ async function boot() {
   $("#btn-s1").addEventListener("click", () => loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait"));
   $("#btn-s2").addEventListener("click", () => loadPhoto("/samples/sample-2.jpg", "Sample II — the lake"));
   $("#btn-export").addEventListener("click", exportPNG);
+  document.querySelector("#shelf-on")?.addEventListener("click", () => {
+    shelfMode = true; activeBrand = null; activeType = "all";
+    renderChips(); renderCabinet($<HTMLInputElement>("#search").value);
+  });
+  document.querySelector("#shelf-all")?.addEventListener("click", () => {
+    shelfMode = false;
+    renderCabinet($<HTMLInputElement>("#search").value);
+  });
+  addEventListener("resize", () => fitStage());
   $("#btn-export-simple").addEventListener("click", exportPNG);
   const wrap = $("#printwrap");
   const drag = (e: PointerEvent) => {
