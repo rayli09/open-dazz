@@ -6,13 +6,15 @@ import {
   CircleDot, Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus,
   BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download, Sun,
   ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight,
+  ChevronDown, Check, User,
 } from "lucide";
 
 const ICONS = {
   MountainSnow, Film, Contrast, Clapperboard, Aperture, Camera, CircleDot,
   Layers, FlaskConical, Image, Moon, Landmark, Globe, Focus,
   BadgeCheck, Users, Video, SwatchBook, Search, Upload, Download,
-  ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight, Sun,
+  ArrowUpRight, Package, Mountain, Palette, SlidersHorizontal, ChevronsLeftRight,
+  ChevronDown, Check, User, Sun,
 };
 function icons() {
   try { createIcons({ icons: ICONS }); }
@@ -114,7 +116,7 @@ function layout() {
         <div class="relative">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink2 pointer-events-none"></i>
           <input id="search" type="text" placeholder="Search looks…"
-            class="w-full bg-mat border border-rule pl-9 pr-3 py-2 font-mono text-[12px] placeholder:text-ink2/80 focus:outline-none focus:border-ink" />
+            class="w-full bg-mat border border-rule pl-9 pr-3 py-2 font-mono text-[16px] lg:text-[12px] placeholder:text-ink2/80 focus:outline-none focus:border-ink" />
         </div>
       </div>
       <div id="cabinet" class="cabinet-scroll overflow-y-auto px-3 pb-4 lg:max-h-[calc(100vh-210px)] max-h-[55vh]">
@@ -126,7 +128,7 @@ function layout() {
     <section class="order-1 lg:order-2 bench-grid relative flex flex-col lg:min-h-[60vh]">
       <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
         <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors"><i data-lucide="upload" class="w-[18px] h-[18px]"></i>Photo</button>
-        <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="package" class="w-[18px] h-[18px]"></i>Sample I</button>
+        <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="user" class="w-[18px] h-[18px]"></i>Sample I</button>
         <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors"><i data-lucide="mountain" class="w-[18px] h-[18px]"></i>Sample II</button>
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
         <input id="file" type="file" accept="image/*" class="hidden" />
@@ -223,26 +225,58 @@ const TYPE_CHIPS: { key: TypeFilter; icon: string; label: string }[] = [
   { key: "video", icon: "video", label: "Video" },
 ];
 
+let openDD: "brand" | "type" | null = null;
+
+function closeDDs() {
+  openDD = null;
+  document.querySelectorAll(".dd-panel").forEach((p) => p.classList.remove("open"));
+  document.querySelectorAll(".dd").forEach((d) => d.classList.remove("open"));
+}
+function toggleDD(which: "brand" | "type") {
+  const willOpen = openDD !== which;
+  closeDDs();
+  if (!willOpen) return;
+  openDD = which;
+  document.querySelector(`.dd[data-dd="${which}"]`)?.classList.add("open");
+  document.querySelector(`.dd[data-dd="${which}"] .dd-panel`)?.classList.add("open");
+}
+
 function renderChips() {
   const host = $("#chips");
   const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
-  const chip = (active: boolean) =>
-    active ? "bg-accent border-ink font-medium text-accentink" : "bg-mat border-rule hover:bg-paper2";
-  let html = `<div class="flex gap-1.5 mb-1.5 overflow-x-auto lg:flex-wrap no-scrollbar -mx-1 px-1">
-    <button data-brand="" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] ${chip(activeBrand === null)}"><i data-lucide="layers" class="w-3.5 h-3.5"></i>All</button>`;
-  for (const b of brands) {
-    html += `<button data-brand="${b}" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] capitalize ${chip(activeBrand === b)}"><i data-lucide="${BRAND_ICONS[b] ?? "swatch-book"}" class="w-3.5 h-3.5"></i>${b === "emulsion" ? "Emulsion" : b}</button>`;
-  }
-  html += `</div><div class="flex gap-1.5 overflow-x-auto lg:flex-wrap no-scrollbar -mx-1 px-1">`;
-  for (const t of TYPE_CHIPS) {
-    html += `<button data-type="${t.key}" class="flex items-center gap-1.5 border px-2.5 py-1.5 font-mono text-[11px] ${chip(activeType === t.key)}"><i data-lucide="${t.icon}" class="w-3.5 h-3.5"></i>${t.label}</button>`;
-  }
-  html += `</div>`;
-  host.innerHTML = html;
+  const brandName = (b: string) => (b === "emulsion" ? "Emulsion" : b);
+  const type = TYPE_CHIPS.find((t) => t.key === activeType)!;
+  const opt = (active: boolean, icon: string, label: string, attrs: string) =>
+    `<button ${attrs} class="w-full flex items-center gap-2 px-2.5 py-2 text-[12.5px] text-left capitalize ${active ? "bg-accent text-accentink font-medium" : "hover:bg-paper2"}">
+       <i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i><span class="flex-1">${label}</span>
+       ${active ? '<i data-lucide="check" class="w-4 h-4 shrink-0"></i>' : ""}</button>`;
+  host.innerHTML = `<div class="flex gap-2">
+    <div class="dd relative flex-1" data-dd="brand">
+      <button class="dd-btn w-full flex items-center gap-2 border border-rule bg-mat px-2.5 py-2 font-mono text-[12px] hover:border-ink transition-colors" data-dd-btn="brand">
+        <i data-lucide="${activeBrand ? (BRAND_ICONS[activeBrand] ?? "swatch-book") : "layers"}" class="w-4 h-4 shrink-0"></i>
+        <span class="flex-1 text-left capitalize">${activeBrand ? brandName(activeBrand) : "All brands"}</span>
+        <i data-lucide="chevron-down" class="dd-chev w-4 h-4 shrink-0"></i></button>
+      <div class="dd-panel absolute left-0 right-0 top-[calc(100%+4px)] z-30 bg-mat border border-ink stage-shadow max-h-72 overflow-y-auto cabinet-scroll">
+        ${opt(activeBrand === null, "layers", "All brands", 'data-brand=""')}
+        ${brands.map((b) => opt(activeBrand === b, BRAND_ICONS[b] ?? "swatch-book", brandName(b), `data-brand="${b}"`)).join("")}
+      </div>
+    </div>
+    <div class="dd relative flex-1" data-dd="type">
+      <button class="dd-btn w-full flex items-center gap-2 border border-rule bg-mat px-2.5 py-2 font-mono text-[12px] hover:border-ink transition-colors" data-dd-btn="type">
+        <i data-lucide="${type.icon}" class="w-4 h-4 shrink-0"></i>
+        <span class="flex-1 text-left">${type.label}</span>
+        <i data-lucide="chevron-down" class="dd-chev w-4 h-4 shrink-0"></i></button>
+      <div class="dd-panel absolute left-0 right-0 top-[calc(100%+4px)] z-30 bg-mat border border-ink stage-shadow">
+        ${TYPE_CHIPS.map((t) => opt(activeType === t.key, t.icon, t.label, `data-type="${t.key}"`)).join("")}
+      </div>
+    </div>
+  </div>`;
+  host.querySelectorAll<HTMLButtonElement>("[data-dd-btn]").forEach((b) =>
+    b.addEventListener("pointerdown", (e) => { e.preventDefault(); toggleDD(b.dataset.ddBtn as "brand" | "type"); }));
   host.querySelectorAll<HTMLButtonElement>("[data-brand]").forEach((b) =>
-    b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
+    b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
-    b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
+    b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   icons();
 }
 
@@ -261,7 +295,7 @@ function renderCabinet(filter = "") {
       let cards = "";
       for (const look of looks) {
         const sel = current?.id === look.id;
-        cards += `<button data-look="${look.id}" class="look-card text-left border ${sel ? "border-ink" : "border-rule"} bg-mat hover:border-ink transition-colors">
+        cards += `<button data-look="${look.id}" class="look-card active:scale-[0.98] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat hover:border-ink transition-colors">
           <span class="relative block">
             <img loading="lazy" src="${thumbUrl(look.id)}" alt="" class="w-full aspect-[3/2] object-cover block" />
             ${look.tier === "official" ? '<span class="absolute top-1 left-1 bg-paper/90 p-[3px]"><i data-lucide="badge-check" class="w-3.5 h-3.5 block"></i></span>' : ""}
@@ -411,6 +445,8 @@ async function boot() {
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
+  addEventListener("pointerdown", (e) => { if (!(e.target as HTMLElement).closest(".dd")) closeDDs(); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") closeDDs(); });
   $("#btn-theme").addEventListener("click", () => {
     const dark = document.documentElement.dataset.theme !== "dark";
     if (dark) document.documentElement.dataset.theme = "dark";
@@ -423,8 +459,8 @@ async function boot() {
     const f = (e.target as HTMLInputElement).files?.[0];
     if (f) loadPhoto(f, f.name);
   });
-  $("#btn-s1").addEventListener("click", () => loadPhoto("/samples/sample-1.jpg", "Sample I — the parcel"));
-  $("#btn-s2").addEventListener("click", () => loadPhoto("/samples/sample-2.jpg", "Sample II — the coast road"));
+  $("#btn-s1").addEventListener("click", () => loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait"));
+  $("#btn-s2").addEventListener("click", () => loadPhoto("/samples/sample-2.jpg", "Sample II — the lake"));
   $("#btn-export").addEventListener("click", () => {
     $<HTMLCanvasElement>("#after").toBlob((b) => {
       if (!b) return;
@@ -448,7 +484,7 @@ async function boot() {
     if (!$("#stage-load")?.classList.contains("hidden") && !origPixels)
       showError("boot timed out — the catalog or engine did not arrive; try reloading");
   }, 15000);
-  await loadPhoto("/samples/sample-1.jpg", "Sample I — the parcel");
+  await loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait");
   await selectLook("fuji/official/classic-chrome");
 }
 

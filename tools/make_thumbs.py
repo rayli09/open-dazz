@@ -11,8 +11,12 @@ from PIL import Image
 
 root = Path(__file__).resolve().parent.parent
 cat = json.loads((root / "library/catalog.json").read_text())
-src = Image.open(root / "tests/images/rendered/AFXT2720-neutral-1600.png")
-src.thumbnail((360, 360))
+# Thumbs preview each look on the default sample (Sample I portrait),
+# using a 3:2 face-focused crop so the cards stay comparable.
+p = Image.open(root / "web/public/samples/sample-1.jpg")
+w, h = p.size
+src = p.crop((int(w * 0.08), int(h * 0.02), int(w * 0.98), int(h * 0.02 + (w * 0.90) * 2 / 3)))
+src.thumbnail((420, 420))
 src.save("/tmp/thumb-src.png")
 out = root / "web/public/thumbs"
 out.mkdir(parents=True, exist_ok=True)
