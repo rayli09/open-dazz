@@ -1,0 +1,40 @@
+{
+  "name": "Sebastiao Salgado",
+  "baseLut": "../luts/sebastiao-salgado.cube",
+  "grain": {
+    "amount": 0.27,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "EmulsionPresets (peva3) — XMP baked to LUT by tools/bake_emulsion.py",
+  "license": "MIT",
+  "provenance": {
+    "category": "Photographer Styles",
+    "treatment": "Monochrome",
+    "sourceFile": "Presets/Photographer/Sebastiao Salgado.xmp",
+    "sourceRepo": "https://github.com/peva3/EmulsionPresets",
+    "bakedFields": [
+      "Shadows/Highlights/Whites/Blacks2012 (approx)",
+      "Contrast2012 (approx)",
+      "ToneCurvePV2012",
+      "ToneCurvePV2012Red",
+      "ToneCurvePV2012Green",
+      "ToneCurvePV2012Blue",
+      "GrayMixer (approx)"
+    ],
+    "droppedFields": [
+      "sharpening"
+    ],
+    "description": "Biblical luminance: Highlights that seem to glow from within. Zones VIII–IX placed deliberately.",
+    "notes": "Display-referred PV2012 approximation; see tools/bake_emulsion.py header for what is captured and what is not."
+  }
+}

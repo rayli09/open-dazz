@@ -19,3 +19,7 @@ WB Red-Cyan shift is approximated as tintShift (lossy — different axis);
 grain weak/strong → 0.25/0.55 with size from the ` l`/` s` suffix;
 Color Chrome Effect, DR, EV, sharpness, clarity and NR have no schema-v0
 counterpart and survive only in `provenance`.
+
+> Note: this directory also holds EmulsionPresets bakes for Fujifilm
+> stocks (slug-named files, MIT) alongside the numbered Fuji X Weekly
+> recipes above; each file's `source`/`provenance` says which it is.
