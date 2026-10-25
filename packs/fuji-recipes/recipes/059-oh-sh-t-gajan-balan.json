@@ -1,0 +1,39 @@
+{
+  "name": "Oh Sh*t",
+  "baseLut": null,
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": -1,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": -0.111,
+    "tintShift": -0.222
+  },
+  "source": "open-fuji-recipes: ACROS +R recipe by Gajan Balan",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ACROS +R",
+    "creator": "Gajan Balan",
+    "type": "blackWhite",
+    "sensor": 4,
+    "wbMode": "daylight",
+    "wbr": -2,
+    "wbb": 1,
+    "dr": "DR200",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 59,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only. No base LUT available yet for this film sim (B&W family) — params only."
+  }
+}

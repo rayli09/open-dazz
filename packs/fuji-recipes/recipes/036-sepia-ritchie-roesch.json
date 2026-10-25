@@ -1,0 +1,39 @@
+{
+  "name": "Sepia",
+  "baseLut": null,
+  "grain": {
+    "amount": 0.55,
+    "size": "large"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 3,
+    "shadow": 3,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: SEPIA recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "SEPIA",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "DR400",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": -2,
+    "clarity": 2,
+    "nr": -4,
+    "sourceId": 36,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only. No base LUT available yet for this film sim (B&W family) — params only."
+  }
+}

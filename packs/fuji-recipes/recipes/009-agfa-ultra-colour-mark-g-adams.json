@@ -1,0 +1,39 @@
+{
+  "name": "Agfa Ultra Colour",
+  "baseLut": "../../fuji-simulations/luts/velvia_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": 2,
+    "color": 4
+  },
+  "whiteBalance": {
+    "tempShift": -0.222,
+    "tintShift": 0.556
+  },
+  "source": "open-fuji-recipes: VELVIA/Vivid recipe by Mark G. Adams",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "VELVIA/Vivid",
+    "creator": "Mark G. Adams",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "4500k",
+    "wbr": 5,
+    "wbb": 2,
+    "dr": "DR200",
+    "ev": "-1/3",
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 2,
+    "clarity": 0,
+    "nr": 2,
+    "sourceId": 9,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

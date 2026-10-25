@@ -1,0 +1,39 @@
+{
+  "name": "Cross Process (III)",
+  "baseLut": "../../fuji-simulations/luts/provia_sRGB.cube",
+  "grain": {
+    "amount": 0.55,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 2,
+    "shadow": 3,
+    "color": 4
+  },
+  "whiteBalance": {
+    "tempShift": 0.889,
+    "tintShift": -0.333
+  },
+  "source": "open-fuji-recipes: PROVIA/Standard recipe by Ritchie Roesch",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "PROVIA/Standard",
+    "creator": "Ritchie Roesch",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "auto",
+    "wbr": -3,
+    "wbb": -8,
+    "dr": "DR200",
+    "ev": "+2/3",
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 0,
+    "clarity": 0,
+    "nr": -3,
+    "sourceId": 139,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

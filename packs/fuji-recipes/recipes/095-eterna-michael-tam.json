@@ -1,0 +1,39 @@
+{
+  "name": "Eterna",
+  "baseLut": "../../fuji-simulations/luts/eterna_sRGB.cube",
+  "grain": {
+    "amount": 0.0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.111,
+    "tintShift": 0.222
+  },
+  "source": "open-fuji-recipes: ETERNA/Cinema recipe by Michael Tam",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ETERNA/Cinema",
+    "creator": "Michael Tam",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 2,
+    "wbb": -1,
+    "dr": "DR400",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 0,
+    "clarity": 0,
+    "nr": 0,
+    "sourceId": 95,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

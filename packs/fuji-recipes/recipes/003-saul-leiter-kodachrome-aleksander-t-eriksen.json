@@ -1,0 +1,39 @@
+{
+  "name": "Saul Leiter (Kodachrome)",
+  "baseLut": "../../fuji-simulations/luts/astia_sRGB.cube",
+  "grain": {
+    "amount": 0.55,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -2,
+    "shadow": -1,
+    "color": -4
+  },
+  "whiteBalance": {
+    "tempShift": 0.778,
+    "tintShift": 0.778
+  },
+  "source": "open-fuji-recipes: ASTIA/Soft recipe by Aleksander T. Eriksen",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "ASTIA/Soft",
+    "creator": "Aleksander T. Eriksen",
+    "type": "color",
+    "sensor": 3,
+    "wbMode": "auto",
+    "wbr": 7,
+    "wbb": -7,
+    "dr": "DR100",
+    "ev": 0,
+    "ccfx": "strong",
+    "ccfxb": "off",
+    "sharp": -4,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 3,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Padilla",
+  "baseLut": null,
+  "grain": {
+    "amount": 0.55,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 3,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: MONOCHROME +R recipe by Kevin Mullins",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "MONOCHROME +R",
+    "creator": "Kevin Mullins",
+    "type": "blackWhite",
+    "sensor": 3,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "AUTO",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "off",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": 0,
+    "sourceId": 86,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only. No base LUT available yet for this film sim (B&W family) — params only."
+  }
+}

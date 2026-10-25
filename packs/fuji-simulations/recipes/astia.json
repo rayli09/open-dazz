@@ -1,0 +1,23 @@
+{
+  "name": "Fujifilm Astia/Soft (base simulation)",
+  "baseLut": "../luts/astia_sRGB.cube",
+  "grain": {
+    "amount": 0,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": 0,
+    "shadow": 0,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0,
+    "tintShift": 0
+  },
+  "source": "abpy/FujifilmCameraProfiles \u2014 DCP LookTable baked to .cube",
+  "license": "CC BY-NC-SA 4.0",
+  "provenance": {
+    "note": "Bare simulation LUT, all engine params zero. Upstream notes these assume a linear-contrast input; on contrasty JPEGs expect a stronger look than in-camera."
+  }
+}

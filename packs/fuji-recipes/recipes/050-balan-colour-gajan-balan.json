@@ -1,0 +1,39 @@
+{
+  "name": "Balan Colour",
+  "baseLut": "../../fuji-simulations/luts/provia_sRGB.cube",
+  "grain": {
+    "amount": 0.25,
+    "size": "small"
+  },
+  "halation": 0,
+  "tone": {
+    "highlight": -1,
+    "shadow": -1,
+    "color": 0
+  },
+  "whiteBalance": {
+    "tempShift": 0.0,
+    "tintShift": 0.0
+  },
+  "source": "open-fuji-recipes: PROVIA/Standard recipe by Gajan Balan",
+  "license": "Apache-2.0 (per upstream package.json)",
+  "provenance": {
+    "film": "PROVIA/Standard",
+    "creator": "Gajan Balan",
+    "type": "color",
+    "sensor": 4,
+    "wbMode": "auto",
+    "wbr": 0,
+    "wbb": 0,
+    "dr": "DR400",
+    "ev": 0,
+    "ccfx": "off",
+    "ccfxb": "weak",
+    "sharp": 1,
+    "clarity": 0,
+    "nr": -4,
+    "sourceId": 50,
+    "sourceRepo": "https://github.com/matthieurobin/open-fuji-recipes",
+    "notes": "wbr mapped to tintShift is approximate (Red-Cyan vs Green-Magenta axis). ccfx/dr/ev/sharp/clarity/nr have no schema-v0 counterpart and are kept here only."
+  }
+}
