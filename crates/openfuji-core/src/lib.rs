@@ -8,6 +8,7 @@
 pub mod lut;
 pub mod recipe;
 pub mod apply;
+pub mod vhs;
 
 pub use lut::Lut3d;
 pub use recipe::Recipe;

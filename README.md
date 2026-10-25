@@ -102,3 +102,14 @@ Not affiliated with or endorsed by FUJIFILM Corporation. "Fuji" here is shorthan
 ## License
 
 MIT (code). Bundled data packs keep their own licenses — see each pack's folder.
+
+
+## Third-party
+
+The VHS/NTSC composite simulation in `crates/openfuji-core/src/vhs.rs`
+is powered by **ntsc-rs** by valadaptive
+(https://github.com/valadaptive/ntsc-rs), vendored at
+`crates/ntsc-rs` under its original license (MIT OR ISC OR
+Apache-2.0; license texts live in that directory). It is not
+published on crates.io, hence the vendored copy; upstream fixes can
+be ported by diffing that directory against upstream `crates/ntscrs`.
