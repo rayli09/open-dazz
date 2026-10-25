@@ -29,6 +29,28 @@ enum Cmd {
         #[arg(long)]
         vhs: Option<String>,
     },
+    /// Apply a look (and optionally the NTSC/VHS simulation) to a
+    /// VIDEO: frames are pumped through ffmpeg, graded one by one
+    /// (the VHS artifacts animate with the frame number), and the
+    /// source audio is copied through untouched.
+    Video {
+        input: PathBuf,
+        output: PathBuf,
+        #[arg(long, conflicts_with = "look")]
+        recipe: Option<PathBuf>,
+        #[arg(long)]
+        look: Option<String>,
+        /// Library root used for --look resolution.
+        #[arg(long, default_value = ".")]
+        root: PathBuf,
+        /// NTSC/VHS stage per frame: broadcast | vhs | vhs-heavy.
+        #[arg(long)]
+        vhs: Option<String>,
+        /// Process at this width (aspect preserved); the composite
+        /// simulation is a standard-definition effect by nature.
+        #[arg(long, default_value_t = 960)]
+        width: u32,
+    },
     /// Print a recipe's parsed parameters.
     Info {
         #[arg(long)]
@@ -176,7 +198,7 @@ fn load_recipe(path: &Path) -> Result<openfuji_core::Recipe, String> {
         .map_err(|e| format!("cannot parse recipe {}: {}", path.display(), e))
 }
 
-fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path, vhs: Option<openfuji_core::vhs::VhsPreset>) -> Result<String, String> {
+fn load_recipe_and_lut(recipe_path: &Path) -> Result<(openfuji_core::Recipe, Option<openfuji_core::Lut3d>), String> {
     let r = load_recipe(recipe_path)?;
     let lut = match &r.base_lut {
         Some(rel) => {
@@ -189,6 +211,40 @@ fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path, vhs: Optio
         }
         None => None,
     };
+    Ok((r, lut))
+}
+
+fn resolve_recipe_path(recipe: &Option<PathBuf>, look: &Option<String>, root: &Path) -> Result<PathBuf, String> {
+    match (recipe, look) {
+        (Some(p), _) => Ok(p.clone()),
+        (None, Some(q)) => {
+            let entries = scan_library(root);
+            match resolve_look(&entries, q) {
+                Resolution::Found(i) => Ok(entries[i].path.clone()),
+                Resolution::Ambiguous(ids) => Err(format!(
+                    "\"{}\" is ambiguous, be more specific:\n  {}",
+                    q,
+                    ids.join("\n  ")
+                )),
+                Resolution::NotFound => Err(format!("no look matches \"{}\"", q)),
+            }
+        }
+        (None, None) => Err("pass --recipe <path> or --look <name|id>".into()),
+    }
+}
+
+fn parse_vhs(v: &Option<String>) -> Result<Option<openfuji_core::vhs::VhsPreset>, String> {
+    match v {
+        Some(v) => Ok(Some(
+            openfuji_core::vhs::VhsPreset::parse(v)
+                .ok_or_else(|| format!("unknown --vhs preset \"{v}\" (broadcast | vhs | vhs-heavy)"))?,
+        )),
+        None => Ok(None),
+    }
+}
+
+fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path, vhs: Option<openfuji_core::vhs::VhsPreset>) -> Result<String, String> {
+    let (r, lut) = load_recipe_and_lut(recipe_path)?;
     let img = image::open(input)
         .map_err(|e| format!("cannot open {}: {}", input.display(), e))?
         .to_rgb8();
@@ -253,35 +309,15 @@ fn run() -> Result<(), String> {
             Ok(())
         }
         Cmd::Apply { input, output, recipe, look, root, vhs } => {
-            let recipe_path = match (recipe, look) {
-                (Some(p), _) => p,
-                (None, Some(q)) => {
-                    let entries = scan_library(&root);
-                    match resolve_look(&entries, &q) {
-                        Resolution::Found(i) => entries[i].path.clone(),
-                        Resolution::Ambiguous(ids) => {
-                            return Err(format!(
-                                "\"{}\" is ambiguous, be more specific:\n  {}",
-                                q,
-                                ids.join("\n  ")
-                            ))
-                        }
-                        Resolution::NotFound => {
-                            return Err(format!("no look matches \"{}\"", q))
-                        }
-                    }
-                }
-                (None, None) => return Err("pass --recipe <path> or --look <name|id>".into()),
-            };
-            let vhs = match &vhs {
-                Some(v) => Some(
-                    openfuji_core::vhs::VhsPreset::parse(v)
-                        .ok_or_else(|| format!("unknown --vhs preset \"{v}\" (broadcast | vhs | vhs-heavy)"))?,
-                ),
-                None => None,
-            };
-            let name = apply_with_recipe(&input, &output, &recipe_path, vhs)?;
+            let recipe_path = resolve_recipe_path(&recipe, &look, &root)?;
+            let name = apply_with_recipe(&input, &output, &recipe_path, parse_vhs(&vhs)?)?;
             println!("{} -> {} (look: {})", input.display(), output.display(), name);
+            Ok(())
+        }
+        Cmd::Video { input, output, recipe, look, root, vhs, width } => {
+            let recipe_path = resolve_recipe_path(&recipe, &look, &root)?;
+            let (name, frames) = apply_to_video(&input, &output, &recipe_path, parse_vhs(&vhs)?, width)?;
+            println!("{} -> {} (look: {}, {} frames)", input.display(), output.display(), name, frames);
             Ok(())
         }
     }
@@ -336,4 +372,104 @@ mod tests {
         }
         assert_eq!(resolve_look(&es, "nonexistent"), Resolution::NotFound);
     }
+}
+
+/// Probe (width, height, fps) via ffprobe.
+fn probe_video(input: &Path) -> Result<(u32, u32, f64), String> {
+    let out = std::process::Command::new("ffprobe")
+        .args(["-v", "error", "-select_streams", "v:0",
+               "-show_entries", "stream=width,height,avg_frame_rate",
+               "-of", "csv=p=0"])
+        .arg(input)
+        .output()
+        .map_err(|e| format!("cannot run ffprobe: {e}"))?;
+    if !out.status.success() {
+        return Err(format!("ffprobe failed on {}", input.display()));
+    }
+    let text = String::from_utf8_lossy(&out.stdout);
+    let first = text.lines().next().ok_or("ffprobe returned nothing")?;
+    let mut parts = first.split(',');
+    let w: u32 = parts.next().and_then(|v| v.trim().parse().ok()).ok_or("bad width")?;
+    let h: u32 = parts.next().and_then(|v| v.trim().parse().ok()).ok_or("bad height")?;
+    let rate = parts.next().unwrap_or("30/1");
+    let mut rp = rate.split('/');
+    let num: f64 = rp.next().and_then(|v| v.trim().parse().ok()).unwrap_or(30.0);
+    let den: f64 = rp.next().and_then(|v| v.trim().parse().ok()).unwrap_or(1.0);
+    Ok((w, h, if den > 0.0 { num / den } else { 30.0 }))
+}
+
+/// Grade a whole video: ffmpeg decodes to raw RGB frames, each frame
+/// runs the recipe pipeline (+ optional VHS stage with the frame
+/// number, so tape artifacts animate), and a second ffmpeg encodes
+/// H.264 while copying the source audio.
+fn apply_to_video(
+    input: &Path,
+    output: &Path,
+    recipe_path: &Path,
+    vhs: Option<openfuji_core::vhs::VhsPreset>,
+    max_width: u32,
+) -> Result<(String, usize), String> {
+    use std::io::{Read, Write};
+    let (r, lut) = load_recipe_and_lut(recipe_path)?;
+    let (sw, sh, fps) = probe_video(input)?;
+    let scale = (max_width as f64 / sw as f64).min(1.0);
+    let mut w = ((sw as f64 * scale).round() as u32) & !1;
+    let mut h = ((sh as f64 * scale).round() as u32) & !1;
+    if w == 0 { w = 2; }
+    if h == 0 { h = 2; }
+
+    let mut decoder = std::process::Command::new("ffmpeg")
+        .args(["-v", "error", "-i"])
+        .arg(input)
+        .args(["-vf", &format!("scale={w}:{h}"), "-f", "rawvideo", "-pix_fmt", "rgb24", "-"])
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+        .map_err(|e| format!("cannot start ffmpeg decoder: {e}"))?;
+    let mut dec_out = decoder.stdout.take().ok_or("decoder stdout missing")?;
+
+    let mut encoder = std::process::Command::new("ffmpeg")
+        .args(["-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
+               "-s", &format!("{w}x{h}"), "-r", &format!("{fps:.4}"), "-i", "-",
+               "-i"])
+        .arg(input)
+        .args(["-map", "0:v:0", "-map", "1:a?", "-c:v", "libx264", "-preset", "medium",
+               "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "copy", "-shortest",
+               "-movflags", "+faststart"])
+        .arg(output)
+        .stdin(std::process::Stdio::piped())
+        .spawn()
+        .map_err(|e| format!("cannot start ffmpeg encoder: {e}"))?;
+    let mut enc_in = encoder.stdin.take().ok_or("encoder stdin missing")?;
+
+    let frame_bytes = (w * h * 3) as usize;
+    let mut buf = vec![0u8; frame_bytes];
+    let mut frame: usize = 0;
+    loop {
+        match dec_out.read_exact(&mut buf) {
+            Ok(()) => {}
+            Err(e) if e.kind() == std::io::ErrorKind::UnexpectedEof => break,
+            Err(e) => return Err(format!("frame read failed: {e}")),
+        }
+        let img = image::RgbImage::from_raw(w, h, buf).ok_or("frame buffer mismatch")?;
+        let mut out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
+        if let Some(preset) = vhs {
+            openfuji_core::vhs::apply_vhs(out.as_mut(), w as usize, h as usize, preset, frame);
+        }
+        enc_in.write_all(&out).map_err(|e| format!("encoder write failed: {e}"))?;
+        buf = vec![0u8; frame_bytes];
+        frame += 1;
+        if frame % 60 == 0 {
+            eprint!("\r  frame {frame}");
+        }
+    }
+    drop(enc_in);
+    let enc_status = encoder.wait().map_err(|e| format!("encoder wait: {e}"))?;
+    let _ = decoder.wait();
+    if frame > 0 {
+        eprintln!("\r  {frame} frames processed");
+    }
+    if !enc_status.success() {
+        return Err("ffmpeg encoder failed".into());
+    }
+    Ok((r.name, frame))
 }
