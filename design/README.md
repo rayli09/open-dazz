@@ -11,9 +11,14 @@ in P2; it remains only as an internal reference for proportions).
   and the shutter ring — things that are round on a real camera.
 - **Type**: IBM Plex Mono is the only voice. Engraved labels are
   uppercase, letter-spaced, 10–11px.
-- **Palette**: the tokens in `web/src/style.css` (paper / ink / rule /
-  stamp / accent #e3edb2). Dark mode is the same paper at night —
-  warm charcoal, never blue-black.
+- **Palette**: DAZZ BLACK (Ray's full-copy call, 2026-10-25) — pure
+  black stage #000, white ink, muted gray #8f8f8f, hairline #262626,
+  accent = white itself (selections are white bands, black text).
+  No light theme: like Dazz's own site, the photograph is the only
+  color on stage. Type is one grotesque (Instrument Sans 400–700);
+  the mono voice and the squared corners retired with the copy —
+  interactive surfaces carry ~10px radius, photos 14px, and there
+  are no shadows anywhere.
 
 ## Inventory (`web/src/icons.ts`)
 

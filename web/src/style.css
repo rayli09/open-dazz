@@ -1,22 +1,24 @@
 @import "tailwindcss";
 
-/* Design language: a vintage film-box palette (decided with Ray,
-   2026-10-25) — cream paper, warm black ink, and one hot accent in
-   the red-orange of film packaging and halation. Mono voice,
-   hairlines, flat squared UI, visible paper grain. */
+/* Design language: DAZZ BLACK (full copy, Ray's call 2026-10-25) —
+   sampled from Dazz's own site (dazz.ltd): a pure-black gallery
+   stage, white grotesque type, no UI accent color at all (the
+   photograph is the only color), no borders/shadows to speak of,
+   gentle rounding. The vintage cream system it replaced lives in
+   git history. */
 @theme {
-  --color-paper: #efe5cd;
-  --color-paper2: #e4d7b8;
-  --color-mat: #faf3e0;
-  --color-ink: #201a13;
-  --color-ink2: #8d7a58;
-  --color-rule: #d2bf94;
-  --color-stamp: #2a2115;
-  --color-accent: #f04e23;
-  --color-accentink: #fff6e6;
-  --font-display: "IBM Plex Mono", ui-monospace, monospace;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
-  --font-sans: "Instrument Sans", "Noto Sans SC", system-ui, sans-serif;
+  --color-paper: #000000;
+  --color-paper2: #0c0c0c;
+  --color-mat: #131313;
+  --color-ink: #ffffff;
+  --color-ink2: #8f8f8f;
+  --color-rule: #262626;
+  --color-stamp: #ffffff;
+  --color-accent: #ffffff;
+  --color-accentink: #000000;
+  --font-display: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, "Noto Sans SC", sans-serif;
+  --font-mono: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, "Noto Sans SC", sans-serif;
+  --font-sans: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, "Noto Sans SC", sans-serif;
 }
 
 /* squared, always */
@@ -31,24 +33,18 @@ body::after {
   inset: 0;
   z-index: 40;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0.05'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* the bench: warm ledger paper */
-.bench-grid {
-  background-color: var(--color-paper2);
-  background-image:
-    linear-gradient(rgba(41, 33, 26, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(41, 33, 26, 0.055) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
+/* the bench: flat black, no grid — the photo is the only picture */
+.bench-grid { background-color: var(--color-paper); }
 
-/* the print sits heavy on the bench */
-.stage-shadow { box-shadow: 5px 5px 0 rgba(41, 33, 26, 0.14); }
-.look-card { transition: box-shadow 0.15s ease, border-color 0.15s ease; }
-.look-card:hover { box-shadow: 3px 3px 0 rgba(41, 33, 26, 0.13); }
+/* Dazz carries no shadows at all */
+.stage-shadow { box-shadow: none; }
+.look-card { transition: border-color 0.15s ease, background-color 0.15s ease; }
+.look-card:hover { box-shadow: none; }
 
 /* square range sliders */
 input[type="range"] {
@@ -82,35 +78,6 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: v
 .skel-pulse { animation: skel-pulse 1.15s ease-in-out infinite; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
-
-/* ---------- dark theme: warm charcoal paper ---------- */
-[data-theme="dark"] {
-  --color-paper: #181209;
-  --color-paper2: #20180e;
-  --color-mat: #251c10;
-  --color-ink: #f0e6cf;
-  --color-ink2: #97835f;
-  --color-rule: #3f3220;
-  --color-stamp: #f0e6cf;
-  --color-accent: #ff5a26;
-  --color-accentink: #fff6e6;
-}
-[data-theme="dark"] body::after { mix-blend-mode: overlay; opacity: 0.3; }
-[data-theme="dark"] .bench-grid {
-  background-image:
-    linear-gradient(rgba(237, 230, 214, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(237, 230, 214, 0.05) 1px, transparent 1px);
-}
-[data-theme="dark"] .stage-shadow { box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.45); }
-[data-theme="dark"] .look-card:hover { box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4); }
-
-/* logo variants per theme */
-.logo-dark { display: none; }
-[data-theme="dark"] .logo-dark { display: block; }
-[data-theme="dark"] .logo-light { display: none; }
-
-/* dark: variant follows the data-theme attribute, not the OS */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* dropdown panels — quick spring-like ease, grow from the trigger */
 .dd-panel {
@@ -181,3 +148,13 @@ html, body { height: 100%; }
   to { filter: blur(0) sepia(0) brightness(1) contrast(1); }
 }
 .developing { animation: develop 0.65s cubic-bezier(0.25, 0.7, 0.3, 1); }
+
+/* ---- Dazz rounding: soft corners on interactive surfaces ---- */
+button, input, .dd-panel, .look-card, .strip-card { border-radius: 10px; }
+.look-card, .strip-card, .dd-panel { overflow: hidden; }
+#printwrap { border-radius: 14px; overflow: hidden; }
+#film-counter { border-radius: 6px; }
+.seg { border-radius: 10px; overflow: hidden; }
+.seg > button { border-radius: 0; }
+.logo-light { display: none; }
+.logo-dark { display: block; }
