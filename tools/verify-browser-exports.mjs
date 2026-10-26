@@ -77,8 +77,15 @@ async function photo() {
   await ready();
 }
 async function look(id) {
+  if (!await page.locator(`[data-preset="${id}"]`).isVisible()) await page.locator('#toggle-looks').click();
   await page.locator(`[data-preset="${id}"]`).click();
   await ready();
+}
+async function collection(kind) {
+  const button=page.locator(`[data-simple-media="${kind}"]`);
+  if (!await button.isVisible()) await page.locator('#toggle-looks').click();
+  await button.click();await ready();
+  if (await page.evaluate(()=>innerWidth<1024)) await page.keyboard.press('Escape');
 }
 async function upload(name, preset = "ricoh-bw") {
   await page.locator("#file").setInputFiles(`${out}/input-${name}`);
@@ -191,7 +198,7 @@ try {
   await upload("short-audio.mp4");
   assert.match(await page.locator("#cap-file").textContent(), /COMPAT/);
   await save("compat-short-audio.mp4");
-  await page.locator('[data-simple-media="video"]').click();
+  await collection('video');
   await ready();
   await save("cx405-mono.mp4");
   // Cancel while compatibility encoding is in flight, then recreate its worker.
@@ -204,7 +211,7 @@ try {
   await ready();
   assert.equal(downloads, beforeMidCancel);
   await save("cx405-recovered.mp4");
-  await page.locator('[data-simple-media="photo"]').click();
+  await collection('photo');
   await ready();
   await photo();
   // Delay PNG encoding so a media switch overtakes its callback.

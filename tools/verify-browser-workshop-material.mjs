@@ -29,7 +29,7 @@ try {
  const grip=await page.locator('.dial-grip').boundingBox();await page.mouse.move(grip.x+40,grip.y+40);await page.mouse.down();await page.mouse.move(grip.x+64,grip.y+40);await page.mouse.up();assert.ok(Number(await page.locator('#num-strength').inputValue())>64);
  await page.locator('#num-temp').fill('-0.25');await page.locator('#num-temp').press('Tab');assert.equal(await page.locator('#sl-temp').inputValue(),'-0.25');
  const edited = await page.locator('#sl-strength').inputValue();
- await page.locator('#btn-s2').click();await ready();await page.locator('.dock-item').first().click();await ready();assert.equal(await page.locator('#sl-strength').inputValue(),edited);
+ await page.locator('.sample-menu summary').click();await page.locator('#btn-s2').click();await ready();await page.locator('.dock-item').first().click();await ready();assert.equal(await page.locator('#sl-strength').inputValue(),edited);
  checks.push('main output contains shared controls; percent/numeric/keyboard/linear drag and per-item settings');
  // Header focus and accessible dropdown activation; actions remain visible on desktop.
  await page.keyboard.press('Tab');await page.locator('#mode-pro').focus();assert.equal(await page.locator('#mode-pro').evaluate(e=>e.matches(':focus-visible')),true);assert.equal(await page.locator('#mode-pro').evaluate(e=>getComputedStyle(e).outlineWidth),'2px');await shot('main-focus');
@@ -52,7 +52,7 @@ try {
   assert.equal(await page.locator("#btn-export-simple").evaluate(e=>e.getBoundingClientRect().bottom<=document.querySelector("#media-dock").getBoundingClientRect().top),true);
   const dimensions=await page.locator('#editing-mode button,#btn-export-simple,#dock-add').evaluateAll(es=>es.filter(e=>e.getBoundingClientRect().width).map(e=>({id:e.id,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height})));
   for (const d of dimensions) assert.ok(d.h>=44 && d.w>=44,JSON.stringify(d));
-  await mode('pro');await page.locator('.dial-grip').scrollIntoViewIfNeeded();assert.ok(await page.locator('.ledger-content').evaluate(e=>e.getBoundingClientRect().height)>500);await shot(`main-mobile-pro-${width}`);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);
+  await mode('pro');await page.locator('#toggle-adjustments').click();await page.locator('.dial-grip').scrollIntoViewIfNeeded();assert.ok(await page.locator('.ledger-content').evaluate(e=>e.getBoundingClientRect().height>300 && e.getBoundingClientRect().bottom<=document.querySelector('#media-dock').getBoundingClientRect().top));await shot(`main-mobile-pro-${width}`);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width);await page.keyboard.press('Escape');
  }
  await page.setViewportSize({width:1440,height:1000});await mode('simple');await top();
  while (await page.locator('.dock-item').count()) await page.locator('#dock-remove').click();
@@ -66,7 +66,7 @@ try {
  await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('#btn-export').evaluate(e=>getComputedStyle(e).transitionDuration),'0s');
  checks.push('390/320px layouts, 44px key targets, direct touch/numeric alternatives and reduced motion');
  const touch = await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
- const t = await touch.newPage();await t.goto(process.env.BASE_URL || 'http://127.0.0.1:4173');await t.waitForFunction(()=>!!document.querySelector('#mode-pro'));await t.locator('#mode-pro').tap();await t.locator('#num-strength').waitFor();await t.locator('#num-strength').tap();await t.locator('#num-strength').fill('72');await t.locator('#num-strength').press('Tab');assert.equal(await t.locator('#sl-strength').inputValue(),'0.72');await touch.close();
+ const t = await touch.newPage();await t.goto(process.env.BASE_URL || 'http://127.0.0.1:4173');await t.waitForFunction(()=>!!document.querySelector('#mode-pro'));await t.locator('#mode-pro').tap();await t.locator('#toggle-adjustments').tap();await t.locator('#num-strength').waitFor();await t.locator('#num-strength').tap();await t.locator('#num-strength').fill('72');await t.locator('#num-strength').press('Tab');assert.equal(await t.locator('#sl-strength').inputValue(),'0.72');await touch.close();
  checks.push('real touch context: mode switch and direct numeric editing');
 
  assert.deepEqual(errors,[]);writeFileSync(`${out}/results.json`,JSON.stringify({checks,pageErrors:errors},null,2));console.log('PASS',checks);

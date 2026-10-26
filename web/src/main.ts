@@ -1,6 +1,7 @@
 import { relativeAssetPath } from "./asset-url";
 import { saveMedia } from "./save-media";
 import { setupDesktop } from "./desktop";
+import { setupWorkspaceLayout } from "./workspace-layout";
 import { setupMediaSession, browserSessionStorage } from "./media-session";
 import { setupSessionUI } from "./session-ui";
 import { ResourceCache, fetchText } from "./resource-cache";
@@ -41,6 +42,7 @@ engineP.then((m) => {
 
 import "./style.css";
 import "./workshop-material.css";
+import "./workspace-layout.css";
 import { dialMarkup, bindCameraDial } from "./camera-dial";
 
 const MAX_DIM = 1920;
@@ -182,10 +184,11 @@ function layout() {
 
   <main class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[292px_minmax(0,1fr)_300px] overflow-y-auto lg:overflow-hidden">
     <!-- THE CABINET -->
-    <aside class="cabinet-aside order-2 lg:order-1 border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
+    <aside id="look-cabinet" tabindex="-1" aria-label="All looks" class="cabinet-aside order-2 lg:order-1 border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
       <div class="px-3 pt-3 pb-1">
         <div class="flex items-center gap-2 mb-2">
           <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">PICK A LOOK</span>
+          <button class="panel-close" data-close-panel="looks" aria-label="Close looks">×</button>
         </div>
         <div id="chips" class="mb-2"></div>
         <div class="relative">
@@ -200,7 +203,7 @@ function layout() {
     </aside>
 
     <!-- THE SHELF RAIL (simple mode: left on desktop, under the photo on mobile) -->
-    <aside class="shelf-rail order-2 lg:order-1 flex-col min-h-0 border-t lg:border-t-0 lg:border-r border-rule">
+    <aside id="look-shelf" tabindex="-1" aria-label="Curated looks" class="shelf-rail order-2 lg:order-1 flex-col min-h-0 border-t lg:border-t-0 lg:border-r border-rule">
       <div class="tex-filmleader shrink-0 border-b border-rule" aria-hidden="true"></div>
       <div class="px-3 pt-3 pb-2 flex flex-col gap-2 shrink-0">
         <div class="flex items-center gap-2">
@@ -208,10 +211,10 @@ function layout() {
             <button data-simple-media="photo" class="is-active" aria-pressed="true">PHOTOS</button>
             <button data-simple-media="video" aria-pressed="false">VIDEO</button>
           </div>
-          <span id="film-counter" class="ml-auto font-mono text-[10px] bg-ink text-accentink px-1.5 py-0.5"></span>
+          <button class="panel-close" data-close-panel="looks" aria-label="Close looks">×</button>
         </div>
         <p id="simple-hint" class="simple-hint">Fuji first. Eleven looks for everyday photos.</p>
-        <button id="simple-open-pro" class="simple-pro-link">All looks in Pro ${icon("arrow-up-right", "w-3 h-3")}</button>
+        <div class="shelf-meta"><button id="simple-open-pro" class="simple-pro-link">All looks in Pro ${icon("arrow-up-right", "w-3 h-3")}</button><span id="film-counter" class="font-mono"></span></div>
       </div>
       <div id="strip" class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto cabinet-scroll px-3 pb-3 lg:flex-1 lg:min-h-0"></div>
     </aside>
@@ -220,8 +223,12 @@ function layout() {
     <section class="order-1 lg:order-2 bench-grid relative flex flex-col min-h-0">
       <div class="import-toolbar flex flex-wrap items-center gap-2 px-4 pt-4">
         <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}Photo / Video</button>
+        <button id="toggle-looks" class="workspace-toggle" aria-expanded="true" aria-controls="look-shelf look-cabinet">${icon("camera", "w-4 h-4")}Looks</button>
+        <button id="toggle-adjustments" class="workspace-toggle" aria-expanded="true" aria-controls="adjustments-panel">${icon("sliders", "w-4 h-4")}Adjust</button>
+        <details class="sample-menu"><summary>Samples</summary><div>
         <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("user", "w-[18px] h-[18px]")}Sample I</button>
         <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("mountain", "w-[18px] h-[18px]")}Sample II</button>
+        </div></details>
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
         <input id="file" type="file" multiple accept="${MEDIA_FILE_TYPES.join(",")}" class="hidden" />
       </div>
@@ -251,8 +258,9 @@ function layout() {
         </figure>
       </div>
       <div id="work-error" hidden class="mx-4 mb-3 p-3 border border-rule bg-mat text-[12px]" role="alert"><span id="work-error-message"></span> <button id="work-retry" type="button" class="underline px-3 py-2">Try again</button></div>
-      <div class="quality-bar mx-4 mb-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink2"><span id="export-spec"></span><button id="cancel-photo" hidden type="button" class="border border-rule px-3 py-2">Cancel photo export</button></div>
-      <p id="phone-output-note" hidden class="mx-4 mb-3 text-[11px] leading-relaxed text-ink2"></p>
+      <div class="bench-footer"><div class="export-information">
+      <div class="quality-bar flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink2"><span id="export-spec"></span><button id="cancel-photo" hidden type="button" class="border border-rule px-3 py-2">Cancel photo export</button></div>
+      <details class="simulation-details"><summary>About this video look</summary><p id="phone-output-note" hidden class="text-[11px] leading-relaxed text-ink2"></p></details></div>
       <div class="simple-only items-center justify-end gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
         <button id="btn-video-simple" title="Develop the loaded video with the current look" style="display:none" class="bg-paper text-ink border border-ink px-3 py-2 hover:bg-paper2 transition-colors items-center gap-2 shrink-0">
           ${icon("video", "w-4 h-4")}
@@ -263,13 +271,15 @@ function layout() {
           <span class="font-mono text-[10px] tracking-[0.2em]">EXPORT</span>
         </button>
       </div>
+      <div class="pro-actions"><button id="btn-export" disabled class="camera-shutter flex items-center justify-center gap-2">${icon("download", "w-4 h-4")}Export PNG</button>
+      <button id="btn-video" style="display:none" class="flex items-center justify-center gap-2">${icon("video", "w-4 h-4")}<span data-vlabel>Develop video (.mp4)</span></button></div></div>
     </section>
 
     <!-- THE LEDGER -->
-    <aside class="ledger order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4 lg:min-h-0 lg:overflow-y-auto"><div class="ledger-content cabinet-scroll">
+    <aside id="adjustments-panel" tabindex="-1" aria-label="Adjustments" class="ledger order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4 lg:min-h-0 lg:overflow-y-auto"><div class="ledger-content cabinet-scroll">
       <div class="flex items-center gap-2 mb-2">
         ${icon("sliders", "w-4 h-4")}
-        <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">ADJUST &amp; EXPORT</span>
+        <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">ADJUST</span><button class="panel-close" data-close-panel="adjustments" aria-label="Close adjustments">×</button>
       </div>
       <h1 id="led-name" class="font-display text-[22px] leading-tight font-semibold">—</h1>
       <div id="led-meta" class="font-mono text-[10.5px] leading-relaxed tracking-[0.06em] text-ink2 mt-1"></div>
@@ -280,8 +290,7 @@ function layout() {
         <button data-gsize="small" class="gsize font-mono text-[11px] border border-ink px-2 py-1">SMALL</button>
         <button data-gsize="large" class="gsize font-mono text-[11px] border border-ink px-2 py-1">LARGE</button>
       </div>
-      </div><div class="ledger-actions"><button id="btn-export" disabled class="camera-shutter mt-4 w-full flex items-center justify-center gap-2">${icon("download", "w-4 h-4")}Export PNG</button>
-    <button id="btn-video" style="display:none" class="mt-2 w-full bg-paper text-ink border border-ink font-mono text-[12px] py-3 hover:bg-paper2 transition-colors items-center justify-center gap-2">${icon("video", "w-4 h-4")}<span data-vlabel>Develop video (.mp4)</span></button></div>
+      </div>
     </aside>
   </main>
 
@@ -1213,6 +1222,8 @@ async function boot() {
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
   layout();
+  const cleanupWorkspaceLayout = setupWorkspaceLayout();
+  document.querySelectorAll<HTMLButtonElement>(".sample-menu button").forEach(button => button.addEventListener("click", () => { document.querySelector<HTMLDetailsElement>(".sample-menu")!.open = false; }));
   $("#cancel-photo").addEventListener("click", () => { cancelPhotoExport(); $("#cap-state").textContent = "PHOTO EXPORT CANCELLED"; });
   $("#work-retry").addEventListener("click", async () => {
     if (!retryWork || retryBusy) return;
@@ -1256,6 +1267,7 @@ async function boot() {
   stageResize.observe($("#stage-wrap"));
   const cleanupMode = () => {
     stageResize.disconnect();
+    cleanupWorkspaceLayout();
     unsubscribeMode(); unsubscribePersistence();
     removeEventListener("pagehide", onPageHide);
   };

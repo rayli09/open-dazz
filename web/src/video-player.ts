@@ -41,7 +41,7 @@ export class FilteredVideoPlayer {
   constructor(host: HTMLElement, resetProcessor: () => void) {
     this.host = host;
     this.resetProcessor = resetProcessor;
-    host.innerHTML = `<div class="player-heading"><span id="player-badge" role="status">Preparing filtered preview…</span><button id="player-compare" type="button" aria-pressed="false">Show original</button></div>
+    host.innerHTML = `<div class="player-heading"><span id="player-badge" role="status">Preparing filtered preview…</span><button id="player-compare" type="button" aria-pressed="false">Show original</button><button id="player-expand" type="button" aria-label="Expand video" title="Expand video">${icon("fullscreen", "player-icon")}</button></div>
     <video-player><media-container class="workshop-player" aria-label="Video preview">
       <div class="player-picture"><video id="source-video" playsinline preload="metadata" disablepictureinpicture disableremoteplayback></video><canvas id="video-filter" aria-label="Live filtered video preview"></canvas><span class="player-overlay-badge" aria-hidden="true"></span></div>
       <div class="player-controls">
@@ -56,6 +56,14 @@ export class FilteredVideoPlayer {
     this.badge = host.querySelector("#player-badge")!;
     this.hint = host.querySelector("#player-hint")!;
     const options = { signal: this.events.signal };
+    const expand = host.querySelector<HTMLButtonElement>("#player-expand")!;
+    expand.disabled = typeof host.requestFullscreen !== "function";
+    if (expand.disabled) expand.title = "Filtered fullscreen is unavailable in this browser";
+    expand.addEventListener("click", () => {
+      void host.querySelector<HTMLElement>(".workshop-player")!.requestFullscreen().catch(() => {
+        this.hint.textContent = "Fullscreen is unavailable here. Use the player controls or a larger window.";
+      });
+    }, options);
     this.compare.addEventListener(
       "click",
       () => {
@@ -122,6 +130,8 @@ export class FilteredVideoPlayer {
     this.video.muted = item.playback.muted;
     this.video.src = item.sourceUrl;
     this.video.load();
+    // loadeddata can precede the first drawable frame, even while paused.
+    this.schedule(true);
     this.hint.textContent =
       "Preview quality · original audio. Export saves the full filtered clip.";
     this.updateView();
@@ -147,9 +157,13 @@ export class FilteredVideoPlayer {
       (this.host.querySelector<HTMLElement>("#player-hint")?.offsetHeight ?? 32) +
       (this.host.parentElement?.querySelector<HTMLElement>("figcaption")?.offsetHeight ?? 30) +
       32;
-    const playerWidth = Math.max(180, Math.min(width, Math.max(100, height - overhead) * ratio));
+    const playerWidth = Math.max(Math.min(320, width), Math.min(width, Math.max(100, height - overhead) * ratio));
     this.host.style.width = `${Math.min(width, playerWidth)}px`;
-    this.host.querySelector<HTMLElement>(".player-picture")!.style.aspectRatio = String(ratio);
+    const picture = this.host.querySelector<HTMLElement>(".player-picture")!;
+    picture.style.aspectRatio = String(ratio);
+    // Keep the control row usable when portrait media or short windows need a
+    // narrower picture. object-fit retains the media's original aspect ratio.
+    picture.style.maxHeight = `${Math.max(100, height - overhead)}px`;
   }
   private updateView() {
     const original =
@@ -214,8 +228,8 @@ export class FilteredVideoPlayer {
       this.hint.textContent = `Preview failed: ${error instanceof Error ? error.message : String(error)}. Try another look.`;
     }
   }
-  private schedule() {
-    if (this.callback !== null || !this.id || this.video.paused) return;
+  private schedule(firstFrame = false) {
+    if (this.callback !== null || !this.id || (this.video.paused && !firstFrame)) return;
     this.callback = this.video.requestVideoFrameCallback(() => {
       this.callback = null;
       this.render();

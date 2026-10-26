@@ -91,11 +91,8 @@ media-slider-thumb { width:17px; height:17px; background:var(--camera-satin); bo
 #divider>div { width:36px; height:36px; background:var(--camera-satin); color:#172128; border-color:#ccd5da; }
 button:disabled { cursor:default; }
 @media(min-width:1024px) {
-  main { grid-template-columns:272px minmax(0,1fr) 304px; }
-  [data-mode=simple] main { grid-template-columns:296px minmax(0,1fr); }
   .import-toolbar { padding-top:20px; }
 }
-@media(min-width:1440px) { main { grid-template-columns:292px minmax(0,1fr) 320px; } }
 @media(max-width:1023px) {
   header>div { min-height:72px; gap:10px; padding:10px 12px; }
   header .font-display { font-size:20px; }
@@ -103,7 +100,6 @@ button:disabled { cursor:default; }
   header .flex.items-center.gap-3 { gap:8px; }
   #editing-mode { width:164px; }
   #editing-mode>button { padding:0 9px; font-size:11px; }
-  .bench-grid { min-height:500px; height:clamp(500px,calc(100dvh - 246px),710px); }
   .simple-only { margin:0 12px 14px; padding-top:12px; }
   #btn-export-simple { min-width:0; }
   #stage-wrap { padding:18px; }
@@ -130,20 +126,12 @@ button:disabled { cursor:default; }
   #btn-load,#btn-s1,#btn-s2 { padding-inline:8px; font-size:11px; }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
-/* Keep the primary action reachable while the editing controls scroll. */
+/* The adjustment rail scrolls independently from the media. */
 .ledger { display:flex; flex-direction:column; overflow:hidden; padding-bottom:18px; }
 .ledger-content { min-height:0; overflow-y:auto; padding:0 3px; }
-.ledger-actions { flex:none; padding:12px 3px 0; margin-top:12px; border-top:1px solid #414c53; }
-.ledger-actions #btn-export { margin-top:0; }
 .edit-control:not(.strength-control) .edit-control-heading output { display:none; }
 .edit-control:not(.strength-control) { margin-bottom:8px; }
-@media(max-width:1023px) { .ledger-content { overflow:visible; } .ledger-actions { max-width:560px; } }
-/* Phone video needs room for actual playback controls plus its output contract.
-   Scroll the bench vertically rather than clipping controls into the dock. */
 .player-buttons { flex-wrap:wrap; row-gap:4px; }
-@media(max-width:1023px) {
-  .bench-grid:has(#video-workspace:not([hidden])) { min-height:760px; height:760px; }
-}
 /* Give the first decode a real, readable loading well before dimensions exist. */
 #printwrap:has(#stage-load:not(.hidden)) { min-width:240px; min-height:180px; }
 #search:focus-visible { outline:2px solid var(--camera-accent); outline-offset:3px; }

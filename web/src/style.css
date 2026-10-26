@@ -106,19 +106,15 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .logo-light { display: none; }
 .logo-dark { display: block; }
 @media (min-width: 1024px) {
-  main { grid-template-columns: 292px minmax(0,1fr) 300px; }
-  [data-mode="simple"] main { grid-template-columns: 320px minmax(0,1fr); }
   .shelf-rail > div:nth-child(2) { padding: 20px 16px 8px; }
   #strip { padding: 0 16px 20px; }
 }
-@media (min-width: 1440px) { main { grid-template-columns: 320px minmax(0,1fr) 340px; } }
 @media (max-width: 1023px) {
   header > div { min-height: 64px; padding: 10px 14px; }
   header .font-display { font-size: 21px; }
   header a { display: none; }
   header .seg > button { padding-inline: 12px; }
   main, [data-mode="simple"] main { display: flex; flex-direction: column; overflow-y: auto; }
-  .bench-grid { flex: none; min-height: 510px; height: min(68dvh,680px); }
   #stage-wrap { padding: 12px; }
   .bench-grid > div:first-child { padding: 12px 12px 0; gap: 6px; }
   #btn-load, #btn-s1, #btn-s2 { padding-inline: 10px; font-size: 12px; }
@@ -207,7 +203,6 @@ media-status-announcer { position: absolute; width: 1px; height: 1px; overflow: 
 .player-icon { display: block; width: 20px; height: 20px; }
 #media-dock { position: relative; }
 @media (max-width: 1023px) {
-  .bench-grid { min-height: 560px; height: min(74dvh,680px); }
   .dock-tools { display: grid; grid-template-columns: repeat(2,44px); padding-left: 4px; }
   .dock-tools #dock-left,.dock-tools #dock-right { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
   .dock-tools #dock-remove { grid-column: span 2; }

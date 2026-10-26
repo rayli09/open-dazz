@@ -30,7 +30,7 @@ mkdir -p tools/verify-out/browser-runner
 bun add --cwd tools/verify-out/browser-runner --exact playwright@1.64.1
 export PLAYWRIGHT_MODULE="$PWD/tools/verify-out/browser-runner/node_modules/playwright/index.mjs"
 export BROWSER_BIN=/usr/bin/chromium
-for suite in state media recovery exports phones materials workshop-material; do
+for suite in state media recovery exports phones materials workshop-material layout; do
   bun "tools/verify-browser-$suite.mjs" || exit 1
 done
 ```
@@ -44,8 +44,9 @@ done
 | `phones` | N95/4S moving outputs, preview stage consistency, aspect ratio, timing/audio, seeded frames and Ricoh PNG routing |
 | `materials` | Isolated `/materials.html` control interactions, PNGs and state isolation |
 | `workshop-material` | Main `/` dial/numeric/keyboard/touch, per-item edits, 320/390px layouts and error/recovery/undo states |
+| `layout` | Laptop/short/mobile preview sizes, collapsible panels, reachable export/dock, paused video first frames, portrait video and playback controls |
 
-Harnesses generate their own fixtures and write captures/downloads/JSON under `/tmp/opendazz-*` by default. `BASE_URL` configures the editor suites; the study uses `MATERIAL_BASE_URL`. Output overrides are `STATE_VERIFY_OUT`, `MEDIA_VERIFY_OUT`, `RECOVERY_VERIFY_OUT`, `EXPORT_VERIFY_OUT`, `PHONE_VERIFY_OUT`, `MATERIAL_VERIFY_OUT`, `WORKSHOP_VERIFY_OUT`. Point them at `/tmp` or ignored `tools/verify-out/`. Do not commit generated reports, screenshots or exported media. Browser checks are bounded regressions, not broad Safari/HDR/HEIC/long-video certification.
+Harnesses generate their own fixtures and write captures/downloads/JSON under `/tmp/opendazz-*` by default. `BASE_URL` configures the editor suites; the study uses `MATERIAL_BASE_URL`. Output overrides are `STATE_VERIFY_OUT`, `MEDIA_VERIFY_OUT`, `RECOVERY_VERIFY_OUT`, `EXPORT_VERIFY_OUT`, `PHONE_VERIFY_OUT`, `MATERIAL_VERIFY_OUT`, `WORKSHOP_VERIFY_OUT`, `LAYOUT_VERIFY_OUT`. Point them at `/tmp` or ignored `tools/verify-out/`. Do not commit generated reports, screenshots or exported media. Browser checks are bounded regressions, not broad Safari/HDR/HEIC/long-video certification.
 
 ## Library and pixel tools
 
