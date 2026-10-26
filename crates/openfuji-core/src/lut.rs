@@ -1,3 +1,5 @@
+use crate::math::lerp;
+
 /// A 3D LUT parsed from a .cube file. Data layout follows the .cube spec:
 /// red varies fastest, then green, then blue.
 #[derive(Debug, Clone)]
@@ -84,11 +86,6 @@ impl Lut3d {
         }
         out
     }
-}
-
-#[inline]
-fn lerp(a: f32, b: f32, t: f32) -> f32 {
-    a + (b - a) * t
 }
 
 #[cfg(test)]
