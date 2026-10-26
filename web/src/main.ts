@@ -1,8 +1,12 @@
+import { setupMediaSession, browserSessionStorage } from "./media-session";
+import { setupSessionUI } from "./session-ui";
+import { ResourceCache, fetchText } from "./resource-cache";
+import { checkPhotoSize, renderOriginalPhoto, type PhotoSnapshot } from "./photo-export";
 import { PHONE_LOOKS, PHONE_META, PHONE_OUTPUT_NOTE, phonePresetForLook } from "./video-phones";
 // open-dazz Photo Workshop — a film-development bench in the browser.
 // Engine: opendazz-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
-import { mediaStore, selectedMedia, MEDIA_FILE_TYPES } from "./media-store";
+import { mediaStore, selectedMedia, editSignature, MEDIA_FILE_TYPES } from "./media-store";
 import { setupMediaDock } from "./media-dock";
 import { setupMediaThumbnails } from "./media-thumbnails";
 import { setupMediaImport } from "./media-import";
@@ -145,7 +149,7 @@ function lookMatches(l: LookEntry, f: string): boolean {
 }
 const thumbUrl = (id: string) => `/thumbs/${id.replaceAll("/", "__")}.webp`;
 let recipe: Recipe | null = null;
-const cubeCache = new Map<string, Promise<string>>();
+const cubeCache = new ResourceCache<string>();
 let origPixels: Uint8ClampedArray | null = null;
 let imgW = 0, imgH = 0;
 let split = 50;
@@ -217,6 +221,7 @@ function layout() {
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
         <input id="file" type="file" multiple accept="${MEDIA_FILE_TYPES.join(",")}" class="hidden" />
       </div>
+      <section id="session-panel" hidden class="mx-4 mt-3 p-3 border border-rule rounded-lg bg-mat text-[12px] leading-relaxed max-h-40 overflow-y-auto" aria-label="Saved editing settings"></section>
       <div id="stage-wrap" class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-6 overflow-hidden">
         <div id="media-empty" hidden><h2 id="empty-title">Your next frame starts here</h2><p id="empty-message">Add photos or short clips, then pick a look. Each item keeps its own edits.</p><button id="empty-add">Add media</button><button id="retry-media" hidden>Try again</button></div>
         <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-ink/60 stage-shadow max-w-full select-none touch-none inline-flex flex-col">
@@ -241,6 +246,8 @@ function layout() {
           </figcaption>
         </figure>
       </div>
+      <div id="work-error" hidden class="mx-4 mb-3 p-3 border border-rule bg-mat text-[12px]" role="alert"><span id="work-error-message"></span> <button id="work-retry" type="button" class="underline px-3 py-2">Try again</button></div>
+      <div class="mx-4 mb-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink2"><span id="export-spec"></span><button id="cancel-photo" hidden type="button" class="border border-rule px-3 py-2">Cancel photo export</button></div>
       <p id="phone-output-note" hidden class="mx-4 mb-3 text-[11px] leading-relaxed text-ink2"></p>
       <div class="simple-only items-center justify-end gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
         <button id="btn-video-simple" title="Develop the loaded video with the current look" style="display:none" class="bg-paper text-ink border border-ink px-3 py-2 hover:bg-paper2 transition-colors items-center gap-2 shrink-0">
@@ -490,6 +497,7 @@ async function selectLook(id: string, restoredRecipe?: Recipe | null) {
     lastSimpleSelection[preset.media] = preset.recipeId;
   }
   developFx = true;
+  clearWorkFailure();
   current = entry;
   const phoneNote = $("#phone-output-note");
   phoneNote.hidden = !phonePresetForLook(id);
@@ -521,8 +529,7 @@ async function selectLook(id: string, restoredRecipe?: Recipe | null) {
   let rj: Recipe;
   try { rj = restoredRecipe ? structuredClone(restoredRecipe) : await fetchJson(recipeUrl, RecipeSchema); }
   catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    if (version === selectionVersion) showError(`could not load look — ${message}`);
+    if (version === selectionVersion && mediaId === activeMediaId) showWorkFailure("Could not load this look. Check your connection and try again; your edits are kept.", retryCurrentLook, error);
     return;
   }
   if (version !== selectionVersion) return;
@@ -543,8 +550,13 @@ async function selectLook(id: string, restoredRecipe?: Recipe | null) {
 async function cubeFor(entry: LookEntry): Promise<string | undefined> {
   if (!entry.baseLut) return undefined;
   const url = new URL(entry.baseLut, location.origin + "/" + entry.recipe).pathname;
-  if (!cubeCache.has(url)) cubeCache.set(url, fetch(url).then((r) => r.text()));
-  return cubeCache.get(url);
+  return cubeCache.get(url, async () => {
+    const text = await fetchText(url);
+    if (!/^\s*LUT_3D_SIZE\s+\d+/m.test(text)) throw new Error("The downloaded LUT is invalid. Try again when the connection is available.");
+    const eng = await engineP;
+    eng.apply(new Uint8Array([0, 0, 0, 255]), 1, 1, '{"name":"Validate LUT"}', text);
+    return text;
+  });
 }
 
 function setSplit(pct: number) {
@@ -597,6 +609,14 @@ function finishDevelop() {
 }
 
 async function applyNow() {
+  const media = mediaVersion, selection = selectionVersion;
+  try { await applyDevelop(); }
+  catch (error) {
+    if (media === mediaVersion && selection === selectionVersion)
+      showWorkFailure("Could not load or develop this look. Check your connection and try again; your edits are kept.", retryCurrentLook, error);
+  }
+}
+async function applyDevelop() {
   hideResultVideo();
   if (!origPixels || !current) return;
   if (!engine) { setBusy(true); return; } // engineP.then re-invokes applyNow
@@ -690,7 +710,7 @@ async function loadPhoto(source: Blob | string, name: string, request?: number):
   syncExportButtons();
   let bmp: ImageBitmap;
   try {
-    bmp = await decodeImage(source instanceof Blob ? source : await (await fetch(source)).blob());
+    bmp = await decodeImage(source instanceof Blob ? source : await fetchSourceBlob(source));
   } catch (e) {
     if (request !== mediaVersion) return false;
     setBusy(false);
@@ -700,6 +720,7 @@ async function loadPhoto(source: Blob | string, name: string, request?: number):
     return false;
   }
   if (request !== mediaVersion) { bmp.close(); return false; }
+  if (!currentVideo) photoSize = { width: bmp.width, height: bmp.height };
   const scale = Math.min(1, MAX_DIM / Math.max(bmp.width, bmp.height));
   imgW = Math.round(bmp.width * scale); imgH = Math.round(bmp.height * scale);
   const work = document.createElement("canvas"); work.width = imgW; work.height = imgH;
@@ -716,7 +737,7 @@ async function loadPhoto(source: Blob | string, name: string, request?: number):
     const c = $<HTMLCanvasElement>(id); c.width = imgW; c.height = imgH;
   }
   $<HTMLCanvasElement>("#before").getContext("2d")!.putImageData(data, 0, 0);
-  $("#cap-file").textContent = `${name.toUpperCase()} — ${imgW}×${imgH}`;
+  $("#cap-file").textContent = `${name.toUpperCase()} — PREVIEW ${imgW}×${imgH}`;
   setSplit(split);
   await applyNow();
   if (request === mediaVersion && activeMediaId && !currentVideo) {
@@ -739,23 +760,42 @@ let videoBusy = false;
 let videoCancel = false;
 let exportMediaVersion = 0;
 let photoExportBusy = false;
+let photoSize: { width: number; height: number } | null = null;
+let photoExportController: AbortController | null = null;
 let resultUrl: string | null = null;
 
 
 function syncExportButtons() {
+  updateExportSpec();
   for (const id of ["#btn-export", "#btn-export-simple"]) {
     const b = document.querySelector<HTMLButtonElement>(id);
     if (!b) continue;
     const item = selectedMedia(mediaStore.getState());
     const video = item?.kind === "video";
-    const label = videoBusy ? "Exporting MP4…" : video ? "Export MP4" : "Export PNG";
+    const label = photoExportBusy ? "Exporting PNG…" : videoBusy ? "Exporting MP4…" : video ? "Export MP4" : "Export PNG";
     b.innerHTML = `${icon("download", "w-4 h-4")}${label}`;
     b.title = video ? "Export the full filtered video as MP4" : "Export the filtered photo as PNG";
-    b.disabled = videoBusy || previewBusy || photoExportBusy || item?.status !== "ready" || (!recipe && current?.brand !== "camcorder");
+    b.disabled = !!workFailure || videoBusy || previewBusy || photoExportBusy || item?.status !== "ready" || (!recipe && current?.brand !== "camcorder");
   }
 }
 
+function updateExportSpec() {
+  const spec = document.querySelector("#export-spec");
+  if (!spec) return;
+  const cv = currentVideo, probe = cv?.wcProbe ?? cv?.ffProbe;
+  if (cv && probe) {
+    const compat = cv.route === "ffmpeg" || current?.id === "camcorder/cx405" || !cv.wcProbe?.audioPassthrough;
+    const fps = probe.fps ? (compat ? Math.min(30, probe.fps) : probe.fps).toFixed(2).replace(/\.?0+$/, "") + " fps" : "source timing";
+    spec.textContent = `MP4 · ${probe.w}×${probe.h} · ${fps}${compat ? "" : " average; source timestamps kept"} · 854px width limit · ${compat ? 45 : 120}s limit${compat ? "" : "; compatibility fallback: up to 30fps / 45s"}`;
+  } else spec.textContent = photoSize ? `PNG · original ${photoSize.width}×${photoSize.height} · 16.7 MP / 8192px export limit · preview up to 1920px` : "";
+  const cancel = document.querySelector<HTMLButtonElement>("#cancel-photo");
+  if (cancel) cancel.hidden = !photoExportBusy;
+}
+function cancelPhotoExport() {
+  photoExportController?.abort(); photoExportController = null; photoExportBusy = false; syncExportButtons();
+}
 function cancelExportForInput() {
+  cancelPhotoExport();
   if (videoBusy) {
     videoCancel = true;
     resetFFmpeg();
@@ -802,7 +842,7 @@ async function activateMedia(id: string | null) {
   mediaDecodeController = new AbortController(); ++selectionVersion; ++playerVersion;
   clearTimeout(applyTimer);
   previewPlayer?.detach(); playerMediaId = null; activeMediaId = id;
-  currentVideo = null; current = null; recipe = null; origPixels = null; imgW = imgH = 0;
+  currentVideo = null; photoSize = null; clearWorkFailure(); current = null; recipe = null; origPixels = null; imgW = imgH = 0;
   setVideoButtons(false);
   for (const selector of ["#before", "#after"]) { const canvas = $<HTMLCanvasElement>(selector); canvas.width = canvas.height = 1; }
   $("#video-workspace").hidden = true; $("#printwrap").hidden = false;
@@ -821,6 +861,10 @@ async function activateMedia(id: string | null) {
   split = item.edit.split; simpleMedia = item.edit.collection;
   lastSimpleSelection = { photo: item.edit.photoLookId, video: item.edit.videoLookId };
   try {
+    if (!findLook(item.edit.lookId)) {
+      markMediaError("The saved look is no longer available. Try again to open this item with Chrome; its unavailable look settings will be reset.");
+      return;
+    }
     await selectLook(item.edit.lookId, item.edit.recipe);
     if (request !== mediaVersion) return;
     if (item.kind === "video" && item.source instanceof File) await loadVideoFile(item.source, request, mediaDecodeController?.signal);
@@ -839,7 +883,7 @@ async function refreshVideoPreview() {
     const processor = await makeFrameProcessor();
     if (version !== playerVersion || request !== mediaVersion || selection !== selectionVersion) { processor.dispose?.(); return; }
     previewPlayer.setProcessor(processor);
-  } catch (error) { if (request === mediaVersion) console.warn("[opendazz] preview processor", error); }
+  } catch (error) { if (request === mediaVersion && selection === selectionVersion) showWorkFailure("Could not prepare this look. Check your connection and try again; your edits are kept.", retryCurrentLook, error); }
 }
 
 async function loadVideoFile(f: File, request = ++mediaVersion, signal?: AbortSignal) {
@@ -985,6 +1029,8 @@ async function developCurrentVideo() {
   const request = mediaVersion;
   const entry = findLook(selectedMedia(mediaStore.getState())?.edit.lookId ?? "");
   const lookName = entry?.name ?? "video";
+  const exportedItem = selectedMedia(mediaStore.getState());
+  const exportedSignature = exportedItem ? editSignature(exportedItem.edit, uiStore.getState().mode, "video") : null;
   const camcorderAudio = entry?.id === "camcorder/cx405";
   hideResultVideo();
   setVideoButtons(true, "■ CANCEL");
@@ -1025,6 +1071,7 @@ async function developCurrentVideo() {
     a.href = resultUrl;
     a.download = `opendazz-${lookName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.mp4`;
     a.click();
+    if (exportedItem && exportedSignature) mediaStore.getState().markExported(exportedItem.id, exportedSignature);
     $("#cap-state").textContent = "VIDEO DEVELOPED — SAVED AS MP4";
   } catch (e) {
     if (request !== mediaVersion) return;
@@ -1063,28 +1110,76 @@ function showError(msg: string) {
   console.error("[open-dazz]", msg);
 }
 
-// Export follows the loaded input; the video poster is preview only.
+let workFailure: string | null = null;
+let retryWork: (() => Promise<void>) | null = null;
+let retryBusy = false;
+function clearWorkFailure() {
+  workFailure = null; retryWork = null;
+  const banner = document.querySelector<HTMLElement>("#work-error");
+  if (banner) banner.hidden = true;
+}
+function showWorkFailure(message: string, retry: () => Promise<void>, error?: unknown) {
+  setBusy(false);
+  workFailure = message; retryWork = retry;
+  $("#work-error-message").textContent = message;
+  $("#work-error").hidden = false;
+  $("#cap-state").textContent = "ACTION NEEDED — TRY AGAIN";
+  hideStageLoad(); syncExportButtons();
+  if (error) console.warn("[opendazz] recoverable work failure", error);
+}
+async function retryCurrentLook() {
+  const item = selectedMedia(mediaStore.getState());
+  if (!item) return;
+  const id = item.id, lookId = item.edit.lookId;
+  const savedRecipe = item.edit.recipe ? structuredClone(item.edit.recipe) : null;
+  await selectLook(lookId, savedRecipe);
+  if (id !== activeMediaId || current?.id !== lookId) return;
+  clearTimeout(applyTimer); await applyNow();
+}
+async function fetchSourceBlob(url: string, signal?: AbortSignal): Promise<Blob> {
+  const response = await fetch(url, { signal });
+  if (!response.ok) throw new Error(`Could not read the image: HTTP ${response.status}`);
+  return response.blob();
+}
+// Preview is bounded, export re-decodes the selected original in a disposable
+// worker. Snapshot settings at click time; switching input cancels the worker.
 async function exportCurrentMedia() {
-  if (videoBusy) return; // Repeated Export clicks never cancel or duplicate work.
-  if (previewBusy || photoExportBusy) return;
+  if (videoBusy || previewBusy || photoExportBusy) return;
   if (currentVideo) return developCurrentVideo();
-  photoExportBusy = true;
-  syncExportButtons();
+  const item = selectedMedia(mediaStore.getState()), entry = current;
+  if (!item || !entry || !engine) return;
   const request = mediaVersion;
-  const selection = selectionVersion;
-  const name = findLook(selectedMedia(mediaStore.getState())?.edit.lookId ?? "")?.name ?? "photo";
-  const src = $<HTMLCanvasElement>("#after");
+  const exportedSignature = editSignature(item.edit, uiStore.getState().mode, "photo");
+  const savedRecipe = item.edit.recipe ? structuredClone(item.edit.recipe) : null;
+  const simple = uiStore.getState().mode === "simple";
+  const phone = phonePresetForLook(entry.id);
+  const controller = new AbortController();
+  photoExportController = controller; photoExportBusy = true; syncExportButtons();
   try {
-    const blob = await new Promise<Blob | null>(resolve => src.toBlob(resolve, "image/png"));
-    if (!blob || request !== mediaVersion || selection !== selectionVersion) return;
+    const snapshot: PhotoSnapshot = phone ? { kind: "phone", preset: phone }
+      : entry.id === "camcorder/cx405" ? { kind: "cx405" }
+      : entry.id === "camcorder/vhs" ? { kind: "vhs" }
+      : { kind: "recipe", recipe: recipeForMedia(savedRecipe!, simple, false), cube: await cubeFor(entry) };
+    if (controller.signal.aborted || request !== mediaVersion) return;
+    const source = item.source instanceof Blob ? item.source : await fetchSourceBlob(item.source, controller.signal);
+    const bitmap = await decodeImage(source);
+    if (controller.signal.aborted || request !== mediaVersion) { bitmap.close(); return; }
+    try { checkPhotoSize(bitmap.width, bitmap.height); }
+    catch (error) { bitmap.close(); throw error; }
+    const blob = await renderOriginalPhoto(bitmap, snapshot, controller.signal);
+    if (controller.signal.aborted || request !== mediaVersion) return;
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `opendazz-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    a.download = `opendazz-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    mediaStore.getState().markExported(item.id, exportedSignature);
+    $("#cap-state").textContent = "ORIGINAL-SIZE PNG SAVED";
+  } catch (error) {
+    if (controller.signal.aborted || request !== mediaVersion) return;
+    const detail = error instanceof Error ? error.message : "";
+    showWorkFailure(detail.startsWith("Original-size export supports") ? detail : "Could not export the original-size photo. Check your connection and try again, or use a smaller copy in a current browser.", exportCurrentMedia, error);
   } finally {
-    photoExportBusy = false;
-    syncExportButtons();
+    if (photoExportController === controller) { photoExportController = null; photoExportBusy = false; syncExportButtons(); }
   }
 }
 
@@ -1098,9 +1193,24 @@ async function boot() {
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
   layout();
+  $("#cancel-photo").addEventListener("click", () => { cancelPhotoExport(); $("#cap-state").textContent = "PHOTO EXPORT CANCELLED"; });
+  $("#work-retry").addEventListener("click", async () => {
+    if (!retryWork || retryBusy) return;
+    const retry = retryWork; retryBusy = true;
+    $<HTMLButtonElement>("#work-retry").disabled = true;
+    clearWorkFailure();
+    try { await retry(); }
+    catch (error) { showWorkFailure("This action could not finish. Check your connection and try again.", retry, error); }
+    finally { retryBusy = false; $<HTMLButtonElement>("#work-retry").disabled = false; }
+  });
   previewPlayer = new FilteredVideoPlayer($("#video-workspace"), () => { void refreshVideoPreview(); });
   progress(45);
-  catalog = await fetchCatalog();
+  while (true) {
+    try { catalog = await fetchCatalog(); clearWorkFailure(); break; }
+    catch (error) {
+      await new Promise<void>(resolve => showWorkFailure("Could not load the filter catalog. Check your connection, then try again.", async () => { clearWorkFailure(); resolve(); }, error));
+    }
+  }
   catalog.brands["camcorder"] = { tiers: { video: VIDEO_LOOKS }, total: VIDEO_LOOKS.length };
   updateCounter();
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
@@ -1138,9 +1248,15 @@ async function boot() {
   const cleanupImport = setupMediaImport($<HTMLInputElement>("#file"), document.body, dock.announce);
   const cleanupSelection = mediaStore.subscribe(state => state.selectedId, id => { void activateMedia(id); });
   $("#empty-add").addEventListener("click", () => $<HTMLInputElement>("#file").click());
-  $("#retry-media").addEventListener("click", () => { void activateMedia(mediaStore.getState().selectedId); });
-  const cleanupMedia = () => { cancelMediaDecode(); cancelExportForInput(); ++mediaVersion; ++selectionVersion; ++playerVersion; clearTimeout(applyTimer); origPixels = null; current = null; recipe = null; currentVideo = null; cleanupSelection(); cleanupImport(); cleanupThumbnails(); dock.destroy(); previewPlayer?.destroy(); hideResultVideo(); mediaStore.getState().clear(); removeEventListener("pagehide", onMediaPageHide); };
-  const onMediaPageHide = (event: PageTransitionEvent) => { if (!event.persisted) cleanupMedia(); else previewPlayer?.video.pause(); };
+  $("#retry-media").addEventListener("click", () => {
+    const item = selectedMedia(mediaStore.getState());
+    if (item && !findLook(item.edit.lookId)) mediaStore.getState().updateEdit(item.id, { lookId: DEFAULT_PHOTO.recipeId, recipe: null, collection: "photo", photoLookId: DEFAULT_PHOTO.recipeId });
+    void activateMedia(mediaStore.getState().selectedId);
+  });
+  const session = setupMediaSession(mediaStore, browserSessionStorage());
+  const cleanupSessionUI = setupSessionUI($("#session-panel"), () => $<HTMLInputElement>("#file").click(), session.reset);
+  const cleanupMedia = () => { session.destroy(); cleanupSessionUI(); cancelMediaDecode(); cancelExportForInput(); ++mediaVersion; ++selectionVersion; ++playerVersion; clearTimeout(applyTimer); origPixels = null; current = null; recipe = null; currentVideo = null; cleanupSelection(); cleanupImport(); cleanupThumbnails(); dock.destroy(); previewPlayer?.destroy(); hideResultVideo(); mediaStore.getState().clear(); removeEventListener("pagehide", onMediaPageHide); };
+  const onMediaPageHide = (event: PageTransitionEvent) => { if (!event.persisted) cleanupMedia(); else { session.flush(); cancelExportForInput(); previewPlayer?.video.pause(); } };
   import.meta.hot?.dispose(cleanupMedia);
   addEventListener("pagehide", onMediaPageHide);
   $("#btn-video").addEventListener("click", cancelVideoExport);
@@ -1172,6 +1288,14 @@ async function boot() {
     const up = () => { removeEventListener("pointermove", mv); removeEventListener("pointerup", up); };
     addEventListener("pointermove", mv); addEventListener("pointerup", up); });
 
+  const savedDrafts = [...mediaStore.getState().drafts];
+  for (const draft of savedDrafts) if (draft.source.kind === "sample") mediaStore.getState().addSample(draft.source.url, draft.name);
+  const preferred = mediaStore.getState().restoreSelectedId;
+  if (preferred && mediaStore.getState().items.some(item => item.id === preferred)) mediaStore.getState().select(preferred);
+  if (savedDrafts.length) {
+    if (!mediaStore.getState().selectedId) void activateMedia(null);
+    return;
+  }
   const initialMediaId = mediaStore.getState().addSample("/samples/sample-1.jpg", "Sample I — the portrait");
   setTimeout(() => {
     const item = selectedMedia(mediaStore.getState());

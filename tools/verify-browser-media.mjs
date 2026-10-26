@@ -505,9 +505,12 @@ try {
       1,
       `URL not released once: ${item.url}`,
     );
-  assert.deepEqual(await page.evaluate(() => Object.keys(localStorage)), ["of-mode"]);
+  const persisted = await page.evaluate(() => JSON.parse(localStorage.getItem("opendazz-edit-session-v1") || "null"));
+  assert.ok(persisted && persisted.version === 1);
+  assert.equal(JSON.stringify(persisted).includes("blob:"), false);
+  assert.equal(JSON.stringify(persisted).includes("sourceUrl"), false);
   checks.push(
-    "empty state, cancellation recovery and exactly-once source URL cleanup; only mode persists",
+    "empty state, cancellation recovery and exactly-once source URL cleanup; only validated settings/metadata persist",
   );
   // A cold compatibility-engine load is canceled, then recreated cleanly.
   const compatContext = await browser.newContext({

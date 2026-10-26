@@ -13,6 +13,7 @@ const browser = await chromium.launch({
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
 const errors = [];
+page.on("dialog", dialog => dialog.accept());
 page.on("pageerror", (error) => errors.push(error.message));
 const ready = () =>
   page.waitForFunction(() => !!document.querySelector("#btn-export-simple") && !document.querySelector("#btn-export-simple").disabled, {
@@ -76,11 +77,11 @@ try {
   );
   await page.locator('[data-preset="chrome"]').click();
   await page.waitForFunction(() =>
-    document.querySelector("#cap-state").textContent.includes("invalid data at grain.amount"),
+    !document.querySelector("#work-error").hidden && document.querySelector("#work-error-message").textContent.includes("Could not load this look"),
   );
   assert.equal(await page.locator("#btn-export-simple").isDisabled(), true);
   await page.unroute(badRecipe);
-  await page.locator('[data-preset="chrome"]').click();
+  await page.locator("#work-retry").click();
   await ready();
   // Invalid persisted values default; denied storage remains usable.
   await page.evaluate(() => localStorage.setItem("of-mode", '{"mode":"pro"}'));

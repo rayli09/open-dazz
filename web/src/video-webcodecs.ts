@@ -30,6 +30,8 @@ import {
 
 export interface WcProbe {
   duration: number;
+  /** Average source frame rate; export preserves source timestamps, including VFR. */
+  fps: number | null;
   /** Processed width/height (display size capped at 854, even). */
   w: number;
   h: number;
@@ -72,6 +74,8 @@ export async function probeWebCodecs(file: File, signal?: AbortSignal): Promise<
     const w = Math.max(2, Math.round(displayW * scale) & ~1);
     const h = Math.max(2, Math.round(displayH * scale) & ~1);
     if (!(await canEncodeVideo("avc", { width: w, height: h, quality: QUALITY_HIGH }))) return null;
+    const stats = duration <= WC_MAX_SECONDS ? await vtrack.computePacketStats() : null;
+    const fps = stats && Number.isFinite(stats.averagePacketRate) && stats.averagePacketRate > 0 ? stats.averagePacketRate : null;
     const atrack = await input.getPrimaryAudioTrack();
     const audioPassthrough = !atrack || atrack.codec === "aac";
 
@@ -89,7 +93,7 @@ export async function probeWebCodecs(file: File, signal?: AbortSignal): Promise<
     const poster = await new Promise<Blob | null>((res) => canvas.toBlob(res, "image/jpeg", 0.9));
     if (!poster) return null;
     return {
-      probe: { duration, w, h, displayW, displayH, hasAudio: !!atrack, audioPassthrough },
+      probe: { duration, fps, w, h, displayW, displayH, hasAudio: !!atrack, audioPassthrough },
       poster,
     };
   } finally {

@@ -29,7 +29,7 @@ export function setupMediaThumbnails() {
         () => {
           if (
             !stopped &&
-            mediaStore.getState().items.some((media) => media.id === item.id) &&
+            mediaStore.getState().items.some((media) => media.id === item.id && media.sourceUrl === item.sourceUrl) &&
             video.videoWidth &&
             video.videoHeight
           ) {
@@ -57,9 +57,9 @@ export function setupMediaThumbnails() {
     if (current || stopped) return;
     const item = mediaStore
       .getState()
-      .items.find((item) => item.kind === "video" && !item.thumbnail && !attempted.has(item.id));
+      .items.find((item) => item.kind === "video" && !item.thumbnail && !attempted.has(`${item.id}:${item.sourceUrl}`));
     if (!item) return;
-    attempted.add(item.id);
+    attempted.add(`${item.id}:${item.sourceUrl}`);
     await make(item);
     current = null;
     if (!stopped) void pump();

@@ -1,4 +1,5 @@
-import { mediaStore, selectedMedia, type MediaItem } from "./media-store";
+import { uiStore } from "./state";
+import { mediaStore, selectedMedia, itemIsDirty, type MediaItem } from "./media-store";
 const equalDockItems = (a: MediaItem[], b: MediaItem[]) =>
   a.length === b.length &&
   a.every(
@@ -6,10 +7,10 @@ const equalDockItems = (a: MediaItem[], b: MediaItem[]) =>
       item.id === b[i].id &&
       item.thumbnail === b[i].thumbnail &&
       item.status === b[i].status &&
-      item.error === b[i].error,
+      item.error === b[i].error && item.edited === b[i].edited && item.exportedSignature === b[i].exportedSignature && item.edit === b[i].edit,
   );
 export function setupMediaDock(host: HTMLElement, browse: () => void) {
-  host.innerHTML = `<div class="dock-heading"><div><span class="dock-title">YOUR MEDIA</span><span id="media-count"></span></div><p id="media-notice" role="status" aria-live="polite">Drop photos and clips anywhere. Everything stays on your device.</p><button id="dock-add" type="button">+ Add media</button></div><div class="dock-body"><div id="media-items" role="toolbar" aria-label="Media dock. Arrow keys select; Alt plus arrows reorder; Delete removes."></div><div class="dock-tools"><button id="dock-left" aria-label="Move selected media left" title="Move left (Alt + ←)">←</button><button id="dock-right" aria-label="Move selected media right" title="Move right (Alt + →)">→</button><button id="dock-remove" aria-label="Remove selected media" title="Remove selected media (Delete)">×</button></div></div>`;
+  host.innerHTML = `<div class="dock-heading"><div><span class="dock-title">YOUR MEDIA</span><span id="media-count"></span></div><p id="media-notice" role="status" aria-live="polite">Drop photos and clips anywhere. Everything stays on your device.</p><button id="dock-add" type="button">+ Add media</button></div><div class="dock-body"><div id="media-items" role="toolbar" aria-label="Media dock. Arrow keys select; Alt plus arrows reorder; Delete removes."></div><div class="dock-tools"><button id="dock-left" aria-label="Move selected media left" title="Move left (Alt + ←)">←</button><button id="dock-right" aria-label="Move selected media right" title="Move right (Alt + →)">→</button><button id="dock-undo" type="button" title="Undo last removal (30 seconds)" hidden>Undo</button><button id="dock-remove" aria-label="Remove selected media" title="Remove selected media (Delete)">×</button></div></div>`;
   const rail = host.querySelector<HTMLElement>("#media-items")!;
   let noticeTimer: ReturnType<typeof setTimeout> | undefined;
   const announce = (message: string) => {
@@ -46,6 +47,8 @@ export function setupMediaDock(host: HTMLElement, browse: () => void) {
         `${item.name}, ${item.kind}${item.status === "error" ? ", could not open" : ""}`,
       );
       button.title = `${item.name} · ${item.kind}`;
+      const dirty = itemIsDirty(item, uiStore.getState().mode);
+      if (dirty) button.setAttribute("aria-label", `${item.name}, ${item.kind}, unexported edits`);
       const thumb = document.createElement("span");
       thumb.className = "dock-thumbnail";
       if (item.thumbnail) {
@@ -68,10 +71,11 @@ export function setupMediaDock(host: HTMLElement, browse: () => void) {
       thumb.append(type);
       const name = document.createElement("span");
       name.className = "dock-name";
-      name.textContent = item.name;
+      name.textContent = item.name + (dirty ? " • Edited" : item.exportedSignature ? " ✓ Exported" : "");
       button.append(thumb, name);
       rail.append(button);
     }
+    (host.querySelector("#dock-undo") as HTMLButtonElement).hidden = !state.undo;
     const index = state.items.findIndex((item) => item.id === state.selectedId);
     (host.querySelector("#dock-left") as HTMLButtonElement).disabled = index <= 0;
     (host.querySelector("#dock-right") as HTMLButtonElement).disabled =
@@ -144,6 +148,12 @@ export function setupMediaDock(host: HTMLElement, browse: () => void) {
       announce(`Removed ${item.name}.`);
     }
   };
+  (host.querySelector("#dock-undo") as HTMLButtonElement).onclick = () => {
+    announce(mediaStore.getState().undoRemove() ? "Removal undone. Edits restored." : "Undo expired or the dock is full. Remove another item first.");
+    focusSelected();
+  };
+  const stopUndo = mediaStore.subscribe(s => s.undo, render);
+  const stopMode = uiStore.subscribe(s => s.mode, render);
   const stopItems = mediaStore.subscribe((s) => s.items, render, {
     equalityFn: equalDockItems,
     fireImmediately: true,
@@ -161,7 +171,7 @@ export function setupMediaDock(host: HTMLElement, browse: () => void) {
     announce,
     destroy: () => {
       clearTimeout(noticeTimer);
-      stopItems();
+      stopItems(); stopUndo(); stopMode();
       stopSelection();
       rail.removeEventListener("click", click);
       rail.removeEventListener("keydown", keydown);
