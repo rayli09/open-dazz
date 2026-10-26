@@ -202,12 +202,39 @@ fn resolve_look(entries: &[LookEntry], query: &str) -> Resolution {
     if let Some(r) = pick(exact_id) {
         return r;
     }
+    // The bare film name ("Classic Chrome", "Provia/Standard")
+    // means the OFFICIAL base simulation — it is the name users
+    // say and the one the web shelf features. Community recipes
+    // that reuse the bare name stay reachable by id or full name.
+    let base_sim: Vec<usize> = entries
+        .iter()
+        .enumerate()
+        .filter(|(_, e)| {
+            e.tier == "official"
+                && e.name
+                    .strip_suffix(" (base simulation)")
+                    .map(|n| n.strip_prefix("Fujifilm ").unwrap_or(n).to_lowercase())
+                    == Some(q.clone())
+        })
+        .map(|(i, _)| i)
+        .collect();
+    if let Some(r) = pick(base_sim) {
+        return r;
+    }
     let exact_name: Vec<usize> = entries
         .iter()
         .enumerate()
         .filter(|(_, e)| e.name.to_lowercase() == q)
         .map(|(i, _)| i)
         .collect();
+    // Several creators name their recipe identically; the official
+    // entry, when one is among them, is the canonical pick.
+    let official: Vec<usize> = exact_name
+        .iter()
+        .copied()
+        .filter(|&i| entries[i].tier == "official")
+        .collect();
+    let exact_name = if official.is_empty() { exact_name } else { official };
     if let Some(r) = pick(exact_name) {
         return r;
     }
@@ -437,6 +464,17 @@ mod tests {
         ];
         assert_eq!(resolve_look(&es, "fuji/official/classic-chrome"), Resolution::Found(0));
         assert_eq!(resolve_look(&es, "docu classic chrome"), Resolution::Found(1));
+    }
+
+    #[test]
+    fn bare_film_name_means_the_official_simulation() {
+        let es = vec![
+            entry("fuji/official/classic-chrome", "Fujifilm Classic Chrome (base simulation)"),
+            entry("fuji/community/094-x", "Classic Chrome"),
+            entry("fuji/community/103-y", "Classic Chrome"),
+        ];
+        assert_eq!(resolve_look(&es, "classic chrome"), Resolution::Found(0));
+        assert_eq!(resolve_look(&es, "fuji/community/094-x"), Resolution::Found(1));
     }
 
     #[test]

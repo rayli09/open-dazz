@@ -207,7 +207,7 @@ function layout() {
         <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("user", "w-[18px] h-[18px]")}Sample I</button>
         <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("mountain", "w-[18px] h-[18px]")}Sample II</button>
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
-        <input id="file" type="file" accept="image/*" class="hidden" />
+        <input id="file" type="file" accept="image/*,.heic,.heif,.avif,.tif,.tiff" class="hidden" />
       </div>
       <div id="stage-wrap" class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-6 overflow-hidden">
         <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-ink/60 stage-shadow max-w-full select-none touch-none inline-flex flex-col">
@@ -574,8 +574,57 @@ async function applyNow() {
   finishDevelop();
 }
 
+// Format support for uploads. Browsers natively decode JPEG/PNG/
+// WebP/AVIF/GIF/BMP, and Safari also decodes HEIC — but Chrome and
+// Firefox cannot open iPhone HEIC/HEIF at all, which used to surface
+// as a bare "async: ..." crash. Sniff the container from the magic
+// bytes (iOS often hands over an empty MIME type), try native first,
+// and fall back to a lazily loaded libheif WASM decoder (heic-to,
+// code-split — only HEIC uploads ever download it).
+function sniffFormat(head: Uint8Array): string {
+  const at = (off: number, txt: string) => txt.split("").every((c, i) => head[off + i] === c.charCodeAt(0));
+  if (head[0] === 0xff && head[1] === 0xd8) return "jpeg";
+  if (head[0] === 0x89 && head[1] === 0x50) return "png";
+  if (at(0, "GIF8")) return "gif";
+  if (at(0, "RIFF") && at(8, "WEBP")) return "webp";
+  if (at(0, "BM")) return "bmp";
+  if ((head[0] === 0x49 && head[1] === 0x49) || (head[0] === 0x4d && head[1] === 0x4d)) return "tiff";
+  if (at(4, "ftyp")) {
+    const brand = String.fromCharCode(...head.slice(8, 12));
+    if (brand === "avif" || brand === "avis") return "avif";
+    return "heif";
+  }
+  return "unknown";
+}
+
+async function decodeImage(blob: Blob): Promise<ImageBitmap> {
+  const head = new Uint8Array(await blob.slice(0, 12).arrayBuffer());
+  const fmt = sniffFormat(head);
+  const native = async () => {
+    // EXIF orientation matters for phone photos; a few browsers
+    // throw on the options bag itself, so retry bare.
+    try { return await createImageBitmap(blob, { imageOrientation: "from-image" }); }
+    catch { return await createImageBitmap(blob); }
+  };
+  if (fmt !== "heif") return native();
+  try { return await native(); }
+  catch { /* not Safari — decode via libheif below */ }
+  $("#cap-state").textContent = "DECODING HEIC…";
+  const { heicTo } = await import("heic-to");
+  const jpg = await heicTo({ blob, type: "image/jpeg", quality: 0.92 });
+  try { return await createImageBitmap(jpg, { imageOrientation: "from-image" }); }
+  catch { return await createImageBitmap(jpg); }
+}
+
 async function loadPhoto(source: Blob | string, name: string) {
-  const bmp = await createImageBitmap(source instanceof Blob ? source : await (await fetch(source)).blob());
+  let bmp: ImageBitmap;
+  try {
+    bmp = await decodeImage(source instanceof Blob ? source : await (await fetch(source)).blob());
+  } catch (e) {
+    showError(`could not open ${name} — this browser cannot decode that format (try JPEG or PNG)`);
+    console.error("[open-dazz] decode failed", e);
+    return;
+  }
   const scale = Math.min(1, MAX_DIM / Math.max(bmp.width, bmp.height));
   imgW = Math.round(bmp.width * scale); imgH = Math.round(bmp.height * scale);
   const work = document.createElement("canvas"); work.width = imgW; work.height = imgH;
