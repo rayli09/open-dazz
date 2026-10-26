@@ -9,9 +9,9 @@ pub struct Recipe {
     /// Path to a .cube LUT, resolved by the caller relative to the recipe file.
     pub base_lut: Option<String>,
     /// Blend of the base LUT stage: 1.0 = full look (default), 0.0 = no LUT.
-    /// Exists because the bundled sim LUTs carry strong baked-in contrast —
-    /// on an already-contrasty render, 0.7-0.85 tames shadow crush while
-    /// keeping the sim's character (verification round 2, 2026-10-25).
+    /// The bundled LUTs are calibrated for display-referred input
+    /// (see docs/COLOR_TEST_CASES.md), so 1.0 is the intended
+    /// out-of-box strength; lower values are a creative fade.
     #[serde(default = "default_strength")]
     pub strength: f32,
     #[serde(default)]
