@@ -1,4 +1,4 @@
-// open-fuji asset library — every user-facing icon is drawn here.
+// open-dazz asset library — every user-facing icon is drawn here.
 // System: 24 grid, 1.6 stroke, squared terminals, currentColor.
 // No third-party icon fonts in the chrome (see design/README.md).
 

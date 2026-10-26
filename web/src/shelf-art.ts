@@ -245,7 +245,7 @@ function body(a: ArtSpec): string {
     <line x1="264.8" y1="68" x2="264.8" y2="152" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
   </g>
   <line x1="58" y1="86.5" x2="262" y2="86.5" stroke="rgba(0,0,0,0.35)" stroke-width="0.8"/>
-  <text x="66" y="78" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-style="italic" font-weight="600" font-size="8.5" letter-spacing="0.4" fill="${engrave}">open fuji</text>
+  <text x="66" y="78" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-style="italic" font-weight="600" font-size="8.5" letter-spacing="0.4" fill="${engrave}">open dazz</text>
   <path d="M252 58 l13 -5 -1.5 7 -11 3 z" fill="${a.top}" stroke="${inkLine}" stroke-width="0.7"/>
   <ellipse cx="232" cy="72" rx="13" ry="4" fill="#000" opacity="0.28" filter="url(#soft{i})"/>
   ${ticks}
@@ -299,7 +299,7 @@ function body(a: ArtSpec): string {
   <line x1="64.6" y1="151.4" x2="67.4" y2="148.6" stroke="${engrave}" stroke-width="0.8"/>
   <circle cx="254" cy="150" r="2.2" fill="none" stroke="${engrave}" stroke-width="0.8"/>
   <line x1="252.6" y1="148.6" x2="255.4" y2="151.4" stroke="${engrave}" stroke-width="0.8"/>
-  <text x="66" y="156" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="5.2" font-weight="600" letter-spacing="0.6" fill="${engrave}">OPEN FUJI</text>
+  <text x="66" y="156" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="5.2" font-weight="600" letter-spacing="0.6" fill="${engrave}">OPEN DAZZ</text>
   <rect x="222" y="147" width="30" height="4.6" rx="2.3" fill="${a.accent}" opacity="0.9"/>`);
 }
 

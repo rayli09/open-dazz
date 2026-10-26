@@ -1,4 +1,4 @@
-// open-fuji Photo Workshop — a film-development bench in the browser.
+// open-dazz Photo Workshop — a film-development bench in the browser.
 // Engine: openfuji-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
 import { store, modeAtom, type Mode } from "./state";
@@ -58,12 +58,12 @@ const FEATURED: [string, string][] = [
 // live in a synthetic "camcorder" brand injected into the catalog
 // at boot; applyNow routes them to their own engine stages. ---
 const VIDEO_LOOKS: LookEntry[] = [
-  { id: "camcorder/cx405", name: "Sony CX405", brand: "camcorder", tier: "video", recipe: "", baseLut: null, hasLut: false, baseFilm: "HDR-CX405", creator: "open-fuji", license: null },
+  { id: "camcorder/cx405", name: "Sony CX405", brand: "camcorder", tier: "video", recipe: "", baseLut: null, hasLut: false, baseFilm: "HDR-CX405", creator: "open-dazz", license: null },
   { id: "camcorder/vhs", name: "VHS-C", brand: "camcorder", tier: "video", recipe: "", baseLut: null, hasLut: false, baseFilm: "VHS tape", creator: "ntsc-rs", license: null },
 ];
 const VIDEO_META: Record<string, { meta: string; note: string }> = {
   "camcorder/cx405": {
-    meta: "camcorder · HDR-CX405 · open-fuji",
+    meta: "camcorder · HDR-CX405 · open-dazz",
     note: "A consumer camcorder, simulated as a signal chain: soft luma, smeared chroma, hunting auto-exposure, milky night blacks, sensor noise. The look is the hardware — no develop sliders.",
   },
   "camcorder/vhs": {
@@ -151,14 +151,14 @@ function layout() {
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
         <img src="/logo.png" alt="" class="logo-light w-9 h-9 pixelated" /><img src="/logo-dark.png" alt="" class="logo-dark w-9 h-9 pixelated" />
-        <span class="font-display text-[20px] font-bold tracking-tight">open-fuji</span>
+        <span class="font-display text-[20px] font-bold tracking-tight">open-dazz</span>
       </div>
       <div class="flex items-center gap-2">
         <div class="seg flex border border-ink font-mono text-[11px]" role="group" aria-label="Mode">
           <button id="mode-simple" class="px-2.5 py-2 tracking-wide">SIMPLE</button>
           <button id="mode-pro" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button>
         </div>
-        <a href="https://github.com/rayli09/open-fuji" target="_blank" rel="noreferrer"
+        <a href="https://github.com/rayli09/open-dazz" target="_blank" rel="noreferrer"
            class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-2 hover:bg-paper2 transition-colors">GitHub ${icon("arrow-up-right", "w-3.5 h-3.5")}</a>
       </div>
     </div>
@@ -607,7 +607,7 @@ function showError(msg: string) {
   if (el) el.textContent = `ERROR — ${msg}`.slice(0, 140);
   const sl = $("#stage-load div");
   if (sl) sl.textContent = `SOMETHING BROKE — ${msg}`.slice(0, 140);
-  console.error("[open-fuji]", msg);
+  console.error("[open-dazz]", msg);
 }
 
 // Export is deliberately plain: the developed pixels, nothing added.
@@ -617,7 +617,7 @@ function exportPNG() {
     if (!b) return;
     const a = document.createElement("a");
     a.href = URL.createObjectURL(b);
-    a.download = `openfuji-${(current?.name ?? "photo").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
+    a.download = `opendazz-${(current?.name ?? "photo").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
     a.click(); URL.revokeObjectURL(a.href);
   }, "image/png");
 }

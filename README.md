@@ -1,4 +1,4 @@
-# open-fuji
+# open-dazz
 
 An open app for quickly applying **film simulations and style filters** — recipes and LUTs, camera-agnostic.
 
@@ -97,7 +97,7 @@ openfuji apply in.png out.png --recipe path/to/recipe.json
 
 ## Name
 
-Not affiliated with or endorsed by FUJIFILM Corporation. "Fuji" here is shorthand for the film-simulation tradition this project celebrates; the app is camera- and vendor-agnostic.
+Not affiliated with or endorsed by the makers of the Dazz app or by FUJIFILM Corporation. This is an independent open-source homage to the film-simulation and instant-camera tradition; the app is camera- and vendor-agnostic.
 
 ## License
 
