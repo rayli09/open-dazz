@@ -89,6 +89,25 @@ pub fn apply_vhs(rgb: &mut [u8], width: usize, height: usize, preset: VhsPreset,
 pub fn apply_vhs_effect(rgb: &mut [u8], width: usize, height: usize, fx: &NtscEffect, frame: usize) {
     debug_assert_eq!(rgb.len(), width * height * 3);
     let ctx = Context::new();
+    // WASM WORKAROUND: ntsc-rs's Notch chroma demodulation silently
+    // returns zero chroma under wasm32 (native builds are correct;
+    // bisected 2026-10-25 — settings, SIMD level, field mode and
+    // filter design all verified identical, only the Notch branch
+    // loses chroma, leaving a pure-luma image). The one-line comb
+    // demodulator is unaffected and is at least as faithful for
+    // tape sources, so on wasm it replaces Notch. Native builds
+    // keep the effect exactly as authored.
+    #[cfg(target_family = "wasm")]
+    let fx = &{
+        let mut f = fx.clone();
+        if f.chroma_demodulation
+            == ntsc_rs::settings::standard::ChromaDemodulationFilter::Notch
+        {
+            f.chroma_demodulation =
+                ntsc_rs::settings::standard::ChromaDemodulationFilter::OneLineComb;
+        }
+        f
+    };
     // NTSC's chroma is quarter-resolution horizontally; a scale of
     // [1, 1] treats the buffer as a full-resolution frame.
     fx.apply_effect_to_buffer::<Rgb, u8>(&ctx, (width, height), rgb, frame, [1.0, 1.0]);
