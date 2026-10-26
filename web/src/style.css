@@ -33,7 +33,7 @@ body::after {
   inset: 0;
   z-index: 40;
   pointer-events: none;
-  opacity: 0;
+  opacity: 0.07;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0.05'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
@@ -110,13 +110,17 @@ button { touch-action: manipulation; }
 }
 /* ---- texture pack (P2): paper grain lives on body::after; these three
    are the reusable material classes ---- */
-/* film leader: a punched sprocket row, for rail/section edges */
+/* film leader: a punched sprocket row in a metal strip, for rail edges */
 .tex-filmleader {
   height: 14px;
-  background-image: radial-gradient(circle at 50% 50%, var(--color-ink) 3.2px, transparent 3.7px);
-  background-size: 17px 14px;
-  background-position: center;
-  opacity: 0.85;
+  background-color: #1a1b1e;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0.62) 3.2px, rgba(255,255,255,0.07) 4.1px, transparent 5.2px),
+    linear-gradient(180deg, #2e3036, #17181b);
+  background-size: 17px 14px, 100% 100%;
+  background-position: center, 0 0;
+  background-repeat: repeat, no-repeat;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 5px rgba(0,0,0,0.45);
 }
 /* brushed metal: fine vertical streaks, for the shutter/print control */
 .tex-metal {
@@ -158,3 +162,200 @@ button, input, .dd-panel, .look-card, .strip-card { border-radius: 10px; }
 .seg > button { border-radius: 0; }
 .logo-light { display: none; }
 .logo-dark { display: block; }
+
+/* ============================================================
+   CAMERA BODY (Ray, 2026-10-25): the app itself is the retro
+   Fuji — anodized black-metal top plate, leatherette body
+   panels, a machined bezel around the photo, amber LCD readouts,
+   metal knobs and a shutter-red export. Same lighting language
+   as the shelf art: key light top-left, machined banding,
+   shadows that seat every part. This layer supersedes the Dazz
+   "no shadows" rule for the chrome (the stage stayspure black).
+   ============================================================ */
+
+/* leatherette body panels (two-layer piqué: light dot + dark dot) */
+.cabinet-aside, .ledger, .shelf-rail {
+  background-color: #0a0a0b;
+  background-image:
+    radial-gradient(rgba(255,255,255,0.050) 1px, transparent 1.5px),
+    radial-gradient(rgba(0,0,0,0.55) 1px, transparent 1.5px);
+  background-size: 5px 5px;
+  background-position: 0 0, 2.5px 2.5px;
+}
+
+/* the bench floor: a studio backdrop glow behind the camera back */
+.bench-grid {
+  background: radial-gradient(1100px 640px at 50% 36%, #16171b 0%, #080809 62%, #050506 100%);
+}
+
+/* --- top plate (header) --- */
+header {
+  position: relative;
+  z-index: 30;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.028) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, #3b3e44 0%, #1a1b1e 34%, #26282d 58%, #0b0b0d 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    inset 0 -1px 0 rgba(0,0,0,0.85),
+    0 14px 30px rgba(0,0,0,0.60);
+}
+header .font-display {
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.14);
+}
+header img { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.65)); }
+header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,0,0.45); background-image: linear-gradient(180deg, #2b2d33, #16171a); }
+
+/* --- dials: segmented switches sit in an inset well; the active
+       segment is a raised metal index --- */
+.seg {
+  background: #0a0a0c;
+  border-color: #34373d !important;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.75), inset 0 -1px 0 rgba(255,255,255,0.06), 0 1px 0 rgba(255,255,255,0.05);
+}
+.seg > button { color: var(--color-ink2); text-shadow: 0 -1px 0 rgba(0,0,0,0.8); }
+.seg > button.bg-ink {
+  background-image: linear-gradient(180deg, #f2f3f5 0%, #c9ccd1 45%, #e3e5e9 70%, #a9adb5 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(0,0,0,0.25), 0 3px 8px rgba(0,0,0,0.55);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+}
+.gsize.bg-ink {
+  background-image: linear-gradient(180deg, #e8e9ec, #b9bcc2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 6px rgba(0,0,0,0.5);
+}
+
+/* --- amber LCD readouts (frame counter + stage state) --- */
+#film-counter, #cap-state {
+  background-image: linear-gradient(180deg, #1c1204, #0e0902);
+  color: #ffb648;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.85), inset 0 -1px 0 rgba(255,182,72,0.14), 0 1px 0 rgba(255,255,255,0.05);
+  text-shadow: 0 0 7px rgba(255,182,72,0.35);
+}
+#cap-state { padding: 2px 8px; border-radius: 5px; }
+#cap-state:empty { background: none; box-shadow: none; padding: 0; }
+
+/* --- raised metal buttons --- */
+#btn-load, #btn-s1, #btn-s2 {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 5px 12px rgba(0,0,0,0.50);
+}
+#btn-load {
+  background-image: linear-gradient(180deg, #f2f3f5 0%, #c9ccd1 45%, #e3e5e9 70%, #a9adb5 100%);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+}
+#btn-s1, #btn-s2 { background-image: linear-gradient(180deg, #2b2d33, #151619); }
+#btn-load:active, #btn-s1:active, #btn-s2:active { transform: translateY(1px); box-shadow: inset 0 2px 6px rgba(0,0,0,0.35), 0 2px 5px rgba(0,0,0,0.5); }
+
+/* --- the shutter: export buttons are silver release buttons
+       with a red index dot --- */
+#btn-export, #btn-export-simple {
+  background-image: linear-gradient(180deg, #f2f3f5 0%, #c9ccd1 45%, #e3e5e9 70%, #a9adb5 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(0,0,0,0.25), 0 6px 16px rgba(0,0,0,0.55);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+  color: #000;
+}
+#btn-export::before, #btn-export-simple::before {
+  content: "";
+  width: 8px; height: 8px; border-radius: 9999px; flex: none;
+  background: radial-gradient(circle at 35% 30%, #ff8a7a, #d43a2a 60%, #8f1d12);
+  box-shadow: inset 0 -1px 2px rgba(0,0,0,0.45), 0 0 6px rgba(212,58,42,0.45);
+}
+#btn-export:active, #btn-export-simple:active { transform: translateY(1px); box-shadow: inset 0 2px 7px rgba(0,0,0,0.30), 0 2px 6px rgba(0,0,0,0.5); }
+
+/* the simple-mode export deck is a metal control strip */
+.simple-only {
+  background-image: linear-gradient(180deg, #26282d, #141518);
+  border-color: #34373d;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 10px 24px rgba(0,0,0,0.50);
+  border-radius: 12px;
+}
+
+/* --- inset wells: search + dropdown triggers --- */
+#search, .dd-btn {
+  background-color: #0c0c0e;
+  background-image: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(255,255,255,0.03));
+  border-color: #2e3036;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.70), inset 0 -1px 0 rgba(255,255,255,0.05);
+}
+.dd-panel {
+  background-image: linear-gradient(180deg, #24262b, #131417);
+  border: 1px solid #3a3d43;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.09);
+}
+
+/* --- cards sit ON the leather, raised --- */
+.strip-card, .look-card {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 8px 18px rgba(0,0,0,0.45);
+  transition: box-shadow 0.18s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+.strip-card:hover, .look-card:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 13px 26px rgba(0,0,0,0.55); }
+
+/* --- the camera back: machined bezel + corner screws + glass --- */
+#stage {
+  background-color: #131417;
+  background-image:
+    radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
+    radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
+    radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
+    radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
+    linear-gradient(180deg, #26282d 0%, #17181b 55%, #101114 100%);
+  background-size: 11px 11px, 11px 11px, 11px 11px, 11px 11px, 100% 100%;
+  background-position: 6px 6px, calc(100% - 6px) 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), 0 0;
+  background-repeat: no-repeat;
+  border: 1px solid #34373d;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 -1px 0 rgba(0,0,0,0.7),
+    0 34px 70px rgba(0,0,0,0.68),
+    0 6px 18px rgba(0,0,0,0.55);
+}
+#printwrap {
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 4px 18px rgba(0,0,0,0.55),
+    0 0 0 1px #000;
+}
+#printwrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.018) 34%, transparent 52%);
+}
+#divider > div {
+  background-image: linear-gradient(180deg, #33363c, #17181b);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 4px 10px rgba(0,0,0,0.6);
+  color: #e8e9ec;
+}
+#stage figcaption { text-shadow: 0 -1px 0 rgba(0,0,0,0.85); }
+
+/* --- Pro sliders: a machined groove + a metal knob --- */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 9999px;
+  background: linear-gradient(180deg, #050506, #1d1e22);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(255,255,255,0.06);
+}
+input[type="range"]::-webkit-slider-thumb {
+  width: 18px; height: 18px; margin-top: -7px; border-radius: 9999px;
+  background: radial-gradient(circle at 34% 28%, #f4f5f7, #c9ccd1 42%, #8f939b 78%, #6d7076);
+  border: 1px solid #0a0a0b;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 3px 7px rgba(0,0,0,0.65);
+}
+input[type="range"]::-moz-range-track {
+  height: 4px; border-radius: 9999px;
+  background: linear-gradient(180deg, #050506, #1d1e22);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(255,255,255,0.06);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 9999px;
+  background: radial-gradient(circle at 34% 28%, #f4f5f7, #c9ccd1 42%, #8f939b 78%, #6d7076);
+  border: 1px solid #0a0a0b;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 3px 7px rgba(0,0,0,0.65);
+}
+
+/* machined scrollbar */
+.cabinet-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3a3d43, #1b1c1f);
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+}
