@@ -1,5 +1,6 @@
 {
   "name": "Kodak Panatomic",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/acros-ye.cube",
   "grain": {
     "amount": 0.0,

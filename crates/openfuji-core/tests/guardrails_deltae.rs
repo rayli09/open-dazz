@@ -103,9 +103,13 @@ fn golden_regression_delta_e() {
     let luts: std::collections::HashMap<&str, Lut3d> =
         STEMS.iter().map(|s| (*s, load(s))).collect();
     let mut sums: std::collections::HashMap<&str, (f32, f32, usize)> = Default::default();
+    let mut seen = std::collections::HashSet::new();
     for line in text.lines().skip(1) {
         let f: Vec<&str> = line.split(',').collect();
         let (stem, idx) = (f[0], f[1].parse::<usize>().unwrap());
+        assert!(STEMS.contains(&stem), "unknown sim in golden fixture: {stem}");
+        assert!(idx < probes.len(), "invalid patch index {idx} for {stem}");
+        assert!(seen.insert((stem, idx)), "duplicate golden patch: {stem}/{idx}");
         let golden = [
             f[2].parse::<f32>().unwrap(),
             f[3].parse::<f32>().unwrap(),
@@ -121,6 +125,11 @@ fn golden_regression_delta_e() {
         e.2 += 1;
     }
     assert_eq!(sums.len(), STEMS.len(), "goldens must cover every official sim");
+    for stem in STEMS {
+        for idx in 0..probes.len() {
+            assert!(seen.contains(&(*stem, idx)), "missing golden patch: {stem}/{idx}");
+        }
+    }
     for (stem, (sum, max, n)) in &sums {
         let mean = sum / *n as f32;
         assert!(

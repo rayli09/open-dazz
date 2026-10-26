@@ -1,5 +1,6 @@
 {
   "name": "Portrait",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/acros-g.cube",
   "grain": {
     "amount": 0.0,

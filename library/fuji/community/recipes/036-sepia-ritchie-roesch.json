@@ -1,5 +1,6 @@
 {
   "name": "Sepia",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/sepia.cube",
   "grain": {
     "amount": 0.55,

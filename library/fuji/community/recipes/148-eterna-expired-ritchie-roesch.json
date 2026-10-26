@@ -1,5 +1,6 @@
 {
   "name": "Eterna Expired",
+  "processing": "fujiPhotoV1",
   "baseLut": "../../official/luts/eterna_sRGB.cube",
   "grain": {
     "amount": 0.55,

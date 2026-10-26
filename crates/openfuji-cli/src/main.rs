@@ -411,7 +411,9 @@ fn run() -> Result<(), String> {
                 return Ok(());
             }
             let recipe_path = resolve_recipe_path(&recipe, &look, &root)?;
-            let (r, lut) = load_recipe_and_lut(&recipe_path)?;
+            let (mut r, lut) = load_recipe_and_lut(&recipe_path)?;
+            // Photo-v1 is a still-photo change. Keep existing video grades.
+            r.processing = openfuji_core::recipe::Processing::Legacy;
             let fx = parse_vhs(&vhs, &vhs_json)?;
             let mut proc = |buf: &[u8], w: usize, h: usize, frame: usize| {
                 let img = image::RgbImage::from_raw(w as u32, h as u32, buf.to_vec())

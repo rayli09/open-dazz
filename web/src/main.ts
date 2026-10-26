@@ -4,6 +4,7 @@
 import { store, modeAtom, type Mode } from "./state";
 import { icon, brandSigil, glyphSvg } from "./icons";
 import { shelfArt } from "./shelf-art";
+import { recipeForMedia } from "./recipe-for-media";
 
 // The WASM engine loads lazily in the background so the shell, cabinet
 // and photo paint immediately; develops queue until it lands.
@@ -576,9 +577,7 @@ async function applyNow() {
   setBusy(true);
   const cube = await cubeFor(current);
   const input = new Uint8Array(origPixels);
-  const effective = store.get(modeAtom) === "simple"
-    ? { ...(recipe as any), strength: 1 }
-    : recipe;
+  const effective = recipeForMedia(recipe, store.get(modeAtom) === "simple", !!currentVideo);
   const out = engine.apply(input, imgW, imgH, JSON.stringify(effective), cube);
   const ctx = $<HTMLCanvasElement>("#after").getContext("2d")!;
   ctx.putImageData(new ImageData(new Uint8ClampedArray(out), imgW, imgH), 0, 0);
@@ -775,7 +774,7 @@ async function makeFrameProcessor(): Promise<(px: Uint8Array, w: number, h: numb
   }
   if (!recipe) throw new Error("recipe not loaded yet");
   const cube = await cubeFor(current);
-  const effective = store.get(modeAtom) === "simple" ? { ...(recipe as any), strength: 1 } : recipe;
+  const effective = recipeForMedia(recipe, store.get(modeAtom) === "simple", true);
   const json = JSON.stringify(effective);
   return (px, w, h) => eng.apply(px, w, h, json, cube);
 }

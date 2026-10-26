@@ -1,5 +1,6 @@
 {
   "name": "Kodachrome 64 V2",
+  "processing": "fujiPhotoV1",
   "baseLut": "../../official/luts/classic chrome_sRGB.cube",
   "grain": {
     "amount": 0.25,

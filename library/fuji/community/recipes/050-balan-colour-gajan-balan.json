@@ -1,5 +1,6 @@
 {
   "name": "Balan Colour",
+  "processing": "fujiPhotoV1",
   "baseLut": "../../official/luts/provia_sRGB.cube",
   "grain": {
     "amount": 0.25,

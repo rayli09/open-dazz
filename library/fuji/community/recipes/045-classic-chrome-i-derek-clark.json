@@ -1,5 +1,6 @@
 {
   "name": "Classic Chrome I",
+  "processing": "fujiPhotoV1",
   "baseLut": "../../official/luts/classic chrome_sRGB.cube",
   "grain": {
     "amount": 0.0,

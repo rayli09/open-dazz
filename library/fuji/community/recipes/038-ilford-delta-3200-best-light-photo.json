@@ -1,5 +1,6 @@
 {
   "name": "Ilford Delta 3200",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/acros-g.cube",
   "grain": {
     "amount": 0.55,

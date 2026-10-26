@@ -61,6 +61,7 @@ def main():
         lut = FILM_TO_LUT.get(film)
         recipe = {
             "name": r["name"],
+            "processing": "fujiPhotoV1",
             "baseLut": (lut if "/" in lut else f"../../official/luts/{lut}") if lut else None,
             "grain": {"amount": GRAIN.get(g, 0.0), "size": size},
             "halation": 0,

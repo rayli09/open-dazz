@@ -1,5 +1,6 @@
 {
   "name": "Bleach Bypass 2/2",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/acros.cube",
   "grain": {
     "amount": 0.55,

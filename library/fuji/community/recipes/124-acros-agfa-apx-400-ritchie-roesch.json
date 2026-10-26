@@ -1,5 +1,6 @@
 {
   "name": "Acros Agfa APX 400",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/acros.cube",
   "grain": {
     "amount": 0.25,

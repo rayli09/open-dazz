@@ -1,5 +1,6 @@
 {
   "name": "Big Softy",
+  "processing": "fujiPhotoV1",
   "baseLut": "../../official/luts/pro neg std_sRGB.cube",
   "grain": {
     "amount": 0.25,
