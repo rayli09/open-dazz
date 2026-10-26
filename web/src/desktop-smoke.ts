@@ -2,7 +2,7 @@
 import { invoke } from "@tauri-apps/api/core";
 const wait = async (check: () => boolean, timeout = 240000) => {
   const until = Date.now() + timeout;
-  while (!check()) { if (Date.now() > until) throw new Error("native smoke timed out"); await new Promise(r => setTimeout(r, 150)); }
+  while (!check()) { const error = document.querySelector<HTMLElement>("#work-error"); if (error && !error.hidden) throw new Error(error.textContent ?? "native rendering error"); if (Date.now() > until) throw new Error("native smoke timed out: " + document.querySelector("#cap-state")?.textContent); await new Promise(r => setTimeout(r, 150)); }
 };
 const button = (id: string) => document.querySelector<HTMLButtonElement>(id)!;
 const ready = () => wait(() => !!button("#btn-export-simple") && !button("#btn-export-simple").disabled);

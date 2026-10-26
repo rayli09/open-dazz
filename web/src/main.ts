@@ -1,3 +1,4 @@
+import { relativeAssetPath } from "./asset-url";
 import { saveMedia } from "./save-media";
 import { setupDesktop } from "./desktop";
 import { setupMediaSession, browserSessionStorage } from "./media-session";
@@ -573,7 +574,7 @@ async function selectLook(id: string, restoredRecipe?: Recipe | null) {
 
 async function cubeFor(entry: LookEntry): Promise<string | undefined> {
   if (!entry.baseLut) return undefined;
-  const url = new URL(entry.baseLut, location.origin + "/" + entry.recipe).pathname;
+  const url = relativeAssetPath(entry.baseLut, entry.recipe);
   return cubeCache.get(url, async () => {
     const text = await fetchText(url);
     if (!/^\s*LUT_3D_SIZE\s+\d+/m.test(text)) throw new Error("The downloaded LUT is invalid. Try again when the connection is available.");
