@@ -1,115 +1,69 @@
-# OpenDazz
+<p align="center">
+  <img src="web/public/logo.svg" width="72" height="72" alt="OpenDazz aperture logo" />
+</p>
+<h1 align="center">OpenDazz</h1>
+<p align="center">A local-first film simulation workshop for photos and video.</p>
+<p align="center">
+  <a href="https://github.com/rayli09/open-dazz/actions/workflows/ci.yml"><img src="https://github.com/rayli09/open-dazz/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/code_license-MIT-blue.svg" alt="Code license: MIT" /></a>
+  <a href="https://opendazz.vercel.app"><img src="https://img.shields.io/badge/try-OpenDazz-graphite?color=30363d" alt="Try OpenDazz" /></a>
+</p>
+<p align="center"><a href="https://opendazz.vercel.app"><strong>Open the app</strong></a> · <a href="web/README.md">Development</a> · <a href="library/README.md">Look library</a></p>
 
-An open app for quickly applying **film simulations and style filters** — recipes and LUTs, camera-agnostic.
+![OpenDazz photo workshop with curated camera looks and a before/after preview](docs/verification/simple-shelf/desktop-photos.jpg)
 
-Pick a look (Kodak Portra, Classic Chrome, CineStill 800T, a VHS/camcorder vibe, your own recipe), preview it on your photo or video, tweak, export. No camera vendor lock-in: a "recipe" here is data, not a camera menu.
+Pick a look, compare the result, and export. Your media is processed on your device; the app downloads its engine and look assets, without uploading your photos or clips for processing.
 
-## Status
+## Features
 
-M1 scaffold is live (2026-10-25): Rust workspace with a working core + CLI,
-an end-to-end example, and a Vite web shell. Tests + clippy + a WASM build
-check run in CI.
+- **Simple:** nine curated Fuji-first photo looks, plus a separate CX405/VHS video-effects collection.
+- **Pro:** the full multi-brand catalogue with strength, grain, halation and white-balance controls.
+- **Photo and video:** draggable before/after preview, PNG photo export and MP4 video development. HEIC conversion is available in the browser.
+- **One engine:** Rust powers both the `opendazz` CLI and browser WebAssembly, with portable JSON recipes and `.cube` LUTs.
 
-## Architecture
+Browser photos export at up to 1920px on the long edge. Video support depends on browser codecs and device resources: clips are limited to 120 seconds on the WebCodecs path or 45 seconds on the FFmpeg compatibility path, at up to 854px wide. CX405 development uses FFmpeg. See [web development and limits](web/README.md).
 
-One Rust core, three surfaces:
+## Quick start
 
-- **`crates/opendazz-core`** — the engine: recipe parsing, `.cube` 3D LUT
-  (trilinear), white balance, tone, halation, grain. No file IO; operates on
-  image buffers, and is kept WASM-clean (CI builds it for
-  `wasm32-unknown-unknown` on every push).
-- **`crates/opendazz-cli`** — `opendazz apply in.png out.png --recipe r.json`
-  (batch work, pipeline testing, golden-image diffs).
-- **`web/`** — Vite + TypeScript app; the same core compiled to WASM runs
-  in-browser (M2). Static hosting only (GitHub Pages / Cloudflare Pages) —
-  free, and images never leave the user's machine.
+### Web
 
-Later surfaces (Tauri desktop, mobile via FFI) reuse the same core instead of
-reimplementing the look in another language.
-
-Try the CLI:
-
-```sh
-cargo run -p opendazz-cli -- apply examples/test-scene.png /tmp/out.png \
-  --recipe recipes/example-faded-warm.json
-```
-
-## Design principles
-
-- **Data-first.** Looks are portable data: a recipe = a base look (LUT) + engine parameters (grain, halation, tone, white balance shifts) in JSON. Anyone can author, share, and fork a recipe without touching app code.
-- **Engine-agnostic core.** The rendering core consumes standard formats — `.cube` and HaldCLUT — so existing open LUT packs drop in unchanged (ffmpeg `lut3d`/`haldclut` compatible).
-- **Open data, credited.** Seed material comes from open sources (see below); every imported pack keeps its license and attribution.
-
-## The library (organized filters)
-
-Looks are grouped **by brand, official first** — see `library/README.md`
-for the layout contract and `library/catalog.json` for the machine index.
-
-- **`library/fuji/official/`** — Fujifilm's own 11 film simulations as
-  .cube LUTs (from FujifilmCameraProfiles) + a bare recipe each.
-  **CC BY-NC-SA 4.0** (non-commercial, share-alike), segregated on purpose.
-- **`library/fuji/community/`** — 204 community recipes imported from
-  open-fuji-recipes (Apache-2.0) by `tools/import-fuji-recipes.py`, now
-  **all 204 joined to a base LUT**: color sims join the official pack;
-  the 56 Acros/Monochrome/Sepia recipes join Hald-converted bases
-  (Stuart Sowerby's X-Trans III set, **GPL-3.0**, segregated in
-  `library/fuji/community/hald-bases/`).
-
-- **`library/<brand>/community/` for 14 more brands** — kodak (80 looks),
-  ilford (18), agfa (11), cinestill (4), rollei, foma, lomography, adox,
-  polaroid, ricoh, bergger, kentmere, orwo, plus the `emulsion` brand for
-  creative styles — baked from Lightroom XMP presets (EmulsionPresets,
-  **MIT**) by `tools/bake_emulsion.py`. Fuji stocks from the same source
-  (38) joined the fuji community tier. Each bake is a display-referred
-  approximation; per-recipe `provenance` records what was captured and
-  what was dropped. Round-3 spot checks: `docs/verification/`.
+Use Node.js 24, matching CI. The repository includes the browser WASM package.
 
 ```sh
-opendazz list                                  # grouped by brand, official first
-opendazz apply in.png out.png --look "Docu Classic Chrome"
-opendazz apply in.png out.png --recipe path/to/recipe.json
+git clone https://github.com/rayli09/open-dazz.git
+cd open-dazz/web
+npm ci
+npm run build
+npm run preview
 ```
 
-## Seed sources (not yet imported)
+Open the local URL printed by Vite. [Development notes](web/README.md) cover the dev server and rebuilding WASM.
 
-- [open-fuji-recipes](https://github.com/matthieurobin/open-fuji-recipes) — Fujifilm film simulation recipes as data
-- [EmulsionPresets](https://github.com/peva3/EmulsionPresets) — 451 open-source film emulation presets (Kodak, Fuji, Ilford, CineStill, ...)
-- [hald-clut](https://github.com/cedeber/hald-clut) — HaldCLUT collection
-- G'MIC film emulation CLUTs (Pat David's film sets; Stuart Sowerby's Fuji X-Trans III set)
-- [Fuji X Weekly](https://fujixweekly.com) — the recipe source of truth upstream (350+ recipes)
+### CLI
 
-## Layout
+From the repository root, with stable Rust installed:
 
-- `recipes/` — recipe JSON files + schema notes
-- `luts/` — bundled LUT packs (each with its own LICENSE/attribution)
+```sh
+cargo run --release -p opendazz-cli -- list
+cargo run --release -p opendazz-cli -- apply \
+  web/public/samples/sample-1.jpg /tmp/opendazz-chrome.png \
+  --look fuji/community/005-docu-classic-chrome-john-peltier
+```
 
-## Roadmap
+Run `cargo run --release -p opendazz-cli -- --help` for commands and `video --help` for the FFmpeg-based video workflow. The installed binary is named **`opendazz`**.
 
-1. ✅ Recipe schema v0 + reference engine + CLI (M1)
-2. Recipe collection (M2): ✅ fuji-simulations LUT pack + 204 fuji-recipes
-   imported and CLI-usable. Next: EmulsionPresets XMP baker (451 Lightroom
-   presets, MIT); Sowerby HaldCLUT set for the B&W sims (GPL — fetch-time
-   conversion only, derivatives never committed)
-3. WASM build of the core wired into the web app: drag-drop, recipe picker,
-   before/after slider, export (M3, deferred by decision 2026-10-25 — the
-   Vite starter in web/ stands until then)
-4. Video: frame pipeline via the CLI + ffmpeg (M4, exploratory)
+## Project guide
 
-## Name
+- [Engine](crates/opendazz-core) · [CLI](crates/opendazz-cli) · [WASM bindings](crates/opendazz-wasm) · [Web app](web)
+- [Recipe format](recipes/README.md) · [Library layout and provenance](library/README.md) · [LUT packs](luts/README.md)
+- [Current UI and export verification](docs/verification/simple-shelf/README.md) · [Fuji photo processing validation](docs/verification/fuji-photo-v1-2026-10-26.md)
 
-Not affiliated with or endorsed by the makers of the Dazz app or by FUJIFILM Corporation. This is an independent open-source homage to the film-simulation and instant-camera tradition; the app is camera- and vendor-agnostic.
+CI runs web tests/build, Rust tests, strict Clippy and a WASM build gate. The badge above reports its actual status; the current known failure is strict Clippy in vendored `ntsc-rs`. Visual comparisons and regression tests are not proof of exact camera or third-party app fidelity.
 
-## License
+## License and credits
 
-MIT (code). Bundled data packs keep their own licenses — see each pack's folder.
+OpenDazz code is [MIT licensed](LICENSE). **Bundled recipes and LUTs retain their own licenses**; a recipe's metadata alone does not override its base LUT's terms. In particular, [Fuji official LUTs](library/fuji/official/README.md) are **CC BY-NC-SA 4.0**, and [some monochrome bases](library/fuji/community/hald-bases/README.md) are **GPL-3.0**. Check the relevant pack before reuse or redistribution.
 
+Credits include [open-fuji-recipes](https://github.com/matthieurobin/open-fuji-recipes), [EmulsionPresets](https://github.com/peva3/EmulsionPresets), and the sources credited in each [library pack](library/README.md). VHS/NTSC processing uses [ntsc-rs](https://github.com/valadaptive/ntsc-rs), preserved with its [MIT](crates/ntsc-rs/LICENSE-MIT), [ISC](crates/ntsc-rs/LICENSE-ISC) and [Apache-2.0](crates/ntsc-rs/LICENSE-APACHE-2.0) license texts. Camera artwork and provenance are recorded in the [asset manifest](design/camera-assets/manifest.json).
 
-## Third-party
-
-The VHS/NTSC composite simulation in `crates/opendazz-core/src/vhs.rs`
-is powered by **ntsc-rs** by valadaptive
-(https://github.com/valadaptive/ntsc-rs), vendored at
-`crates/ntsc-rs` under its original license (MIT OR ISC OR
-Apache-2.0; license texts live in that directory). It is not
-published on crates.io, hence the vendored copy; upstream fixes can
-be ported by diffing that directory against upstream `crates/ntscrs`.
+Independent project; not affiliated with Dazz, Fujifilm or other camera manufacturers.
