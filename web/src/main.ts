@@ -7,6 +7,9 @@ import { shelfArt } from "./shelf-art";
 
 // The WASM engine loads lazily in the background so the shell, cabinet
 // and photo paint immediately; develops queue until it lands.
+import { getFFmpeg, probeVideo, posterFrame, developVideo, resetFFmpeg, VIDEO_MAX_SECONDS } from "./video.js";
+import type { VideoProbe } from "./video.js";
+
 type Engine = typeof import("./pkg/openfuji_wasm.js");
 let engine: Engine | null = null;
 const engineP: Promise<Engine> = import("./pkg/openfuji_wasm.js");
@@ -203,11 +206,11 @@ function layout() {
     <!-- THE BENCH -->
     <section class="order-1 lg:order-2 bench-grid relative flex flex-col min-h-0">
       <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
-        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}Photo</button>
+        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}Photo / Video</button>
         <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("user", "w-[18px] h-[18px]")}Sample I</button>
         <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("mountain", "w-[18px] h-[18px]")}Sample II</button>
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
-        <input id="file" type="file" accept="image/*,.heic,.heif,.avif,.tif,.tiff" class="hidden" />
+        <input id="file" type="file" accept="image/*,video/*,.heic,.heif,.avif,.tif,.tiff,.mov,.m4v" class="hidden" />
       </div>
       <div id="stage-wrap" class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-6 overflow-hidden">
         <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-ink/60 stage-shadow max-w-full select-none touch-none inline-flex flex-col">
@@ -232,6 +235,10 @@ function layout() {
         </figure>
       </div>
       <div class="simple-only items-center justify-end gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
+        <button id="btn-video-simple" title="Develop the loaded video with the current look" style="display:none" class="bg-paper text-ink border border-ink px-3 py-2 hover:bg-paper2 transition-colors items-center gap-2 shrink-0">
+          ${icon("video", "w-4 h-4")}
+          <span data-vlabel class="font-mono text-[10px] tracking-[0.2em]">DEVELOP VIDEO</span>
+        </button>
         <button id="btn-export-simple" title="Export the developed photo as a PNG" class="bg-ink text-paper px-3 py-2 hover:bg-stamp transition-colors flex items-center gap-2 shrink-0">
           ${icon("download", "w-4 h-4")}
           <span class="font-mono text-[10px] tracking-[0.2em]">EXPORT</span>
@@ -256,6 +263,7 @@ function layout() {
         <button data-gsize="large" class="gsize font-mono text-[11px] border border-ink px-2 py-1">LARGE</button>
       </div>
       <button id="btn-export" class="mt-4 w-full bg-ink text-paper font-mono text-[12px] py-3 hover:bg-stamp transition-colors flex items-center justify-center gap-2">${icon("download", "w-4 h-4")}Export PNG</button>
+    <button id="btn-video" style="display:none" class="mt-2 w-full bg-paper text-ink border border-ink font-mono text-[12px] py-3 hover:bg-paper2 transition-colors items-center justify-center gap-2">${icon("video", "w-4 h-4")}<span data-vlabel>Develop video (.mp4)</span></button>
     </aside>
   </main>
 
@@ -535,6 +543,7 @@ function finishDevelop() {
 }
 
 async function applyNow() {
+  hideResultVideo();
   if (!origPixels || !current) return;
   if (!engine) { setBusy(true); return; } // engineP.then re-invokes applyNow
   if (current.brand === "camcorder") {
@@ -640,6 +649,151 @@ async function loadPhoto(source: Blob | string, name: string) {
   applyNow();
 }
 
+// ---- Video uploads: the poster frame previews the look on the
+// stage; DEVELOP VIDEO then runs the whole clip through the same
+// engine stages in ffmpeg.wasm (see video.ts). ----
+let currentVideo: { file: File; probe: VideoProbe } | null = null;
+let videoBusy = false;
+let videoCancel = false;
+let resultUrl: string | null = null;
+
+function isVideoFile(f: File): boolean {
+  return f.type.startsWith("video/") || /\.(mp4|m4v|mov|webm|mkv)$/i.test(f.name);
+}
+
+function setVideoButtons(on: boolean, label?: string) {
+  for (const id of ["#btn-video-simple", "#btn-video"]) {
+    const b = document.querySelector<HTMLButtonElement>(id);
+    if (!b) continue;
+    b.style.display = on ? "" : "none";
+    const span = b.querySelector("[data-vlabel]");
+    if (span && label) span.textContent = label;
+    if (span && !label && id === "#btn-video-simple") span.textContent = "DEVELOP VIDEO";
+    if (span && !label && id === "#btn-video") span.textContent = "Develop video (.mp4)";
+  }
+}
+
+function hideResultVideo() {
+  const v = document.querySelector<HTMLVideoElement>("#vid-result");
+  if (v) {
+    v.pause();
+    v.removeAttribute("src");
+    v.classList.add("hidden");
+  }
+  if (resultUrl) {
+    URL.revokeObjectURL(resultUrl);
+    resultUrl = null;
+  }
+}
+
+async function loadMedia(f: File) {
+  hideResultVideo();
+  if (isVideoFile(f)) {
+    await loadVideoFile(f);
+    return;
+  }
+  currentVideo = null;
+  setVideoButtons(false);
+  await loadPhoto(f, f.name);
+}
+
+async function loadVideoFile(f: File) {
+  currentVideo = null;
+  setVideoButtons(false);
+  try {
+    setBusy(true);
+    $("#cap-state").textContent = "LOADING VIDEO ENGINE…";
+    const inst = await getFFmpeg();
+    $("#cap-state").textContent = "READING VIDEO…";
+    const probe = await probeVideo(inst, f);
+    if (probe.duration > VIDEO_MAX_SECONDS) {
+      setBusy(false);
+      showError(`clip is ${Math.round(probe.duration)}s — in-browser developing caps at ${VIDEO_MAX_SECONDS}s; trim it first`);
+      return;
+    }
+    const poster = await posterFrame(inst, probe);
+    await loadPhoto(poster, f.name);
+    currentVideo = { file: f, probe };
+    $("#cap-file").textContent = `${f.name.toUpperCase()} — VIDEO ${probe.w}×${probe.h} · ${probe.duration.toFixed(1)}S`;
+    setVideoButtons(true);
+    $("#cap-state").textContent = "VIDEO READY — PICK A LOOK, THEN DEVELOP VIDEO";
+    setBusy(false);
+  } catch (e) {
+    setBusy(false);
+    showError(`could not open video ${f.name}`);
+    console.error("[open-dazz] video load failed", e);
+  }
+}
+
+async function makeFrameProcessor(): Promise<(px: Uint8Array, w: number, h: number, fr: number) => Uint8Array> {
+  const eng = engine;
+  if (!eng || !current) throw new Error("engine or look not ready");
+  if (current.brand === "camcorder") {
+    if (current.id === "camcorder/cx405") {
+      const sim = new eng.CamcorderSim(7n);
+      return (px, w, h, fr) => sim.process(px, w, h, fr);
+    }
+    return (px, w, h, fr) => eng.apply_vhs(px, w, h, "vhs", fr);
+  }
+  if (!recipe) throw new Error("recipe not loaded yet");
+  const cube = await cubeFor(current);
+  const effective = store.get(modeAtom) === "simple" ? { ...(recipe as any), strength: 1 } : recipe;
+  const json = JSON.stringify(effective);
+  return (px, w, h) => eng.apply(px, w, h, json, cube);
+}
+
+async function developCurrentVideo() {
+  if (videoBusy) {
+    videoCancel = true;
+    return;
+  }
+  if (!currentVideo) return;
+  videoBusy = true;
+  videoCancel = false;
+  hideResultVideo();
+  setVideoButtons(true, "■ CANCEL");
+  const { probe } = currentVideo;
+  try {
+    const inst = await getFFmpeg();
+    const process = await makeFrameProcessor();
+    const blob = await developVideo(inst, {
+      probe,
+      camcorderAudio: current?.id === "camcorder/cx405",
+      process,
+      onProgress: (done, total) => {
+        const pct = Math.round((done / total) * 100);
+        $("#cap-state").textContent = `DEVELOPING VIDEO — ${pct}% · FRAME ${done}/${total}`;
+        progress(Math.max(2, pct));
+      },
+      isCancelled: () => videoCancel,
+    });
+    resultUrl = URL.createObjectURL(blob);
+    const v = document.querySelector<HTMLVideoElement>("#vid-result");
+    if (v) {
+      v.src = resultUrl;
+      v.classList.remove("hidden");
+      v.play().catch(() => {});
+    }
+    const a = document.createElement("a");
+    a.href = resultUrl;
+    a.download = `opendazz-${(current?.name ?? "video").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.mp4`;
+    a.click();
+    $("#cap-state").textContent = "VIDEO DEVELOPED — SAVED AS MP4";
+  } catch (e) {
+    if (String((e as Error)?.message ?? e).includes("cancelled")) {
+      resetFFmpeg();
+      $("#cap-state").textContent = "VIDEO DEVELOP CANCELLED";
+    } else {
+      showError("video develop failed — see console");
+      console.error("[open-dazz] video develop failed", e);
+    }
+  } finally {
+    progress(100);
+    videoBusy = false;
+    if (currentVideo) setVideoButtons(true);
+  }
+}
+
 async function fetchCatalog(): Promise<Catalog> {
   const attempt = async (url: string) => {
     const ctl = new AbortController();
@@ -675,6 +829,17 @@ async function boot() {
   addEventListener("error", (e) => showError(String(e.message ?? e.error ?? "unknown error")));
   addEventListener("unhandledrejection", (e) => showError(`async: ${String(e.reason?.message ?? e.reason ?? "rejection")}`));
   layout();
+  const pwrap = $("#printwrap");
+  if (pwrap && !$("#vid-result")) {
+    const v = document.createElement("video");
+    v.id = "vid-result";
+    v.className = "hidden absolute inset-0 w-full h-full object-contain bg-black";
+    v.style.zIndex = "20";
+    v.controls = true;
+    v.loop = true;
+    v.playsInline = true;
+    pwrap.appendChild(v);
+  }
   progress(45);
   catalog = await fetchCatalog();
   catalog.brands["camcorder"] = { tiers: { video: VIDEO_LOOKS }, total: VIDEO_LOOKS.length };
@@ -703,10 +868,12 @@ async function boot() {
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
   $<HTMLInputElement>("#file").addEventListener("change", (e) => {
     const f = (e.target as HTMLInputElement).files?.[0];
-    if (f) loadPhoto(f, f.name);
+    if (f) loadMedia(f);
   });
-  $("#btn-s1").addEventListener("click", () => loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait"));
-  $("#btn-s2").addEventListener("click", () => loadPhoto("/samples/sample-2.jpg", "Sample II — the lake"));
+  $("#btn-video").addEventListener("click", developCurrentVideo);
+  $("#btn-video-simple").addEventListener("click", developCurrentVideo);
+  $("#btn-s1").addEventListener("click", () => { currentVideo = null; setVideoButtons(false); loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait"); });
+  $("#btn-s2").addEventListener("click", () => { currentVideo = null; setVideoButtons(false); loadPhoto("/samples/sample-2.jpg", "Sample II — the lake"); });
   $("#btn-export").addEventListener("click", exportPNG);
   document.querySelector("#shelf-on")?.addEventListener("click", () => {
     shelfMode = true; activeBrand = null; activeType = "all";
@@ -727,7 +894,7 @@ async function boot() {
     const up = () => { removeEventListener("pointermove", mv); removeEventListener("pointerup", up); };
     addEventListener("pointermove", mv); addEventListener("pointerup", up); });
   addEventListener("dragover", (e) => e.preventDefault());
-  addEventListener("drop", (e) => { e.preventDefault(); const f = e.dataTransfer?.files?.[0]; if (f) loadPhoto(f, f.name); });
+  addEventListener("drop", (e) => { e.preventDefault(); const f = e.dataTransfer?.files?.[0]; if (f) loadMedia(f); });
   setTimeout(() => {
     if (!$("#stage-load")?.classList.contains("hidden") && !origPixels)
       showError("boot timed out — the catalog or engine did not arrive; try reloading");

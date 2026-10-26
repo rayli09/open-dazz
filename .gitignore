@@ -9,3 +9,4 @@ target/
 tests/images/src/
 tests/images/rendered/
 tools/verify-out/
+web/public/ffmpeg/

@@ -5,5 +5,5 @@ import { __wbg_set_wasm } from "./openfuji_wasm_bg.js";
 __wbg_set_wasm(wasm);
 
 export {
-    apply, apply_camcorder, apply_vhs, engine_version
+    CamcorderSim, apply, apply_camcorder, apply_vhs, engine_version
 } from "./openfuji_wasm_bg.js";
