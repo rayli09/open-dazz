@@ -37,6 +37,8 @@ engineP.then((m) => {
 });
 
 import "./style.css";
+import "./workshop-material.css";
+import { dialMarkup, bindCameraDial } from "./camera-dial";
 
 const MAX_DIM = 1920;
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
@@ -165,9 +167,9 @@ function layout() {
         <span class="font-display text-[20px] font-bold tracking-tight">OpenDazz</span>
       </div>
       <div class="flex items-center gap-2">
-        <div class="seg flex border border-ink font-mono text-[11px]" role="group" aria-label="Mode">
+        <div id="editing-mode" class="mechanical-mode" role="group" aria-label="Mode">
           <button id="mode-simple" aria-pressed="true" class="px-2.5 py-2 tracking-wide">SIMPLE</button>
-          <button id="mode-pro" aria-pressed="false" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button>
+          <button id="mode-pro" aria-pressed="false" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button><span class="mode-carriage" aria-hidden="true"></span>
         </div>
         <a href="https://github.com/rayli09/open-dazz" target="_blank" rel="noreferrer"
            class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-2 hover:bg-paper2 transition-colors">GitHub ${icon("arrow-up-right", "w-3.5 h-3.5")}</a>
@@ -180,7 +182,6 @@ function layout() {
     <aside class="cabinet-aside order-2 lg:order-1 border-b lg:border-b-0 lg:border-r border-rule flex flex-col min-h-0">
       <div class="px-3 pt-3 pb-1">
         <div class="flex items-center gap-2 mb-2">
-          <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">1</span>
           <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">PICK A LOOK</span>
         </div>
         <div id="chips" class="mb-2"></div>
@@ -214,7 +215,7 @@ function layout() {
 
     <!-- THE BENCH -->
     <section class="order-1 lg:order-2 bench-grid relative flex flex-col min-h-0">
-      <div class="flex flex-wrap items-center gap-2 px-4 pt-4">
+      <div class="import-toolbar flex flex-wrap items-center gap-2 px-4 pt-4">
         <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}Photo / Video</button>
         <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("user", "w-[18px] h-[18px]")}Sample I</button>
         <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("mountain", "w-[18px] h-[18px]")}Sample II</button>
@@ -247,14 +248,14 @@ function layout() {
         </figure>
       </div>
       <div id="work-error" hidden class="mx-4 mb-3 p-3 border border-rule bg-mat text-[12px]" role="alert"><span id="work-error-message"></span> <button id="work-retry" type="button" class="underline px-3 py-2">Try again</button></div>
-      <div class="mx-4 mb-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink2"><span id="export-spec"></span><button id="cancel-photo" hidden type="button" class="border border-rule px-3 py-2">Cancel photo export</button></div>
+      <div class="quality-bar mx-4 mb-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink2"><span id="export-spec"></span><button id="cancel-photo" hidden type="button" class="border border-rule px-3 py-2">Cancel photo export</button></div>
       <p id="phone-output-note" hidden class="mx-4 mb-3 text-[11px] leading-relaxed text-ink2"></p>
       <div class="simple-only items-center justify-end gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
         <button id="btn-video-simple" title="Develop the loaded video with the current look" style="display:none" class="bg-paper text-ink border border-ink px-3 py-2 hover:bg-paper2 transition-colors items-center gap-2 shrink-0">
           ${icon("video", "w-4 h-4")}
           <span data-vlabel class="font-mono text-[10px] tracking-[0.2em]">DEVELOP VIDEO</span>
         </button>
-        <button id="btn-export-simple" title="Export the developed photo as a PNG" class="bg-ink text-paper px-3 py-2 hover:bg-stamp transition-colors flex items-center gap-2 shrink-0">
+        <button id="btn-export-simple" disabled title="Export the developed photo as a PNG" class="camera-shutter flex items-center justify-center gap-2 shrink-0">
           ${icon("download", "w-4 h-4")}
           <span class="font-mono text-[10px] tracking-[0.2em]">EXPORT</span>
         </button>
@@ -262,9 +263,8 @@ function layout() {
     </section>
 
     <!-- THE LEDGER -->
-    <aside class="ledger order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4 lg:min-h-0 lg:overflow-y-auto">
+    <aside class="ledger order-3 border-t lg:border-t-0 lg:border-l border-rule px-4 py-4 lg:min-h-0 lg:overflow-y-auto"><div class="ledger-content cabinet-scroll">
       <div class="flex items-center gap-2 mb-2">
-        <span class="w-[18px] h-[18px] bg-ink text-paper font-mono text-[10px] flex items-center justify-center shrink-0">3</span>
         ${icon("sliders", "w-4 h-4")}
         <span class="font-mono text-[10px] tracking-[0.18em] text-ink2">ADJUST &amp; EXPORT</span>
       </div>
@@ -277,8 +277,8 @@ function layout() {
         <button data-gsize="small" class="gsize font-mono text-[11px] border border-ink px-2 py-1">SMALL</button>
         <button data-gsize="large" class="gsize font-mono text-[11px] border border-ink px-2 py-1">LARGE</button>
       </div>
-      <button id="btn-export" class="mt-4 w-full bg-ink text-paper font-mono text-[12px] py-3 hover:bg-stamp transition-colors flex items-center justify-center gap-2">${icon("download", "w-4 h-4")}Export PNG</button>
-    <button id="btn-video" style="display:none" class="mt-2 w-full bg-paper text-ink border border-ink font-mono text-[12px] py-3 hover:bg-paper2 transition-colors items-center justify-center gap-2">${icon("video", "w-4 h-4")}<span data-vlabel>Develop video (.mp4)</span></button>
+      </div><div class="ledger-actions"><button id="btn-export" disabled class="camera-shutter mt-4 w-full flex items-center justify-center gap-2">${icon("download", "w-4 h-4")}Export PNG</button>
+    <button id="btn-video" style="display:none" class="mt-2 w-full bg-paper text-ink border border-ink font-mono text-[12px] py-3 hover:bg-paper2 transition-colors items-center justify-center gap-2">${icon("video", "w-4 h-4")}<span data-vlabel>Develop video (.mp4)</span></button></div>
     </aside>
   </main>
 
@@ -287,11 +287,14 @@ function layout() {
 }
 
 function sliderRow(key: string, label: string, min: number, max: number, step: number, val: number, fmt: (v: number) => string) {
-  return `<label class="block">
-    <span class="flex justify-between font-mono text-[10px] tracking-[0.18em] text-ink2">
-      <span>${label}</span><span id="val-${key}" class="text-ink">${fmt(val)}</span></span>
-    <input type="range" id="sl-${key}" min="${min}" max="${max}" step="${step}" value="${val}" />
-  </label>`;
+  const strength = key === "strength";
+  return `<div class="edit-control ${strength ? "strength-control" : ""}">
+    <div class="edit-control-heading"><label for="sl-${key}">${label}</label><output id="val-${key}" for="sl-${key}">${fmt(val)}</output></div>
+    ${strength ? dialMarkup() : ""}
+    <div class="edit-control-inputs"><input type="range" id="sl-${key}" min="${min}" max="${max}" step="${step}" value="${val}" aria-label="${label}" />
+    <input class="edit-numeric" type="number" id="num-${key}" aria-label="${label}${strength ? " percent" : " value"}" min="${strength ? 0 : min}" max="${strength ? 150 : max}" step="${strength ? 1 : step}" value="${strength ? Math.round(val * 100) : val}" inputmode="decimal" /></div>
+    ${strength ? '<p class="dial-help">Drag left or right, use arrow keys, or type a percentage.</p>' : ""}
+  </div>`;
 }
 
 function renderSliders() {
@@ -313,10 +316,29 @@ function renderSliders() {
     sliderRow("tint", "TINT", -1, 1, 0.01, wb.tintShift ?? 0, (v) => (v >= 0 ? "+" : "") + v.toFixed(2)),
   ].join("");
   const on = (key: string, fn: (v: number) => void) => {
-    $<HTMLInputElement>(`#sl-${key}`).addEventListener("input", (e) => {
-      const v = parseFloat((e.target as HTMLInputElement).value);
+    const range = $<HTMLInputElement>(`#sl-${key}`), numeric = $<HTMLInputElement>(`#num-${key}`);
+    const scale = key === "strength" ? 100 : 1;
+    range.addEventListener("input", () => {
+      // Ignore detached controls from a previous item/recipe, including a drag
+      // interrupted by switching media. State and export snapshots stay per item.
+      if (mediaId !== activeMediaId || recipe !== R) return;
+      const v = range.valueAsNumber;
+      numeric.value = String(Math.round(v * scale * 100) / 100);
+      numeric.setAttribute("aria-invalid", "false");
       fn(v); commit(); scheduleApply();
     });
+    numeric.addEventListener("input", () => {
+      const valid = numeric.validity.valid && Number.isFinite(numeric.valueAsNumber);
+      numeric.setAttribute("aria-invalid", String(!valid));
+      if (!valid) return;
+      range.value = String(numeric.valueAsNumber / scale);
+      range.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    numeric.addEventListener("change", () => {
+      numeric.value = String(Math.round(range.valueAsNumber * scale * 100) / 100);
+      numeric.setAttribute("aria-invalid", "false");
+    });
+    if (key === "strength") bindCameraDial($(".strength-control"), range);
   };
   on("strength", (v) => { R.strength = v; $("#val-strength").textContent = `${Math.round(v * 100)}%`; });
   on("grain", (v) => { R.grain = { ...(R.grain ?? {}), amount: v, size: R.grain?.size ?? "small" }; $("#val-grain").textContent = v.toFixed(2); });
@@ -386,7 +408,7 @@ function buildChips(host: HTMLElement) {
     </div>
   </div>`;
   host.querySelectorAll<HTMLButtonElement>("[data-dd-btn]").forEach((b) =>
-    b.addEventListener("pointerdown", (e) => { e.preventDefault(); toggleDD(b); }));
+    b.addEventListener("click", () => toggleDD(b)));
   host.querySelectorAll<HTMLButtonElement>("[data-brand]").forEach((b) =>
     b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
@@ -1219,6 +1241,7 @@ async function boot() {
   // Subscribe only to mode; unrelated store changes do not redevelop pixels.
   const applyMode = (m: ReturnType<typeof selectMode>) => {
     document.documentElement.dataset.mode = m;
+    $("#editing-mode").dataset.mode = m;
     const next = selectionForMode(m, current?.id);
     if (current && next !== current.id) selectLook(next);
     else applyNow();
@@ -1231,7 +1254,10 @@ async function boot() {
   };
   const unsubscribeMode = uiStore.subscribe(selectMode, applyMode, { fireImmediately: true });
   const unsubscribePersistence = persistMode(uiStore, browserModeStorage());
+  const stageResize = new ResizeObserver(() => fitStage());
+  stageResize.observe($("#stage-wrap"));
   const cleanupMode = () => {
+    stageResize.disconnect();
     unsubscribeMode(); unsubscribePersistence();
     removeEventListener("pagehide", onPageHide);
   };

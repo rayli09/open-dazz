@@ -1,37 +1,38 @@
-# Graphite Darkroom acceptance
+# Graphite workshop rollout — visual QA
 
 final result: passed
 
-## Visual evidence
+Source visual truth: `docs/verification/material-controls/material-desktop.png` (1440×1104) and `material-mobile.png`, the user-approved implemented material study. Implementation: production main route `/`, screenshots under `docs/verification/workshop-material/`; desktop 1440×1000 and mobile 390×844/320×844, CSS pixels and device scale factor 1. The mobile touch context also exercised actual `tap` input. The source route is a material reference; the editor retains its existing layout and content instead of adopting the study's promotional introduction or isolated-control arrangement.
 
-Source: `design/reference/graphite-darkroom.png`, Library `libfile_57538a55f7588191bc08df33d5746a93`, selected option 2. Source is 1487×1058 pixels. Implementation: local production preview, `http://127.0.0.1:4174/`.
+## Comparison evidence
 
-`docs/verification/simple-shelf/desktop-pro.jpg` is 1487×1058 CSS/pixels, Pro, Sample I, Docu Classic Chrome, split 50%. `reference-comparison.jpg` combines both full views at equal scale; `reference-details.jpg` combines same-scale card and adjustment crops. Both combined images were opened and inspected. No browser chrome/device frame or density mismatch. The compact report image downsamples both sides equally; original captures remain available.
+`comparison-full.png` puts source and final main Pro together, both at 50% for composition. `comparison-controls.png` compares native, unscaled CSS-pixel crops of the dial, mode carriage and shutter button. The source has taller page content and a landscape photo; the main editor has a portrait and persistent dock. Those content/layout differences are intentional. Both were opened and compared visually, alongside desktop Simple, mobile photo/Pro/video, export, retry/error, loading, empty, undo and recovery screenshots. This is not a claim of pixel-identical whole-page recreation.
 
-Additional browser captures: `desktop-photos.jpg` and `desktop-video.jpg` (1280×720), `desktop-hasselblad.jpg` (1487×1058), `mobile-photos.jpg` and `mobile-shelf.jpg` (390×844). Mobile at 360×740 was also exercised. Screenshots contain only the app and repository sample photographs, no personal files or account information.
+## Findings and fixes
 
-## Findings and comparison history
-
-- P1 fixed: two-column grid initially compressed rows and clipped card labels. `grid-auto-rows: max-content` restores complete names/descriptions. Final desktop and mobile shelf captures show the correction.
-- P2 fixed: oversized frame padding reduced the photograph. `fitStage` now gives the image more room. At 390×844 the portrait is 257×385 and Export is visible at y574–620. At 360×740 Export remains visible at y510–556. Neither viewport overflows horizontally.
-- P2 fixed: card rerenders discarded keyboard focus. Focus now returns to the corresponding card; Enter selection of Gold retains focus and pressed state.
-- P2 fixed: Pro names truncated. Labels now wrap within the card; final Pro screenshot verifies actual catalogue names.
-- No remaining actionable P0/P1/P2 findings within the selected design and retained product scope.
+- [P1, resolved] Mobile Pro's flex ledger initially shrank into its footer, clipping the editing surface. Set the mobile ledger/content to non-shrinking natural page flow. Final `main-mobile-pro-390.png` was opened after the environment recovered; dial and numeric input are visible. Browser regression additionally checks the ledger content height at both mobile widths.
+- [P2, resolved] Desktop Pro controls pushed Export beyond the visible panel. Split scrolling `ledger-content` from fixed `ledger-actions`. Final desktop Pro and automated button/dock bounds confirm Export remains reachable.
+- [P2, resolved] Mobile photo Export partially met the dock at initial scroll. Adjust the photo bench height against viewport space; final mobile photo and button/dock bounds pass at 320/390px.
+- [P2, resolved] Narrow mobile video previews clipped playback buttons. Reserve video bench height and wrap the native library control row; final player and output/export captures show all controls. Scrolling for video output information is intentional.
+- [P2, resolved] Error/recovery banners resized available preview space without refitting the image. Observe the actual stage container size with a cleaned-up ResizeObserver. Final error screenshot keeps the whole preview and actionable retry visible.
+- [P2, resolved] Initial decode had no measured image size for a readable loading well. Add a bounded loading minimum, hide its comparison handle and start Export disabled. Final loading screenshot shows status and disabled action.
 
 ## Required fidelity surfaces
 
-- **Typography:** Instrument Sans retained with system fallbacks. Pro heading 25px, Simple names 14px, descriptions 11px, values 12px; wrapping and hierarchy verified in actual captures. Mockup labels are shorter than real catalogue names; actual names and legal provenance are retained instead of copying mockup text.
-- **Layout:** graphite header, compact two-column camera shelf, dominant photograph, right adjustment column. Pro retains working search and the full catalogue; Simple uses the nine approved meaningful recipes. Mobile becomes a vertical workflow with substantial preview and immediately reachable Export, then a two-column shelf. Source mockup has no mobile specification.
-- **Tokens:** shared graphite surfaces, quiet borders/radii, silver active controls, muted amber selection/focus. Competing stripe/checker decorations, theatrical hardware framing and fake glass overlays removed. Image assets carry material texture. The source's stronger material gradients are restrained rather than recreated as competing CSS decoration.
-- **Images:** all six original generated assets preserved unchanged; responsive WebP alpha derivatives use contain sizing. Dark/light composites and actual Fuji, compact, instant, camcorder and Hasselblad cards inspected. No stretching or clipping observed; slight edge fringe remains a P3 limitation. Asset alpha peaks at 254, so this is not a claim of a perfect opaque cutout. Approved original camera artwork supersedes the mockup's approximate camera drawings.
-- **Content:** actual recipes, controls and provenance retained. No claimed popularity ranking, Dazz equivalence, CCD substitution or invented Leica recipe. Existing catalogue has Hasselblad but no Leica brand; Leica artwork is prepared and mapped for future entries.
+- **Typography:** same Instrument Sans/system fallback stack as the reference, quiet uppercase control labels, readable supporting text and tabular numeric values. The executor blocked external font requests, so fallback rendering was inspected; exact loaded-font rendering is not claimed.
+- **Spacing/layout:** restrained matte regions, reduced nested action-card treatment, shared narrow bevel/recess rhythm, fixed desktop action and natural mobile scrolling. Portrait/landscape previews preserve geometry. Primary targets are at least 44px; Pro controls are not hidden behind the dock.
+- **Colors/tokens:** shared satin, recessed base, graphite panel, rule and accent tokens. The shared dial uses the reference's top-left lighting, ticks and fixed indicator. Most surfaces stay matte; focus and error states remain explicit. Original sample contrast checks pass (7.32–15.91:1 for its checked foreground pairs); this is not a claim that every pixel pair has been audited.
+- **Image quality:** existing realistic camera artwork, transparency, aspect ratio and thumbnail pipeline preserved. No rasterized interactive controls, replacement product art or new 3D dependency. CSS/SVG physical controls follow the user's explicit implementation direction.
+- **Copy/content:** existing film names, inspired-device limits, original-size photo contract and settings-only recovery disclosures remain. No study-only promotional text or developer implementation details were introduced into the editor flow. Strength is editable only where existing Pro behavior permits it; no unsupported exposure control was invented.
 
-## Interaction and regression evidence
+## Interaction/accessibility evidence
 
-Verified browser keyboard selection/focus, collection memory (Gold→Video→Gold), Pro selection and Simple fallback (Hasselblad→Chrome), rapid sample replacement, photo/video inputs, both export controls, invalid-image error recovery and Simple/Pro PNG pixel equality. A 0.5s synthetic Sample II clip developed through CX405's FFmpeg path into a downloaded, decodable H.264 MP4: 320×212, five frames, 14,738 bytes. WebCodecs photo-look processing also reached completion; poster exports in both modes were equal. Production console contained only the intentionally induced invalid-image errors.
+Main material suite passes six groups: keyboard/native slider, direct number and invalid bounds, optional horizontal dial dragging, per-item restoration, touch mode/numeric input, focus/hover/press/disabled, dropdown Enter/Escape, main PNG download, retry, delete/undo and reduced motion. Media/state/recovery suites additionally exercise playback, switching/removal/cancel/export snapshots and settings persistence. All final suites report zero uncaught page errors. No new processing algorithms, persistent binary storage or transient-resource ownership changes.
 
-Tests: 106 native passed, 1 ignored; five web tests passed; production TypeScript/Vite build passed; three existing native/WASM parity cases all mean/max difference 0. No recipe, LUT, core or WASM source changed. Strict Clippy still fails on 12 unchanged vendor `ntsc-rs` diagnostics; checks were not weakened.
+## Comparison history and remaining scope
 
-## Follow-up polish and limits
+Initial full-view/focused inspection found the issues above; fixes were followed by new production builds and recaptures. Final mobile Pro evidence was explicitly opened after the temporary executor outage. Earlier test completion was recovered from logs rather than assumed. The final main material suite and final media suite passed after the last layout changes.
 
-P3: the artwork's edge fringe can be refined later, and additional brand-specific art can replace remaining existing SVG/photographic fallbacks. The source image supplies art direction, not new filter science: these checks establish working integration and regression stability, not camera-ground-truth or competitor matching. No new rendering library or manual deployment.
+No actionable P0/P1/P2 visual findings remain in the inspected states. Existing truncated dock filenames have full accessible labels/tooltips; further dense-library polish is P3. Safari, mobile OS keyboards, HDR/HEIC variants, long-video behavior, 200% text zoom and manual screen-reader certification remain outside this Chromium visual pass. Public Vercel rendering is not inferred from CI or deployment status.
+
+Implementation checklist: shared controls extracted; main route integrated; desktop/mobile and interaction states inspected; meaningful existing media/export/recovery gates passed; screenshot evidence persisted outside deployment output; one batched main push and remote verification required for release handoff.

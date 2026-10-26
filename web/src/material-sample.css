@@ -1,3 +1,4 @@
+@import "./camera-controls.css";
 /* Isolated study: no imports or changes to the workshop's global styles. */
 :root {
   color-scheme:dark;
@@ -268,59 +269,6 @@ fieldset {
   margin-bottom:10px;
   padding:0
 }
-.mechanical-mode {
-  height:54px;
-  padding:4px;
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  position:relative;
-  background:#101517;
-  border-radius:8px;
-  border:1px solid #424d53;
-  box-shadow:inset 0 2px 3px #0009,0 1px 0 #ffffff05
-}
-.mechanical-mode input {
-  width:1px;
-  height:1px;
-  position:absolute;
-  opacity:0
-}
-.mechanical-mode label {
-  min-height:44px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:1;
-  color:#c6cdd0;
-  font-size:12px;
-  font-weight:600;
-  border-radius:5px;
-  cursor:pointer;
-  transition:color 100ms
-}
-.mechanical-mode input:checked+label {
-  color:#182024
-}
-.mechanical-mode input:focus-visible+label {
-  outline:2px solid #dfb76b;
-  outline-offset:5px
-}
-.mode-carriage {
-  position:absolute;
-  z-index:0;
-  left:4px;
-  top:4px;
-  bottom:4px;
-  width:calc(50% - 4px);
-  border:1px solid #c0c8cc;
-  border-radius:5px;
-  background:linear-gradient(135deg,#e1e5e7 0%,#b9c2c7 74%,#a9b3ba 100%);
-  box-shadow:inset 0 1px 0 #fff9,inset 0 -1px 0 #7f8c94,0 1px 2px #0008;
-  transition:transform 100ms ease-out
-}
-.mechanical-mode[data-mode=pro] .mode-carriage {
-  transform:translateX(100%)
-}
 
 .dial-section {
   margin-top:30px
@@ -335,109 +283,6 @@ fieldset {
   font-variant-numeric:tabular-nums;
   font-size:10px;
   letter-spacing:.03em
-}
-.dial-stage {
-  width:160px;
-  height:160px;
-  margin:10px auto 0;
-  position:relative
-}
-.dial-stage>svg {
-  position:absolute;
-  inset:0;
-  width:160px;
-  height:160px;
-  fill:none;
-  stroke-width:1
-}
-.major {
-  stroke:#d6dde0;
-  stroke-width:1.3
-}
-.minor {
-  stroke:#929fa7
-}
-.fixed-index {
-  position:absolute;
-  z-index:3;
-  width:3px;
-  height:8px;
-  top:6px;
-  left:calc(50% - 1.5px);
-  background:#e6c78b;
-  border-radius:1px;
-  box-shadow:0 1px 0 #0d1215
-}
-.dial-grip {
-  --dial-angle:41.667deg;
-  width:112px;
-  height:112px;
-  position:absolute;
-  left:24px;
-  top:24px;
-  border-radius:50%;
-  background:repeating-conic-gradient(from 0deg,#748088 0deg 1deg,#3d494f 1deg 2.5deg,#a4afb5 2.5deg 3deg,#56636b 3deg 5deg);
-  border:1px solid #11191d;
-  box-shadow:0 4px 5px #0009,-1px -1px 0 #b4c0c52b,inset 0 0 0 2px #172024;
-  touch-action:pan-y;
-  cursor:ew-resize
-}
-.dial-face {
-  position:absolute;
-  inset:7px;
-  border-radius:50%;
-  border:1px solid #c0c9ce;
-  background:radial-gradient(ellipse at 25% 18%,#d3dbe0 0%,#adb8c0 53%,#8a99a4 100%);
-  box-shadow:inset 1px 1px 1px #f5f9f9ad,inset -1px -1px 1px #5b6c79,0 1px 2px #0008
-}
-.dial-face:before {
-  content:"";
-  position:absolute;
-  inset:1px;
-  border-radius:50%;
-  opacity:.05;
-  background:repeating-linear-gradient(0deg,#fff0 0 1px,#e4edf3 1px 2px,#24343f 2px 3px,#fff0 3px 4px)
-}
-.dial-witness {
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  transform:rotate(var(--dial-angle))
-}
-.dial-witness:after {
-  content:"";
-  position:absolute;
-  width:3px;
-  height:14px;
-  border-radius:1px;
-  left:calc(50% - 1.5px);
-  top:5px;
-  background:#162027;
-  box-shadow:1px 0 0 #ecf5f680
-}
-.dial-center {
-  position:absolute;
-  width:40px;
-  height:40px;
-  left:calc(50% - 20px);
-  top:calc(50% - 20px);
-  border:1px solid #8796a0;
-  border-radius:50%;
-  background:linear-gradient(135deg,#c5cfd6,#a2b0ba);
-  box-shadow:inset 0 1px 0 #e6eef24d
-}
-.dial-min,.dial-max {
-  position:absolute;
-  bottom:9px;
-  color:#c8d0d4;
-  font-size:9px;
-  font-variant-numeric:tabular-nums
-}
-.dial-min {
-  left:25px
-}
-.dial-max {
-  right:17px
 }
 
 #sample-strength {
@@ -554,61 +399,7 @@ fieldset {
   letter-spacing:.06em;
   margin-bottom:10px
 }
-.shutter-base {
-  padding:4px;
-  border:1px solid #48545b;
-  border-radius:10px;
-  background:#101719;
-  box-shadow:inset 0 2px 2px #0009,0 1px 0 #ffffff08
-}
-#sample-export {
-  display:block;
-  width:100%;
-  min-height:49px;
-  border:1px solid #acb8c0;
-  padding:0;
-  border-radius:6px;
-  background:#b7c2c9;
-  color:#172128;
-  box-shadow:0 2px 2px #0009;
-  transition:transform 100ms ease-out,box-shadow 100ms ease-out;
-  touch-action:manipulation
-}
-.shutter-face {
-  min-height:47px;
-  padding:0 16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  position:relative;
-  border-radius:5px;
-  border-top:1px solid #f3f7f8ad;
-  background:linear-gradient(135deg,#e3e8eb 0%,#bdc8cf 64%,#aab7c1 100%);
-  box-shadow:inset 0 -1px 0 #8a9ba7;
-  font-size:13px;
-  font-weight:600
-}
-#sample-export:hover:not(:disabled) .shutter-face {
-  background:linear-gradient(135deg,#edf0f1 0%,#c6d0d7 64%,#b2bfc8 100%)
-}
-#sample-export:active:not(:disabled) {
-  transform:translateY(1px);
-  box-shadow:0 0 1px #0008
-}
-.export-glyph {
-  width:17px;
-  height:17px
-}
-.shutter-dimple {
-  position:absolute;
-  right:12px;
-  width:4px;
-  height:4px;
-  border-radius:50%;
-  background:#7a8e9c;
-  box-shadow:inset 0 1px 1px #31414b66,0 1px 0 #edf4f54d
-}
+
 #sample-status {
   min-height:34px;
   margin:16px 0 0;
