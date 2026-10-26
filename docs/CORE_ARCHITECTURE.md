@@ -1,4 +1,4 @@
-# openfuji-core architecture
+# opendazz-core architecture
 
 The core is organized by domain. Each module owns one concern;
 shared helpers live in exactly one place. The public surface is
@@ -6,7 +6,7 @@ the flat re-exports in `lib.rs` (plus `prelude`); internal paths
 may move, the re-exports may not.
 
 ```
-crates/openfuji-core/src/
+crates/opendazz-core/src/
   lib.rs          module map + stable re-exports + prelude
   math.rs         lerp, clamp01, screen blend, Rec.709 luminance,
                   hash2d (the frozen grain hash)

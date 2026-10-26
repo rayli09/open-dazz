@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
-CLI = ROOT / "target/release/openfuji"
+CLI = ROOT / "target/release/opendazz"
 OUT = ROOT / "tools/verify-out"; OUT.mkdir(exist_ok=True)
 FLAGSHIPS = [  # (fully-qualified id, display) — ids needed: FXW has same-named Fuji looks
     ("kodak/community/kodak-portra-400", "Kodak Portra 400"),

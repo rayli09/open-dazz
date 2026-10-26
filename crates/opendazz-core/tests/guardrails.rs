@@ -22,7 +22,7 @@
 //! If a band fails, the LUT changed character — do not widen a
 //! band without re-measuring and documenting why.
 
-use openfuji_core::Lut3d;
+use opendazz_core::Lut3d;
 use std::path::PathBuf;
 
 fn load(stem: &str) -> Lut3d {

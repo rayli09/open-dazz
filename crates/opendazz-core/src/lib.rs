@@ -1,4 +1,4 @@
-//! openfuji-core: camera-agnostic film simulation engine.
+//! opendazz-core: camera-agnostic film simulation engine.
 //!
 //! A recipe (JSON) references a base 3D LUT (.cube) and adds
 //! engine parameters: grain, halation, tone, white-balance shift.
@@ -21,7 +21,7 @@
 //!   (vendored ntsc-rs).
 //!
 //! The flat re-exports below are the stable public surface;
-//! `openfuji_core::vhs` remains as a path via the [`video`]
+//! `opendazz_core::vhs` remains as a path via the [`video`]
 //! re-export.
 
 pub mod color;

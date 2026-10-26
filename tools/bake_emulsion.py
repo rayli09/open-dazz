@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bake peva3/EmulsionPresets Lightroom XMPs into open-fuji looks.
+"""Bake peva3/EmulsionPresets Lightroom XMPs into open-dazz looks.
 
 Each preset becomes a .cube LUT (the point operations that a LUT can
 express) plus a recipe JSON (grain etc. that our engine models natively),

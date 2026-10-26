@@ -2,8 +2,8 @@
 """Fresh, paired Fuji still-photo comparisons; no old verify-out data reused.
 
 Requires existing CLI executables, numpy and Pillow. Example:
-python3 tools/verify_fuji_photo.py --before /tmp/openfuji-before \
-  --baseline-ref 306ee16 --after target/debug/openfuji
+python3 tools/verify_fuji_photo.py --before /tmp/opendazz-before \
+  --baseline-ref 306ee16 --after target/debug/opendazz
 No corpus downloads or source mutations. Outputs go to ignored verify-out.
 """
 import argparse
@@ -48,8 +48,8 @@ def main():
     before, after, out = args.before.resolve(), args.after.resolve(), args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
     baseline = git("rev-parse", args.baseline_ref).decode().strip()
-    source_paths = sorted((ROOT / "crates/openfuji-core/src/pipeline").glob("*.rs"))
-    source_paths += [ROOT / "crates/openfuji-core/src/recipe.rs", ROOT / "crates/openfuji-wasm/src/lib.rs"]
+    source_paths = sorted((ROOT / "crates/opendazz-core/src/pipeline").glob("*.rs"))
+    source_paths += [ROOT / "crates/opendazz-core/src/recipe.rs", ROOT / "crates/opendazz-wasm/src/lib.rs"]
     manifest = {
         "baseline_commit": baseline,
         "after_parent_commit": git("rev-parse", "HEAD").decode().strip(),
@@ -126,7 +126,7 @@ def main():
         cases_path.write_text(json.dumps(wasm_cases))
         result = subprocess.check_output(["node","--experimental-wasm-modules",str(ROOT/"tools/check_wasm_photo.mjs"),str(cases_path)],cwd=ROOT)
         manifest["wasm_native_parity"] = json.loads(result)
-        manifest["browser_wasm_sha256"] = digest((ROOT/"web/src/pkg/openfuji_wasm_bg.wasm").read_bytes())
+        manifest["browser_wasm_sha256"] = digest((ROOT/"web/src/pkg/opendazz_wasm_bg.wasm").read_bytes())
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print(json.dumps(manifest["grain_free_face"], indent=2))
     print(f"Fresh comparisons and hashed manifest: {out}")

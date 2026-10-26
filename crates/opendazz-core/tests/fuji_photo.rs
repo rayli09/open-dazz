@@ -1,8 +1,8 @@
 //! Full recipe quality gates, independent of the bare-LUT goldens.
 //! These assert useful properties and paired improvements, not camera accuracy.
 use image::{Rgb, RgbImage};
-use openfuji_core::recipe::Processing;
-use openfuji_core::{apply_recipe, Lut3d, Recipe};
+use opendazz_core::recipe::Processing;
+use opendazz_core::{apply_recipe, Lut3d, Recipe};
 use std::path::PathBuf;
 
 fn root() -> PathBuf {
@@ -24,8 +24,8 @@ const VISION: &str = "library/fuji/community/recipes/021-kodak-vision3-500t-piot
 
 #[test]
 fn positive_color_never_reduces_chroma_even_at_gamut_boundary() {
-    use openfuji_core::pipeline::tone;
-    use openfuji_core::recipe::Tone;
+    use opendazz_core::pipeline::tone;
+    use opendazz_core::recipe::Tone;
     // Boundary primaries/secondaries, near-boundary colors, skin, neutrals.
     // A positive color step must be identity when there is no headroom,
     // not a desaturation: this failed for [1, .5, 0] in photo-v1.

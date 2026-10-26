@@ -27,7 +27,7 @@ w, h = p.size
 crop = (int(w * 0.08), int(h * 0.02), int(w * 0.98), int(h * 0.02 + (w * 0.90) * 2 / 3))
 out = root / "web/public/thumbs"
 out.mkdir(parents=True, exist_ok=True)
-binp = root / "target/release/openfuji"
+binp = root / "target/release/opendazz"
 looks = [l for d in cat["brands"].values() for tier in d["tiers"].values() for l in tier]
 if args.brand:
     looks = [l for l in looks if l["brand"] == args.brand]

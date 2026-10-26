@@ -33,6 +33,6 @@ Rules:
 - Ungrouped house examples live in the repo-root `recipes/` and list
   last, under "examples".
 
-The CLI reads this layout directly (`openfuji list`, `openfuji apply
+The CLI reads this layout directly (`opendazz list`, `opendazz apply
 --look <name|id>`); `catalog.json` is the same data as one file for the
 future web app.

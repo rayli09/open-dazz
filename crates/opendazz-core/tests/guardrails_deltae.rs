@@ -1,4 +1,4 @@
-use openfuji_core::Lut3d;
+use opendazz_core::Lut3d;
 use palette::{color_difference::Ciede2000, Lab};
 use std::path::PathBuf;
 
@@ -74,7 +74,7 @@ fn golden_path() -> PathBuf {
 
 /// Re-bless the golden outputs from the current cubes. Run
 /// deliberately after an intentional LUT change:
-///   cargo test -p openfuji-core --test guardrails_deltae -- --ignored
+///   cargo test -p opendazz-core --test guardrails_deltae -- --ignored
 /// A re-bless must ride in the same commit as the LUT change and
 /// the docs/COLOR_TEST_CASES.md band review.
 #[test]
@@ -94,7 +94,7 @@ fn bless_goldens() {
 #[test]
 fn golden_regression_delta_e() {
     let text = std::fs::read_to_string(golden_path()).expect(
-        "golden fixture missing — bless it: cargo test -p openfuji-core \
+        "golden fixture missing — bless it: cargo test -p opendazz-core \
          --test guardrails_deltae bless_goldens -- --ignored",
     );
     let probes = probes();

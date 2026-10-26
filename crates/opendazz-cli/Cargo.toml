@@ -1,15 +1,15 @@
 [package]
-name = "openfuji-cli"
+name = "opendazz-cli"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
 
 [[bin]]
-name = "openfuji"
+name = "opendazz"
 path = "src/main.rs"
 
 [dependencies]
-openfuji-core = { path = "../openfuji-core" }
+opendazz-core = { path = "../opendazz-core" }
 image = { workspace = true }
 serde_json = { workspace = true }
 clap = { workspace = true }

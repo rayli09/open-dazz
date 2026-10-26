@@ -1,9 +1,9 @@
 //! WASM bindings: the web app hands us RGBA pixels + a recipe JSON +
 //! the base LUT's .cube text; we hand back developed RGBA pixels.
-//! All engine work is openfuji-core — this crate is only the bridge.
+//! All engine work is opendazz-core — this crate is only the bridge.
 
 use image::{ImageBuffer, RgbImage};
-use openfuji_core::{apply_recipe, Lut3d, Recipe};
+use opendazz_core::{apply_recipe, Lut3d, Recipe};
 use wasm_bindgen::prelude::*;
 
 /// Apply a recipe (JSON, same schema as the CLI) with an optional base
@@ -73,11 +73,11 @@ pub fn apply_vhs(
     preset: &str,
     frame: u32,
 ) -> Result<Vec<u8>, JsError> {
-    let p = openfuji_core::vhs::VhsPreset::parse(preset)
+    let p = opendazz_core::vhs::VhsPreset::parse(preset)
         .ok_or_else(|| JsError::new("unknown VHS preset"))?;
     let npix = (width * height) as usize;
     let mut rgb = strip_alpha(rgba, npix)?;
-    openfuji_core::vhs::apply_vhs(&mut rgb, width as usize, height as usize, p, frame as usize);
+    opendazz_core::vhs::apply_vhs(&mut rgb, width as usize, height as usize, p, frame as usize);
     Ok(restore_alpha(&rgb, rgba))
 }
 
@@ -87,7 +87,7 @@ pub fn apply_vhs(
 pub fn apply_camcorder(rgba: &[u8], width: u32, height: u32) -> Result<Vec<u8>, JsError> {
     let npix = (width * height) as usize;
     let rgb = strip_alpha(rgba, npix)?;
-    let out = openfuji_core::Camcorder::process_still(&rgb, width as usize, height as usize);
+    let out = opendazz_core::Camcorder::process_still(&rgb, width as usize, height as usize);
     Ok(restore_alpha(&out, rgba))
 }
 
@@ -96,14 +96,14 @@ pub fn apply_camcorder(rgba: &[u8], width: u32, height: u32) -> Result<Vec<u8>, 
 /// core pipeline (and the CLI) instead of restarting every frame.
 #[wasm_bindgen]
 pub struct CamcorderSim {
-    inner: openfuji_core::Camcorder,
+    inner: opendazz_core::Camcorder,
 }
 
 #[wasm_bindgen]
 impl CamcorderSim {
     #[wasm_bindgen(constructor)]
     pub fn new(seed: u64) -> CamcorderSim {
-        CamcorderSim { inner: openfuji_core::Camcorder::new(seed) }
+        CamcorderSim { inner: opendazz_core::Camcorder::new(seed) }
     }
 
     /// Process one RGBA frame; `frame` is the frame index in the

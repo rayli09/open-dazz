@@ -2,7 +2,7 @@
 // node --experimental-wasm-modules tools/check_wasm_photo.mjs cases.json
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { apply } from "../web/src/pkg/openfuji_wasm.js";
+import { apply } from "../web/src/pkg/opendazz_wasm.js";
 
 const cases = JSON.parse(readFileSync(process.argv[2], "utf8"));
 const results = [];

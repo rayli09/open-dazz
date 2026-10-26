@@ -3,7 +3,7 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 #[derive(Parser)]
-#[command(name = "openfuji", about = "Apply film simulation recipes to images")]
+#[command(name = "opendazz", about = "Apply film simulation recipes to images")]
 struct Cli {
     #[command(subcommand)]
     cmd: Cmd,
@@ -30,7 +30,7 @@ enum Cmd {
         vhs: Option<String>,
         /// Full ntsc-rs settings JSON file (the format the ntsc-rs
         /// app saves/loads) — every settings block, not just a
-        /// preset. Start from `openfuji vhs-dump <preset>`.
+        /// preset. Start from `opendazz vhs-dump <preset>`.
         #[arg(long, conflicts_with = "vhs")]
         vhs_json: Option<PathBuf>,
         /// Run the CX405 camcorder simulation instead of a look
@@ -60,7 +60,7 @@ enum Cmd {
         /// NTSC/VHS stage per frame: broadcast | vhs | vhs-heavy.
         #[arg(long)]
         vhs: Option<String>,
-        /// Full ntsc-rs settings JSON file (see `openfuji vhs-dump`).
+        /// Full ntsc-rs settings JSON file (see `opendazz vhs-dump`).
         #[arg(long, conflicts_with = "vhs")]
         vhs_json: Option<PathBuf>,
         /// Process at this width (aspect preserved); the composite
@@ -109,7 +109,7 @@ const TIERS: [&str; 2] = ["official", "community"];
 
 fn read_look(path: &Path, brand: &str, tier: &str) -> Option<LookEntry> {
     let text = std::fs::read_to_string(path).ok()?;
-    let recipe = openfuji_core::Recipe::from_json(&text).ok()?;
+    let recipe = opendazz_core::Recipe::from_json(&text).ok()?;
     let film = serde_json::from_str::<serde_json::Value>(&text)
         .ok()
         .and_then(|v| v.get("provenance")?.get("film")?.as_str().map(str::to_string));
@@ -247,21 +247,21 @@ fn resolve_look(entries: &[LookEntry], query: &str) -> Resolution {
     pick(substr).unwrap_or(Resolution::NotFound)
 }
 
-fn load_recipe(path: &Path) -> Result<openfuji_core::Recipe, String> {
+fn load_recipe(path: &Path) -> Result<opendazz_core::Recipe, String> {
     let text = std::fs::read_to_string(path)
         .map_err(|e| format!("cannot read recipe {}: {}", path.display(), e))?;
-    openfuji_core::Recipe::from_json(&text)
+    opendazz_core::Recipe::from_json(&text)
         .map_err(|e| format!("cannot parse recipe {}: {}", path.display(), e))
 }
 
-fn load_recipe_and_lut(recipe_path: &Path) -> Result<(openfuji_core::Recipe, Option<openfuji_core::Lut3d>), String> {
+fn load_recipe_and_lut(recipe_path: &Path) -> Result<(opendazz_core::Recipe, Option<opendazz_core::Lut3d>), String> {
     let r = load_recipe(recipe_path)?;
     let lut = match &r.base_lut {
         Some(rel) => {
             let lut_path = recipe_path.parent().unwrap_or(Path::new(".")).join(rel);
             let text = std::fs::read_to_string(&lut_path)
                 .map_err(|e| format!("cannot read LUT {}: {}", lut_path.display(), e))?;
-            let lut = openfuji_core::Lut3d::parse_cube(&text)
+            let lut = opendazz_core::Lut3d::parse_cube(&text)
                 .map_err(|e| format!("cannot parse LUT {}: {}", lut_path.display(), e))?;
             Some(lut)
         }
@@ -292,32 +292,32 @@ fn resolve_recipe_path(recipe: &Option<PathBuf>, look: &Option<String>, root: &P
 fn parse_vhs(
     v: &Option<String>,
     vhs_json: &Option<PathBuf>,
-) -> Result<Option<openfuji_core::vhs::NtscEffectFull>, String> {
+) -> Result<Option<opendazz_core::vhs::NtscEffectFull>, String> {
     match (v, vhs_json) {
         (Some(_), Some(_)) => Err("--vhs and --vhs-json are mutually exclusive".into()),
         (Some(v), None) => Ok(Some(
-            openfuji_core::vhs::VhsPreset::parse(v)
+            opendazz_core::vhs::VhsPreset::parse(v)
                 .ok_or_else(|| format!("unknown --vhs preset \"{v}\" (broadcast | vhs | vhs-heavy)"))?
                 .effect(),
         )),
         (None, Some(path)) => {
             let text = std::fs::read_to_string(path)
                 .map_err(|e| format!("cannot read {}: {e}", path.display()))?;
-            Ok(Some(openfuji_core::vhs::effect_from_json(&text)?))
+            Ok(Some(opendazz_core::vhs::effect_from_json(&text)?))
         }
         (None, None) => Ok(None),
     }
 }
 
-fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path, vhs: Option<openfuji_core::vhs::NtscEffectFull>) -> Result<String, String> {
+fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path, vhs: Option<opendazz_core::vhs::NtscEffectFull>) -> Result<String, String> {
     let (r, lut) = load_recipe_and_lut(recipe_path)?;
     let img = image::open(input)
         .map_err(|e| format!("cannot open {}: {}", input.display(), e))?
         .to_rgb8();
-    let mut out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
+    let mut out = opendazz_core::apply_recipe(&img, &r, lut.as_ref());
     if let Some(fx) = &vhs {
         let (w, h) = out.dimensions();
-        openfuji_core::vhs::apply_vhs_effect(out.as_mut(), w as usize, h as usize, fx, 0);
+        opendazz_core::vhs::apply_vhs_effect(out.as_mut(), w as usize, h as usize, fx, 0);
     }
     out.save(output)
         .map_err(|e| format!("cannot save {}: {}", output.display(), e))?;
@@ -370,9 +370,9 @@ fn run() -> Result<(), String> {
     match cli.cmd {
         Cmd::List { root, brand } => list_library(&root, &brand),
         Cmd::VhsDump { preset } => {
-            let p = openfuji_core::vhs::VhsPreset::parse(&preset)
+            let p = opendazz_core::vhs::VhsPreset::parse(&preset)
                 .ok_or_else(|| format!("unknown preset \"{preset}\" (broadcast | vhs | vhs-heavy)"))?;
-            println!("{}", openfuji_core::vhs::preset_to_json(p)?);
+            println!("{}", opendazz_core::vhs::preset_to_json(p)?);
             Ok(())
         }
         Cmd::Info { recipe } => {
@@ -386,7 +386,7 @@ fn run() -> Result<(), String> {
                     .map_err(|e| format!("cannot open {}: {}", input.display(), e))?
                     .to_rgb8();
                 let (w, h) = img.dimensions();
-                let out = openfuji_core::Camcorder::new(seed)
+                let out = opendazz_core::Camcorder::new(seed)
                     .process_frame(img.as_raw(), w as usize, h as usize, 0);
                 image::RgbImage::from_raw(w, h, out)
                     .ok_or("camcorder output size mismatch")?
@@ -402,7 +402,7 @@ fn run() -> Result<(), String> {
         }
         Cmd::Video { input, output, recipe, look, root, vhs, vhs_json, width, camcorder, seed } => {
             if camcorder {
-                let mut cam = openfuji_core::Camcorder::new(seed);
+                let mut cam = opendazz_core::Camcorder::new(seed);
                 let mut proc = |buf: &[u8], w: usize, h: usize, frame: usize| {
                     cam.process_frame(buf, w, h, frame as u32)
                 };
@@ -413,14 +413,14 @@ fn run() -> Result<(), String> {
             let recipe_path = resolve_recipe_path(&recipe, &look, &root)?;
             let (mut r, lut) = load_recipe_and_lut(&recipe_path)?;
             // Photo-v1 is a still-photo change. Keep existing video grades.
-            r.processing = openfuji_core::recipe::Processing::Legacy;
+            r.processing = opendazz_core::recipe::Processing::Legacy;
             let fx = parse_vhs(&vhs, &vhs_json)?;
             let mut proc = |buf: &[u8], w: usize, h: usize, frame: usize| {
                 let img = image::RgbImage::from_raw(w as u32, h as u32, buf.to_vec())
                     .expect("frame buffer mismatch");
-                let mut out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
+                let mut out = opendazz_core::apply_recipe(&img, &r, lut.as_ref());
                 if let Some(fx) = &fx {
-                    openfuji_core::vhs::apply_vhs_effect(out.as_mut(), w, h, fx, frame);
+                    opendazz_core::vhs::apply_vhs_effect(out.as_mut(), w, h, fx, frame);
                 }
                 out.into_raw()
             };

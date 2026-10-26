@@ -18,7 +18,8 @@ import json, os, re, sys
 import numpy as np
 from PIL import Image
 
-PACK = "/home/hatch/workspace/open-fuji/.scratch/rtpack/HaldCLUT"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PACK = os.path.join(ROOT, ".scratch", "rtpack", "HaldCLUT")
 LIB = "library"
 
 def slugify(name: str) -> str:

@@ -1,19 +1,19 @@
 {
-  "name": "openfuji-wasm",
+  "name": "opendazz-wasm",
   "type": "module",
-  "description": "WebAssembly bindings for openfuji-core (web app).",
+  "description": "WebAssembly bindings for opendazz-core (web app).",
   "version": "0.1.0",
   "license": "MIT",
   "files": [
-    "openfuji_wasm_bg.wasm",
-    "openfuji_wasm.js",
-    "openfuji_wasm_bg.js",
-    "openfuji_wasm.d.ts"
+    "opendazz_wasm_bg.wasm",
+    "opendazz_wasm.js",
+    "opendazz_wasm_bg.js",
+    "opendazz_wasm.d.ts"
   ],
-  "main": "openfuji_wasm.js",
-  "types": "openfuji_wasm.d.ts",
+  "main": "opendazz_wasm.js",
+  "types": "opendazz_wasm.d.ts",
   "sideEffects": [
-    "./openfuji_wasm.js",
+    "./opendazz_wasm.js",
     "./snippets/*"
   ]
 }

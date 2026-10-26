@@ -1,4 +1,4 @@
-# open-dazz
+# OpenDazz
 
 An open app for quickly applying **film simulations and style filters** — recipes and LUTs, camera-agnostic.
 
@@ -14,11 +14,11 @@ check run in CI.
 
 One Rust core, three surfaces:
 
-- **`crates/openfuji-core`** — the engine: recipe parsing, `.cube` 3D LUT
+- **`crates/opendazz-core`** — the engine: recipe parsing, `.cube` 3D LUT
   (trilinear), white balance, tone, halation, grain. No file IO; operates on
   image buffers, and is kept WASM-clean (CI builds it for
   `wasm32-unknown-unknown` on every push).
-- **`crates/openfuji-cli`** — `openfuji apply in.png out.png --recipe r.json`
+- **`crates/opendazz-cli`** — `opendazz apply in.png out.png --recipe r.json`
   (batch work, pipeline testing, golden-image diffs).
 - **`web/`** — Vite + TypeScript app; the same core compiled to WASM runs
   in-browser (M2). Static hosting only (GitHub Pages / Cloudflare Pages) —
@@ -30,7 +30,7 @@ reimplementing the look in another language.
 Try the CLI:
 
 ```sh
-cargo run -p openfuji-cli -- apply examples/test-scene.png /tmp/out.png \
+cargo run -p opendazz-cli -- apply examples/test-scene.png /tmp/out.png \
   --recipe recipes/example-faded-warm.json
 ```
 
@@ -65,9 +65,9 @@ for the layout contract and `library/catalog.json` for the machine index.
   what was dropped. Round-3 spot checks: `docs/verification/`.
 
 ```sh
-openfuji list                                  # grouped by brand, official first
-openfuji apply in.png out.png --look "Docu Classic Chrome"
-openfuji apply in.png out.png --recipe path/to/recipe.json
+opendazz list                                  # grouped by brand, official first
+opendazz apply in.png out.png --look "Docu Classic Chrome"
+opendazz apply in.png out.png --recipe path/to/recipe.json
 ```
 
 ## Seed sources (not yet imported)
@@ -106,7 +106,7 @@ MIT (code). Bundled data packs keep their own licenses — see each pack's folde
 
 ## Third-party
 
-The VHS/NTSC composite simulation in `crates/openfuji-core/src/vhs.rs`
+The VHS/NTSC composite simulation in `crates/opendazz-core/src/vhs.rs`
 is powered by **ntsc-rs** by valadaptive
 (https://github.com/valadaptive/ntsc-rs), vendored at
 `crates/ntsc-rs` under its original license (MIT OR ISC OR

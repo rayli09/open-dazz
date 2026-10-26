@@ -1,4 +1,4 @@
-# open-fuji design assets
+# OpenDazz design assets
 
 One drawing system for everything user-facing. If an icon ships in the
 chrome, it is drawn here — no third-party icon fonts (Lucide was retired

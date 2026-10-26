@@ -1,15 +1,15 @@
 [package]
-name = "openfuji-wasm"
+name = "opendazz-wasm"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-description = "WebAssembly bindings for openfuji-core (web app)."
+description = "WebAssembly bindings for opendazz-core (web app)."
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
-openfuji-core = { path = "../openfuji-core" }
+opendazz-core = { path = "../opendazz-core" }
 wasm-bindgen = "0.2"
 serde_json = { workspace = true }
 image = { workspace = true }

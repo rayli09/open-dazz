@@ -57,9 +57,9 @@ def main() -> int:
             problems.append(f"{l['id']}: thumbnail missing ({thumb})")
     print(f"catalog: {len(looks)} looks, {n_cube} LUT-backed")
     if "--render" in sys.argv:
-        exe = os.path.join(ROOT, "target", "release", "openfuji")
+        exe = os.path.join(ROOT, "target", "release", "opendazz")
         if not os.path.exists(exe):
-            exe = os.path.join(ROOT, "target", "debug", "openfuji")
+            exe = os.path.join(ROOT, "target", "debug", "opendazz")
         with tempfile.TemporaryDirectory() as td:
             src = os.path.join(td, "t.png")
             subprocess.run(["python3", "-c",

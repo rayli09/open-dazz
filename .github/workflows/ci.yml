@@ -27,4 +27,4 @@ jobs:
       - run: cargo test --workspace
       - run: cargo clippy --workspace -- -D warnings
       - name: Core must stay WASM-clean
-        run: cargo build -p openfuji-core --target wasm32-unknown-unknown
+        run: cargo build -p opendazz-core --target wasm32-unknown-unknown

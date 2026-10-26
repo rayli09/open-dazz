@@ -7,7 +7,7 @@
 //! catch stage-order, matrix, or LUT transcription errors, which
 //! produce diffs an order of magnitude larger than kernel noise.
 
-use openfuji_core::video::Camcorder;
+use opendazz_core::video::Camcorder;
 
 const W: usize = 960;
 const H: usize = 540;

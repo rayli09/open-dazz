@@ -1,5 +1,5 @@
 // open-dazz Photo Workshop — a film-development bench in the browser.
-// Engine: openfuji-core (Rust) compiled to WebAssembly. No uploads:
+// Engine: opendazz-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
 import { store, modeAtom, type Mode } from "./state";
 import { icon, brandSigil, glyphSvg } from "./icons";
@@ -13,9 +13,9 @@ import { probeWebCodecs, developWebCodecs, WC_MAX_SECONDS } from "./video-webcod
 import type { WcProbe } from "./video-webcodecs.js";
 import type { VideoProbe } from "./video.js";
 
-type Engine = typeof import("./pkg/openfuji_wasm.js");
+type Engine = typeof import("./pkg/opendazz_wasm.js");
 let engine: Engine | null = null;
-const engineP: Promise<Engine> = import("./pkg/openfuji_wasm.js");
+const engineP: Promise<Engine> = import("./pkg/opendazz_wasm.js");
 engineP.catch((e) => showError(`engine failed to load (${(e as Error)?.message ?? e})`));
 engineP.then((m) => {
   engine = m;
@@ -157,7 +157,7 @@ function layout() {
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
         <img src="/logo.svg" alt="" class="w-9 h-9" />
-        <span class="font-display text-[20px] font-bold tracking-tight">open-dazz</span>
+        <span class="font-display text-[20px] font-bold tracking-tight">OpenDazz</span>
       </div>
       <div class="flex items-center gap-2">
         <div class="seg flex border border-ink font-mono text-[11px]" role="group" aria-label="Mode">

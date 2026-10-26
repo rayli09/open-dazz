@@ -1,6 +1,6 @@
 # web — the Photo Workshop (Vite + Tailwind v4 + WASM)
 
-Live: https://openfuji.vercel.app — a film-development bench in the
+Live: https://opendazz.vercel.app — a film-development bench in the
 browser. Design language: **paper workshop, squared** — cream paper,
 ink, hairline rules, serif display type (Fraunces), mono ledger labels
 (IBM Plex Mono), hard offset shadows, and a strict no-rounded-corners
@@ -8,8 +8,8 @@ rule (`border-radius: 0`, enforced globally in `src/style.css`).
 
 ## How it works
 
-- `src/pkg/` is `openfuji-core` compiled to WebAssembly
-  (`crates/openfuji-wasm`, built with wasm-pack, target `bundler`).
+- `src/pkg/` is `opendazz-core` compiled to WebAssembly
+  (`crates/opendazz-wasm`, built with wasm-pack, target `bundler`).
   The app hands it RGBA pixels + a recipe JSON + the base LUT's `.cube`
   text; it hands back developed pixels. No uploads — everything is
   developed locally in the visitor's browser.
@@ -33,13 +33,14 @@ npm run build      # tsc + vite build
 Rebuild the WASM package after changing the Rust core:
 
 ```sh
-wasm-pack build crates/openfuji-wasm --target bundler \
-  --out-dir ../../web/src/pkg     # from the repo root's crates/ dir
+wasm-pack build crates/opendazz-wasm --target bundler \
+  --out-dir ../../web/src/pkg     # run from the repository root
 ```
 
 ## Deployment
 
-Vercel project `openfuji` (personal account), **git-connected** to
-`rayli09/open-fuji` with root directory `web`, framework preset Vite,
-Node 24.x (the newest Vercel offers). Pushes to `main` deploy to
-production (https://openfuji.vercel.app); other branches get previews.
+The verified production URL is https://opendazz.vercel.app. The source
+repository is `rayli09/open-dazz`; the frontend root is `web` and the build
+command is `npm run build`. Existing hosting settings and Git integration
+are managed separately. Renaming the CLI/crates/WASM package does not rename
+hosting projects or change infrastructure settings.

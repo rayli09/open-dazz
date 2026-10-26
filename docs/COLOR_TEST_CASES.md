@@ -11,7 +11,7 @@ until the Oct 2026 re-base (see `tools/fix_official_fuji.py`).
 ## How to run
 
 ```
-cargo test -p openfuji-core --test guardrails
+cargo test -p opendazz-core --test guardrails
 ```
 
 Six tests: `chroma_bands`, `neutral_axis_ramp_and_slope`,
@@ -64,7 +64,7 @@ Eterna's ramp slope < Provia's (Eterna stays the flattest sim).
 
 ## ΔE golden regression (v2)
 
-`crates/openfuji-core/tests/guardrails_deltae.rs` adds a second,
+`crates/opendazz-core/tests/guardrails_deltae.rs` adds a second,
 independent layer on top of the character bands:
 
 - **Golden outputs** — all 222 probe outputs × 11 sims are stored
@@ -82,17 +82,18 @@ independent layer on top of the character bands:
 - Negative control: the pre-re-base Provia cube fails the golden
   regression at **mean ΔE00 10.6, max 20.0** — a measure of how
   far off the original shipped colors were. Re-blessing after an
-  intentional change: `cargo test -p openfuji-core --test
+  intentional change: `cargo test -p opendazz-core --test
   guardrails_deltae bless_goldens -- --ignored`, in the same
   commit as the band review.
 
 ## Full-recipe photo quality (2026-10-26)
 
-`cargo test -p openfuji-core --test fuji_photo` adds seven tests beyond the
+`cargo test -p opendazz-core --test fuji_photo` adds eight tests beyond the
 bare-LUT checks above: all 81 highlight/shadow combinations, neutral/skin WB
 ramps, highlight gradation through all 11 actual official cubes, paired
 grain-free public portrait clipping, grain endpoints/determinism, library
-profile coverage, and frozen full-pipeline bytes for five legacy looks.
+profile coverage, frozen full-pipeline bytes for five legacy looks, and monotonic color controls
+at saturated gamut boundaries.
 The existing cubes, bands and ΔE goldens are unchanged. Fixture loading now
 requires every `(sim, patch)` exactly once, so missing/duplicate rows fail.
 

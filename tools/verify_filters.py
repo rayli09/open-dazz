@@ -3,7 +3,7 @@
 
 For each neutral RAW render in tests/images/rendered/ (1600px versions):
   1. Applies every base-sim recipe + selected imported recipes via the
-     openfuji CLI (the real engine, not a reimplementation).
+     opendazz CLI (the real engine, not a reimplementation).
   2. Engine fidelity: compares CLI output for the bare sims against an
      independent numpy trilinear reference of the same .cube (mean/p99
      absolute error, in 0..255 units).
@@ -22,7 +22,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
-CLI = ROOT / "target/release/openfuji"
+CLI = ROOT / "target/release/opendazz"
 RENDERED = ROOT / "tests/images/rendered"
 OUT = ROOT / "tools/verify-out"
 DOCS = ROOT / "docs/verification"

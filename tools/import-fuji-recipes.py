@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Import matthieurobin/open-fuji-recipes (204 camera-setting recipes) into
-open-fuji recipe JSONs under library/fuji/community/recipes/.
+open-dazz recipe JSONs under library/fuji/community/recipes/.
 
 Usage: python3 tools/import-fuji-recipes.py /path/to/open-fuji-recipes
 
