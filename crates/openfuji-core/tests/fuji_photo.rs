@@ -23,6 +23,61 @@ const DOCU: &str = "library/fuji/community/recipes/005-docu-classic-chrome-john-
 const VISION: &str = "library/fuji/community/recipes/021-kodak-vision3-500t-piotr-skrzypek.json";
 
 #[test]
+fn positive_color_never_reduces_chroma_even_at_gamut_boundary() {
+    use openfuji_core::pipeline::tone;
+    use openfuji_core::recipe::Tone;
+    // Boundary primaries/secondaries, near-boundary colors, skin, neutrals.
+    // A positive color step must be identity when there is no headroom,
+    // not a desaturation: this failed for [1, .5, 0] in photo-v1.
+    for input in [
+        [1.0, 0.5, 0.0],
+        [0.0, 0.5, 1.0],
+        [1.0, 0.0, 1.0],
+        [0.999, 0.5, 0.001],
+        [0.78, 0.57, 0.44],
+        [0.6, 0.5, 0.4],
+        [0.5; 3],
+        [0.0; 3],
+        [1.0; 3],
+    ] {
+        let span = |p: [f32; 3]| {
+            p.into_iter().fold(f32::NEG_INFINITY, f32::max)
+                - p.into_iter().fold(f32::INFINITY, f32::min)
+        };
+        let mut previous = 0.0;
+        for step in -4..=4 {
+            let mut output = input;
+            tone::apply_photo(
+                &mut output,
+                &Tone {
+                    highlight: 0.0,
+                    shadow: 0.0,
+                    color: step as f32,
+                },
+            );
+            assert!(output
+                .iter()
+                .all(|&c| c.is_finite() && (-1e-6..=1.000001).contains(&c)));
+            let chroma = span(output);
+            assert!(
+                chroma + 1e-6 >= previous,
+                "color {step} reduced chroma for {input:?}: {previous} -> {chroma}"
+            );
+            if step >= 0 {
+                assert!(
+                    chroma + 1e-6 >= span(input),
+                    "positive color desaturated {input:?}: {output:?}"
+                );
+            }
+            if step == 0 {
+                assert_eq!(output, input);
+            }
+            previous = chroma;
+        }
+    }
+}
+
+#[test]
 fn photo_tone_endpoints_direction_and_monotonicity() {
     let ramp = RgbImage::from_fn(256, 1, |x, _| Rgb([x as u8; 3]));
     // Exhaust all valid Fuji highlight/shadow combinations, including

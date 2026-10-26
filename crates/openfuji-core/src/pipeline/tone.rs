@@ -58,9 +58,16 @@ pub fn apply_photo(px: &mut [f32; 3], tone: &Tone) {
             limit = limit.min(-target / chroma);
         }
     }
-    let knee = limit * 0.75;
-    let scale = if sat > 1.0 && sat > knee && limit.is_finite() && limit > 0.0 {
-        knee + (limit - knee) * (1.0 - (-(sat - knee) / (limit - knee)).exp())
+    // Anchor compression at identity. A color already on the gamut
+    // boundary has no room to increase chroma, but must never become
+    // LESS saturated when the color control is turned up.
+    let headroom = (limit - 1.0).max(0.0);
+    let scale = if sat > 1.0 && limit.is_finite() {
+        if headroom > 0.0 {
+            1.0 + headroom * (1.0 - (-(sat - 1.0) / headroom).exp())
+        } else {
+            1.0
+        }
     } else {
         sat.min(limit)
     };
