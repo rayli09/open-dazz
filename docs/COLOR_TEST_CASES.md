@@ -62,6 +62,30 @@ Family invariants asserted on top of the per-sim bands:
 Velvia > Provia > Classic Chrome > Bleach Bypass in chroma gain;
 Eterna's ramp slope < Provia's (Eterna stays the flattest sim).
 
+## ΔE golden regression (v2)
+
+`crates/openfuji-core/tests/guardrails_deltae.rs` adds a second,
+independent layer on top of the character bands:
+
+- **Golden outputs** — all 222 probe outputs × 11 sims are stored
+  in `tests/fixtures/golden_official.csv` (blessed from the
+  calibrated cubes). The regression test recomputes them and
+  asserts **mean ΔE00 ≤ 1.0, max ≤ 2.0** per sim (darktable's
+  integration-test convention, tightened), so any future LUT
+  edit — even one that stays inside the character bands — shows
+  up as a number, not an opinion.
+- **ΔE conformance** — the ΔE00 implementation (the `palette`
+  crate, MIT/Apache-2.0) is itself tested against the 34
+  reference pairs of Sharma, Wu & Dalal (2005), transcribed from
+  the colour-science fixtures (BSD-3) and verified against
+  colour 0.4.7 to <1e-4.
+- Negative control: the pre-re-base Provia cube fails the golden
+  regression at **mean ΔE00 10.6, max 20.0** — a measure of how
+  far off the original shipped colors were. Re-blessing after an
+  intentional change: `cargo test -p openfuji-core --test
+  guardrails_deltae bless_goldens -- --ignored`, in the same
+  commit as the band review.
+
 ## Rules
 
 - A failing band means the LUT's character changed. Re-measure,
