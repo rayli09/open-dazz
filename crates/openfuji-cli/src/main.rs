@@ -33,11 +33,20 @@ enum Cmd {
         /// preset. Start from `openfuji vhs-dump <preset>`.
         #[arg(long, conflicts_with = "vhs")]
         vhs_json: Option<PathBuf>,
+        /// Run the CX405 camcorder simulation instead of a look
+        /// (a still is frame 0 of the camcorder's stream).
+        #[arg(long, conflicts_with_all = ["recipe", "look", "vhs", "vhs_json"])]
+        camcorder: bool,
+        /// Camcorder drift/noise seed.
+        #[arg(long, default_value_t = 7)]
+        seed: u64,
     },
     /// Apply a look (and optionally the NTSC/VHS simulation) to a
     /// VIDEO: frames are pumped through ffmpeg, graded one by one
     /// (the VHS artifacts animate with the frame number), and the
-    /// source audio is copied through untouched.
+    /// source audio is copied through untouched. With --camcorder,
+    /// frames run through the CX405 simulation and the audio gets
+    /// the camcorder's tin-can chain (band-limit, AGC pump, hiss).
     Video {
         input: PathBuf,
         output: PathBuf,
@@ -58,6 +67,12 @@ enum Cmd {
         /// simulation is a standard-definition effect by nature.
         #[arg(long, default_value_t = 960)]
         width: u32,
+        /// Run the CX405 camcorder simulation instead of a look.
+        #[arg(long, conflicts_with_all = ["recipe", "look", "vhs", "vhs_json"])]
+        camcorder: bool,
+        /// Camcorder drift/noise seed.
+        #[arg(long, default_value_t = 7)]
+        seed: u64,
     },
     /// Print a VHS preset's full ntsc-rs settings as JSON (the
     /// starting point for a custom --vhs-json file).
@@ -338,16 +353,50 @@ fn run() -> Result<(), String> {
             println!("{}", serde_json::to_string_pretty(&r).unwrap());
             Ok(())
         }
-        Cmd::Apply { input, output, recipe, look, root, vhs, vhs_json } => {
+        Cmd::Apply { input, output, recipe, look, root, vhs, vhs_json, camcorder, seed } => {
+            if camcorder {
+                let img = image::open(&input)
+                    .map_err(|e| format!("cannot open {}: {}", input.display(), e))?
+                    .to_rgb8();
+                let (w, h) = img.dimensions();
+                let out = openfuji_core::Camcorder::new(seed)
+                    .process_frame(img.as_raw(), w as usize, h as usize, 0);
+                image::RgbImage::from_raw(w, h, out)
+                    .ok_or("camcorder output size mismatch")?
+                    .save(&output)
+                    .map_err(|e| format!("cannot save {}: {}", output.display(), e))?;
+                println!("{} -> {} (camcorder: CX405, seed {})", input.display(), output.display(), seed);
+                return Ok(());
+            }
             let recipe_path = resolve_recipe_path(&recipe, &look, &root)?;
             let name = apply_with_recipe(&input, &output, &recipe_path, parse_vhs(&vhs, &vhs_json)?)?;
             println!("{} -> {} (look: {})", input.display(), output.display(), name);
             Ok(())
         }
-        Cmd::Video { input, output, recipe, look, root, vhs, vhs_json, width } => {
+        Cmd::Video { input, output, recipe, look, root, vhs, vhs_json, width, camcorder, seed } => {
+            if camcorder {
+                let mut cam = openfuji_core::Camcorder::new(seed);
+                let mut proc = |buf: &[u8], w: usize, h: usize, frame: usize| {
+                    cam.process_frame(buf, w, h, frame as u32)
+                };
+                let frames = apply_to_video(&input, &output, width, true, &mut proc)?;
+                println!("{} -> {} (camcorder: CX405, seed {}, {} frames)", input.display(), output.display(), seed, frames);
+                return Ok(());
+            }
             let recipe_path = resolve_recipe_path(&recipe, &look, &root)?;
-            let (name, frames) = apply_to_video(&input, &output, &recipe_path, parse_vhs(&vhs, &vhs_json)?, width)?;
-            println!("{} -> {} (look: {}, {} frames)", input.display(), output.display(), name, frames);
+            let (r, lut) = load_recipe_and_lut(&recipe_path)?;
+            let fx = parse_vhs(&vhs, &vhs_json)?;
+            let mut proc = |buf: &[u8], w: usize, h: usize, frame: usize| {
+                let img = image::RgbImage::from_raw(w as u32, h as u32, buf.to_vec())
+                    .expect("frame buffer mismatch");
+                let mut out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
+                if let Some(fx) = &fx {
+                    openfuji_core::vhs::apply_vhs_effect(out.as_mut(), w, h, fx, frame);
+                }
+                out.into_raw()
+            };
+            let frames = apply_to_video(&input, &output, width, false, &mut proc)?;
+            println!("{} -> {} (look: {}, {} frames)", input.display(), output.display(), r.name, frames);
             Ok(())
         }
     }
@@ -428,19 +477,43 @@ fn probe_video(input: &Path) -> Result<(u32, u32, f64), String> {
     Ok((w, h, if den > 0.0 { num / den } else { 30.0 }))
 }
 
-/// Grade a whole video: ffmpeg decodes to raw RGB frames, each frame
-/// runs the recipe pipeline (+ optional VHS stage with the frame
-/// number, so tape artifacts animate), and a second ffmpeg encodes
-/// H.264 while copying the source audio.
+/// Does the source carry an audio stream?
+fn probe_has_audio(input: &Path) -> bool {
+    std::process::Command::new("ffprobe")
+        .args(["-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0"])
+        .arg(input)
+        .output()
+        .map(|o| !o.stdout.is_empty())
+        .unwrap_or(false)
+}
+
+/// Source duration in seconds (for sizing the hiss generator).
+fn probe_duration(input: &Path) -> f64 {
+    let out = std::process::Command::new("ffprobe")
+        .args(["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0"])
+        .arg(input)
+        .output();
+    out.ok()
+        .and_then(|o| String::from_utf8(o.stdout).ok())
+        .and_then(|s| s.trim().parse::<f64>().ok())
+        .filter(|d| *d > 0.0)
+        .unwrap_or(10.0)
+}
+
+/// Grade a whole video: ffmpeg decodes to raw RGB frames, each one
+/// runs through `proc` (recipe pipeline, VHS stage, camcorder…),
+/// and a second ffmpeg encodes H.264. Audio is copied untouched,
+/// except in camcorder mode, where it runs through the CX405's
+/// tin-can chain from the Python pipeline (band-limit → stereo
+/// narrowing → AGC pump → compressor → + white hiss).
 fn apply_to_video(
     input: &Path,
     output: &Path,
-    recipe_path: &Path,
-    vhs: Option<openfuji_core::vhs::NtscEffectFull>,
     max_width: u32,
-) -> Result<(String, usize), String> {
+    camcorder_audio: bool,
+    proc: &mut dyn FnMut(&[u8], usize, usize, usize) -> Vec<u8>,
+) -> Result<usize, String> {
     use std::io::{Read, Write};
-    let (r, lut) = load_recipe_and_lut(recipe_path)?;
     let (sw, sh, fps) = probe_video(input)?;
     let scale = (max_width as f64 / sw as f64).min(1.0);
     let mut w = ((sw as f64 * scale).round() as u32) & !1;
@@ -457,14 +530,34 @@ fn apply_to_video(
         .map_err(|e| format!("cannot start ffmpeg decoder: {e}"))?;
     let mut dec_out = decoder.stdout.take().ok_or("decoder stdout missing")?;
 
-    let mut encoder = std::process::Command::new("ffmpeg")
+    let has_audio = probe_has_audio(input);
+    let mut enc_cmd = std::process::Command::new("ffmpeg");
+    enc_cmd
         .args(["-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
                "-s", &format!("{w}x{h}"), "-r", &format!("{fps:.4}"), "-i", "-",
                "-i"])
-        .arg(input)
-        .args(["-map", "0:v:0", "-map", "1:a?", "-c:v", "libx264", "-preset", "medium",
-               "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "copy", "-shortest",
-               "-movflags", "+faststart"])
+        .arg(input);
+    if camcorder_audio && has_audio {
+        let dur = probe_duration(input).ceil() as u64 + 1;
+        let fc = format!(
+            "[1:a]highpass=f=95,lowpass=f=12500,\
+             pan=stereo|c0=0.82*c0+0.18*c1|c1=0.82*c1+0.18*c0,\
+             dynaudnorm=f=250:g=12:p=0.9,acompressor=threshold=0.5:ratio=3:attack=20:release=250,\
+             volume=1.1[a1];\
+             anoisesrc=color=white:amplitude=0.0045:d={dur}[hiss];\
+             [a1][hiss]amix=inputs=2:duration=first:weights='1 0.5'[aout]"
+        );
+        enc_cmd.args(["-filter_complex", &fc, "-map", "0:v:0", "-map", "[aout]",
+                      "-c:v", "libx264", "-preset", "medium", "-crf", "21",
+                      "-maxrate", "11M", "-bufsize", "22M", "-pix_fmt", "yuv420p",
+                      "-c:a", "aac", "-b:a", "128k", "-ar", "48000", "-shortest",
+                      "-movflags", "+faststart"]);
+    } else {
+        enc_cmd.args(["-map", "0:v:0", "-map", "1:a?", "-c:v", "libx264", "-preset", "medium",
+                      "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "copy", "-shortest",
+                      "-movflags", "+faststart"]);
+    }
+    let mut encoder = enc_cmd
         .arg(output)
         .stdin(std::process::Stdio::piped())
         .spawn()
@@ -480,11 +573,7 @@ fn apply_to_video(
             Err(e) if e.kind() == std::io::ErrorKind::UnexpectedEof => break,
             Err(e) => return Err(format!("frame read failed: {e}")),
         }
-        let img = image::RgbImage::from_raw(w, h, buf).ok_or("frame buffer mismatch")?;
-        let mut out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
-        if let Some(fx) = &vhs {
-            openfuji_core::vhs::apply_vhs_effect(out.as_mut(), w as usize, h as usize, fx, frame);
-        }
+        let out = proc(&buf, w as usize, h as usize, frame);
         enc_in.write_all(&out).map_err(|e| format!("encoder write failed: {e}"))?;
         buf = vec![0u8; frame_bytes];
         frame += 1;
@@ -501,5 +590,5 @@ fn apply_to_video(
     if !enc_status.success() {
         return Err("ffmpeg encoder failed".into());
     }
-    Ok((r.name, frame))
+    Ok(frame)
 }
