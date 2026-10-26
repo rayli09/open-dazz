@@ -1,4 +1,61 @@
 /**
+ * Stateful CX405 camcorder for VIDEO: one instance per clip, so
+ * the drift/noise streams evolve across frames exactly like the
+ * core pipeline (and the CLI) instead of restarting every frame.
+ */
+export class CamcorderSim {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        CamcorderSimFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_camcordersim_free(ptr, 0);
+    }
+    /**
+     * @param {bigint} seed
+     */
+    constructor(seed) {
+        const ret = wasm.camcordersim_new(seed);
+        this.__wbg_ptr = ret;
+        CamcorderSimFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * Process one RGBA frame; `frame` is the frame index in the
+     * clip (drives the temporal stages).
+     * @param {Uint8Array} rgba
+     * @param {number} width
+     * @param {number} height
+     * @param {number} frame
+     * @returns {Uint8Array}
+     */
+    process(rgba, width, height, frame) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passArray8ToWasm0(rgba, wasm.__wbindgen_export);
+            const len0 = WASM_VECTOR_LEN;
+            wasm.camcordersim_process(retptr, this.__wbg_ptr, ptr0, len0, width, height, frame);
+            var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+            var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+            var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+            var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+            if (r3) {
+                throw takeObject(r2);
+            }
+            var v2 = getArrayU8FromWasm0(r0, r1).slice();
+            wasm.__wbindgen_export3(r0, r1 * 1, 1);
+            return v2;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+}
+if (Symbol.dispose) CamcorderSim.prototype[Symbol.dispose] = CamcorderSim.prototype.free;
+
+/**
  * Apply a recipe (JSON, same schema as the CLI) with an optional base
  * LUT (.cube text) to an RGBA pixel buffer. Alpha is passed through.
  * @param {Uint8Array} rgba
@@ -120,6 +177,13 @@ export function __wbg_Error_30c8987f7c2ed4e2(arg0, arg1) {
     const ret = Error(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
 }
+export function __wbg___wbindgen_throw_41e9ee4f547fc59a(arg0, arg1) {
+    throw new Error(getStringFromWasm0(arg0, arg1));
+}
+const CamcorderSimFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_camcordersim_free(ptr, 1));
+
 function addHeapObject(obj) {
     if (heap_next === heap.length) heap.push(heap.length + 1);
     const idx = heap_next;

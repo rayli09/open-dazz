@@ -91,6 +91,37 @@ pub fn apply_camcorder(rgba: &[u8], width: u32, height: u32) -> Result<Vec<u8>, 
     Ok(restore_alpha(&out, rgba))
 }
 
+/// Stateful CX405 camcorder for VIDEO: one instance per clip, so
+/// the drift/noise streams evolve across frames exactly like the
+/// core pipeline (and the CLI) instead of restarting every frame.
+#[wasm_bindgen]
+pub struct CamcorderSim {
+    inner: openfuji_core::Camcorder,
+}
+
+#[wasm_bindgen]
+impl CamcorderSim {
+    #[wasm_bindgen(constructor)]
+    pub fn new(seed: u64) -> CamcorderSim {
+        CamcorderSim { inner: openfuji_core::Camcorder::new(seed) }
+    }
+
+    /// Process one RGBA frame; `frame` is the frame index in the
+    /// clip (drives the temporal stages).
+    pub fn process(
+        &mut self,
+        rgba: &[u8],
+        width: u32,
+        height: u32,
+        frame: u32,
+    ) -> Result<Vec<u8>, JsError> {
+        let npix = (width * height) as usize;
+        let rgb = strip_alpha(rgba, npix)?;
+        let out = self.inner.process_frame(&rgb, width as usize, height as usize, frame);
+        Ok(restore_alpha(&out, rgba))
+    }
+}
+
 /// Engine version string, for the web app's "about" line.
 #[wasm_bindgen]
 pub fn engine_version() -> String {
