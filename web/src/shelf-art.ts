@@ -86,6 +86,18 @@ function stage(a: ArtSpec, inner: string): string {
     <linearGradient id="win${i}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#000" stop-opacity="0.42"/><stop offset="0.35" stop-color="#000" stop-opacity="0"/>
     </linearGradient>
+    <linearGradient id="mtl${i}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.40"/><stop offset="0.16" stop-color="#fff" stop-opacity="0.06"/>
+      <stop offset="0.40" stop-color="#000" stop-opacity="0.17"/><stop offset="0.60" stop-color="#fff" stop-opacity="0.11"/>
+      <stop offset="0.84" stop-color="#000" stop-opacity="0.20"/><stop offset="1" stop-color="#000" stop-opacity="0.34"/>
+    </linearGradient>
+    <linearGradient id="spc${i}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.60"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cnc${i}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.30"/><stop offset="0.45" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.14"/><stop offset="1" stop-color="#fff" stop-opacity="0.10"/>
+    </linearGradient>
     <radialGradient id="vig${i}" cx="0.5" cy="0.44" r="0.85">
       <stop offset="0.62" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.20"/>
     </radialGradient>
@@ -159,7 +171,14 @@ function body(a: ArtSpec): string {
   <rect x="54" y="76" width="212" height="10" fill="url(#pl{i})"/>
   <clipPath id="bd{i}"><rect x="54" y="62" width="212" height="98" rx="10"/></clipPath>
   <g clip-path="url(#bd{i})">
-    <rect x="54" y="62" width="212" height="24" filter="url(#brs{i})" opacity="0.30"/>
+    <rect x="54" y="62" width="212" height="24" filter="url(#brs{i})" opacity="0.45"/>
+    <rect x="54" y="62" width="212" height="24" fill="url(#mtl{i})"/>
+    <rect x="54" y="63.5" width="212" height="4.5" fill="url(#spc{i})"/>
+    <rect x="54" y="150" width="212" height="10" fill="url(#mt{i})"/>
+    <rect x="54" y="150" width="212" height="10" fill="url(#mtl{i})"/>
+    <rect x="54" y="150" width="212" height="10" filter="url(#brs{i})" opacity="0.35"/>
+    <line x1="54" y1="150" x2="266" y2="150" stroke="rgba(0,0,0,0.35)" stroke-width="0.9"/>
+    <line x1="54" y1="151.1" x2="266" y2="151.1" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/>
     <rect x="54" y="88" width="212" height="72" filter="url(#grk{i})" opacity="0.34"/>
     <rect x="54" y="88" width="212" height="72" filter="url(#grw{i})" opacity="0.16"/>
     ${shade(54, 116, 212, 44)}
@@ -175,12 +194,16 @@ function body(a: ArtSpec): string {
   ${ticks}
   <circle cx="232" cy="60" r="10.5" fill="url(#pl{i})" stroke="${inkLine}"/>
   <circle cx="232" cy="60" r="10.5" fill="url(#dial{i})"/>
+  <clipPath id="dl{i}"><circle cx="232" cy="60" r="10.5"/></clipPath>
+  <g clip-path="url(#dl{i})"><rect x="221" y="49" width="22" height="22" fill="url(#cnc{i})"/></g>
   <circle cx="232" cy="60" r="4" fill="none" stroke="${engrave}" stroke-width="0.8"/>
   <text x="232" y="44" text-anchor="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="4.8" font-weight="600" fill="${engrave}">125</text>
   <rect x="150" y="57" width="20" height="4.5" rx="1" fill="#14161a"/>
   <rect x="150" y="57" width="20" height="1.6" fill="rgba(255,255,255,0.28)"/>
   <circle cx="90" cy="59" r="6.5" fill="url(#pl{i})" stroke="${inkLine}"/>
   <circle cx="90" cy="59" r="6.5" fill="url(#dial{i})"/>
+  <clipPath id="dl2{i}"><circle cx="90" cy="59" r="6.5"/></clipPath>
+  <g clip-path="url(#dl2{i})"><rect x="83" y="52" width="14" height="14" fill="url(#cnc{i})"/></g>
   <circle cx="90" cy="59" r="3.6" fill="${a.band}"/>
   <rect x="196" y="66" width="15" height="8" rx="1.5" fill="#10151a"/>
   <text x="203.5" y="72.5" text-anchor="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="5" font-weight="700" fill="#e8b13a">24</text>
@@ -197,6 +220,9 @@ function body(a: ArtSpec): string {
   ${[0, 90, 180, 270].map((deg) => { const t = (deg * Math.PI) / 180; const x = 160 + 36 * Math.cos(t), y = 118 + 36 * Math.sin(t); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.3" fill="#3c4046"/>`; }).join("")}
   <circle cx="160" cy="118" r="33" fill="#1b1e23"/>
   <circle cx="160" cy="118" r="33" fill="url(#dial{i})"/>
+  <clipPath id="ln{i}"><circle cx="160" cy="118" r="33"/></clipPath>
+  <g clip-path="url(#ln{i})"><rect x="127" y="85" width="66" height="66" fill="url(#mtl{i})" opacity="0.55"/></g>
+  <path d="M138 97 A32 32 0 0 1 157 86.5" fill="none" stroke="rgba(255,255,255,0.20)" stroke-width="2.4" stroke-linecap="round"/>
   ${apText}
   <circle cx="160" cy="79.5" r="1.9" fill="${a.accent}"/>
   ${knurl}
@@ -253,6 +279,8 @@ function canister(a: ArtSpec): string {
   return stage(a, `
   <ellipse cx="160" cy="50" rx="43" ry="9" fill="${a.top}"/>
   <ellipse cx="160" cy="50" rx="43" ry="9" fill="url(#dial{i})"/>
+  <ellipse cx="160" cy="50" rx="43" ry="9" fill="url(#mtl{i})" opacity="0.55"/>
+  <ellipse cx="160" cy="50" rx="43" ry="9" filter="url(#brs{i})" opacity="0.30"/>
   <ellipse cx="160" cy="50" rx="30" ry="6" fill="none" stroke="rgba(0,0,0,0.20)" stroke-width="1"/>
   <rect x="117" y="50" width="86" height="112" fill="${a.base}"/>
   <clipPath id="cn{i}"><path d="M117 50 h86 v103 a43 9 0 0 1 -86 0 Z"/></clipPath>
@@ -308,6 +336,8 @@ function handycam(a: ArtSpec): string {
   <g clip-path="url(#hc{i})">
     <rect x="58" y="76" width="198" height="66" filter="url(#grk{i})" opacity="0.30"/>
     <rect x="58" y="76" width="198" height="66" filter="url(#grw{i})" opacity="0.13"/>
+    <rect x="58" y="76" width="198" height="66" fill="url(#mtl{i})" opacity="0.45"/>
+    <rect x="58" y="77.5" width="198" height="4" fill="url(#spc{i})" opacity="0.7"/>
     ${shade(58, 104, 198, 38)}
     ${sheen(58, 76, 198, 66)}
     <line x1="62" y1="77.2" x2="252" y2="77.2" stroke="rgba(255,255,255,0.30)" stroke-width="1"/>
@@ -316,6 +346,7 @@ function handycam(a: ArtSpec): string {
   <ellipse cx="44" cy="112" rx="22" ry="26" fill="#000" opacity="0.35" filter="url(#soft{i})"/>
   <rect x="30" y="86" width="38" height="46" rx="7" fill="${a.band}"/>
   <rect x="30" y="86" width="38" height="46" rx="7" fill="url(#lt{i})" opacity="0.4"/>
+  <rect x="30" y="86" width="38" height="46" rx="7" fill="url(#mtl{i})" opacity="0.5"/>
   <rect x="30" y="86" width="38" height="46" rx="7" fill="url(#shd{i})" opacity="0.55"/>
   <ellipse cx="29" cy="109" rx="9.5" ry="21" fill="url(#ls{i})"/>
   <ellipse cx="29" cy="109" rx="4.6" ry="11" fill="#0a1420"/>
