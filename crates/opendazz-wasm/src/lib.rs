@@ -27,7 +27,7 @@ pub fn apply(
         return Err(JsError::new("RGBA buffer size does not match dimensions"));
     }
     let mut rgb = Vec::with_capacity(npix * 3);
-    for px in rgba.chunks_exact(4) {
+    for px in rgba.as_chunks::<4>().0 {
         rgb.extend_from_slice(&px[..3]);
     }
     let img: RgbImage = ImageBuffer::from_raw(width, height, rgb)
@@ -35,7 +35,7 @@ pub fn apply(
     let out = apply_recipe(&img, &recipe, lut.as_ref());
     let raw = out.into_raw();
     let mut result = Vec::with_capacity(npix * 4);
-    for (i, px) in raw.chunks_exact(3).enumerate() {
+    for (i, px) in raw.as_chunks::<3>().0.iter().enumerate() {
         result.extend_from_slice(px);
         result.push(rgba[i * 4 + 3]);
     }
@@ -47,7 +47,7 @@ fn strip_alpha(rgba: &[u8], npix: usize) -> Result<Vec<u8>, JsError> {
         return Err(JsError::new("RGBA buffer size does not match dimensions"));
     }
     let mut rgb = Vec::with_capacity(npix * 3);
-    for px in rgba.chunks_exact(4) {
+    for px in rgba.as_chunks::<4>().0 {
         rgb.extend_from_slice(&px[..3]);
     }
     Ok(rgb)
@@ -55,7 +55,7 @@ fn strip_alpha(rgba: &[u8], npix: usize) -> Result<Vec<u8>, JsError> {
 
 fn restore_alpha(rgb: &[u8], rgba: &[u8]) -> Vec<u8> {
     let mut result = Vec::with_capacity(rgb.len() / 3 * 4);
-    for (i, px) in rgb.chunks_exact(3).enumerate() {
+    for (i, px) in rgb.as_chunks::<3>().0.iter().enumerate() {
         result.extend_from_slice(px);
         result.push(rgba[i * 4 + 3]);
     }
@@ -126,4 +126,19 @@ impl CamcorderSim {
 #[wasm_bindgen]
 pub fn engine_version() -> String {
     env!("CARGO_PKG_VERSION").to_string()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{restore_alpha, strip_alpha};
+
+    #[test]
+    fn alpha_conversion_round_trip_preserves_each_pixel() {
+        let rgba = [12, 34, 56, 0, 78, 90, 123, 127, 210, 220, 230, 255];
+        let rgb = strip_alpha(&rgba, 3).unwrap();
+        assert_eq!(rgb, [12, 34, 56, 78, 90, 123, 210, 220, 230]);
+        assert_eq!(restore_alpha(&rgb, &rgba), rgba);
+        assert!(strip_alpha(&[], 0).unwrap().is_empty());
+        assert!(restore_alpha(&[], &[]).is_empty());
+    }
 }

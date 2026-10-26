@@ -283,11 +283,11 @@ impl EffectCtx {
                     }
                     // Handle the remainder separately
                     let last = y[width - 1];
-                    for index in width - 2..width {
+                    for sample in &mut y[width - 2..width] {
                         let c = last;
                         sum -= delay.push(c);
                         sum += c;
-                        y[index] = sum * 0.25;
+                        *sample = sum * 0.25;
                     }
                 });
             }
@@ -614,8 +614,8 @@ impl EffectCtx {
                                 * WEIGHT_DIAG
                     };
 
-                    for index in 0..2 {
-                        y[index] = filter_scalar(index);
+                    for (index, sample) in y[..2].iter_mut().enumerate() {
+                        *sample = filter_scalar(index);
                     }
                     let mut index = 2;
                     while index < width.saturating_sub(S::f32s::N + 2) {
@@ -737,8 +737,8 @@ impl EffectCtx {
                             - (((tl + br) * wd1) + ((tr + bl) * wd2))
                     };
 
-                    for index in 0..2 {
-                        y[index] = filter_scalar(index);
+                    for (index, sample) in y[..2].iter_mut().enumerate() {
+                        *sample = filter_scalar(index);
                     }
 
                     let mut index = 2;
@@ -1053,9 +1053,10 @@ impl EffectCtx {
                 let transient_intensity = (rng.random::<f32>() + 0.5) * 0.5;
                 let transient_len = 16.0 * self.horizontal_scale;
 
-                for i in copy_start..(copy_start + transient_len.ceil() as usize).min(width) {
-                    let x = (i - copy_start) as f32;
-                    row[i] += (1.0 - (x / transient_len)).powi(3) * transient_intensity;
+                let copy_end = (copy_start + transient_len.ceil() as usize).min(width);
+                for (offset, sample) in row[copy_start..copy_end].iter_mut().enumerate() {
+                    let x = offset as f32;
+                    *sample += (1.0 - (x / transient_len)).powi(3) * transient_intensity;
                 }
             } else {
                 shift_row(

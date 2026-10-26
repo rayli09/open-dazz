@@ -76,13 +76,18 @@ struct SmoothSignal {
     amp: f32,
 }
 
+// The reference pipeline seeds phase over exactly 6.28 radians. Using TAU
+// would alter the seeded AE/WB drift, so retain this calibrated literal.
+#[allow(clippy::approx_constant)]
+const REFERENCE_PHASE_SPAN: f32 = 6.28;
+
 impl SmoothSignal {
     fn new(rng: &mut SplitMix64, freqs: &[f32], amp: f32) -> Self {
         let waves = freqs
             .iter()
             .map(|&f| Wave {
                 freq: f,
-                phase: rng.uniform() * 6.28,
+                phase: rng.uniform() * REFERENCE_PHASE_SPAN,
                 amp: 0.4 + 0.6 * rng.uniform(),
             })
             .collect();
@@ -360,23 +365,30 @@ impl Camcorder {
         }
 
         // --- 4. global contrast only (undo phone "clarity") ---
-        for c in 0..3 {
-            let blur = gaussian_blur(&planes[c], w, h, 18.0 * ws, 18.0 * ws);
-            for i in 0..n {
-                planes[c][i] = blur[i] + (planes[c][i] - blur[i]) * 0.96;
+        for plane in planes.iter_mut() {
+            let blur = gaussian_blur(plane, w, h, 18.0 * ws, 18.0 * ws);
+            for (sample, blurred) in plane.iter_mut().zip(blur) {
+                *sample = blurred + (*sample - blurred) * 0.96;
             }
         }
 
         // --- 5. AE / WB hunting ---
-        for i in 0..n {
-            planes[0][i] *= expo * (1.0 + warm);
-            planes[1][i] *= expo;
-            planes[2][i] *= expo * (1.0 - warm * 0.8);
+        for sample in &mut planes[0] {
+            *sample *= expo * (1.0 + warm);
+        }
+        for sample in &mut planes[1] {
+            *sample *= expo;
+        }
+        for sample in &mut planes[2] {
+            *sample *= expo * (1.0 - warm * 0.8);
         }
 
         // --- 6. Sony consumer color ---
-        for i in 0..n {
-            let (r, g, b) = (planes[0][i], planes[1][i], planes[2][i]);
+        let [red, green, blue, ..] = planes else {
+            unreachable!("RGB processing requires three planes");
+        };
+        for ((red, green), blue) in red.iter_mut().zip(green).zip(blue) {
+            let (r, g, b) = (*red, *green, *blue);
             // The Python matrix is authored in BGR order; this is
             // its exact RGB transcription.
             let mut nr = (-0.02 * b + 0.12 * g + 0.96 * r).clamp(0.0, 1.2);
@@ -392,19 +404,19 @@ impl Camcorder {
             ng += green_excess * 0.08;
             nr += green_excess * 0.025;
             // ~6-bit color depth -> banding (soft posterize blend).
-            planes[0][i] = nr * 0.35 + (nr * 60.0).round() / 60.0 * 0.65;
-            planes[1][i] = ng * 0.35 + (ng * 60.0).round() / 60.0 * 0.65;
-            planes[2][i] = nb * 0.35 + (nb * 60.0).round() / 60.0 * 0.65;
+            *red = nr * 0.35 + (nr * 60.0).round() / 60.0 * 0.65;
+            *green = ng * 0.35 + (ng * 60.0).round() / 60.0 * 0.65;
+            *blue = nb * 0.35 + (nb * 60.0).round() / 60.0 * 0.65;
         }
 
         // --- 7. tone curve (day/night blend by darkness) ---
         let mut lut = [0.0f32; 1024];
-        for i in 0..1024 {
-            lut[i] = self.lut_day[i] * (1.0 - dark) + self.lut_night[i] * dark;
+        for (i, value) in lut.iter_mut().enumerate() {
+            *value = self.lut_day[i] * (1.0 - dark) + self.lut_night[i] * dark;
         }
-        for c in 0..3 {
-            for i in 0..n {
-                planes[c][i] = apply_lut(planes[c][i], &lut);
+        for plane in planes.iter_mut() {
+            for sample in plane {
+                *sample = apply_lut(*sample, &lut);
             }
         }
 
@@ -412,14 +424,14 @@ impl Camcorder {
         let bloom_gain = 0.07 + 0.60 * dark;
         if bloom_gain > 0.0 {
             let sigma = (7.0 + 18.0 * dark) * ws;
-            for c in 0..3 {
-                let hi: Vec<f32> = planes[c]
+            for plane in planes.iter_mut() {
+                let hi: Vec<f32> = plane
                     .iter()
                     .map(|&v| (v - 0.86).max(0.0) * 3.2)
                     .collect();
                 let bloom = gaussian_blur(&hi, w, h, sigma, sigma);
                 for i in 0..n {
-                    planes[c][i] = (planes[c][i] + bloom[i] * bloom_gain).clamp(0.0, 1.0);
+                    plane[i] = (plane[i] + bloom[i] * bloom_gain).clamp(0.0, 1.0);
                 }
             }
         }
@@ -451,10 +463,10 @@ impl Camcorder {
         };
         planes[0] = remap_scale(&planes[0], 1.0022);
         planes[2] = remap_scale(&planes[2], 0.9978);
-        for c in 0..3 {
-            let soft = gaussian_blur(&planes[c], w, h, 3.2 * ws, 3.2 * ws);
+        for plane in planes.iter_mut() {
+            let soft = gaussian_blur(plane, w, h, 3.2 * ws, 3.2 * ws);
             for i in 0..n {
-                planes[c][i] = (planes[c][i] * (1.0 - corner[i]) + soft[i] * corner[i]) * vig[i];
+                plane[i] = (plane[i] * (1.0 - corner[i]) + soft[i] * corner[i]) * vig[i];
             }
         }
 
@@ -483,8 +495,8 @@ impl Camcorder {
                 }
             }
         }
-        for c in 0..3 {
-            for v in planes[c].iter_mut() {
+        for plane in planes.iter_mut() {
+            for v in plane {
                 *v = v.clamp(0.0, 1.0);
             }
         }

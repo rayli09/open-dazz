@@ -21,6 +21,12 @@ impl Context {
     }
 }
 
+impl Default for Context {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[cfg(feature = "std")]
 static GLOBAL_CTX: std::sync::OnceLock<Context> = std::sync::OnceLock::new();
 

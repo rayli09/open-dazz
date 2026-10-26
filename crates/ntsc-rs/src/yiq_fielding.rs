@@ -523,6 +523,9 @@ impl<'a> YiqView<'a> {
         assert!(blit_info.rect.width() + blit_info.destination.0 <= self.dimensions.0);
         assert!(blit_info.rect.height() + blit_info.destination.1 <= self.dimensions.1);
 
+        // Keep the upstream SIMD dispatch signature: separate Y/I/Q planes and
+        // source metadata avoid changing this unsafe conversion boundary.
+        #[allow(clippy::too_many_arguments)]
         #[inline(always)]
         unsafe fn blit_row_simd_inner<S: Simd, P: PixelFormat, T: Normalize, F: PixelTransform>(
             simd: S,
@@ -563,6 +566,8 @@ impl<'a> YiqView<'a> {
             }
         }
 
+        // Mirror the inner SIMD helper without bundling its borrowed planes.
+        #[allow(clippy::too_many_arguments)]
         unsafe fn blit_row_simd<P: PixelFormat, T: Normalize, F: PixelTransform>(
             level: Level,
             y: &mut [f32],

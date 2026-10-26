@@ -1,6 +1,6 @@
 pub mod easy;
-mod settings;
+mod descriptors;
 pub mod standard;
 
-pub use settings::*;
+pub use descriptors::*;
 pub use standard::*;

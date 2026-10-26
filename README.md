@@ -58,7 +58,7 @@ Run `cargo run --release -p opendazz-cli -- --help` for commands and `video --he
 - [Recipe format](recipes/README.md) · [Library layout and provenance](library/README.md) · [LUT packs](luts/README.md)
 - [Current UI and export verification](docs/verification/simple-shelf/README.md) · [Fuji photo processing validation](docs/verification/fuji-photo-v1-2026-10-26.md)
 
-CI runs web tests/build, Rust tests, strict Clippy and a WASM build gate. The badge above reports its actual status; the current known failure is strict Clippy in vendored `ntsc-rs`. Visual comparisons and regression tests are not proof of exact camera or third-party app fidelity.
+CI runs web tests/build, Rust tests, strict Clippy and a WASM build gate. The badge above reports its actual status. Visual comparisons and regression tests are not proof of exact camera or third-party app fidelity.
 
 ## License and credits
 

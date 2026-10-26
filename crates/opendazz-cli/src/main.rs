@@ -540,6 +540,8 @@ fn probe_duration(input: &Path) -> f64 {
         .unwrap_or(10.0)
 }
 
+type FrameProcessor<'a> = dyn FnMut(&[u8], usize, usize, usize) -> Vec<u8> + 'a;
+
 /// Grade a whole video: ffmpeg decodes to raw RGB frames, each one
 /// runs through `proc` (recipe pipeline, VHS stage, camcorder…),
 /// and a second ffmpeg encodes H.264. Audio is copied untouched,
@@ -551,7 +553,7 @@ fn apply_to_video(
     output: &Path,
     max_width: u32,
     camcorder_audio: bool,
-    proc: &mut dyn FnMut(&[u8], usize, usize, usize) -> Vec<u8>,
+    proc: &mut FrameProcessor<'_>,
 ) -> Result<usize, String> {
     use std::io::{Read, Write};
     let (sw, sh, fps) = probe_video(input)?;
@@ -617,7 +619,7 @@ fn apply_to_video(
         enc_in.write_all(&out).map_err(|e| format!("encoder write failed: {e}"))?;
         buf = vec![0u8; frame_bytes];
         frame += 1;
-        if frame % 60 == 0 {
+        if frame.is_multiple_of(60) {
             eprint!("\r  frame {frame}");
         }
     }

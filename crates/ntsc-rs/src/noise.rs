@@ -187,8 +187,10 @@ impl<const N: usize> ScalarCoords for [f32; N] {
     #[inline(always)]
     fn splat_x<S: Simd>(self, simd: S) -> Self::SimdCoords<S> {
         let mut coords = self.map(|c| S::f32s::splat(simd, c));
-        for i in 0..S::f32s::N {
-            coords[0][i] += i as f32;
+        // Iterate SIMD lanes of the x coordinate, not the N coordinate axes.
+        let x = &mut coords[0];
+        for lane in 0..S::f32s::N {
+            x[lane] += lane as f32;
         }
         coords
     }
