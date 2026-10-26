@@ -53,9 +53,12 @@ export function webCodecsPresent(): boolean {
  * on the ffmpeg path. Throws only on unexpected errors — callers
  * treat any failure as "use ffmpeg".
  */
-export async function probeWebCodecs(file: File): Promise<{ probe: WcProbe; poster: Blob } | null> {
+export async function probeWebCodecs(file: File, signal?: AbortSignal): Promise<{ probe: WcProbe; poster: Blob } | null> {
+  signal?.throwIfAborted();
   if (!webCodecsPresent()) return null;
   const input = new Input({ source: new BlobSource(file), formats: ALL_FORMATS });
+  const abort = () => input.dispose();
+  signal?.addEventListener("abort", abort, { once: true });
   try {
     if (!(await input.canRead())) return null;
     const vtrack = await input.getPrimaryVideoTrack();
@@ -90,7 +93,8 @@ export async function probeWebCodecs(file: File): Promise<{ probe: WcProbe; post
       poster,
     };
   } finally {
-    (input as unknown as { dispose?: () => void }).dispose?.();
+    signal?.removeEventListener("abort", abort);
+    input.dispose();
   }
 }
 
@@ -189,6 +193,6 @@ export async function developWebCodecs(file: File, opts: WcDevelopOptions): Prom
     if (audioPump) await audioPump.catch(() => {});
     throw e;
   } finally {
-    (input as unknown as { dispose?: () => void }).dispose?.();
+    input.dispose();
   }
 }

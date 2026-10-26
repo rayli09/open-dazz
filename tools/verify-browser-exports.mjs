@@ -80,13 +80,14 @@ async function look(id) {
   await page.locator(`[data-preset="${id}"]`).click();
   await ready();
 }
-async function upload(name) {
+async function upload(name, preset = "ricoh-bw") {
   await page.locator("#file").setInputFiles(`${out}/input-${name}`);
   await page.waitForFunction(
     () => document.querySelector("#cap-file").textContent.includes("VIDEO"),
     { timeout: 90000 },
   );
   await ready();
+  if (preset) await look(preset); // Each dock item now owns its look; choose it explicitly.
   console.log("upload", name, await page.locator("#cap-file").textContent());
 }
 async function save(name, selector = "#btn-export-simple", extra) {
@@ -156,7 +157,7 @@ try {
   console.log("switch input", await state());
   // Recover and export again after cancellation/input switch.
   await look("ricoh-negative");
-  await upload("aac.mp4");
+  await upload("aac.mp4", "ricoh-negative");
   await save("recovered.mp4");
   await photo();
   await page.setViewportSize({ width: 390, height: 844 });

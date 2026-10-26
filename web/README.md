@@ -30,11 +30,15 @@ Both `.d.ts` files in `src/pkg/` come from wasm-bindgen; the client imports thei
 
 - **Simple:** eleven curated Fuji-first photo recipes; separate CX405 and VHS effects. Recipe identity, artwork, labels and media grouping live in `src/simple-presets.ts`.
 - **Pro:** full catalogue, search/brand/type filters, recipe provenance and adjustment sliders.
-- **Preview/export:** compare original and processed pixels; Export saves photos as PNG and full filtered clips as MP4 with audio when supported. Both modes preserve the recipe's photo-processing profile; video uses the legacy processing override.
+- **Preview/export:** compare original and processed pixels; Export saves the selected photo as PNG or the complete filtered clip as MP4 with audio when supported. Both modes preserve photo profiles; video uses the legacy processing override.
+- **Media dock:** import multiple files with the picker or Uppy drag/drop. Each item keeps its own look, sliders, comparison and playback position in a Zustand session store. Arrow keys select, Alt+arrows reorder and Delete removes; touch controls provide the same actions.
+- **Player:** Video.js HTML components provide accessible play/pause, seeking, time, mute/volume and filtered fullscreen. The live WASM preview uses up to a 480px long edge at about 12 fps and source audio; original comparison is explicitly labelled. Export remains a separate complete-clip render, including CX405 audio processing.
 - **Assets:** `scripts/sync-library.mjs` copies `../library` before dev/build. Recipes and LUTs are fetched when needed. Original generated camera artwork and responsive derivatives are documented in `../design/camera-assets/manifest.json`.
 - **Style:** Graphite Darkroom, Instrument Sans, shared graphite surfaces and restrained silver controls. Desktop uses a two-column camera shelf; mobile keeps a substantial preview and reachable export controls before the shelf.
 
 ## Browser limits
+
+The session dock holds up to **24 items**, **512 MB per file**. Files, object URLs and edits stay in memory and are released on removal/page exit; only Simple/Pro mode persists across reloads.
 
 Photos are scaled to a maximum long edge of **1920px**. Format decoding depends on the browser; HEIC/HEIF conversion loads on demand. JPEG and PNG are useful fallbacks for unsupported images.
 

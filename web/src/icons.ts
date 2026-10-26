@@ -7,6 +7,11 @@ function svg(inner: string, cls: string): string {
 }
 
 const CONTROLS: Record<string, string> = {
+  play: '<path d="M8 5l11 7-11 7z" fill="currentColor" stroke="none"/>',
+  pause: '<path d="M8 5v14M16 5v14" stroke-width="3"/>',
+  replay: '<path d="M5 8a8 8 0 1 1-1 7M5 3v6h6"/>',
+  fullscreen: '<path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>',
+  "exit-fullscreen": '<path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/>',
   search: '<circle cx="11" cy="11" r="6.5"/><path d="M15.8 15.8L20.5 20.5"/>',
   "chevron-down": '<path d="M5 9.5l7 7 7-7"/>',
   check: '<path d="M4.5 12.5l5 5L19.5 7"/>',
