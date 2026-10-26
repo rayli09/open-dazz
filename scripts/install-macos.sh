@@ -36,7 +36,7 @@ main() {
   [[ $(uname -s) == Darwin ]] || fail 'macOS only.'
   [[ $(id -u) -ne 0 ]] || fail 'Run as your normal user, without sudo.'
   [[ $(sw_vers -productVersion | cut -d. -f1) -ge 14 ]] || fail 'macOS 14 or later is required.'
-  case $(uname -m) in arm64|x86_64) ;; *) fail 'Unsupported CPU architecture.' ;; esac
+  [[ $(sysctl -n hw.optional.arm64 2>/dev/null || true) == 1 ]] || fail 'Apple Silicon is required; Intel Macs are unsupported. No files were modified.'
   [[ "$install_dir" == /* && ! -L "$install_dir" ]] || fail 'Choose an absolute, non-symlink installation directory.'
   mkdir -p "$install_dir"
   [[ -O "$install_dir" && -w "$install_dir" ]] || fail 'Installation directory must be owned and writable by you.'
@@ -52,7 +52,7 @@ main() {
   work=$(mktemp -d "${TMPDIR:-/tmp}/opendazz-download.XXXXXX")
   stage=$(mktemp -d "$install_dir/.opendazz-stage.XXXXXX")
   # Only our mktemp directories are removed; existing app/data are never deleted.
-  archive="OpenDazz-${version}-universal.zip"
+  archive="OpenDazz-${version}-arm64.zip"
   local base="https://github.com/rayli09/open-dazz/releases/download/desktop-v${version}"
   curl --fail --location --silent --show-error --proto '=https' --proto-redir '=https' --tlsv1.2 --connect-timeout 20 --max-time 600 --max-filesize 1073741824 "$base/$archive" -o "$work/$archive"
   curl --fail --location --silent --show-error --proto '=https' --proto-redir '=https' --tlsv1.2 --connect-timeout 20 --max-time 60 "$base/SHA256SUMS" -o "$work/SHA256SUMS"
@@ -65,7 +65,7 @@ main() {
   local executable
   executable=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$plist")
   [[ "$executable" =~ ^[A-Za-z0-9_-]+$ ]] || fail 'Unsafe executable name.'
-  lipo "$app/Contents/MacOS/$executable" -verify_arch arm64 x86_64
+  [[ $(lipo "$app/Contents/MacOS/$executable" -archs) == arm64 ]] || fail 'Expected an Apple Silicon-only application.'
   codesign --verify --deep --strict --verbose=2 "$app"
   local signature
   signature=$(codesign -dv --verbose=4 "$app" 2>&1)

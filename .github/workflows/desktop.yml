@@ -16,7 +16,7 @@ jobs:
           bun-version: 1.4.3
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-apple-darwin,x86_64-apple-darwin
+          targets: aarch64-apple-darwin
           components: clippy
       - uses: Swatinem/rust-cache@v2
         with:
@@ -24,22 +24,24 @@ jobs:
           cache-on-failure: true
       - run: bun install --frozen-lockfile
         working-directory: web
+      - name: Require native Apple Silicon runner
+        run: test "$(uname -m)" = arm64
       - name: Installer safety tests
         run: bash tools/test-macos-installer.sh
       - run: bun run build:desktop
         working-directory: web
       - name: Check desktop Rust
         run: cargo clippy --locked --manifest-path web/src-tauri/Cargo.toml --all-features -- -D warnings
-      - name: Universal development app (not a signed distribution release)
+      - name: Apple Silicon development app (not a signed distribution release)
         working-directory: web
         env:
           APPLE_SIGNING_IDENTITY: '-'
-        run: bun run desktop:build -- --target universal-apple-darwin --bundles app --ci -- --locked
-      - name: Package both architectures
-        run: scripts/package-macos.sh web/src-tauri/target/universal-apple-darwin/release/bundle/macos/OpenDazz.app "$RUNNER_TEMP/desktop-artifacts"
+        run: bun run desktop:build -- --target aarch64-apple-darwin --bundles app --ci -- --locked
+      - name: Package Apple Silicon app
+        run: scripts/package-macos.sh web/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/OpenDazz.app "$RUNNER_TEMP/desktop-artifacts"
       - uses: actions/upload-artifact@v4
         with:
-          name: OpenDazz-universal-development
+          name: OpenDazz-apple-silicon-development
           path: ${{ runner.temp }}/desktop-artifacts/
           retention-days: 3
           if-no-files-found: error
@@ -51,12 +53,12 @@ jobs:
         run: |
           brew list ffmpeg >/dev/null 2>&1 || brew install ffmpeg
           ffmpeg -y -v error -f lavfi -i testsrc2=size=320x240:rate=12 -f lavfi -i sine=frequency=440:sample_rate=48000 -t 2 -c:v libx264 -pix_fmt yuv420p -c:a aac public/samples/desktop-smoke.mp4
-          bun run desktop:build -- --features smoke-test --no-bundle --ci -- --locked
+          bun run desktop:build -- --target aarch64-apple-darwin --features smoke-test --no-bundle --ci -- --locked
       - name: Native WebKit runtime (${{ runner.arch }}) and real exports
         shell: bash
         run: |
           uname -m
-          web/src-tauri/target/release/opendazz-desktop > "$RUNNER_TEMP/desktop-smoke.log" 2>&1 &
+          web/src-tauri/target/aarch64-apple-darwin/release/opendazz-desktop > "$RUNNER_TEMP/desktop-smoke.log" 2>&1 &
           app_pid=$!
           for attempt in {1..180}; do
             if ! kill -0 "$app_pid" 2>/dev/null; then

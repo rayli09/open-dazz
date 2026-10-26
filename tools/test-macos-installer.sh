@@ -40,3 +40,21 @@ test "$(cat "$work/apps/OpenDazz.app/sentinel")" = 'existing app data'
 if cat "$root/scripts/install-macos.sh" | bash -s -- --version latest > "$work/stdin" 2>&1; then exit 1; fi
 grep -q 'Supply an exact version' "$work/stdin"
 echo 'Installer: version allowlist, archive traversal/identity/symlink rejection, refusal preserves existing data — PASS'
+# Simulate an Intel Mac only in a temporary script copy; production has no bypass.
+mkdir "$work/stubs"
+for item in 'uname Darwin' 'id 1000' 'sw_vers 14.0' 'sysctl 0'; do
+  set -- $item
+  printf '#!/bin/sh\nprintf "%%s\\n" "%s"\n' "$2" > "$work/stubs/$1"
+  chmod +x "$work/stubs/$1"
+done
+python3 - "$root/scripts/install-macos.sh" "$work" <<'PY'
+import sys
+from pathlib import Path
+root=Path(sys.argv[2])
+text=Path(sys.argv[1]).read_text().replace('PATH=/usr/bin:/bin:/usr/sbin:/sbin','PATH="'+str(root/'stubs')+':/usr/bin:/bin:/usr/sbin:/sbin"',1)
+(root/'intel-installer.sh').write_text(text)
+PY
+if bash "$work/intel-installer.sh" --version 0.1.0 --directory "$work/must-not-exist" > "$work/intel-refused" 2>&1; then exit 1; fi
+grep -q 'Intel Macs are unsupported' "$work/intel-refused"
+test ! -e "$work/must-not-exist"
+echo 'Intel rejection occurs before installation-directory creation — PASS'

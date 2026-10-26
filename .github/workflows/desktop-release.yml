@@ -20,7 +20,7 @@ jobs:
           bun-version: 1.4.3
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-apple-darwin,x86_64-apple-darwin
+          targets: aarch64-apple-darwin
       - name: Require approved signing credentials
         env:
           VITE_DESKTOP_SMOKE: '0'
@@ -38,7 +38,7 @@ jobs:
         working-directory: web
       - run: bun test && bun run build
         working-directory: web
-      - name: Sign and notarize universal application
+      - name: Sign and notarize Apple Silicon application
         uses: tauri-apps/tauri-action@v0
         env:
           VITE_DESKTOP_SMOKE: '0'
@@ -51,10 +51,10 @@ jobs:
         with:
           projectPath: web
           tauriScript: bun --bun tauri
-          args: --target universal-apple-darwin --bundles app --ci -- --locked
+          args: --target aarch64-apple-darwin --bundles app --ci -- --locked
       - name: Verify notarization and prepare immutable release
         run: |
-          app=web/src-tauri/target/universal-apple-darwin/release/bundle/macos/OpenDazz.app
+          app=web/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/OpenDazz.app
           xcrun stapler staple "$app"
           xcrun stapler validate "$app"
           codesign --verify --deep --strict "$app"
@@ -75,7 +75,7 @@ jobs:
           git tag "$tag" "$GITHUB_SHA"
           git push origin "refs/tags/$tag"
           gh release create "$tag" --verify-tag \
-            "$RUNNER_TEMP/release/OpenDazz-$RELEASE_VERSION-universal.zip" \
+            "$RUNNER_TEMP/release/OpenDazz-$RELEASE_VERSION-arm64.zip" \
             "$RUNNER_TEMP/release/SHA256SUMS" "$RUNNER_TEMP/release/install-macos.sh" \
             --target "$GITHUB_SHA" --title "OpenDazz desktop $RELEASE_VERSION" \
-            --notes 'Signed and notarized universal macOS 14+ app. See docs/DESKTOP.md for the checksum-verifying, per-user installer. Included LUT packs retain their individual licenses.'
+            --notes 'Signed and notarized Apple Silicon macOS 14+ app. See docs/DESKTOP.md for the checksum-verifying, per-user installer. Included LUT packs retain their individual licenses.'
