@@ -36,6 +36,7 @@ pub use lut::Lut3d;
 pub use pipeline::apply_recipe;
 pub use recipe::Recipe;
 pub use video::vhs;
+pub use video::Camcorder;
 
 /// The types and entry points most callers need.
 pub mod prelude {
@@ -43,4 +44,5 @@ pub mod prelude {
     pub use crate::pipeline::apply_recipe;
     pub use crate::recipe::Recipe;
     pub use crate::video::vhs::VhsPreset;
+    pub use crate::video::Camcorder;
 }
