@@ -12,9 +12,10 @@ python3 - "$work" <<'PY'
 import sys,zipfile
 from pathlib import Path
 root=Path(sys.argv[1])
-for name,entry in [('valid','OpenDazz.app/Contents/Info.plist'),('traversal','OpenDazz.app/Contents/../../outside'),('absolute','/OpenDazz.app/Contents/outside'),('other','Other.app/Contents/Info.plist')]:
+for name,entry in [('valid','OpenDazz.app/Contents/Info.plist'),('traversal','OpenDazz.app/Contents/../../outside'),('absolute','/OpenDazz.app/Contents/outside'),('other','Other.app/Contents/Info.plist'),('double','OpenDazz.app/Contents//Info.plist'),('dot','OpenDazz.app/Contents/./Info.plist'),('double-tail','OpenDazz.app/Contents//')]:
  with zipfile.ZipFile(root/(name+'.zip'),'w') as z:z.writestr(entry,'fixture')
 with zipfile.ZipFile(root/'metadata.zip','w') as z:
+ for directory in ['OpenDazz.app/', 'OpenDazz.app/Contents/', '__MACOSX/', '__MACOSX/OpenDazz.app/', '__MACOSX/OpenDazz.app/Contents/']:z.writestr(directory,'')
  z.writestr('OpenDazz.app/Contents/Info.plist','fixture');z.writestr('__MACOSX/OpenDazz.app/Contents/._Info.plist','metadata')
 with zipfile.ZipFile(root/'symlink.zip','w') as z:
  i=zipfile.ZipInfo('OpenDazz.app/Contents/link');i.create_system=3;i.external_attr=(0o120777<<16);z.writestr(i,'/outside')
@@ -28,7 +29,7 @@ cat "$work/SHA256SUMS" "$work/SHA256SUMS" > "$work/duplicate"
 if verify_checksum "$work/valid.zip" "$work/duplicate" valid.zip; then exit 1; fi
 cp "$work/valid.zip" "$work/changed.zip"; printf 'changed' >> "$work/changed.zip"
 if verify_checksum "$work/changed.zip" "$work/SHA256SUMS" valid.zip; then exit 1; fi
-for invalid in traversal absolute other symlink; do
+for invalid in traversal absolute other symlink double dot double-tail; do
   if validate_archive "$work/$invalid.zip" "$work/entries"; then echo "Unsafe archive accepted: $invalid" >&2; exit 1; fi
 done
 mkdir -p "$work/apps/OpenDazz.app"

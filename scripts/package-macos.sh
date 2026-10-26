@@ -17,5 +17,5 @@ cp scripts/install-macos.sh "$out/install-macos.sh"
 source scripts/install-macos.sh
 entries=$(mktemp)
 trap 'rm -f -- "$entries"' EXIT
-validate_archive "$out/OpenDazz-${version}-arm64.zip" "$entries"
-verify_checksum "$out/OpenDazz-${version}-arm64.zip" "$out/SHA256SUMS" "OpenDazz-${version}-arm64.zip"
+validate_archive "$out/OpenDazz-${version}-arm64.zip" "$entries" || { echo 'Packaged ZIP violates installer archive contract' >&2; exit 1; }
+verify_checksum "$out/OpenDazz-${version}-arm64.zip" "$out/SHA256SUMS" "OpenDazz-${version}-arm64.zip" || { echo 'Packaged ZIP checksum mismatch' >&2; exit 1; }

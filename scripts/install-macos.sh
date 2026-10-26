@@ -11,7 +11,7 @@ validate_archive() {
   while IFS= read -r entry; do
     [[ "$entry" =~ ^[A-Za-z0-9._/-]+$ ]] || return 1
     case "$entry" in OpenDazz.app/Contents/*|OpenDazz.app/|OpenDazz.app|__MACOSX/|__MACOSX/._OpenDazz.app|__MACOSX/OpenDazz.app/*) ;; *) return 1 ;; esac
-    case "/$entry/" in *'/../'*|*'/./'*|*'//'*) return 1 ;; esac
+    case "/${entry%/}/" in *'/../'*|*'/./'*|*'//'*) return 1 ;; esac
   done < "$2"
   # This bundle has no embedded frameworks/symlinks; refuse link extraction.
   unzip -Z -l "$1" | awk 'substr($0,1,1)=="l" { bad=1 } END { exit bad ? 1 : 0 }'
