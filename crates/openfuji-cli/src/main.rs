@@ -28,6 +28,11 @@ enum Cmd {
         /// look: broadcast | vhs | vhs-heavy.
         #[arg(long)]
         vhs: Option<String>,
+        /// Full ntsc-rs settings JSON file (the format the ntsc-rs
+        /// app saves/loads) — every settings block, not just a
+        /// preset. Start from `openfuji vhs-dump <preset>`.
+        #[arg(long, conflicts_with = "vhs")]
+        vhs_json: Option<PathBuf>,
     },
     /// Apply a look (and optionally the NTSC/VHS simulation) to a
     /// VIDEO: frames are pumped through ffmpeg, graded one by one
@@ -46,10 +51,19 @@ enum Cmd {
         /// NTSC/VHS stage per frame: broadcast | vhs | vhs-heavy.
         #[arg(long)]
         vhs: Option<String>,
+        /// Full ntsc-rs settings JSON file (see `openfuji vhs-dump`).
+        #[arg(long, conflicts_with = "vhs")]
+        vhs_json: Option<PathBuf>,
         /// Process at this width (aspect preserved); the composite
         /// simulation is a standard-definition effect by nature.
         #[arg(long, default_value_t = 960)]
         width: u32,
+    },
+    /// Print a VHS preset's full ntsc-rs settings as JSON (the
+    /// starting point for a custom --vhs-json file).
+    VhsDump {
+        /// broadcast | vhs | vhs-heavy.
+        preset: String,
     },
     /// Print a recipe's parsed parameters.
     Info {
@@ -233,25 +247,35 @@ fn resolve_recipe_path(recipe: &Option<PathBuf>, look: &Option<String>, root: &P
     }
 }
 
-fn parse_vhs(v: &Option<String>) -> Result<Option<openfuji_core::vhs::VhsPreset>, String> {
-    match v {
-        Some(v) => Ok(Some(
+fn parse_vhs(
+    v: &Option<String>,
+    vhs_json: &Option<PathBuf>,
+) -> Result<Option<openfuji_core::vhs::NtscEffectFull>, String> {
+    match (v, vhs_json) {
+        (Some(_), Some(_)) => Err("--vhs and --vhs-json are mutually exclusive".into()),
+        (Some(v), None) => Ok(Some(
             openfuji_core::vhs::VhsPreset::parse(v)
-                .ok_or_else(|| format!("unknown --vhs preset \"{v}\" (broadcast | vhs | vhs-heavy)"))?,
+                .ok_or_else(|| format!("unknown --vhs preset \"{v}\" (broadcast | vhs | vhs-heavy)"))?
+                .effect(),
         )),
-        None => Ok(None),
+        (None, Some(path)) => {
+            let text = std::fs::read_to_string(path)
+                .map_err(|e| format!("cannot read {}: {e}", path.display()))?;
+            Ok(Some(openfuji_core::vhs::effect_from_json(&text)?))
+        }
+        (None, None) => Ok(None),
     }
 }
 
-fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path, vhs: Option<openfuji_core::vhs::VhsPreset>) -> Result<String, String> {
+fn apply_with_recipe(input: &Path, output: &Path, recipe_path: &Path, vhs: Option<openfuji_core::vhs::NtscEffectFull>) -> Result<String, String> {
     let (r, lut) = load_recipe_and_lut(recipe_path)?;
     let img = image::open(input)
         .map_err(|e| format!("cannot open {}: {}", input.display(), e))?
         .to_rgb8();
     let mut out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
-    if let Some(preset) = vhs {
+    if let Some(fx) = &vhs {
         let (w, h) = out.dimensions();
-        openfuji_core::vhs::apply_vhs(out.as_mut(), w as usize, h as usize, preset, 0);
+        openfuji_core::vhs::apply_vhs_effect(out.as_mut(), w as usize, h as usize, fx, 0);
     }
     out.save(output)
         .map_err(|e| format!("cannot save {}: {}", output.display(), e))?;
@@ -303,20 +327,26 @@ fn run() -> Result<(), String> {
     let cli = Cli::parse();
     match cli.cmd {
         Cmd::List { root, brand } => list_library(&root, &brand),
+        Cmd::VhsDump { preset } => {
+            let p = openfuji_core::vhs::VhsPreset::parse(&preset)
+                .ok_or_else(|| format!("unknown preset \"{preset}\" (broadcast | vhs | vhs-heavy)"))?;
+            println!("{}", openfuji_core::vhs::preset_to_json(p)?);
+            Ok(())
+        }
         Cmd::Info { recipe } => {
             let r = load_recipe(&recipe)?;
             println!("{}", serde_json::to_string_pretty(&r).unwrap());
             Ok(())
         }
-        Cmd::Apply { input, output, recipe, look, root, vhs } => {
+        Cmd::Apply { input, output, recipe, look, root, vhs, vhs_json } => {
             let recipe_path = resolve_recipe_path(&recipe, &look, &root)?;
-            let name = apply_with_recipe(&input, &output, &recipe_path, parse_vhs(&vhs)?)?;
+            let name = apply_with_recipe(&input, &output, &recipe_path, parse_vhs(&vhs, &vhs_json)?)?;
             println!("{} -> {} (look: {})", input.display(), output.display(), name);
             Ok(())
         }
-        Cmd::Video { input, output, recipe, look, root, vhs, width } => {
+        Cmd::Video { input, output, recipe, look, root, vhs, vhs_json, width } => {
             let recipe_path = resolve_recipe_path(&recipe, &look, &root)?;
-            let (name, frames) = apply_to_video(&input, &output, &recipe_path, parse_vhs(&vhs)?, width)?;
+            let (name, frames) = apply_to_video(&input, &output, &recipe_path, parse_vhs(&vhs, &vhs_json)?, width)?;
             println!("{} -> {} (look: {}, {} frames)", input.display(), output.display(), name, frames);
             Ok(())
         }
@@ -406,7 +436,7 @@ fn apply_to_video(
     input: &Path,
     output: &Path,
     recipe_path: &Path,
-    vhs: Option<openfuji_core::vhs::VhsPreset>,
+    vhs: Option<openfuji_core::vhs::NtscEffectFull>,
     max_width: u32,
 ) -> Result<(String, usize), String> {
     use std::io::{Read, Write};
@@ -452,8 +482,8 @@ fn apply_to_video(
         }
         let img = image::RgbImage::from_raw(w, h, buf).ok_or("frame buffer mismatch")?;
         let mut out = openfuji_core::apply_recipe(&img, &r, lut.as_ref());
-        if let Some(preset) = vhs {
-            openfuji_core::vhs::apply_vhs(out.as_mut(), w as usize, h as usize, preset, frame);
+        if let Some(fx) = &vhs {
+            openfuji_core::vhs::apply_vhs_effect(out.as_mut(), w as usize, h as usize, fx, frame);
         }
         enc_in.write_all(&out).map_err(|e| format!("encoder write failed: {e}"))?;
         buf = vec![0u8; frame_bytes];

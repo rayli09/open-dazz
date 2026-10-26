@@ -10,8 +10,13 @@
 //! `random_seed` + frame number, and we fix both.
 
 use ntsc_rs::settings::standard::VHSTapeSpeed;
+use ntsc_rs::settings::SettingsList;
 use ntsc_rs::yiq_fielding::Rgb;
 use ntsc_rs::{Context, NtscEffect};
+
+/// The full ntsc-rs settings surface, re-exported so callers can
+/// drive every settings block (not just the built-in presets).
+pub use ntsc_rs::NtscEffect as NtscEffectFull;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum VhsPreset {
@@ -36,7 +41,7 @@ impl VhsPreset {
         }
     }
 
-    fn effect(self) -> NtscEffect {
+    pub fn effect(self) -> NtscEffect {
         // Built on ntsc-rs's EASY-mode defaults, converted to the
         // standard settings — that conversion is the profile the
         // ntsc-rs app itself opens with and produces its showcase
@@ -76,12 +81,35 @@ impl VhsPreset {
 /// `frame` drives the animated artifacts (noise, head switching);
 /// stills use frame 0.
 pub fn apply_vhs(rgb: &mut [u8], width: usize, height: usize, preset: VhsPreset, frame: usize) {
+    apply_vhs_effect(rgb, width, height, &preset.effect(), frame);
+}
+
+/// Run an arbitrary ntsc-rs effect (the full settings surface)
+/// over `rgb` in place.
+pub fn apply_vhs_effect(rgb: &mut [u8], width: usize, height: usize, fx: &NtscEffect, frame: usize) {
     debug_assert_eq!(rgb.len(), width * height * 3);
     let ctx = Context::new();
-    let fx = preset.effect();
     // NTSC's chroma is quarter-resolution horizontally; a scale of
     // [1, 1] treats the buffer as a full-resolution frame.
     fx.apply_effect_to_buffer::<Rgb, u8>(&ctx, (width, height), rgb, frame, [1.0, 1.0]);
+}
+
+/// Parse a full ntsc-rs settings JSON (the format the ntsc-rs app
+/// itself saves/loads, including legacy ntscQT files) into an
+/// effect. This is the escape hatch that makes all ~90 settings
+/// reachable without a preset.
+pub fn effect_from_json(json: &str) -> Result<NtscEffect, String> {
+    SettingsList::<NtscEffect>::new()
+        .from_json(json)
+        .map_err(|e| format!("invalid ntsc settings JSON: {e}"))
+}
+
+/// Serialize a preset's full settings to ntsc-rs JSON, for
+/// inspection or as a starting point for a custom --vhs-json file.
+pub fn preset_to_json(preset: VhsPreset) -> Result<String, String> {
+    SettingsList::<NtscEffect>::new()
+        .to_json_string(&preset.effect())
+        .map_err(|e| format!("cannot serialize preset: {e}"))
 }
 
 #[cfg(test)]
@@ -111,6 +139,19 @@ mod tests {
         apply_vhs(&mut b, w, h, VhsPreset::Vhs, 0);
         assert_ne!(a, src, "the effect must change the image");
         assert_eq!(a, b, "same preset + frame must be deterministic");
+    }
+
+    #[test]
+    fn json_roundtrip_renders_identically() {
+        let json = preset_to_json(VhsPreset::Vhs).expect("serialize");
+        let fx = effect_from_json(&json).expect("parse back");
+        let (w, h) = (96, 64);
+        let src = gradient(w, h);
+        let mut a = src.clone();
+        let mut b = src.clone();
+        apply_vhs(&mut a, w, h, VhsPreset::Vhs, 0);
+        apply_vhs_effect(&mut b, w, h, &fx, 0);
+        assert_eq!(a, b, "JSON roundtrip must render identically");
     }
 
     #[test]
