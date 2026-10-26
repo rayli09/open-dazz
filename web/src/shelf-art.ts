@@ -52,6 +52,34 @@ export const SHELF_ART: Record<string, ArtSpec> = {
   "camcorder/vhs": { kind: "handycam", dark: true, cassette: true, backdrop: ["#4a3436", "#1c1113"], glow: "#ffb37a", base: "#1b1b1e", top: "#2a2a2e", band: "#101012", accent: "#ff7a1a", label: "VHS-C", sub: "COMPACT" },
 };
 
+// Blend two #rrggbb colors (k<0 extrapolates toward black, k>1
+// toward white) — used to build the studio-reflection gradient
+// from each body's own plate colors.
+function mixc(c1: string, c2: string, k: number): string {
+  const p = (h: string) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+  const a = p(c1), b = p(c2);
+  const ch = a.map((v, i) => Math.max(0, Math.min(255, Math.round(v + (b[i] - v) * k))));
+  return "#" + ch.map((v) => v.toString(16).padStart(2, "0")).join("");
+}
+
+// The metal lesson from product photography: a plate reads as
+// metal when it reflects a ROOM — a rhythm of soft bright bands
+// (walls, a softbox core) and dark bands (the gaps between them),
+// not a two-stop gradient. Built per body from its own colors.
+function envStops(a: ArtSpec): string {
+  const s: Array<[number, string]> = [
+    [0.0, mixc(a.top, "#ffffff", 0.3)],
+    [0.16, a.top],
+    [0.36, mixc(a.base, "#000000", 0.2)],
+    [0.48, mixc(a.base, a.top, 0.55)],
+    [0.56, mixc(a.top, "#eef4ff", 0.6)],
+    [0.66, mixc(a.base, a.top, 0.25)],
+    [0.84, mixc(a.base, "#000000", 0.12)],
+    [1.0, mixc(a.base, "#000000", 0.32)],
+  ];
+  return s.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join("");
+}
+
 let uid = 0;
 
 function stage(a: ArtSpec, inner: string): string {
@@ -67,6 +95,11 @@ function stage(a: ArtSpec, inner: string): string {
     <linearGradient id="mt${i}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="${a.top}"/><stop offset="0.55" stop-color="${a.base}"/><stop offset="1" stop-color="${a.base}"/>
     </linearGradient>
+    <linearGradient id="env${i}" x1="0" y1="0" x2="0" y2="1">${envStops(a)}</linearGradient>
+    <pattern id="brl${i}" width="2" height="2" patternUnits="userSpaceOnUse">
+      <rect width="2" height="0.9" fill="rgba(255,255,255,0.055)"/><rect y="1" width="2" height="0.9" fill="rgba(0,0,0,0.05)"/>
+    </pattern>
+    <filter id="sft${i}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6"/></filter>
     <radialGradient id="ls${i}" cx="0.35" cy="0.35" r="0.95">
       <stop offset="0" stop-color="#b9ccd8"/><stop offset="0.45" stop-color="#33465a"/><stop offset="1" stop-color="#0a0f14"/>
     </radialGradient>
@@ -115,7 +148,7 @@ function stage(a: ArtSpec, inner: string): string {
       <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.9 0.9 0.9 0 -0.55"/>
     </filter>
     <filter id="brs${i}" x="0%" y="0%" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.55" numOctaves="2" stitchTiles="stitch" result="n"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.003 0.9" numOctaves="2" stitchTiles="stitch" result="n"/>
       <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.9 0.9 0.9 0 -0.55"/>
     </filter>
   </defs>
@@ -164,17 +197,41 @@ function body(a: ArtSpec): string {
   const stripe = a.rainbow
     ? `<g>${["#e84a3a", "#f28c28", "#e3c53a", "#2fbf71", "#1fa8c9", "#2438d8"].map((c, k) => `<rect x="${112 + k * 13}" y="88" width="13" height="66" fill="${c}"/>`).join("")}</g>`
     : "";
+  // Lathe-turned concentric rings for dials and the lens ring:
+  // alternating light/dark hairlines are how machined metal
+  // catches light in the round.
+  let turn = "";
+  for (let r = 3.2; r <= 9.9; r += 1.1) {
+    const on = Math.round((r - 3.2) / 1.1) % 2 === 0;
+    turn += `<circle cx="232" cy="60" r="${r.toFixed(1)}" fill="none" stroke="${on ? "rgba(255,255,255,0.13)" : "rgba(0,0,0,0.10)"}" stroke-width="0.55"/>`;
+  }
+  let turn2 = "";
+  for (let r = 1.9; r <= 6.0; r += 1.0) {
+    const on = Math.round((r - 1.9) / 1.0) % 2 === 0;
+    turn2 += `<circle cx="90" cy="59" r="${r.toFixed(1)}" fill="none" stroke="${on ? "rgba(255,255,255,0.13)" : "rgba(0,0,0,0.10)"}" stroke-width="0.5"/>`;
+  }
+  let ringTurn = "";
+  for (let r = 25.0; r <= 32.4; r += 1.05) {
+    const on = Math.round((r - 25.0) / 1.05) % 2 === 0;
+    ringTurn += `<circle cx="160" cy="118" r="${r.toFixed(1)}" fill="none" stroke="${on ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.28)"}" stroke-width="0.5"/>`;
+  }
   return stage(a, `
   <rect x="54" y="62" width="212" height="98" rx="10" fill="url(#mt{i})"/>
   <rect x="54" y="88" width="212" height="72" rx="10" fill="url(#lt{i})"/>
-  <rect x="54" y="62" width="212" height="24" rx="10" fill="url(#pl{i})"/>
+  <rect x="54" y="62" width="212" height="24" rx="10" fill="url(#env{i})"/>
   <rect x="54" y="76" width="212" height="10" fill="url(#pl{i})"/>
   <clipPath id="bd{i}"><rect x="54" y="62" width="212" height="98" rx="10"/></clipPath>
   <g clip-path="url(#bd{i})">
     <rect x="54" y="62" width="212" height="24" filter="url(#brs{i})" opacity="0.45"/>
     <rect x="54" y="62" width="212" height="24" fill="url(#mtl{i})"/>
     <rect x="54" y="63.5" width="212" height="4.5" fill="url(#spc{i})"/>
-    <rect x="54" y="150" width="212" height="10" fill="url(#mt{i})"/>
+    <rect x="54" y="62" width="212" height="24" fill="url(#brl{i})" opacity="0.55"/>
+    <clipPath id="pl8{i}"><rect x="54" y="62" width="212" height="24"/></clipPath>
+    <g clip-path="url(#pl8{i})">
+      <g filter="url(#sft{i})"><rect x="98" y="54" width="42" height="40" fill="#ffffff" opacity="0.15" transform="rotate(10 119 74)"/></g>
+      <rect x="141" y="56" width="1.6" height="36" fill="rgba(240,246,255,0.45)" transform="rotate(10 142 74)"/>
+    </g>
+    <rect x="54" y="150" width="212" height="10" fill="url(#env{i})"/>
     <rect x="54" y="150" width="212" height="10" fill="url(#mtl{i})"/>
     <rect x="54" y="150" width="212" height="10" filter="url(#brs{i})" opacity="0.35"/>
     <line x1="54" y1="150" x2="266" y2="150" stroke="rgba(0,0,0,0.35)" stroke-width="0.9"/>
@@ -196,6 +253,7 @@ function body(a: ArtSpec): string {
   <circle cx="232" cy="60" r="10.5" fill="url(#dial{i})"/>
   <clipPath id="dl{i}"><circle cx="232" cy="60" r="10.5"/></clipPath>
   <g clip-path="url(#dl{i})"><rect x="221" y="49" width="22" height="22" fill="url(#cnc{i})"/></g>
+  ${turn}
   <circle cx="232" cy="60" r="4" fill="none" stroke="${engrave}" stroke-width="0.8"/>
   <text x="232" y="44" text-anchor="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="4.8" font-weight="600" fill="${engrave}">125</text>
   <rect x="150" y="57" width="20" height="4.5" rx="1" fill="#14161a"/>
@@ -204,6 +262,7 @@ function body(a: ArtSpec): string {
   <circle cx="90" cy="59" r="6.5" fill="url(#dial{i})"/>
   <clipPath id="dl2{i}"><circle cx="90" cy="59" r="6.5"/></clipPath>
   <g clip-path="url(#dl2{i})"><rect x="83" y="52" width="14" height="14" fill="url(#cnc{i})"/></g>
+  ${turn2}
   <circle cx="90" cy="59" r="3.6" fill="${a.band}"/>
   <rect x="196" y="66" width="15" height="8" rx="1.5" fill="#10151a"/>
   <text x="203.5" y="72.5" text-anchor="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="5" font-weight="700" fill="#e8b13a">24</text>
@@ -221,7 +280,7 @@ function body(a: ArtSpec): string {
   <circle cx="160" cy="118" r="33" fill="#1b1e23"/>
   <circle cx="160" cy="118" r="33" fill="url(#dial{i})"/>
   <clipPath id="ln{i}"><circle cx="160" cy="118" r="33"/></clipPath>
-  <g clip-path="url(#ln{i})"><rect x="127" y="85" width="66" height="66" fill="url(#mtl{i})" opacity="0.55"/></g>
+  <g clip-path="url(#ln{i})"><rect x="127" y="85" width="66" height="66" fill="url(#mtl{i})" opacity="0.55"/>${ringTurn}</g>
   <path d="M138 97 A32 32 0 0 1 157 86.5" fill="none" stroke="rgba(255,255,255,0.20)" stroke-width="2.4" stroke-linecap="round"/>
   ${apText}
   <circle cx="160" cy="79.5" r="1.9" fill="${a.accent}"/>
