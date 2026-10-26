@@ -22,6 +22,7 @@
     "@ffmpeg/core": "^0.12.10",
     "@ffmpeg/ffmpeg": "^0.12.15",
     "heic-to": "^1.6.6",
-    "jotai": "^3.0.1"
+    "jotai": "^3.0.1",
+    "mediabunny": "^1.62.1"
   }
 }

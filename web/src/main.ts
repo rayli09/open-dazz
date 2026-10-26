@@ -8,6 +8,8 @@ import { shelfArt } from "./shelf-art";
 // The WASM engine loads lazily in the background so the shell, cabinet
 // and photo paint immediately; develops queue until it lands.
 import { getFFmpeg, probeVideo, posterFrame, developVideo, resetFFmpeg, VIDEO_MAX_SECONDS } from "./video.js";
+import { probeWebCodecs, developWebCodecs, WC_MAX_SECONDS } from "./video-webcodecs.js";
+import type { WcProbe } from "./video-webcodecs.js";
 import type { VideoProbe } from "./video.js";
 
 type Engine = typeof import("./pkg/openfuji_wasm.js");
@@ -652,7 +654,13 @@ async function loadPhoto(source: Blob | string, name: string) {
 // ---- Video uploads: the poster frame previews the look on the
 // stage; DEVELOP VIDEO then runs the whole clip through the same
 // engine stages in ffmpeg.wasm (see video.ts). ----
-let currentVideo: { file: File; probe: VideoProbe } | null = null;
+interface LoadedVideo {
+  file: File;
+  route: "webcodecs" | "ffmpeg";
+  ffProbe: VideoProbe | null;
+  wcProbe: WcProbe | null;
+}
+let currentVideo: LoadedVideo | null = null;
 let videoBusy = false;
 let videoCancel = false;
 let resultUrl: string | null = null;
@@ -702,6 +710,25 @@ async function loadVideoFile(f: File) {
   setVideoButtons(false);
   try {
     setBusy(true);
+    $("#cap-state").textContent = "READING VIDEO…";
+    // Fast path first: Mediabunny/WebCodecs reads the file with no
+    // downloads and hardware decode. Any gap (codec, encoder,
+    // container) routes the clip to the ffmpeg compat engine.
+    const wc = await probeWebCodecs(f).catch((e) => {
+      console.warn("[open-dazz] webcodecs probe failed, using ffmpeg", e);
+      return null;
+    });
+    if (wc) {
+      if (wc.probe.duration > WC_MAX_SECONDS) {
+        setBusy(false);
+        showError(`clip is ${Math.round(wc.probe.duration)}s — developing caps at ${WC_MAX_SECONDS}s; trim it first`);
+        return;
+      }
+      await loadPhoto(wc.poster, f.name);
+      currentVideo = { file: f, route: "webcodecs", ffProbe: null, wcProbe: wc.probe };
+      finishVideoLoad(f, wc.probe.w, wc.probe.h, wc.probe.duration, "FAST PATH");
+      return;
+    }
     $("#cap-state").textContent = "LOADING VIDEO ENGINE…";
     const inst = await getFFmpeg();
     $("#cap-state").textContent = "READING VIDEO…";
@@ -713,16 +740,27 @@ async function loadVideoFile(f: File) {
     }
     const poster = await posterFrame(inst, probe);
     await loadPhoto(poster, f.name);
-    currentVideo = { file: f, probe };
-    $("#cap-file").textContent = `${f.name.toUpperCase()} — VIDEO ${probe.w}×${probe.h} · ${probe.duration.toFixed(1)}S`;
-    setVideoButtons(true);
-    $("#cap-state").textContent = "VIDEO READY — PICK A LOOK, THEN DEVELOP VIDEO";
-    setBusy(false);
+    currentVideo = { file: f, route: "ffmpeg", ffProbe: probe, wcProbe: null };
+    finishVideoLoad(f, probe.w, probe.h, probe.duration, "COMPAT");
   } catch (e) {
     setBusy(false);
     showError(`could not open video ${f.name}`);
     console.error("[open-dazz] video load failed", e);
   }
+}
+
+function finishVideoLoad(f: File, w: number, h: number, dur: number, routeLabel: string) {
+  $("#cap-file").textContent = `${f.name.toUpperCase()} — VIDEO ${w}×${h} · ${dur.toFixed(1)}S · ${routeLabel}`;
+  setVideoButtons(true);
+  setBusy(false);
+  // applyNow's async tail lands a beat after loadPhoto and would
+  // overwrite the ready line with a bare READY; restate it once
+  // things settle.
+  setTimeout(() => {
+    if (currentVideo && !videoBusy) {
+      $("#cap-state").textContent = "VIDEO READY — PICK A LOOK, THEN DEVELOP VIDEO";
+    }
+  }, 160);
 }
 
 async function makeFrameProcessor(): Promise<(px: Uint8Array, w: number, h: number, fr: number) => Uint8Array> {
@@ -742,6 +780,25 @@ async function makeFrameProcessor(): Promise<(px: Uint8Array, w: number, h: numb
   return (px, w, h) => eng.apply(px, w, h, json, cube);
 }
 
+async function developViaFFmpeg(
+  cv: LoadedVideo,
+  process: (px: Uint8Array, w: number, h: number, fr: number) => Uint8Array,
+): Promise<Blob> {
+  const inst = await getFFmpeg();
+  if (!cv.ffProbe) cv.ffProbe = await probeVideo(inst, cv.file);
+  return developVideo(inst, {
+    probe: cv.ffProbe,
+    camcorderAudio: current?.id === "camcorder/cx405",
+    process,
+    onProgress: (done, total) => {
+      const pct = Math.round((done / total) * 100);
+      $("#cap-state").textContent = `DEVELOPING VIDEO — ${pct}% · FRAME ${done}/${total}`;
+      progress(Math.max(2, pct));
+    },
+    isCancelled: () => videoCancel,
+  });
+}
+
 async function developCurrentVideo() {
   if (videoBusy) {
     videoCancel = true;
@@ -752,21 +809,34 @@ async function developCurrentVideo() {
   videoCancel = false;
   hideResultVideo();
   setVideoButtons(true, "■ CANCEL");
-  const { probe } = currentVideo;
+  const cv = currentVideo;
   try {
-    const inst = await getFFmpeg();
     const process = await makeFrameProcessor();
-    const blob = await developVideo(inst, {
-      probe,
-      camcorderAudio: current?.id === "camcorder/cx405",
-      process,
-      onProgress: (done, total) => {
-        const pct = Math.round((done / total) * 100);
-        $("#cap-state").textContent = `DEVELOPING VIDEO — ${pct}% · FRAME ${done}/${total}`;
-        progress(Math.max(2, pct));
-      },
-      isCancelled: () => videoCancel,
-    });
+    let blob: Blob;
+    // The CX405 always takes the ffmpeg route: its audio chain is
+    // real signal processing, which the WebCodecs path (built on
+    // audio passthrough) deliberately does not do.
+    if (current?.id === "camcorder/cx405" || cv.route === "ffmpeg" || !cv.wcProbe) {
+      blob = await developViaFFmpeg(cv, process);
+    } else {
+      try {
+        blob = await developWebCodecs(cv.file, {
+          probe: cv.wcProbe,
+          process,
+          onProgress: (frac) => {
+            const pct = Math.round(frac * 100);
+            $("#cap-state").textContent = `DEVELOPING VIDEO (FAST PATH) — ${pct}%`;
+            progress(Math.max(2, pct));
+          },
+          isCancelled: () => videoCancel,
+        });
+      } catch (e) {
+        if (String((e as Error)?.message ?? e).includes("cancelled")) throw e;
+        console.warn("[open-dazz] webcodecs develop failed, falling back to ffmpeg", e);
+        $("#cap-state").textContent = "FAST PATH FAILED — SWITCHING TO COMPAT ENGINE…";
+        blob = await developViaFFmpeg(cv, process);
+      }
+    }
     resultUrl = URL.createObjectURL(blob);
     const v = document.querySelector<HTMLVideoElement>("#vid-result");
     if (v) {
