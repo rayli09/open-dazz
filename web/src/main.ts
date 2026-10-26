@@ -1,7 +1,8 @@
 // open-dazz Photo Workshop — a film-development bench in the browser.
 // Engine: opendazz-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
-import { store, modeAtom, type Mode } from "./state";
+import { uiStore, selectMode, persistMode, browserModeStorage } from "./state";
+import { CatalogSchema, RecipeSchema, fetchJson, type Catalog, type LookEntry, type Recipe } from "./schemas";
 import { icon, brandSigil, glyphSvg } from "./icons";
 import { shelfArt } from "./shelf-art";
 import { recipeForMedia } from "./recipe-for-media";
@@ -26,13 +27,6 @@ engineP.then((m) => {
 });
 
 import "./style.css";
-
-interface LookEntry {
-  id: string; name: string; brand: string; tier: string;
-  recipe: string; baseLut: string | null; hasLut: boolean;
-  baseFilm: string | null; creator: string | null; license: string | null;
-}
-interface Catalog { brands: Record<string, { tiers: Record<string, LookEntry[]>; total: number }>; totalLooks: number }
 
 const MAX_DIM = 1920;
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
@@ -129,7 +123,7 @@ function lookMatches(l: LookEntry, f: string): boolean {
   return !f || l.name.toLowerCase().includes(f);
 }
 const thumbUrl = (id: string) => `/thumbs/${id.replaceAll("/", "__")}.webp`;
-let recipe: Record<string, any> | null = null;
+let recipe: Recipe | null = null;
 const cubeCache = new Map<string, Promise<string>>();
 let origPixels: Uint8ClampedArray | null = null;
 let imgW = 0, imgH = 0;
@@ -270,12 +264,12 @@ function sliderRow(key: string, label: string, min: number, max: number, step: n
 }
 
 function renderSliders() {
-  if (!recipe) return;
   if (current?.brand === "camcorder") {
     $("#sliders").innerHTML = `<div class="font-mono text-[10.5px] leading-relaxed text-ink2 px-1 py-2">Signal-chain camera — the look is the hardware; there are no develop sliders.</div>`;
     return;
   }
-  const R: Record<string, any> = recipe;
+  if (!recipe) return;
+  const R = recipe;
   const g = R.grain ?? { amount: 0, size: "small" };
   const wb = R.whiteBalance ?? { tempShift: 0, tintShift: 0 };
   $("#sliders").innerHTML = [
@@ -299,7 +293,7 @@ function renderSliders() {
   document.querySelectorAll<HTMLButtonElement>(".gsize").forEach((b) => {
     const active = (R.grain?.size ?? "small") === b.dataset.gsize;
     b.classList.toggle("bg-ink", active); b.classList.toggle("text-paper", active);
-    b.onclick = () => { R.grain = { ...(R.grain ?? { amount: 0 }), size: b.dataset.gsize }; renderSliders(); scheduleApply(); };
+    b.onclick = () => { R.grain = { ...(R.grain ?? { amount: 0 }), size: b.dataset.gsize === "large" ? "large" : "small" }; renderSliders(); scheduleApply(); };
   });
 }
 
@@ -475,7 +469,7 @@ async function selectLook(id: string) {
   updateCounter();
   renderCabinet($<HTMLInputElement>("#search").value);
   if (focusHost) document.querySelector<HTMLButtonElement>(`#${focusHost} [data-look="${id}"]`)?.focus({ preventScroll: true });
-  if (store.get(modeAtom) === "simple") requestAnimationFrame(() => {
+  if (uiStore.getState().mode === "simple") requestAnimationFrame(() => {
     if (version !== selectionVersion) return;
     document.querySelector<HTMLElement>(`#strip [data-look="${id}"]`)?.scrollIntoView({
       inline: "center", block: "nearest",
@@ -483,7 +477,7 @@ async function selectLook(id: string) {
     });
   });
   if (entry.brand === "camcorder") {
-    recipe = {}; // marker — video cameras run their own engine stage
+    recipe = null; // Video cameras run their own engine stage.
     renderSliders();
     $("#led-name").textContent = entry.name;
     $("#led-meta").innerHTML = VIDEO_META[entry.id].meta;
@@ -493,7 +487,13 @@ async function selectLook(id: string) {
   }
   $("#cap-state").textContent = "LOADING…";
   const recipeUrl = "/" + entry.recipe;
-  const rj: Record<string, any> = await (await fetch(recipeUrl)).json();
+  let rj: Recipe;
+  try { rj = await fetchJson(recipeUrl, RecipeSchema); }
+  catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (version === selectionVersion) showError(`could not load look — ${message}`);
+    return;
+  }
   if (version !== selectionVersion) return;
   recipe = rj;
   renderSliders();
@@ -556,7 +556,7 @@ function finishDevelop() {
   fitStage();
   if (developFx) {
     developFx = false;
-    if (store.get(modeAtom) === "simple") {
+    if (uiStore.getState().mode === "simple") {
       const c = $<HTMLCanvasElement>("#after");
       c.classList.remove("developing");
       void c.offsetWidth;
@@ -601,7 +601,7 @@ async function applyNow() {
   const cube = await cubeFor(current);
   if (version !== selectionVersion || mediaRequest !== mediaVersion || !recipe) return;
   const input = new Uint8Array(origPixels);
-  const effective = recipeForMedia(recipe, store.get(modeAtom) === "simple", !!currentVideo);
+  const effective = recipeForMedia(recipe, uiStore.getState().mode === "simple", !!currentVideo);
   const out = engine.apply(input, imgW, imgH, JSON.stringify(effective), cube);
   const ctx = $<HTMLCanvasElement>("#after").getContext("2d")!;
   ctx.putImageData(new ImageData(new Uint8ClampedArray(out), imgW, imgH), 0, 0);
@@ -845,7 +845,7 @@ async function makeFrameProcessor(): Promise<FrameProcessor> {
   }
   if (!recipe) throw new Error("recipe not loaded yet");
   const entry = current;
-  const effective = recipeForMedia(structuredClone(recipe), store.get(modeAtom) === "simple", true);
+  const effective = recipeForMedia(structuredClone(recipe), uiStore.getState().mode === "simple", true);
   const cube = await cubeFor(entry);
   const json = JSON.stringify(effective);
   return (px, w, h) => eng.apply(px, w, h, json, cube);
@@ -953,7 +953,7 @@ async function fetchCatalog(): Promise<Catalog> {
   const attempt = async (url: string) => {
     const ctl = new AbortController();
     const t = setTimeout(() => ctl.abort(), 9000);
-    try { return await (await fetch(url, { signal: ctl.signal })).json(); }
+    try { return await fetchJson(url, CatalogSchema, { signal: ctl.signal }); }
     finally { clearTimeout(t); }
   };
   try { return await attempt("/library/catalog.json"); }
@@ -1021,14 +1021,12 @@ async function boot() {
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
   $<HTMLInputElement>("#search").addEventListener("input", (e) => renderCabinet((e.target as HTMLInputElement).value));
-  // Mode (simple/pro) — state lives in the Jotai store; DOM follows it.
-  const applyMode = () => {
-    const m = store.get(modeAtom);
+  // Subscribe only to mode; unrelated store changes do not redevelop pixels.
+  const applyMode = (m: ReturnType<typeof selectMode>) => {
     document.documentElement.dataset.mode = m;
     const next = selectionForMode(m, current?.id);
     if (current && next !== current.id) selectLook(next);
     else applyNow();
-    try { localStorage.setItem("of-mode", m); } catch {}
     requestAnimationFrame(() => fitStage());
     const on = "bg-ink text-paper", off = "hover:bg-paper2";
     $<HTMLButtonElement>("#mode-simple").className = `px-2.5 py-2 tracking-wide ${m === "simple" ? on : off}`;
@@ -1036,10 +1034,17 @@ async function boot() {
     $("#mode-simple").setAttribute("aria-pressed", String(m === "simple"));
     $("#mode-pro").setAttribute("aria-pressed", String(m === "pro"));
   };
-  store.sub(modeAtom, applyMode);
-  store.set(modeAtom, document.documentElement.dataset.mode === "pro" ? "pro" : "simple");
-  $<HTMLButtonElement>("#mode-simple").addEventListener("click", () => store.set(modeAtom, "simple" as Mode));
-  $<HTMLButtonElement>("#mode-pro").addEventListener("click", () => store.set(modeAtom, "pro" as Mode));
+  const unsubscribeMode = uiStore.subscribe(selectMode, applyMode, { fireImmediately: true });
+  const unsubscribePersistence = persistMode(uiStore, browserModeStorage());
+  const cleanupMode = () => {
+    unsubscribeMode(); unsubscribePersistence();
+    removeEventListener("pagehide", onPageHide);
+  };
+  const onPageHide = (event: PageTransitionEvent) => { if (!event.persisted) cleanupMode(); };
+  import.meta.hot?.dispose(cleanupMode);
+  addEventListener("pagehide", onPageHide);
+  $<HTMLButtonElement>("#mode-simple").addEventListener("click", () => uiStore.getState().setMode("simple"));
+  $<HTMLButtonElement>("#mode-pro").addEventListener("click", () => uiStore.getState().setMode("pro"));
   addEventListener("pointerdown", (e) => { if (!(e.target as HTMLElement).closest(".dd")) closeDDs(); });
   addEventListener("keydown", (e) => { if (e.key === "Escape") closeDDs(); });
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
@@ -1062,7 +1067,7 @@ async function boot() {
     activeBrand = null; activeType = "all";
     $<HTMLInputElement>("#search").value = "";
     renderChips(); renderCabinet();
-    store.set(modeAtom, "pro");
+    uiStore.getState().setMode("pro");
   });
   addEventListener("resize", () => fitStage());
   $("#btn-export-simple").addEventListener("click", exportCurrentMedia);

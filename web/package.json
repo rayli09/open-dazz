@@ -6,7 +6,8 @@
   "scripts": {
     "test": "bun test",
     "dev": "bun --bun vite",
-    "build": "bun --bun tsc && bun --bun vite build",
+    "typecheck": "bun --bun tsc --noEmit && bun --bun tsc -p tsconfig.wasm.json --noEmit",
+    "build": "bun run typecheck && bun --bun vite build",
     "preview": "bun --bun vite preview",
     "predev": "bun scripts/sync-library.mjs && bun scripts/sync-ffmpeg.mjs",
     "prebuild": "bun scripts/sync-library.mjs && bun scripts/sync-ffmpeg.mjs"
@@ -23,8 +24,9 @@
     "@ffmpeg/core": "^0.12.10",
     "@ffmpeg/ffmpeg": "^0.12.15",
     "heic-to": "^1.6.6",
-    "jotai": "^3.0.1",
-    "mediabunny": "^1.62.1"
+    "mediabunny": "^1.62.1",
+    "zod": "^4.6.7",
+    "zustand": "^5.0.16"
   },
   "packageManager": "bun@1.4.3",
   "engines": {

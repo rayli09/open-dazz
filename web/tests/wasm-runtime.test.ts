@@ -2,6 +2,7 @@ import { test } from "bun:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { loadWasm } from "../../tools/load-wasm.mjs";
+import { RecipeSchema } from "../src/schemas.ts";
 import { recipeForMedia } from "../src/recipe-for-media.ts";
 const root = new URL("../../", import.meta.url);
 const engine = await loadWasm(new URL("../src/pkg/", import.meta.url).pathname);
@@ -24,7 +25,7 @@ test("actual Ricoh recipes filter pixels and retain alpha through browser WASM",
   const input = new Uint8Array([200, 100, 60, 37, 55, 170, 200, 255]);
   for (const file of ["ricoh-superior-100-negative-film", "ricoh-high-minus-contrast-monochrome"]) {
     const path = new URL(`library/ricoh/community/recipes/${file}.json`, root);
-    const recipe = JSON.parse(readFileSync(path, "utf8"));
+    const recipe = RecipeSchema.parse(JSON.parse(readFileSync(path, "utf8")));
     const cube = readFileSync(new URL(recipe.baseLut, path), "utf8");
     const output = engine.apply(
       input,

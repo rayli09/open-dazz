@@ -3,11 +3,12 @@ import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { SIMPLE_PRESETS, DEFAULT_PHOTO, presetForRecipe, presetsForMedia, selectionForMedia, selectionForMode } from "../src/simple-presets.ts";
 import { artKeyForRecipe, cameraAsset, useArtworkFallback } from "../src/camera-art.ts";
+import { CatalogSchema, RecipeSchema } from "../src/schemas.ts";
 import { recipeForMedia } from "../src/recipe-for-media.ts";
 
 const root = new URL("../../", import.meta.url);
-const catalog = JSON.parse(readFileSync(new URL("library/catalog.json",root),"utf8"));
-const looks = new Map<string,any>(Object.values(catalog.brands).flatMap((b:any)=>Object.values(b.tiers).flat()).map((l:any)=>[l.id,l]));
+const catalog = CatalogSchema.parse(JSON.parse(readFileSync(new URL("library/catalog.json",root),"utf8")));
+const looks = new Map(Object.values(catalog.brands).flatMap(b=>Object.values(b.tiers).flat()).map(l=>[l.id,l]));
 
 test("eleven unique photo looks have real recipes and five Fuji photo-v1 profiles lead the shelf", () => {
   const photos=presetsForMedia("photo");
@@ -17,7 +18,7 @@ test("eleven unique photo looks have real recipes and five Fuji photo-v1 profile
   assert.equal(DEFAULT_PHOTO.id,"chrome");
   for (const [i,p] of photos.entries()) {
     const look=looks.get(p.recipeId);assert.ok(look,`Missing ${p.recipeId}`);
-    const recipe=JSON.parse(readFileSync(new URL(look.recipe,root),"utf8"));
+    const recipe=RecipeSchema.parse(JSON.parse(readFileSync(new URL(look.recipe,root),"utf8")));
     assert.ok(p.label && p.description);
     assert.ok(cameraAsset(p.artKey),`Missing approved art for ${p.id}`);
     if(i<5) { assert.equal(recipe.processing,"fujiPhotoV1");assert.equal(p.artKey,"fuji-silver"); }

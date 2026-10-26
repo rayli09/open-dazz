@@ -26,3 +26,7 @@ jobs:
       - run: cargo clippy --workspace -- -D warnings
       - name: Core must stay WASM-clean
         run: cargo build -p opendazz-core --target wasm32-unknown-unknown
+      - name: Install matching wasm-bindgen generator
+        run: cargo install wasm-bindgen-cli --version 0.2.129 --locked
+      - name: Generated WASM declarations must match Rust
+        run: tools/check-wasm-declarations.sh

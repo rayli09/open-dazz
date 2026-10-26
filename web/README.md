@@ -24,6 +24,8 @@ wasm-pack build crates/opendazz-wasm --target bundler \
   --out-dir ../../web/src/pkg
 ```
 
+Both `.d.ts` files in `src/pkg/` come from wasm-bindgen; the client imports their typed JS entry. CI rebuilds bindings with the CLI version matching `Cargo.lock` and rejects declaration drift (`tools/check-wasm-declarations.sh` from the root). `bun run typecheck` checks strict client types and generated-binding contracts.
+
 ## Product and implementation
 
 - **Simple:** eleven curated Fuji-first photo recipes; separate CX405 and VHS effects. Recipe identity, artwork, labels and media grouping live in `src/simple-presets.ts`.
