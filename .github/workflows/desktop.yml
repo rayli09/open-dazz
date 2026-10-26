@@ -64,6 +64,7 @@ jobs:
             if ! kill -0 "$app_pid" 2>/dev/null; then
               wait "$app_pid"
               cat "$RUNNER_TEMP/desktop-smoke.log"
+              grep -q 'OPENDAZZ_SMOKE: window destroyed normally' "$RUNNER_TEMP/desktop-smoke.log"
               test -f "$TMPDIR/opendazz-smoke/photo.png"
               test -f "$TMPDIR/opendazz-smoke/video.mp4"
               exit 0

@@ -1,5 +1,9 @@
 // Only compiled for the dedicated native CI build; absent from release builds.
 import { invoke } from "@tauri-apps/api/core";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import { hasUnsavedEdits } from "./media-session";
+import { mediaStore } from "./media-store";
+import { uiStore } from "./state";
 const wait = async (check: () => boolean, timeout = 240000) => {
   const until = Date.now() + timeout;
   while (!check()) { const error = document.querySelector<HTMLElement>("#work-error"); if (error && !error.hidden) throw new Error(error.textContent ?? "native rendering error"); if (Date.now() > until) throw new Error("native smoke timed out: " + document.querySelector("#cap-state")?.textContent); await new Promise(r => setTimeout(r, 150)); }
@@ -18,6 +22,8 @@ void (async () => {
     await ready(); button('[data-simple-media="video"]').click(); await ready(); button('[data-preset="nokia-n95"]').click(); await ready();
     button("#btn-export-simple").click();
     await wait(() => document.querySelector("#cap-state")!.textContent!.includes("SAVED AS MP4"));
+    if (hasUnsavedEdits(mediaStore.getState(), uiStore.getState().mode)) throw new Error("exported smoke items still marked dirty");
     await invoke("finish_smoke", { success: true, detail: "WKWebView: bundled catalog/WASM, actual original PNG worker and filtered MP4/audio exports" });
+    await getCurrentWindow().close();
   } catch (error) { await invoke("finish_smoke", { success: false, detail: String(error) }); }
 })();

@@ -3,5 +3,5 @@
   "identifier": "main",
   "description": "Local editor: save only files chosen in a native save dialog and confirm window close.",
   "windows": ["main"],
-  "permissions": ["dialog:allow-save", "dialog:allow-message", "fs:allow-write-file", "core:event:allow-listen", "core:event:allow-unlisten", "core:window:allow-close"]
+  "permissions": ["dialog:allow-save", "dialog:allow-message", "fs:allow-write-file", "core:event:allow-listen", "core:event:allow-unlisten", "core:window:allow-close", "core:window:allow-destroy"]
 }

@@ -13,3 +13,9 @@ out=$(cd "$out" && pwd)
 ditto -c -k --sequesterRsrc --keepParent "$app" "$out/OpenDazz-${version}-arm64.zip"
 cp scripts/install-macos.sh "$out/install-macos.sh"
 (cd "$out" && shasum -a 256 "OpenDazz-${version}-arm64.zip" install-macos.sh > SHA256SUMS)
+# Check the actual packaged ZIP against the installer's extraction contract.
+source scripts/install-macos.sh
+entries=$(mktemp)
+trap 'rm -f -- "$entries"' EXIT
+validate_archive "$out/OpenDazz-${version}-arm64.zip" "$entries"
+verify_checksum "$out/OpenDazz-${version}-arm64.zip" "$out/SHA256SUMS" "OpenDazz-${version}-arm64.zip"

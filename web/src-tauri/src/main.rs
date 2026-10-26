@@ -14,7 +14,9 @@ fn save_smoke_export(name: String, bytes: Vec<u8>) -> Result<(), String> {
 #[tauri::command]
 fn finish_smoke(app: tauri::AppHandle, success: bool, detail: String) {
     println!("OPENDAZZ_SMOKE: {success}: {detail}");
-    app.exit(if success { 0 } else { 1 });
+    if !success {
+        app.exit(1);
+    }
 }
 use tauri::Manager;
 fn main() {
@@ -54,6 +56,8 @@ fn main() {
             } = &event
             {
                 if label == "main" {
+                    #[cfg(feature = "smoke-test")]
+                    println!("OPENDAZZ_SMOKE: window destroyed normally");
                     app.exit(0);
                 }
             }
