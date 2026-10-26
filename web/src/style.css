@@ -1,405 +1,135 @@
 @import "tailwindcss";
 
-/* Design language: DAZZ BLACK (full copy, Ray's call 2026-10-25) —
-   sampled from Dazz's own site (dazz.ltd): a pure-black gallery
-   stage, white grotesque type, no UI accent color at all (the
-   photograph is the only color), no borders/shadows to speak of,
-   gentle rounding. The vintage cream system it replaced lives in
-   git history. */
+/* Graphite Darkroom: one quiet material system; camera assets carry the texture. */
 @theme {
-  --color-paper: #000000;
-  --color-paper2: #0c0c0c;
-  --color-mat: #131313;
-  --color-ink: #ffffff;
-  --color-ink2: #8f8f8f;
-  --color-rule: #262626;
+  --color-paper: #131516;
+  --color-paper2: #1b1e20;
+  --color-mat: #24282b;
+  --color-ink: #f3f3ef;
+  --color-ink2: #b0b4b5;
+  --color-rule: #393e41;
   --color-stamp: #ffffff;
-  --color-accent: #ffffff;
-  --color-accentink: #000000;
-  --font-display: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, "Noto Sans SC", sans-serif;
-  --font-mono: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, "Noto Sans SC", sans-serif;
-  --font-sans: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, "Noto Sans SC", sans-serif;
+  --color-accent: #dfb76b;
+  --color-accentink: #181a1c;
+  --font-display: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
-/* squared, always */
-/* (the old squared-everything reset retired with the Dazz copy) */
-
-html, body { background: var(--color-paper); color: var(--color-ink); }
-
-/* paper grain over everything (non-interactive, very subtle) */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  pointer-events: none;
-  opacity: 0.07;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0.05'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* the bench: flat black, no grid — the photo is the only picture */
-.bench-grid { background-color: var(--color-paper); }
-
-/* Dazz carries no shadows at all */
-.stage-shadow { box-shadow: none; }
-.look-card { transition: border-color 0.15s ease, background-color 0.15s ease; }
-.look-card:hover { box-shadow: none; }
-
-/* square range sliders */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 22px;
-  background: transparent;
-  cursor: pointer;
-}
-input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: var(--color-ink2); }
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; appearance: none; margin-top: -7px;
-  width: 16px; height: 16px; background: var(--color-ink); border: none;
-}
-input[type="range"]::-moz-range-track { height: 2px; background: var(--color-ink2); }
-input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: var(--color-ink); border: none; }
-
-/* thin square scrollbar */
-.cabinet-scroll::-webkit-scrollbar { width: 8px; }
-.cabinet-scroll::-webkit-scrollbar-track { background: var(--color-paper2); }
-.cabinet-scroll::-webkit-scrollbar-thumb { background: var(--color-rule); }
-
-::selection { background: var(--color-accent); }
-
-.pixelated { image-rendering: pixelated; }
-
-/* skeletons + helpers */
-.skel { background: var(--color-paper2); animation: skel-pulse 1.15s ease-in-out infinite; }
-@keyframes skel-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
-.skel-pulse { animation: skel-pulse 1.15s ease-in-out infinite; }
+:root { color-scheme: dark; --radius: 9px; --surface-raised: #292d30; --metal: #d8dbdc; }
+html, body { height: 100%; background: var(--color-paper); color: var(--color-ink); }
+* { -webkit-tap-highlight-color: transparent; }
+button { touch-action: manipulation; cursor: pointer; }
+button, input, .dd-panel { border-radius: var(--radius); }
+button { transition: background-color .16s, border-color .16s, box-shadow .16s; }
+button:disabled { cursor: wait; opacity: .45; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+::selection { background: var(--color-accent); color: var(--color-accentink); }
+header { position: relative; z-index: 30; background: #202325; border-bottom: 1px solid var(--color-rule) !important; box-shadow: 0 4px 16px #0003; }
+header > div { min-height: 72px; }
+header .font-display { font-size: 25px; letter-spacing: -.035em; }
+header a { color: var(--color-ink2); border: 0; min-height: 44px; }
+.seg { border: 1px solid var(--color-rule); border-radius: var(--radius); overflow: hidden; background: #151719; padding: 3px; gap: 3px; }
+.seg > button { border: 0; border-radius: 6px; min-height: 38px; color: var(--color-ink2); padding-inline: 16px; font-weight: 600; }
+.seg > button.bg-ink, .seg > button[aria-pressed="true"], .gsize.bg-ink { background: var(--metal); color: #17191a; box-shadow: inset 0 1px 0 #fff8, 0 2px 4px #0003; }
+.cabinet-aside, .ledger, .shelf-rail { background: #1b1e20; }
+.bench-grid { background: #121415; }
+.cabinet-scroll { scrollbar-width: thin; scrollbar-color: #50575b transparent; }
+.cabinet-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.cabinet-scroll::-webkit-scrollbar-thumb { background: #50575b; border-radius: 8px; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
-
-/* dropdown panels — quick spring-like ease, grow from the trigger */
-.dd-panel {
-  opacity: 0;
-  transform: translateY(-3px) scale(0.98);
-  transform-origin: top center;
-  pointer-events: none;
-  transition: opacity 0.16s cubic-bezier(0.32, 0.72, 0.24, 1), transform 0.16s cubic-bezier(0.32, 0.72, 0.24, 1);
-}
+.tex-filmleader { display: none; }
+.tex-metal, .tex-leather { background-image: none; }
+.simple-only, .shelf-rail, .vf { display: none; }
+[data-mode="simple"] .simple-only, [data-mode="simple"] .shelf-rail { display: flex; }
+[data-mode="simple"] .ledger, [data-mode="simple"] .cabinet-aside { display: none; }
+.simple-media-controls { flex: 1; }
+.simple-media-controls button { flex: 1; min-height: 38px; font-size: 11px; letter-spacing: .08em; }
+.simple-hint { color: var(--color-ink2); font-size: 12px; line-height: 1.5; }
+.simple-pro-link { display: flex; align-items: center; gap: 6px; align-self: flex-start; min-height: 44px; font-size: 12px; color: var(--color-ink2); }
+#film-counter { color: var(--color-ink2); background: transparent; font-size: 10px; letter-spacing: .06em; }
+#strip { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); grid-auto-rows: max-content; gap: 10px; align-content: start; overflow: auto; }
+.simple-preset-card { width: 100%; min-width: 0; }
+.strip-card, .look-card { border: 1px solid #343a3e; border-radius: 10px; overflow: hidden; background: #25292c; box-shadow: 0 2px 5px #0002; }
+.strip-card:hover, .look-card:hover { background: #303639; border-color: #6a7276; }
+.strip-card[aria-pressed="true"], .look-card[aria-pressed="true"] { border-color: var(--color-accent); box-shadow: 0 0 0 1px var(--color-accent); }
+.camera-art { display: block; width: 100%; aspect-ratio: 3/2; background: #292e31; }
+.camera-art img { display: block; width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.strip-copy { display: block; padding: 9px 9px 11px; }
+.strip-copy.is-selected { background: #323027; color: var(--color-ink); }
+.strip-title { display: block; font-size: 14px; font-weight: 600; line-height: 1.25; }
+.strip-description { display: block; margin-top: 5px; min-height: 2.8em; font-size: 11px; line-height: 1.4; color: #b8bdbf; }
+.look-card > span:last-child { min-height: 48px; display: flex; align-items: center; }
+.look-card .truncate { white-space: normal; overflow: visible; font-size: 12px; line-height: 1.35; }
+.look-card > .bg-accent { background: #323027; color: var(--color-ink); }
+#btn-load, #btn-s1, #btn-s2, #btn-video, #btn-video-simple { min-height: 44px; padding-inline: 16px; font-size: 13px; border: 1px solid #41474b; background: #282d30; box-shadow: inset 0 1px 0 #ffffff0a; }
+#btn-load { background: var(--metal); color: #17191a; border-color: #d3d6d7; font-weight: 600; }
+#btn-export, #btn-export-simple { min-height: 46px; background: var(--metal); color: #17191a; border: 1px solid #d5d8d9; font-size: 13px; font-weight: 600; letter-spacing: .01em; box-shadow: inset 0 1px 0 #fff9, 0 3px 8px #0003; }
+#btn-export-simple span { font-size: 12px; letter-spacing: .06em; }
+#btn-load:hover, #btn-export:hover, #btn-export-simple:hover { background: #eef0f0; }
+#btn-s1:hover, #btn-s2:hover, #btn-video:hover, #btn-video-simple:hover { background: #343b3f; }
+#stage { padding: 0; border: 0; background: transparent; box-shadow: none; }
+#printwrap { border-radius: 8px; overflow: hidden; border: 1px solid #555c60; box-shadow: 0 12px 30px #0003; }
+#printwrap::after { display: none; }
+#stage figcaption { padding-top: 10px; font-size: 10px; letter-spacing: .04em; line-height: 1.5; }
+#cap-state { color: #d9bc81; }
+#divider > div { width: 30px; height: 30px; background: #252b2f; border-color: #e9e9e6; box-shadow: 0 2px 6px #0005; }
+.simple-only { background: #1c2022; border: 1px solid var(--color-rule); border-radius: 10px; box-shadow: none; }
+#search, .dd-btn { background: #191c1e; border: 1px solid #41474b; min-height: 44px; }
+.dd-panel { opacity: 0; transform: translateY(-3px); pointer-events: none; transition: opacity .16s, transform .16s; background: #292e31; border: 1px solid #525a5e; box-shadow: 0 12px 32px #0006; overflow: hidden; }
 .dd-panel.open { opacity: 1; transform: none; pointer-events: auto; }
-.dd .dd-chev { transition: transform 0.16s ease; }
+.dd-panel > button { border-radius: 0; min-height: 44px; }
+.dd-panel > button:hover { background: #3b4247; }
+.dd-panel > button.bg-accent { background: #ded4bc; color: #17191a; }
+.dd .dd-chev { transition: transform .16s; }
 .dd.open .dd-chev { transform: rotate(180deg); }
-
-/* mobile-native basics (Emil Kowalski's mobile-native skill) */
-* { -webkit-tap-highlight-color: transparent; }
-button { touch-action: manipulation; }
-
-/* mode: simple hides the pro ledger; the simple bar only exists in simple mode */
-.simple-only { display: none; }
-[data-mode="simple"] .simple-only { display: flex; }
-[data-mode="simple"] .ledger { display: none; }
-@media (min-width: 1024px) {
-  [data-mode="simple"] main { grid-template-columns: 300px minmax(0, 1fr); }
-}
-
-/* simple mode = the camera: cabinet away, bench takes the whole stage */
-[data-mode="simple"] .cabinet-aside { display: none; }
-@media (min-width: 1024px) {
-  [data-mode="simple"] main { grid-template-columns: 300px minmax(0, 1fr); }
-}
-/* ---- texture pack (P2): paper grain lives on body::after; these three
-   are the reusable material classes ---- */
-/* film leader: a punched sprocket row in a metal strip, for rail edges */
-.tex-filmleader {
-  height: 22px;
-  background-color: #141518;
-  background-image:
-    radial-gradient(circle at 50% 50%, rgba(0,0,0,0.92) 5.2px, rgba(255,255,255,0.38) 6.6px, rgba(0,0,0,0.45) 7.8px, transparent 8.6px),
-    linear-gradient(180deg, #3a3d44, #1e1f24);
-  background-size: 26px 22px, 100% 100%;
-  background-position: center, 0 0;
-  background-repeat: repeat, no-repeat;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 5px rgba(0,0,0,0.45);
-}
-/* brushed metal: fine horizontal machined lines (same 2px rhythm
-   as the shelf art's line pattern), for metal control surfaces */
-.tex-metal {
-  background-image: repeating-linear-gradient(180deg, rgba(255,255,255,0.05) 0 1px, rgba(0,0,0,0.055) 1px 2px);
-}
-/* leatherette: a tight cross piqué, for quiet header bands */
-.tex-leather {
-  background-image:
-    repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 4px);
-}
-[data-theme="dark"] .tex-leather {
-  background-image:
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 4px);
-}
-/* the shelf rail exists only in simple mode */
-.shelf-rail { display: none; }
-[data-mode="simple"] .shelf-rail { display: flex; }
-.vf { display: none; }
-[data-mode="simple"] .vf { display: block; }
-
-/* the document itself never scrolls — regions manage their own overflow */
-html, body { height: 100%; }
-
-/* develop-in: a fresh print resolving out of the chemistry */
-@keyframes develop {
-  from { filter: blur(7px) sepia(0.55) brightness(1.18) contrast(0.92); }
-  to { filter: blur(0) sepia(0) brightness(1) contrast(1); }
-}
-.developing { animation: develop 0.65s cubic-bezier(0.25, 0.7, 0.3, 1); }
-
-/* ---- Dazz rounding: soft corners on interactive surfaces ---- */
-button, input, .dd-panel, .look-card, .strip-card { border-radius: 10px; }
-.look-card, .strip-card, .dd-panel { overflow: hidden; }
-#printwrap { border-radius: 14px; overflow: hidden; }
-#film-counter { border-radius: 6px; }
-.seg { border-radius: 10px; overflow: hidden; }
-.seg > button { border-radius: 0; }
+.ledger { padding: 28px 24px; }
+#led-name { font-size: 25px; line-height: 1.2; letter-spacing: -.02em; margin-top: 16px; }
+#led-meta { font-size: 11px; line-height: 1.65; }
+#led-note { font-size: 13px; line-height: 1.6; }
+#sliders { margin-top: 24px; padding-top: 24px; }
+#sliders > label { margin-bottom: 19px; }
+#sliders > label > span { font-size: 11px; letter-spacing: .12em; align-items: center; }
+#sliders [id^="val-"] { min-width: 53px; padding: 6px 8px; text-align: center; background: #141718; border: 1px solid var(--color-rule); border-radius: 6px; letter-spacing: 0; font-size: 12px; }
+.gsize { min-height: 44px; padding-inline: 14px; border-color: var(--color-rule); }
+input[type="range"] { appearance: none; -webkit-appearance: none; width: 100%; height: 34px; background: transparent; cursor: pointer; }
+input[type="range"]::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: #535b60; }
+input[type="range"]::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; margin-top: -9px; border-radius: 50%; background: var(--metal); border: 1px solid #f1f3f3; box-shadow: 0 2px 5px #0005; }
+input[type="range"]::-moz-range-track { height: 4px; border-radius: 4px; background: #535b60; }
+input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--metal); border: 1px solid #f1f3f3; }
+.skel, .skel-pulse { animation: skel-pulse 1.15s ease-in-out infinite; }
+.skel { background: var(--color-mat); }
+@keyframes skel-pulse { 50% { opacity: .45; } }
+@keyframes develop { from { filter: blur(5px); opacity: .65; } to { filter: none; opacity: 1; } }
+.developing { animation: develop .5s ease-out; }
+.pixelated { image-rendering: pixelated; }
 .logo-light { display: none; }
 .logo-dark { display: block; }
-
-/* ============================================================
-   CAMERA BODY (Ray, 2026-10-25): the app itself is the retro
-   Fuji — anodized black-metal top plate, leatherette body
-   panels, a machined bezel around the photo, amber LCD readouts,
-   metal knobs and a shutter-red export. Same lighting language
-   as the shelf art: key light top-left, machined banding,
-   shadows that seat every part. This layer supersedes the Dazz
-   "no shadows" rule for the chrome (the stage stayspure black).
-   ============================================================ */
-
-/* Shared metal tokens — the SAME texture language as the shelf
-   art's metal pass, so the app's chrome and the cameras it draws
-   are one material system:
-   --od-lines:  2px horizontal machined lines (the art's brl layer)
-   --od-silver: the env reflection rhythm for silver parts
-                (bright wall / dark gap / cool softbox core / falloff)
-   --od-plate:  the same rhythm in anodized-black values
-   --od-turn:   concentric turning rings for round knobs */
-:root {
-  --od-lines: repeating-linear-gradient(180deg, rgba(255,255,255,0.05) 0 1px, rgba(0,0,0,0.055) 1px 2px);
-  --od-silver: linear-gradient(180deg, #f5f7fa 0%, #ccd0d6 30%, #878d95 48%, #eef1f6 57%, #b7bcc4 74%, #71767e 100%);
-  --od-plate: linear-gradient(180deg, #41454c 0%, #232529 30%, #0f1013 48%, #2e3138 57%, #191a1e 74%, #0a0a0c 100%);
-  --od-turn: repeating-radial-gradient(circle at 50% 42%, rgba(255,255,255,0.13) 0 1px, rgba(0,0,0,0.10) 1px 2px);
+@media (min-width: 1024px) {
+  main { grid-template-columns: 292px minmax(0,1fr) 300px; }
+  [data-mode="simple"] main { grid-template-columns: 320px minmax(0,1fr); }
+  .shelf-rail > div:nth-child(2) { padding: 20px 16px 8px; }
+  #strip { padding: 0 16px 20px; }
 }
-
-/* leatherette body panels (two-layer piqué: light dot + dark dot) */
-.cabinet-aside, .ledger, .shelf-rail {
-  background-color: #0a0a0b;
-  background-image:
-    radial-gradient(rgba(255,255,255,0.050) 1px, transparent 1.5px),
-    radial-gradient(rgba(0,0,0,0.55) 1px, transparent 1.5px);
-  background-size: 5px 5px;
-  background-position: 0 0, 2.5px 2.5px;
+@media (min-width: 1440px) { main { grid-template-columns: 320px minmax(0,1fr) 340px; } }
+@media (max-width: 1023px) {
+  header > div { min-height: 64px; padding: 10px 14px; }
+  header .font-display { font-size: 21px; }
+  header a { display: none; }
+  header .seg > button { padding-inline: 12px; }
+  main, [data-mode="simple"] main { display: flex; flex-direction: column; overflow-y: auto; }
+  .bench-grid { flex: none; min-height: 510px; height: min(68dvh,680px); }
+  #stage-wrap { padding: 12px; }
+  .bench-grid > div:first-child { padding: 12px 12px 0; gap: 6px; }
+  #btn-load, #btn-s1, #btn-s2 { padding-inline: 10px; font-size: 12px; }
+  #split-label { display: none; }
+  .simple-only { margin: 0 12px 12px; padding: 8px; }
+  .simple-only > button { flex: 1; justify-content: center; }
+  .shelf-rail, .cabinet-aside { flex: none; overflow: visible; }
+  .shelf-rail > div:nth-child(2) { padding: 14px 16px 2px; }
+  #strip { overflow: visible; padding: 0 16px 20px; }
+  .strip-description { min-height: auto; }
+  #cabinet { max-height: 70dvh; }
+  .ledger { padding: 24px 18px; }
 }
-
-/* the bench floor: a studio backdrop glow behind the camera back */
-.bench-grid {
-  background: radial-gradient(1100px 640px at 50% 36%, #16171b 0%, #080809 62%, #050506 100%);
-}
-
-/* --- top plate (header) --- */
-header {
-  position: relative;
-  z-index: 30;
-  background-image: var(--od-lines), var(--od-plate);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.28),
-    inset 0 -1px 0 rgba(0,0,0,0.85),
-    0 14px 30px rgba(0,0,0,0.60);
-}
-header .font-display {
-  text-shadow: 0 -1px 1px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.14);
-}
-header img { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.65)); }
-header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,0,0.45); background-image: var(--od-lines), linear-gradient(180deg, #2b2d33, #16171a); }
-
-/* --- dials: segmented switches sit in an inset well; the active
-       segment is a raised metal index --- */
-.seg {
-  background: #0a0a0c;
-  border-color: #34373d !important;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.75), inset 0 -1px 0 rgba(255,255,255,0.06), 0 1px 0 rgba(255,255,255,0.05);
-}
-.seg > button { color: var(--color-ink2); text-shadow: 0 -1px 0 rgba(0,0,0,0.8); }
-.seg > button.bg-ink {
-  background-image: var(--od-lines), var(--od-silver);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(0,0,0,0.25), 0 3px 8px rgba(0,0,0,0.55);
-  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
-}
-.gsize.bg-ink {
-  background-image: var(--od-lines), var(--od-silver);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 6px rgba(0,0,0,0.5);
-}
-
-/* --- amber LCD readouts (frame counter + stage state) --- */
-#film-counter, #cap-state {
-  background-image: linear-gradient(180deg, #1c1204, #0e0902);
-  color: #ffb648;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.85), inset 0 -1px 0 rgba(255,182,72,0.14), 0 1px 0 rgba(255,255,255,0.05);
-  text-shadow: 0 0 7px rgba(255,182,72,0.35);
-}
-#cap-state { padding: 2px 8px; border-radius: 5px; }
-#cap-state:empty { background: none; box-shadow: none; padding: 0; }
-
-/* --- raised metal buttons --- */
-#btn-load, #btn-s1, #btn-s2 {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 5px 12px rgba(0,0,0,0.50);
-}
-#btn-load {
-  background-image: var(--od-lines), var(--od-silver);
-  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
-}
-#btn-s1, #btn-s2 { background-image: var(--od-lines), linear-gradient(180deg, #2b2d33, #151619); }
-#btn-load:active, #btn-s1:active, #btn-s2:active { transform: translateY(1px); box-shadow: inset 0 2px 6px rgba(0,0,0,0.35), 0 2px 5px rgba(0,0,0,0.5); }
-
-/* --- the shutter: export buttons are silver release buttons
-       with a red index dot --- */
-#btn-export, #btn-export-simple {
-  background-image: var(--od-lines), var(--od-silver);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(0,0,0,0.25), 0 6px 16px rgba(0,0,0,0.55);
-  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
-  color: #000;
-}
-#btn-export::before, #btn-export-simple::before {
-  content: "";
-  width: 8px; height: 8px; border-radius: 9999px; flex: none;
-  background: radial-gradient(circle at 35% 30%, #ff8a7a, #d43a2a 60%, #8f1d12);
-  box-shadow: inset 0 -1px 2px rgba(0,0,0,0.45), 0 0 6px rgba(212,58,42,0.45);
-}
-#btn-export:active, #btn-export-simple:active { transform: translateY(1px); box-shadow: inset 0 2px 7px rgba(0,0,0,0.30), 0 2px 6px rgba(0,0,0,0.5); }
-
-/* the simple-mode export deck is a metal control strip */
-.simple-only {
-  background-image: var(--od-lines), var(--od-plate);
-  border-color: #34373d;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 10px 24px rgba(0,0,0,0.50);
-  border-radius: 12px;
-}
-
-/* --- inset wells: search + dropdown triggers --- */
-#search, .dd-btn {
-  background-color: #0c0c0e;
-  background-image: var(--od-lines), linear-gradient(180deg, rgba(0,0,0,0.55), rgba(255,255,255,0.03));
-  border-color: #2e3036;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.70), inset 0 -1px 0 rgba(255,255,255,0.05);
-}
-/* an open dropdown's trigger seats lit, like a pressed index */
-.dd.open .dd-btn {
-  border-color: #565b63;
-  box-shadow: inset 0 2px 7px rgba(0,0,0,0.8), inset 0 -1px 0 rgba(255,255,255,0.10), 0 0 0 1px rgba(255,255,255,0.05);
-}
-/* --- dropdown panels: a machined plate that drops from the well —
-       same env rhythm + line texture as every other metal surface,
-       with a cool softbox streak across its top --- */
-.dd-panel {
-  background-image:
-    linear-gradient(115deg, rgba(238,244,255,0.09) 0%, rgba(238,244,255,0.02) 34%, transparent 52%),
-    var(--od-lines),
-    var(--od-plate);
-  border: 1px solid #43464d;
-  box-shadow: 0 24px 48px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.16), inset 0 -1px 0 rgba(0,0,0,0.6);
-}
-.dd-panel > button {
-  border-radius: 0;
-  color: #d7d9dd;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  text-shadow: 0 -1px 0 rgba(0,0,0,0.6);
-}
-.dd-panel > button:last-child { border-bottom: none; }
-.dd-panel > button:hover {
-  background-image: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
-  color: #ffffff;
-}
-/* the chosen row is a silver index plate, like the seg's active segment */
-.dd-panel > button.bg-accent {
-  background-image: var(--od-lines), var(--od-silver);
-  color: #000;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
-}
-
-/* --- cards sit ON the leather, raised --- */
-.strip-card, .look-card {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 8px 18px rgba(0,0,0,0.45);
-  transition: box-shadow 0.18s ease, border-color 0.15s ease, transform 0.12s ease;
-}
-.strip-card:hover, .look-card:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 13px 26px rgba(0,0,0,0.55); }
-
-/* --- the camera back: machined bezel + corner screws + glass --- */
-#stage {
-  background-color: #131417;
-  background-image:
-    radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
-    radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
-    radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
-    radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
-    var(--od-plate);
-  background-size: 11px 11px, 11px 11px, 11px 11px, 11px 11px, 100% 100%;
-  background-position: 6px 6px, calc(100% - 6px) 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), 0 0;
-  background-repeat: no-repeat;
-  border: 1px solid #34373d;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.14),
-    inset 0 -1px 0 rgba(0,0,0,0.7),
-    0 34px 70px rgba(0,0,0,0.68),
-    0 6px 18px rgba(0,0,0,0.55);
-}
-#printwrap {
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.06),
-    inset 0 4px 18px rgba(0,0,0,0.55),
-    0 0 0 1px #000;
-}
-#printwrap::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-  background:
-    linear-gradient(115deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.032) 34%, transparent 56%),
-    linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.07) 38%, transparent 47%);
-}
-#divider > div {
-  background-image: linear-gradient(180deg, #33363c, #17181b);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 4px 10px rgba(0,0,0,0.6);
-  color: #e8e9ec;
-}
-#stage figcaption { text-shadow: 0 -1px 0 rgba(0,0,0,0.85); }
-
-/* --- Pro sliders: a machined groove + a metal knob --- */
-input[type="range"]::-webkit-slider-runnable-track {
-  height: 4px; border-radius: 9999px;
-  background: linear-gradient(180deg, #050506, #1d1e22);
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(255,255,255,0.06);
-}
-input[type="range"]::-webkit-slider-thumb {
-  width: 18px; height: 18px; margin-top: -7px; border-radius: 9999px;
-  background: var(--od-turn), radial-gradient(circle at 34% 28%, #f4f5f7, #c9ccd1 42%, #8f939b 78%, #6d7076);
-  border: 1px solid #0a0a0b;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 3px 7px rgba(0,0,0,0.65);
-}
-input[type="range"]::-moz-range-track {
-  height: 4px; border-radius: 9999px;
-  background: linear-gradient(180deg, #050506, #1d1e22);
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.9), inset 0 -1px 0 rgba(255,255,255,0.06);
-}
-input[type="range"]::-moz-range-thumb {
-  width: 18px; height: 18px; border-radius: 9999px;
-  background: var(--od-turn), radial-gradient(circle at 34% 28%, #f4f5f7, #c9ccd1 42%, #8f939b 78%, #6d7076);
-  border: 1px solid #0a0a0b;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 3px 7px rgba(0,0,0,0.65);
-}
-
-/* machined scrollbar */
-.cabinet-scroll::-webkit-scrollbar-thumb {
-  background: var(--od-lines), linear-gradient(180deg, #3a3d43, #1b1c1f);
-  border-radius: 4px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
-}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

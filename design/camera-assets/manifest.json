@@ -1,0 +1,161 @@
+{
+  "purpose": "User-approved original generated camera family; original alpha retained. No competitor artwork copied.",
+  "assets": [
+    {
+      "name": "fuji-silver",
+      "library_file_id": "libfile_965c0d3fb1108191ad9beb1e21df0b7d",
+      "original": "design/camera-assets/originals/fuji-silver.png",
+      "sha256": "1592b3b973b6b192a0b95dbeb4de77a564c09c1439ba50a6d28680e533aa3989",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "derivatives": [
+        {
+          "path": "web/public/cameras/fuji-silver-384.webp",
+          "bytes": 26866,
+          "sha256": "758f32519bca41a5ed5b7241317eee780b4d8ba2db85f6e69bb24069a64343f9"
+        },
+        {
+          "path": "web/public/cameras/fuji-silver-768.webp",
+          "bytes": 87934,
+          "sha256": "73f121bf8f0150a6d12e04bc5524be07d6b7b1fd0a99d09c16368ec8e855b0cb"
+        }
+      ]
+    },
+    {
+      "name": "street-compact",
+      "library_file_id": "libfile_1796ecd734fc81919a97c2c030eedb8e",
+      "original": "design/camera-assets/originals/street-compact.png",
+      "sha256": "81c0eff7938c069d71653a580d1dd3c9f4b2a33d57b7223988f37341d838fcbd",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "derivatives": [
+        {
+          "path": "web/public/cameras/street-compact-384.webp",
+          "bytes": 21474,
+          "sha256": "b0d064eb283d9a4c5cd29f0fa1d7fc140f8f6d400f6a8e3a8569ab28c92b98a3"
+        },
+        {
+          "path": "web/public/cameras/street-compact-768.webp",
+          "bytes": 74664,
+          "sha256": "03619ddaab9bc39d5851ed92f10629e3b411606662f49384d05866ab416a0efd"
+        }
+      ]
+    },
+    {
+      "name": "instant-ivory",
+      "library_file_id": "libfile_7861f6fbdb24819198000a0f43c9626f",
+      "original": "design/camera-assets/originals/instant-ivory.png",
+      "sha256": "c26ef85c7132c547f84159b84a90b228edba68e9e099aa053d712c6db10cfcd2",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "derivatives": [
+        {
+          "path": "web/public/cameras/instant-ivory-384.webp",
+          "bytes": 17408,
+          "sha256": "7bb32e1940e3d5fe4d6bf9f7a2a4d4fba13fec16c7ab322fda764ebc7f1b034b"
+        },
+        {
+          "path": "web/public/cameras/instant-ivory-768.webp",
+          "bytes": 46012,
+          "sha256": "9b81a188a2459da242e0891b25ac63d5d5c622c2debc072bcac90fcdc8b84c9b"
+        }
+      ]
+    },
+    {
+      "name": "cx405-camcorder",
+      "library_file_id": "libfile_418c0e8d7b648191afcd5a73670da395",
+      "original": "design/camera-assets/originals/cx405-camcorder.png",
+      "sha256": "13a386e6acb7bff25c92c8ff116124194c84ad14ff0d7cd0855f539ae2947432",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "derivatives": [
+        {
+          "path": "web/public/cameras/cx405-camcorder-384.webp",
+          "bytes": 13466,
+          "sha256": "b13fb8a3ef49de3f8dedc9bd3739ea48eb90b5269d077337c3fc2172821f50ba"
+        },
+        {
+          "path": "web/public/cameras/cx405-camcorder-768.webp",
+          "bytes": 35242,
+          "sha256": "1e6f24a20e112a8b251ea2fe300dfe5ca6fb8e96f9e048039ab9b784c8bb26a4"
+        }
+      ]
+    },
+    {
+      "name": "leica-rangefinder",
+      "library_file_id": "libfile_26b1ea2d6dac8191a3ec26a720027bae",
+      "original": "design/camera-assets/originals/leica-rangefinder.png",
+      "sha256": "afe17061e93e244e7456e9f07b003bf5a33ceeafc6ceb0da59a7e06b4b5da0cd",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "derivatives": [
+        {
+          "path": "web/public/cameras/leica-rangefinder-384.webp",
+          "bytes": 19534,
+          "sha256": "b72d7c73a623f7be1c92f230cbf4fa045d2e2a263807828220752b39a800bd49"
+        },
+        {
+          "path": "web/public/cameras/leica-rangefinder-768.webp",
+          "bytes": 60768,
+          "sha256": "294aee0f543c7fd23fdf170a3707f5d664e1909d15b5b4009cbd81ad5edc3d37"
+        }
+      ]
+    },
+    {
+      "name": "hasselblad-medium-format",
+      "library_file_id": "libfile_b8a3f835e9c48191b171fd0fd0b29269",
+      "original": "design/camera-assets/originals/hasselblad-medium-format.png",
+      "sha256": "afe9d1196c456f98281c790fa0018421426b78200dd3033dda53c745f830d401",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "derivatives": [
+        {
+          "path": "web/public/cameras/hasselblad-medium-format-384.webp",
+          "bytes": 19438,
+          "sha256": "3233ea598e043133ac57d698ea4d38d85204bf7982787882215a861bfa1c684a"
+        },
+        {
+          "path": "web/public/cameras/hasselblad-medium-format-768.webp",
+          "bytes": 64262,
+          "sha256": "004b61a762c96e6095a4ac34a3fa7155e8e7978f437cf53a5b63671fcb2a3d9c"
+        }
+      ]
+    }
+  ]
+}

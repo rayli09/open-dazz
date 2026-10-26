@@ -5,6 +5,8 @@ import { store, modeAtom, type Mode } from "./state";
 import { icon, brandSigil, glyphSvg } from "./icons";
 import { shelfArt } from "./shelf-art";
 import { recipeForMedia } from "./recipe-for-media";
+import { DEFAULT_PHOTO, presetForRecipe, presetsForMedia, selectionForMedia, selectionForMode, type PresetMedia, type ArtKey } from "./simple-presets";
+import { artKeyForRecipe, cameraAsset, useArtworkFallback } from "./camera-art";
 
 // The WASM engine loads lazily in the background so the shell, cabinet
 // and photo paint immediately; develops queue until it lands.
@@ -38,28 +40,6 @@ const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)
 let catalog: Catalog;
 let current: LookEntry | null = null;
 
-// --- P0: the camera shelf (curated cameras for simple mode) ---
-const FEATURED: [string, string][] = [
-  ["fuji/official/classic-chrome", "Chrome"],
-  ["fuji/official/velvia", "Velvia"],
-  ["fuji/official/classic-neg", "Classic Neg."],
-  ["fuji/official/astia", "Astia"],
-  ["fuji/official/provia", "Provia"],
-  ["fuji/official/eterna", "Eterna"],
-  ["fuji/community/fujifilm-acros", "Acros"],
-  ["kodak/community/kodak-portra-400", "Portra 400"],
-  ["kodak/community/kodak-ektar-100", "Ektar 100"],
-  ["kodak/community/kodachrome-64", "Kodachrome"],
-  ["kodak/community/kodak-gold-200", "Gold 200"],
-  ["kodak/community/kodak-tri-minus-x-400", "Tri-X"],
-  ["ilford/community/ilford-hp5-plus", "HP5"],
-  ["cinestill/community/cinestill-800t", "800T"],
-  ["polaroid/community/polaroid-sx-minus-70", "SX-70"],
-  ["agfa/community/agfa-vista-200", "Vista"],
-  ["camcorder/cx405", "CX405"],
-  ["camcorder/vhs", "VHS"],
-];
-
 // --- Video cameras: signal-chain simulations, not LUT looks. They
 // live in a synthetic "camcorder" brand injected into the catalog
 // at boot; applyNow routes them to their own engine stages. ---
@@ -77,9 +57,14 @@ const VIDEO_META: Record<string, { meta: string; note: string }> = {
     note: "NTSC composite + VHS tape simulation: chroma bleed, head-switching, tracking noise, tape smear. The look is the hardware — no develop sliders.",
   },
 };
-let shelfMode = true;
+let simpleMedia: PresetMedia = "photo";
+const lastSimpleSelection: Record<PresetMedia, string> = {
+  photo: DEFAULT_PHOTO.recipeId,
+  video: selectionForMedia("video").recipeId,
+};
 let developFx = false;
-let flatIds: string[] = [];
+let selectionVersion = 0;
+let mediaVersion = 0;
 
 // --- P0: hand-drawn camera body glyphs (squared, stroke style) ---
 function glyphFor(l: LookEntry): string {
@@ -95,29 +80,30 @@ function glyphFor(l: LookEntry): string {
   else if (["kodak", "ilford", "kentmere", "foma", "bergger", "adox", "rollei"].includes(l.brand)) kind = "slr";
   return glyphSvg(kind);
 }
-function buildFlat() {
-  flatIds = [];
-  const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
-  for (const b of brands) for (const t of ["official", "community", "video"]) for (const l of catalog.brands[b].tiers[t] ?? []) flatIds.push(l.id);
-}
 function updateCounter() {
   const el = document.querySelector("#film-counter");
   if (!el) return;
-  const i = current ? flatIds.indexOf(current.id) : -1;
-  el.textContent = i >= 0 ? `No. ${String(i + 1).padStart(3, "0")}` : "—";
+  const entries = presetsForMedia(simpleMedia);
+  const i = entries.findIndex(p => p.recipeId === current?.id);
+  el.textContent = `${simpleMedia === "photo" ? "PHOTO" : "VIDEO"} ${i < 0 ? "—" : i + 1} / ${entries.length}`;
 }
 function syncShelfUI() {
-  const on = $<HTMLButtonElement>("#shelf-on"), all = $<HTMLButtonElement>("#shelf-all");
-  if (!on || !all) return;
-  on.className = `px-2 py-1 ${shelfMode ? "bg-ink text-paper" : "hover:bg-paper2"}`;
-  all.className = `px-2 py-1 border-l border-ink ${!shelfMode ? "bg-ink text-paper" : "hover:bg-paper2"}`;
+  document.querySelectorAll<HTMLButtonElement>("[data-simple-media]").forEach(button => {
+    const active = button.dataset.simpleMedia === simpleMedia;
+    button.setAttribute("aria-pressed", String(active));
+    button.classList.toggle("is-active", active);
+  });
+  $("#simple-hint").textContent = simpleMedia === "photo"
+    ? "Fuji first. Nine looks for everyday photos."
+    : "Camera effects. Preview a photo or develop a clip.";
+  updateCounter();
 }
 function fitStage() {
   const wrap = document.querySelector<HTMLElement>("#stage-wrap");
   const pw = document.querySelector<HTMLElement>("#printwrap");
   if (!wrap || !pw || !imgW || !imgH) return;
   const r = wrap.getBoundingClientRect();
-  const availW = Math.max(50, r.width - 56), availH = Math.max(50, r.height - 104);
+  const availW = Math.max(50, r.width - 32), availH = Math.max(50, r.height - 56);
   const scale = Math.min(availW / imgW, availH / imgH);
   pw.style.width = `${Math.floor(imgW * scale)}px`;
   pw.style.height = `${Math.floor(imgH * scale)}px`;
@@ -161,8 +147,8 @@ function layout() {
       </div>
       <div class="flex items-center gap-2">
         <div class="seg flex border border-ink font-mono text-[11px]" role="group" aria-label="Mode">
-          <button id="mode-simple" class="px-2.5 py-2 tracking-wide">SIMPLE</button>
-          <button id="mode-pro" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button>
+          <button id="mode-simple" aria-pressed="true" class="px-2.5 py-2 tracking-wide">SIMPLE</button>
+          <button id="mode-pro" aria-pressed="false" class="px-2.5 py-2 tracking-wide border-l border-ink">PRO</button>
         </div>
         <a href="https://github.com/rayli09/open-dazz" target="_blank" rel="noreferrer"
            class="flex items-center gap-1 font-mono text-[11px] border border-rule px-2.5 py-2 hover:bg-paper2 transition-colors">GitHub ${icon("arrow-up-right", "w-3.5 h-3.5")}</a>
@@ -195,13 +181,14 @@ function layout() {
       <div class="tex-filmleader shrink-0 border-b border-rule" aria-hidden="true"></div>
       <div class="px-3 pt-3 pb-2 flex flex-col gap-2 shrink-0">
         <div class="flex items-center gap-2">
-          <div class="seg flex border border-ink font-mono text-[10px]">
-            <button id="shelf-on" class="px-2 py-1">SHELF</button>
-            <button id="shelf-all" class="px-2 py-1 border-l border-ink">ALL FILMS</button>
+          <div class="seg simple-media-controls flex border border-rule" role="group" aria-label="Look collection">
+            <button data-simple-media="photo" class="is-active" aria-pressed="true">PHOTOS</button>
+            <button data-simple-media="video" aria-pressed="false">VIDEO</button>
           </div>
           <span id="film-counter" class="ml-auto font-mono text-[10px] bg-ink text-accentink px-1.5 py-0.5"></span>
         </div>
-        <div id="strip-chips"></div>
+        <p id="simple-hint" class="simple-hint">Fuji first. Nine looks for everyday photos.</p>
+        <button id="simple-open-pro" class="simple-pro-link">All looks in Pro ${icon("arrow-up-right", "w-3 h-3")}</button>
       </div>
       <div id="strip" class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto cabinet-scroll px-3 pb-3 lg:flex-1 lg:min-h-0"></div>
     </aside>
@@ -338,9 +325,8 @@ function toggleDD(btn?: HTMLElement) {
 }
 
 function renderChips() {
-  for (const host of [$("#chips"), $("#strip-chips")]) {
-    if (host) buildChips(host);
-  }
+  const host = $("#chips");
+  if (host) buildChips(host);
 }
 
 function buildChips(host: HTMLElement) {
@@ -375,9 +361,9 @@ function buildChips(host: HTMLElement) {
   host.querySelectorAll<HTMLButtonElement>("[data-dd-btn]").forEach((b) =>
     b.addEventListener("pointerdown", (e) => { e.preventDefault(); toggleDD(b); }));
   host.querySelectorAll<HTMLButtonElement>("[data-brand]").forEach((b) =>
-    b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; shelfMode = false; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
+    b.addEventListener("click", () => { activeBrand = b.dataset.brand || null; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
   host.querySelectorAll<HTMLButtonElement>("[data-type]").forEach((b) =>
-    b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; shelfMode = false; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
+    b.addEventListener("click", () => { activeType = b.dataset.type as TypeFilter; closeDDs(); renderChips(); renderCabinet(($("#search") as HTMLInputElement).value); }));
 }
 
 function renderCabinet(filter = "") {
@@ -395,9 +381,9 @@ function renderCabinet(filter = "") {
       let cards = "";
       for (const look of looks) {
         const sel = current?.id === look.id;
-        cards += `<button data-look="${look.id}" class="look-card active:scale-[0.98] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat hover:border-ink transition-colors">
+        cards += `<button data-look="${look.id}" aria-pressed="${sel}" class="look-card active:scale-[0.98] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat hover:border-ink transition-colors">
           <span class="relative block">
-            ${shelfArt(look.id) ?? `<img loading="lazy" src="${thumbUrl(look.id)}" alt="" class="w-full aspect-[3/2] object-cover block" />`}
+            ${renderArtwork(look.id, presetForRecipe(look.id)?.artKey)}
             ${look.tier === "official" ? `<span class="absolute top-1 left-1 bg-paper/90 p-[3px]">${icon("badge-check", "w-3.5 h-3.5 block")}</span>` : ""}
           </span>
           <span class="block px-2 py-1.5 ${sel ? "bg-accent text-accentink" : ""}">
@@ -420,41 +406,50 @@ function renderCabinet(filter = "") {
   host.innerHTML = html || `<div class="px-3 py-6 text-center">${icon("search", "w-6 h-6 text-ink2 inline-block")}<div class="font-mono text-[11px] text-ink2 mt-2">No matches.</div></div>`;
   host.querySelectorAll<HTMLButtonElement>(".look-card").forEach((b) =>
     b.addEventListener("click", () => selectLook(b.dataset.look!)));
+  bindArtworkFallback(host);
   renderStrip();
+}
+
+function renderArtwork(recipeId: string, artKey?: ArtKey): string {
+  const asset = cameraAsset(artKey ?? artKeyForRecipe(recipeId));
+  if (asset) return `<span class="camera-art"><img src="${asset.src}" srcset="${asset.srcset}" sizes="${asset.sizes}" data-fallback="${thumbUrl(recipeId)}" width="384" height="256" alt="" loading="lazy" decoding="async" /></span>`;
+  return shelfArt(recipeId) ?? `<img src="${thumbUrl(recipeId)}" alt="" loading="lazy" class="w-full aspect-[3/2] object-cover block" />`;
+}
+
+function bindArtworkFallback(host: HTMLElement) {
+  host.querySelectorAll<HTMLImageElement>("img[data-fallback]").forEach(image => {
+    let recovered = false;
+    const recover = () => {
+      if (recovered) return;
+      recovered = true;
+      useArtworkFallback(image, image.dataset.fallback!);
+    };
+    image.addEventListener("error", recover, { once: true });
+    // Cached failures may complete before the listener is attached.
+    if (image.complete && image.naturalWidth === 0) recover();
+  });
 }
 
 function renderStrip() {
   const host = $("#strip");
   if (!host) return;
   syncShelfUI();
-  const items: { look: LookEntry; label: string }[] = [];
-  if (shelfMode) {
-    for (const [id, short] of FEATURED) { const l = findLook(id); if (l) items.push({ look: l, label: short }); }
-  } else {
-    const f = $<HTMLInputElement>("#search").value.trim().toLowerCase();
-    const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
-    for (const brand of brands) {
-      if (activeBrand && brand !== activeBrand) continue;
-      for (const tier of ["official", "community", "video"]) {
-        for (const l of (catalog.brands[brand].tiers[tier] ?? []).filter((x) => lookMatches(x, f))) items.push({ look: l, label: l.name });
-      }
-    }
-  }
-  host.innerHTML = items.length ? items.map(({ look: l, label }) => {
-    const sel = current?.id === l.id;
-    return `<button data-look="${l.id}" class="strip-card shrink-0 w-[92px] lg:w-full text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
-      ${shelfArt(l.id) ?? `<img src="/thumbs/${l.id.replaceAll("/", "__")}.webp" alt="" loading="lazy" class="w-full h-[62px] lg:h-[76px] object-cover block" />`}
-      <span class="flex items-center gap-1 px-1.5 py-1 ${sel ? "bg-accent text-accentink font-semibold" : ""}">
-        ${shelfArt(l.id) ? "" : `<span class="w-3.5 h-3.5 shrink-0 ${sel ? "" : "text-ink2"}">${glyphFor(l)}</span>`}
-        <span class="font-mono text-[9px] leading-tight truncate">${label}</span>
+  const items = presetsForMedia(simpleMedia).filter(preset => findLook(preset.recipeId));
+  host.innerHTML = items.length ? items.map(preset => {
+    const sel = current?.id === preset.recipeId;
+    return `<button data-look="${preset.recipeId}" data-preset="${preset.id}" aria-pressed="${sel}" class="strip-card simple-preset-card shrink-0 text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
+      ${renderArtwork(preset.recipeId, preset.artKey)}
+      <span class="strip-copy ${sel ? "is-selected" : ""}">
+        <span class="strip-title">${preset.label}</span>
+        <span class="strip-description">${preset.description}</span>
       </span>
     </button>`;
   }).join("") : `<div class="font-mono text-[11px] text-ink2 py-3">No matches.</div>`;
   host.querySelectorAll<HTMLButtonElement>(".strip-card").forEach((b) =>
     b.addEventListener("click", () => {
       selectLook(b.dataset.look!);
-      b.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
     }));
+  bindArtworkFallback(host);
 }
 
 function findLook(id: string): LookEntry | undefined {
@@ -465,10 +460,28 @@ function findLook(id: string): LookEntry | undefined {
 
 async function selectLook(id: string) {
   const entry = findLook(id); if (!entry) return;
+  const focusedCard = document.activeElement as HTMLElement | null;
+  const focusHost = focusedCard?.matches("[data-look]") ? focusedCard.closest("#strip, #cabinet")?.id : undefined;
+  const version = ++selectionVersion;
+  const preset = presetForRecipe(id);
+  if (preset) {
+    simpleMedia = preset.media;
+    lastSimpleSelection[preset.media] = preset.recipeId;
+  }
   developFx = true;
   current = entry;
+  recipe = null;
+  setBusy(true);
   updateCounter();
   renderCabinet($<HTMLInputElement>("#search").value);
+  if (focusHost) document.querySelector<HTMLButtonElement>(`#${focusHost} [data-look="${id}"]`)?.focus({ preventScroll: true });
+  if (store.get(modeAtom) === "simple") requestAnimationFrame(() => {
+    if (version !== selectionVersion) return;
+    document.querySelector<HTMLElement>(`#strip [data-look="${id}"]`)?.scrollIntoView({
+      inline: "center", block: "nearest",
+      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
+  });
   if (entry.brand === "camcorder") {
     recipe = {}; // marker — video cameras run their own engine stage
     renderSliders();
@@ -481,6 +494,7 @@ async function selectLook(id: string) {
   $("#cap-state").textContent = "LOADING…";
   const recipeUrl = "/" + entry.recipe;
   const rj: Record<string, any> = await (await fetch(recipeUrl)).json();
+  if (version !== selectionVersion) return;
   recipe = rj;
   renderSliders();
   const prov = rj.provenance ?? {};
@@ -511,9 +525,11 @@ function setSplit(pct: number) {
 function setBusy(b: boolean) {
   $("#spin")?.classList.toggle("hidden", !b);
   $("#cap-state").textContent = b ? "DEVELOPING…" : "READY";
-  const ex = $<HTMLButtonElement>("#btn-export");
-  ex.disabled = b;
-  ex.classList.toggle("opacity-50", b);
+  for (const id of ["#btn-export", "#btn-export-simple"]) {
+    const ex = $<HTMLButtonElement>(id);
+    ex.disabled = b;
+    ex.classList.toggle("opacity-50", b);
+  }
 }
 function progress(p: number) {
   const bar = $("#topbar") as HTMLDivElement | null;
@@ -575,7 +591,10 @@ async function applyNow() {
   }
   if (!recipe) return;
   setBusy(true);
+  const version = selectionVersion;
+  const mediaRequest = mediaVersion;
   const cube = await cubeFor(current);
+  if (version !== selectionVersion || mediaRequest !== mediaVersion || !recipe) return;
   const input = new Uint8Array(origPixels);
   const effective = recipeForMedia(recipe, store.get(modeAtom) === "simple", !!currentVideo);
   const out = engine.apply(input, imgW, imgH, JSON.stringify(effective), cube);
@@ -626,19 +645,24 @@ async function decodeImage(blob: Blob): Promise<ImageBitmap> {
   catch { return await createImageBitmap(jpg); }
 }
 
-async function loadPhoto(source: Blob | string, name: string) {
+async function loadPhoto(source: Blob | string, name: string, request = ++mediaVersion): Promise<boolean> {
+  setBusy(true);
   let bmp: ImageBitmap;
   try {
     bmp = await decodeImage(source instanceof Blob ? source : await (await fetch(source)).blob());
   } catch (e) {
+    if (request !== mediaVersion) return false;
+    setBusy(false);
     showError(`could not open ${name} — this browser cannot decode that format (try JPEG or PNG)`);
     console.error("[open-dazz] decode failed", e);
-    return;
+    return false;
   }
+  if (request !== mediaVersion) { bmp.close(); return false; }
   const scale = Math.min(1, MAX_DIM / Math.max(bmp.width, bmp.height));
   imgW = Math.round(bmp.width * scale); imgH = Math.round(bmp.height * scale);
   const work = document.createElement("canvas"); work.width = imgW; work.height = imgH;
   const wctx = work.getContext("2d")!; wctx.drawImage(bmp, 0, 0, imgW, imgH);
+  bmp.close();
   const data = wctx.getImageData(0, 0, imgW, imgH);
   origPixels = data.data;
   for (const id of ["#before", "#after"]) {
@@ -647,7 +671,8 @@ async function loadPhoto(source: Blob | string, name: string) {
   $<HTMLCanvasElement>("#before").getContext("2d")!.putImageData(data, 0, 0);
   $("#cap-file").textContent = `${name.toUpperCase()} — ${imgW}×${imgH}`;
   setSplit(split);
-  applyNow();
+  await applyNow();
+  return request === mediaVersion;
 }
 
 // ---- Video uploads: the poster frame previews the look on the
@@ -705,6 +730,7 @@ async function loadMedia(f: File) {
 }
 
 async function loadVideoFile(f: File) {
+  const request = ++mediaVersion;
   currentVideo = null;
   setVideoButtons(false);
   try {
@@ -717,38 +743,49 @@ async function loadVideoFile(f: File) {
       console.warn("[open-dazz] webcodecs probe failed, using ffmpeg", e);
       return null;
     });
+    if (request !== mediaVersion) return;
     if (wc) {
       if (wc.probe.duration > WC_MAX_SECONDS) {
         setBusy(false);
         showError(`clip is ${Math.round(wc.probe.duration)}s — developing caps at ${WC_MAX_SECONDS}s; trim it first`);
         return;
       }
-      await loadPhoto(wc.poster, f.name);
       currentVideo = { file: f, route: "webcodecs", ffProbe: null, wcProbe: wc.probe };
-      finishVideoLoad(f, wc.probe.w, wc.probe.h, wc.probe.duration, "FAST PATH");
+      if (!await loadPhoto(wc.poster, f.name, request)) {
+        if (request === mediaVersion) currentVideo = null;
+        return;
+      }
+      finishVideoLoad(f, wc.probe.w, wc.probe.h, wc.probe.duration, "FAST PATH", request);
       return;
     }
     $("#cap-state").textContent = "LOADING VIDEO ENGINE…";
     const inst = await getFFmpeg();
+    if (request !== mediaVersion) return;
     $("#cap-state").textContent = "READING VIDEO…";
     const probe = await probeVideo(inst, f);
+    if (request !== mediaVersion) return;
     if (probe.duration > VIDEO_MAX_SECONDS) {
       setBusy(false);
       showError(`clip is ${Math.round(probe.duration)}s — in-browser developing caps at ${VIDEO_MAX_SECONDS}s; trim it first`);
       return;
     }
     const poster = await posterFrame(inst, probe);
-    await loadPhoto(poster, f.name);
+    if (request !== mediaVersion) return;
     currentVideo = { file: f, route: "ffmpeg", ffProbe: probe, wcProbe: null };
-    finishVideoLoad(f, probe.w, probe.h, probe.duration, "COMPAT");
+    if (!await loadPhoto(poster, f.name, request)) {
+      if (request === mediaVersion) currentVideo = null;
+      return;
+    }
+    finishVideoLoad(f, probe.w, probe.h, probe.duration, "COMPAT", request);
   } catch (e) {
+    if (request !== mediaVersion) return;
     setBusy(false);
     showError(`could not open video ${f.name}`);
     console.error("[open-dazz] video load failed", e);
   }
 }
 
-function finishVideoLoad(f: File, w: number, h: number, dur: number, routeLabel: string) {
+function finishVideoLoad(f: File, w: number, h: number, dur: number, routeLabel: string, request: number) {
   $("#cap-file").textContent = `${f.name.toUpperCase()} — VIDEO ${w}×${h} · ${dur.toFixed(1)}S · ${routeLabel}`;
   setVideoButtons(true);
   setBusy(false);
@@ -756,7 +793,7 @@ function finishVideoLoad(f: File, w: number, h: number, dur: number, routeLabel:
   // overwrite the ready line with a bare READY; restate it once
   // things settle.
   setTimeout(() => {
-    if (currentVideo && !videoBusy) {
+    if (request === mediaVersion && currentVideo && !videoBusy) {
       $("#cap-state").textContent = "VIDEO READY — PICK A LOOK, THEN DEVELOP VIDEO";
     }
   }, 160);
@@ -912,7 +949,6 @@ async function boot() {
   progress(45);
   catalog = await fetchCatalog();
   catalog.brands["camcorder"] = { tiers: { video: VIDEO_LOOKS }, total: VIDEO_LOOKS.length };
-  buildFlat();
   updateCounter();
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
@@ -921,12 +957,16 @@ async function boot() {
   const applyMode = () => {
     const m = store.get(modeAtom);
     document.documentElement.dataset.mode = m;
-    applyNow();
+    const next = selectionForMode(m, current?.id);
+    if (current && next !== current.id) selectLook(next);
+    else applyNow();
     try { localStorage.setItem("of-mode", m); } catch {}
     requestAnimationFrame(() => fitStage());
     const on = "bg-ink text-paper", off = "hover:bg-paper2";
     $<HTMLButtonElement>("#mode-simple").className = `px-2.5 py-2 tracking-wide ${m === "simple" ? on : off}`;
     $<HTMLButtonElement>("#mode-pro").className = `px-2.5 py-2 tracking-wide border-l border-ink ${m === "pro" ? on : off}`;
+    $("#mode-simple").setAttribute("aria-pressed", String(m === "simple"));
+    $("#mode-pro").setAttribute("aria-pressed", String(m === "pro"));
   };
   store.sub(modeAtom, applyMode);
   store.set(modeAtom, document.documentElement.dataset.mode === "pro" ? "pro" : "simple");
@@ -944,13 +984,17 @@ async function boot() {
   $("#btn-s1").addEventListener("click", () => { currentVideo = null; setVideoButtons(false); loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait"); });
   $("#btn-s2").addEventListener("click", () => { currentVideo = null; setVideoButtons(false); loadPhoto("/samples/sample-2.jpg", "Sample II — the lake"); });
   $("#btn-export").addEventListener("click", exportPNG);
-  document.querySelector("#shelf-on")?.addEventListener("click", () => {
-    shelfMode = true; activeBrand = null; activeType = "all";
-    renderChips(); renderCabinet($<HTMLInputElement>("#search").value);
-  });
-  document.querySelector("#shelf-all")?.addEventListener("click", () => {
-    shelfMode = false;
-    renderCabinet($<HTMLInputElement>("#search").value);
+  document.querySelectorAll<HTMLButtonElement>("[data-simple-media]").forEach(button => button.addEventListener("click", () => {
+    simpleMedia = button.dataset.simpleMedia as PresetMedia;
+    const next = selectionForMedia(simpleMedia, lastSimpleSelection[simpleMedia]);
+    if (next.recipeId !== current?.id) selectLook(next.recipeId);
+    else renderStrip();
+  }));
+  $("#simple-open-pro").addEventListener("click", () => {
+    activeBrand = null; activeType = "all";
+    $<HTMLInputElement>("#search").value = "";
+    renderChips(); renderCabinet();
+    store.set(modeAtom, "pro");
   });
   addEventListener("resize", () => fitStage());
   $("#btn-export-simple").addEventListener("click", exportPNG);
@@ -969,7 +1013,7 @@ async function boot() {
       showError("boot timed out — the catalog or engine did not arrive; try reloading");
   }, 15000);
   await loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait");
-  await selectLook("fuji/official/classic-chrome");
+  await selectLook(DEFAULT_PHOTO.recipeId);
 }
 
 boot();
