@@ -12,13 +12,15 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
+const ffmpeg = dirname(fileURLToPath(import.meta.resolve("@ffmpeg/ffmpeg")));
+const core = dirname(fileURLToPath(import.meta.resolve("@ffmpeg/core")));
 const out = join(here, "..", "public", "ffmpeg");
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
-cpSync(join(here, "..", "node_modules", "@ffmpeg", "ffmpeg", "dist", "esm"), out, {
+cpSync(ffmpeg, out, {
   recursive: true,
   filter: (src) => !src.endsWith(".d.ts") && !src.endsWith(".mts") && !src.endsWith(".mjs"),
 });
-cpSync(join(here, "..", "node_modules", "@ffmpeg", "core", "dist", "esm", "ffmpeg-core.js"), join(out, "ffmpeg-core.js"));
-cpSync(join(here, "..", "node_modules", "@ffmpeg", "core", "dist", "esm", "ffmpeg-core.wasm"), join(out, "ffmpeg-core.wasm"));
+cpSync(join(core, "ffmpeg-core.js"), join(out, "ffmpeg-core.js"));
+cpSync(join(core, "ffmpeg-core.wasm"), join(out, "ffmpeg-core.wasm"));
 console.log("ffmpeg runtime synced to public/ffmpeg/");

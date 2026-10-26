@@ -9,7 +9,7 @@ name = "opendazz"
 path = "src/main.rs"
 
 [dependencies]
-opendazz-core = { path = "../opendazz-core" }
+opendazz-core = { path = "../../crates/opendazz-core" }
 image = { workspace = true }
 serde_json = { workspace = true }
 clap = { workspace = true }

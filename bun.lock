@@ -3,7 +3,18 @@
   "configVersion": 0,
   "workspaces": {
     "": {
+      "name": "opendazz-workspace",
+    },
+    "apps/desktop": {
+      "name": "opendazz-desktop",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@tauri-apps/cli": "2",
+      },
+    },
+    "web": {
       "name": "opendazz-web",
+      "version": "0.0.0",
       "dependencies": {
         "@ffmpeg/core": "^0.12.10",
         "@ffmpeg/ffmpeg": "^0.12.15",
@@ -20,7 +31,6 @@
       },
       "devDependencies": {
         "@tailwindcss/vite": "^4.3.3",
-        "@tauri-apps/cli": "2",
         "tailwindcss": "^4.3.3",
         "typescript": "~6.0.3",
         "vite": "^8.3.4",
@@ -261,6 +271,10 @@
     "namespace-emitter": ["namespace-emitter@2.0.1", "", {}, "sha512-N/sMKHniSDJBjfrkbS/tpkPj4RAbvW3mr8UAzvlMHyun93XEm83IAvhWtJVHo+RHn/oO8Job5YN4b+wRjSVp5g=="],
 
     "nanoid": ["nanoid@6.0.2", "", { "bin": { "nanoid": "bin/nanoid.js" } }, "sha512-hIvVOb9Qr1p/9CNNLOe0OlWvgx/ziTsVwKN/GDSsuArN2K0wDiafP3s0SWmsm7o2BdnyS8Z9Z64NFBUbn6ziBg=="],
+
+    "opendazz-desktop": ["opendazz-desktop@workspace:apps/desktop"],
+
+    "opendazz-web": ["opendazz-web@workspace:web"],
 
     "p-queue": ["p-queue@9.3.5", "", { "dependencies": { "eventemitter3": "^5.0.4", "p-timeout": "^7.0.0" } }, "sha512-Lki/zhXFVmDhesBUn/yHRLW9Bte7mE7xoFHzTR8sIomV7a2z+LxYAPkGvdfidNiu4fKSfjtawixxSHcZci5QcQ=="],
 

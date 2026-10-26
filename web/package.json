@@ -11,13 +11,10 @@
     "preview": "bun --bun vite preview",
     "predev": "bun scripts/sync-library.mjs && bun scripts/sync-ffmpeg.mjs",
     "prebuild": "bun scripts/sync-library.mjs && bun scripts/sync-ffmpeg.mjs",
-    "build:desktop": "bun run build --mode desktop --outDir dist-desktop",
-    "desktop:dev": "bun --bun tauri dev",
-    "desktop:build": "bun --bun tauri build"
+    "build:desktop": "bun run build --mode desktop --outDir dist-desktop"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "@tauri-apps/cli": "2",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
     "vite": "^8.3.4",

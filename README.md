@@ -16,7 +16,7 @@ Bun 1.4.3:
 
 ```sh
 git clone https://github.com/rayli09/open-dazz.git
-cd open-dazz/web
+cd open-dazz
 bun install --frozen-lockfile
 bun run build
 bun run preview
@@ -24,6 +24,8 @@ bun run preview
 
 Open the URL printed by Vite. CLI help (stable Rust, from the repo root):
 `cargo run --release -p opendazz-cli -- --help`.
+
+Workspaces: [web frontend](web/), [Apple Silicon desktop](apps/desktop/), [CLI](apps/cli/) and [shared Rust crates](crates/). Cargo and Bun each use one root lockfile; the desktop bundles the same web/WASM engine.
 
 ## Docs
 

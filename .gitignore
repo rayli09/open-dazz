@@ -18,5 +18,5 @@ web/public/ffmpeg/
 /QA-verificaiton.md
 
 web/dist-desktop/
-web/src-tauri/gen/
+apps/desktop/src-tauri/gen/
 web/public/samples/desktop-smoke.mp4

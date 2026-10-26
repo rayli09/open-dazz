@@ -9,6 +9,8 @@ jobs:
         with:
           bun-version: 1.4.3
       - run: bun install --frozen-lockfile
+      - name: Existing web install entry uses the root lockfile
+        run: bun install --frozen-lockfile
         working-directory: web
       - run: bun test
         working-directory: web
@@ -22,10 +24,10 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
           components: clippy
-      - run: cargo test --workspace
-      - run: cargo clippy --workspace -- -D warnings
+      - run: cargo test --locked --workspace --exclude opendazz-desktop
+      - run: cargo clippy --locked --workspace --exclude opendazz-desktop -- -D warnings
       - name: Core must stay WASM-clean
-        run: cargo build -p opendazz-core --target wasm32-unknown-unknown
+        run: cargo build --locked -p opendazz-core --target wasm32-unknown-unknown
       - name: Install matching wasm-bindgen generator
         run: cargo install wasm-bindgen-cli --version 0.2.129 --locked
       - name: Generated WASM declarations must match Rust

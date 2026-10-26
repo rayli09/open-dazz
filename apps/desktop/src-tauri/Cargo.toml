@@ -3,7 +3,6 @@ name = "opendazz-desktop"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-[workspace]
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 [dependencies]
@@ -12,9 +11,3 @@ tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
 [features]
 smoke-test = []
-[profile.release]
-opt-level = "s"
-lto = "thin"
-codegen-units = 16
-strip = true
-panic = "abort"

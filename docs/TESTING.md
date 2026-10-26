@@ -5,17 +5,18 @@ Run commands from the repository root unless noted. Use stable Rust with `clippy
 ## Core and web gates
 
 ```sh
-cargo test --workspace
-cargo clippy --workspace -- -D warnings
+cargo test --locked --workspace --exclude opendazz-desktop
+cargo clippy --locked --workspace --exclude opendazz-desktop -- -D warnings
 cargo build -p opendazz-core --target wasm32-unknown-unknown
 cargo install wasm-bindgen-cli --version 0.2.129 --locked
 tools/check-wasm-declarations.sh
-cd web
 bun install --frozen-lockfile
-bun test
+bun run test
 bun run build
 bun run preview
 ```
+
+The root Cargo workspace includes the native apps and shared crates; default members cover the portable CLI/engine/WASM checks. Desktop Rust/packaging/runtime gates run separately on Apple Silicon macOS, without requiring Linux GTK/WebKit for these checks. Cargo and Bun use their root lockfiles; the existing `web/` install/build entry remains supported.
 
 The bindgen CLI must match the dependency in `Cargo.lock`. The declaration check rebuilds Rust bindings and compares both committed `.d.ts` files; the web build checks strict app types and generated-ABI contracts. After engine changes, regenerate the complete JS/WASM/declaration package as described in [web development](../web/README.md). Keep `web/src/pkg/` committed so frontend builds do not require Rust.
 
@@ -26,9 +27,9 @@ Native tests include [LUT/color guardrails](COLOR_TEST_CASES.md), ΔE/golden con
 Keep the production preview running (default `http://127.0.0.1:4173`); run harnesses in a second terminal at the repository root, with Chromium and FFmpeg/ffprobe installed. Keep browser tooling outside the app's production dependencies. One reproducible scratch installation, using the version verified with these harnesses:
 
 ```sh
-mkdir -p tools/verify-out/browser-runner
-bun add --cwd tools/verify-out/browser-runner --exact playwright@1.64.1
-export PLAYWRIGHT_MODULE="$PWD/tools/verify-out/browser-runner/node_modules/playwright/index.mjs"
+opendazz_browser_runner=$(mktemp -d "${TMPDIR:-/tmp}/opendazz-browser.XXXXXX")
+bun add --cwd "$opendazz_browser_runner" --exact playwright@1.64.1
+export PLAYWRIGHT_MODULE="$opendazz_browser_runner/node_modules/playwright/index.mjs"
 export BROWSER_BIN=/usr/bin/chromium
 for suite in state media recovery exports phones materials workshop-material layout; do
   bun "tools/verify-browser-$suite.mjs" || exit 1

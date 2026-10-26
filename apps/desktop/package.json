@@ -1,0 +1,13 @@
+{
+  "name": "opendazz-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --bun tauri dev",
+    "build": "CARGO_PROFILE_RELEASE_LTO=thin CARGO_PROFILE_RELEASE_CODEGEN_UNITS=16 bun --bun tauri build --target aarch64-apple-darwin"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2"
+  }
+}

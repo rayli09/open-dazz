@@ -35,13 +35,13 @@ jobs:
             test -n "${!name}" || { echo "Required signing configuration unavailable: $name" >&2; exit 1; }
           done
       - run: bun install --frozen-lockfile
-        working-directory: web
       - run: bun test && bun run build
-        working-directory: web
       - name: Sign and notarize Apple Silicon application
         uses: tauri-apps/tauri-action@v0
         env:
           VITE_DESKTOP_SMOKE: '0'
+          CARGO_PROFILE_RELEASE_LTO: thin
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: '16'
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
           APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
@@ -49,12 +49,12 @@ jobs:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         with:
-          projectPath: web
+          projectPath: apps/desktop
           tauriScript: bun --bun tauri
           args: --target aarch64-apple-darwin --bundles app --ci -- --locked
       - name: Verify notarization and prepare immutable release
         run: |
-          app=web/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/OpenDazz.app
+          app=target/aarch64-apple-darwin/release/bundle/macos/OpenDazz.app
           xcrun stapler staple "$app"
           xcrun stapler validate "$app"
           codesign --verify --deep --strict "$app"

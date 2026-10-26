@@ -2,17 +2,19 @@
 
 OpenDazz uses Tauri 2 and the bundled Vite/WASM frontend; no hosted web page, upload service or separate filter engine is involved. The target is Apple Silicon (arm64), macOS 14+. Intel Macs are unsupported and the installer rejects them before any filesystem changes. A Rosetta terminal on Apple Silicon is recognized by the hardware capability. CI requires a native arm64 runner for both packaging and WKWebView runtime checks.
 
-From `web/`, with stable Rust, Xcode Command Line Tools and Bun 1.4.3:
+From the repository root, with stable Rust, Xcode Command Line Tools and Bun 1.4.3:
 
 ```sh
 bun install --frozen-lockfile
 bun run desktop:dev
 # For Apple Silicon packaging:
 rustup target add aarch64-apple-darwin
-bun run desktop:build -- --target aarch64-apple-darwin --bundles app
+bun run desktop:build -- --bundles app
 ```
 
-`src-tauri/` is an isolated Cargo workspace with its own lockfile, so the existing Rust/WASM CLI gates do not need Linux GTK/WebKit dependencies. Desktop builds use `dist-desktop/`, remove external font links and bundle the LUTs, thumbnails, samples, FFmpeg runtime and WASM locally. The app uses system font fallbacks offline. Bundled LUT packs retain individual licenses, including non-commercial/share-alike terms; see [library licensing](../library/README.md). Code/vendor notices are bundled under `Contents/Resources/licenses/`.
+`apps/desktop/src-tauri/` shares the root Cargo workspace and lockfile with `apps/cli/` and `crates/`. Portable default members keep normal CLI/engine checks free of GUI toolchain requirements; desktop has dedicated macOS checks. Its Bun package owns the Tauri CLI and invokes the shared frontend in `web/`, producing `web/dist-desktop/`. The desktop build keeps thin LTO scoped to its Cargo invocation; the core/WASM release profile stays unchanged.
+
+Desktop builds remove external font links and bundle the LUTs, thumbnails, samples, FFmpeg runtime and WASM locally. The app uses system font fallbacks offline. Bundled LUT packs retain individual licenses, including non-commercial/share-alike terms; see [library licensing](../library/README.md). Code/vendor notices are bundled under `Contents/Resources/licenses/`.
 
 Imports retain the HTML picker/Uppy flow. Desktop exports use a native save dialog and write only its chosen path; cancelling or switching inputs before write prevents stale saves. Rendering, settings snapshots and media limits remain shared with the web app. No broad filesystem, HTTP or shell plugin permissions are granted. Close/Quit preserves the unsaved-edit confirmation; settings recovery still requires reselecting original files. Desktop storage is separate from the website's browser storage. No automatic updater is installed.
 
@@ -36,4 +38,4 @@ The installer downloads only that repository's fixed release, verifies SHA-256, 
 
 An authorized owner must confirm the signing configuration and run a successful signed release before distributing the curl command. Development CI artifacts do not meet the installer’s signature/notarization requirements.
 
-References: [Tauri macOS signing](https://v2.tauri.app/distribute/sign/macos/), [capabilities](https://v2.tauri.app/security/capabilities/), [GitHub pipeline](https://v2.tauri.app/distribute/pipelines/github/). Run `bash tools/test-macos-installer.sh` for installer safety checks and `bun test` from `web/` for save-adapter cancellation/error cases. Other shared gates remain in [Testing](TESTING.md); outputs stay in ignored build directories or temporary CI artifacts.
+References: [Tauri macOS signing](https://v2.tauri.app/distribute/sign/macos/), [capabilities](https://v2.tauri.app/security/capabilities/), [GitHub pipeline](https://v2.tauri.app/distribute/pipelines/github/). Run `bash tools/test-macos-installer.sh` for installer safety checks and `bun run test` from the root for save-adapter cancellation/error cases. Other shared gates remain in [Testing](TESTING.md); outputs stay in ignored build directories or temporary CI artifacts.

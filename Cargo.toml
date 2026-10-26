@@ -1,7 +1,8 @@
 [workspace]
 resolver = "2"
-exclude = ["web/src-tauri"]
-members = ["crates/opendazz-core", "crates/opendazz-cli", "crates/opendazz-wasm", "crates/ntsc-rs"]
+members = ["apps/cli", "apps/desktop/src-tauri", "crates/opendazz-core", "crates/opendazz-wasm", "crates/ntsc-rs"]
+# Portable engine/CLI checks stay usable without a platform GUI toolchain.
+default-members = ["apps/cli", "crates/opendazz-core", "crates/opendazz-wasm", "crates/ntsc-rs"]
 
 [workspace.dependencies]
 image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
