@@ -209,10 +209,7 @@ function layout() {
           </figcaption>
         </figure>
       </div>
-      <div class="simple-only items-center gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
-        <span class="font-mono text-[10px] tracking-[0.18em] text-ink2 shrink-0">STRENGTH</span>
-        <input id="s-strength-simple" type="range" min="0" max="1.5" step="0.01" value="1" class="slider flex-1" />
-        <span id="v-strength-simple" class="font-mono text-[11px] w-10 text-right shrink-0">100%</span>
+      <div class="simple-only items-center justify-end gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
         <button id="btn-export-simple" title="Export the developed photo as a PNG" class="bg-ink text-paper px-3 py-2 hover:bg-stamp transition-colors flex items-center gap-2 shrink-0">
           ${icon("download", "w-4 h-4")}
           <span class="font-mono text-[10px] tracking-[0.2em]">EXPORT</span>
@@ -270,7 +267,7 @@ function renderSliders() {
       fn(v); scheduleApply();
     });
   };
-  on("strength", (v) => { R.strength = v; $("#val-strength").textContent = `${Math.round(v * 100)}%`; syncSimpleStrength(); });
+  on("strength", (v) => { R.strength = v; $("#val-strength").textContent = `${Math.round(v * 100)}%`; });
   on("grain", (v) => { R.grain = { ...(R.grain ?? {}), amount: v, size: R.grain?.size ?? "small" }; $("#val-grain").textContent = v.toFixed(2); });
   on("halation", (v) => { R.halation = v; $("#val-halation").textContent = v.toFixed(2); });
   on("temp", (v) => { R.whiteBalance = { ...(R.whiteBalance ?? {}), tempShift: v }; $("#val-temp").textContent = (v >= 0 ? "+" : "") + v.toFixed(2); });
@@ -280,16 +277,6 @@ function renderSliders() {
     b.classList.toggle("bg-ink", active); b.classList.toggle("text-paper", active);
     b.onclick = () => { R.grain = { ...(R.grain ?? { amount: 0 }), size: b.dataset.gsize }; renderSliders(); scheduleApply(); };
   });
-  syncSimpleStrength();
-}
-
-function syncSimpleStrength() {
-  const inp = document.querySelector<HTMLInputElement>("#s-strength-simple");
-  if (!inp) return;
-  const v = (recipe as any)?.strength ?? 1;
-  inp.value = String(v);
-  const lbl = document.querySelector("#v-strength-simple");
-  if (lbl) lbl.textContent = `${Math.round(v * 100)}%`;
 }
 
 const TYPE_CHIPS: { key: TypeFilter; icon: string; label: string }[] = [
@@ -501,7 +488,10 @@ async function applyNow() {
   setBusy(true);
   const cube = await cubeFor(current);
   const input = new Uint8Array(origPixels);
-  const out = engine.apply(input, imgW, imgH, JSON.stringify(recipe), cube);
+  const effective = store.get(modeAtom) === "simple"
+    ? { ...(recipe as any), strength: 1 }
+    : recipe;
+  const out = engine.apply(input, imgW, imgH, JSON.stringify(effective), cube);
   const ctx = $<HTMLCanvasElement>("#after").getContext("2d")!;
   ctx.putImageData(new ImageData(new Uint8ClampedArray(out), imgW, imgH), 0, 0);
   setBusy(false);
@@ -583,6 +573,7 @@ async function boot() {
   const applyMode = () => {
     const m = store.get(modeAtom);
     document.documentElement.dataset.mode = m;
+    applyNow();
     try { localStorage.setItem("of-mode", m); } catch {}
     requestAnimationFrame(() => fitStage());
     const on = "bg-ink text-paper", off = "hover:bg-paper2";
@@ -593,14 +584,6 @@ async function boot() {
   store.set(modeAtom, document.documentElement.dataset.mode === "pro" ? "pro" : "simple");
   $<HTMLButtonElement>("#mode-simple").addEventListener("click", () => store.set(modeAtom, "simple" as Mode));
   $<HTMLButtonElement>("#mode-pro").addEventListener("click", () => store.set(modeAtom, "pro" as Mode));
-  document.querySelector<HTMLInputElement>("#s-strength-simple")?.addEventListener("input", (e) => {
-    const v = parseFloat((e.target as HTMLInputElement).value);
-    if (recipe) (recipe as any).strength = v;
-    $("#v-strength-simple").textContent = `${Math.round(v * 100)}%`;
-    const pro = document.querySelector<HTMLInputElement>("#sl-strength");
-    if (pro) { pro.value = String(v); $("#val-strength").textContent = `${Math.round(v * 100)}%`; }
-    scheduleApply();
-  });
   addEventListener("pointerdown", (e) => { if (!(e.target as HTMLElement).closest(".dd")) closeDDs(); });
   addEventListener("keydown", (e) => { if (e.key === "Escape") closeDDs(); });
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
