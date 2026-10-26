@@ -10,14 +10,20 @@ validate_archive() {
   unzip -Z -1 "$1" > "$2"
   while IFS= read -r entry; do
     [[ "$entry" =~ ^[A-Za-z0-9._/-]+$ ]] || return 1
-    case "$entry" in OpenDazz.app/Contents/*|OpenDazz.app/|OpenDazz.app) ;; *) return 1 ;; esac
+    case "$entry" in OpenDazz.app/Contents/*|OpenDazz.app/|OpenDazz.app|__MACOSX/|__MACOSX/._OpenDazz.app|__MACOSX/OpenDazz.app/*) ;; *) return 1 ;; esac
     case "/$entry/" in *'/../'*|*'/./'*|*'//'*) return 1 ;; esac
   done < "$2"
   # This bundle has no embedded frameworks/symlinks; refuse link extraction.
   unzip -Z -l "$1" | awk 'substr($0,1,1)=="l" { bad=1 } END { exit bad ? 1 : 0 }'
 }
+verify_checksum() {
+  local expected actual
+  expected=$(awk -v name="$3" '$2==name && length($1)==64 && $1 !~ /[^0-9a-f]/ {print $1; count++} END {if(count!=1)exit 1}' "$2") || return 1
+  actual=$(shasum -a 256 "$1") || return 1
+  [[ "${actual%% *}" == "$expected" ]]
+}
 main() {
-  local version='' replace=0 install_dir="${HOME:?}/Applications" work='' stage='' backup='' lock='' dest archive expected actual
+  local version='' replace=0 install_dir="${HOME:?}/Applications" work='' stage='' backup='' lock='' dest archive
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --version) [[ $# -ge 2 ]] || fail '--version needs a value'; version=$2; shift 2 ;;
@@ -50,9 +56,7 @@ main() {
   local base="https://github.com/rayli09/open-dazz/releases/download/desktop-v${version}"
   curl --fail --location --silent --show-error --proto '=https' --proto-redir '=https' --tlsv1.2 --connect-timeout 20 --max-time 600 --max-filesize 1073741824 "$base/$archive" -o "$work/$archive"
   curl --fail --location --silent --show-error --proto '=https' --proto-redir '=https' --tlsv1.2 --connect-timeout 20 --max-time 60 "$base/SHA256SUMS" -o "$work/SHA256SUMS"
-  expected=$(awk -v name="$archive" '$2==name && length($1)==64 && $1 !~ /[^0-9a-f]/ {print $1; count++} END {if(count!=1)exit 1}' "$work/SHA256SUMS") || fail 'Missing or ambiguous release checksum.'
-  actual=$(shasum -a 256 "$work/$archive"); actual=${actual%% *}
-  [[ "$actual" == "$expected" ]] || fail 'Release checksum mismatch; app was not modified.'
+  verify_checksum "$work/$archive" "$work/SHA256SUMS" "$archive" || fail 'Missing, ambiguous or mismatched release checksum; app was not modified.'
   validate_archive "$work/$archive" "$work/entries" || fail 'Unsafe archive entries or symlinks.'
   ditto -x -k "$work/$archive" "$stage"
   local app="$stage/OpenDazz.app" plist="$stage/OpenDazz.app/Contents/Info.plist"
@@ -61,7 +65,7 @@ main() {
   local executable
   executable=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$plist")
   [[ "$executable" =~ ^[A-Za-z0-9_-]+$ ]] || fail 'Unsafe executable name.'
-  lipo -verify_arch arm64 x86_64 "$app/Contents/MacOS/$executable"
+  lipo "$app/Contents/MacOS/$executable" -verify_arch arm64 x86_64
   codesign --verify --deep --strict --verbose=2 "$app"
   local signature
   signature=$(codesign -dv --verbose=4 "$app" 2>&1)

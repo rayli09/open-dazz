@@ -14,10 +14,20 @@ from pathlib import Path
 root=Path(sys.argv[1])
 for name,entry in [('valid','OpenDazz.app/Contents/Info.plist'),('traversal','OpenDazz.app/Contents/../../outside'),('absolute','/OpenDazz.app/Contents/outside'),('other','Other.app/Contents/Info.plist')]:
  with zipfile.ZipFile(root/(name+'.zip'),'w') as z:z.writestr(entry,'fixture')
+with zipfile.ZipFile(root/'metadata.zip','w') as z:
+ z.writestr('OpenDazz.app/Contents/Info.plist','fixture');z.writestr('__MACOSX/OpenDazz.app/Contents/._Info.plist','metadata')
 with zipfile.ZipFile(root/'symlink.zip','w') as z:
  i=zipfile.ZipInfo('OpenDazz.app/Contents/link');i.create_system=3;i.external_attr=(0o120777<<16);z.writestr(i,'/outside')
 PY
 validate_archive "$work/valid.zip" "$work/entries"
+validate_archive "$work/metadata.zip" "$work/entries"
+(cd "$work" && shasum -a 256 valid.zip > SHA256SUMS)
+verify_checksum "$work/valid.zip" "$work/SHA256SUMS" valid.zip
+if verify_checksum "$work/valid.zip" "$work/SHA256SUMS" missing.zip; then exit 1; fi
+cat "$work/SHA256SUMS" "$work/SHA256SUMS" > "$work/duplicate"
+if verify_checksum "$work/valid.zip" "$work/duplicate" valid.zip; then exit 1; fi
+cp "$work/valid.zip" "$work/changed.zip"; printf 'changed' >> "$work/changed.zip"
+if verify_checksum "$work/changed.zip" "$work/SHA256SUMS" valid.zip; then exit 1; fi
 for invalid in traversal absolute other symlink; do
   if validate_archive "$work/$invalid.zip" "$work/entries"; then echo "Unsafe archive accepted: $invalid" >&2; exit 1; fi
 done

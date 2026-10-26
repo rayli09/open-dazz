@@ -36,7 +36,8 @@ fn main() {
             .disable_drag_drop_handler()
             .on_navigation(|url| {
                 (url.scheme() == "tauri" && url.host_str() == Some("localhost"))
-                    || (url.scheme() == "http"
+                    || (cfg!(debug_assertions)
+                        && url.scheme() == "http"
                         && url.host_str() == Some("127.0.0.1")
                         && url.port() == Some(4173))
             })

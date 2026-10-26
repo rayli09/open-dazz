@@ -21,6 +21,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: web/src-tauri -> target
+          cache-on-failure: true
       - run: bun install --frozen-lockfile
         working-directory: web
       - name: Installer safety tests
