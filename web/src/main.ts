@@ -150,7 +150,7 @@ function layout() {
   <header class="shrink-0 border-b-2 border-ink">
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <div class="flex items-center gap-3">
-        <img src="/logo.png" alt="" class="logo-light w-9 h-9 pixelated" /><img src="/logo-dark.png" alt="" class="logo-dark w-9 h-9 pixelated" />
+        <img src="/logo.svg" alt="" class="w-9 h-9" />
         <span class="font-display text-[20px] font-bold tracking-tight">open-dazz</span>
       </div>
       <div class="flex items-center gap-2">
@@ -214,7 +214,7 @@ function layout() {
           <div id="printwrap" class="relative overflow-hidden bg-paper2">
             <canvas id="after" class="absolute inset-0 w-full h-full block"></canvas>
             <div id="stage-load" class="absolute inset-0 bg-mat/80 flex flex-col items-center justify-center gap-3">
-              <img src="/logo.png" alt="" class="logo-light w-12 h-12 pixelated skel-pulse" /><img src="/logo-dark.png" alt="" class="logo-dark w-12 h-12 pixelated skel-pulse" />
+              <img src="/logo.svg" alt="" class="w-12 h-12 skel-pulse" />
               <div class="font-mono text-[10px] tracking-[0.2em] text-ink2">LOADING THE BENCH…</div>
             </div>
             <canvas id="before" class="block w-full h-auto absolute inset-0"></canvas>

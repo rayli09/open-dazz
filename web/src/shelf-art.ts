@@ -366,58 +366,88 @@ function canister(a: ArtSpec): string {
 function handycam(a: ArtSpec): string {
   const engrave = "rgba(255,255,255,0.62)";
   const faint = "rgba(255,255,255,0.28)";
+  // Lathe-turned rings on the silver lens ring (same device as the
+  // film bodies' dials).
+  let hcTurn = "";
+  for (let r = 29.6; r <= 33.3; r += 0.92) {
+    const on = Math.round((r - 29.6) / 0.92) % 2 === 0;
+    hcTurn += `<circle cx="112" cy="113" r="${r.toFixed(1)}" fill="none" stroke="${on ? "rgba(255,255,255,0.13)" : "rgba(0,0,0,0.20)"}" stroke-width="0.45"/>`;
+  }
+  const evf = a.cassette ? `
+  <rect x="94" y="57" width="56" height="24" rx="8" fill="${a.top}"/>
+  <rect x="94" y="57" width="56" height="24" rx="8" fill="url(#dial{i})"/>
+  <rect x="97" y="63" width="17" height="12" rx="3" fill="#0a0c10"/>` : "";
   const cassette = a.cassette ? `
-  <rect x="118" y="88" width="86" height="36" rx="4" fill="rgba(0,0,0,0.42)" stroke="${faint}" stroke-width="1"/>
-  <rect x="118" y="88" width="86" height="36" rx="4" fill="url(#win{i})"/>
-  <circle cx="140" cy="106" r="9.5" fill="none" stroke="${engrave}" stroke-width="1.6"/>
-  <circle cx="182" cy="106" r="9.5" fill="none" stroke="${engrave}" stroke-width="1.6"/>
-  <circle cx="140" cy="106" r="9.5" fill="url(#dial{i})"/>
-  <circle cx="182" cy="106" r="9.5" fill="url(#dial{i})"/>
-  <path d="M140 99v14M133 106h14M182 99v14M175 106h14" stroke="${engrave}" stroke-width="1.3"/>
-  <rect x="149" y="103.5" width="24" height="4.5" fill="rgba(0,0,0,0.55)"/>` : `
-  <text x="128" y="112" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-weight="700" font-size="15" letter-spacing="1" fill="${engrave}">${a.label ?? ""}</text>
-  <text x="128" y="126" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-weight="600" font-size="6.4" letter-spacing="2.2" fill="${faint}">${a.sub ?? ""}</text>`;
+  <rect x="160" y="92" width="88" height="34" rx="4" fill="rgba(0,0,0,0.42)" stroke="${faint}" stroke-width="1"/>
+  <rect x="160" y="92" width="88" height="34" rx="4" fill="url(#win{i})"/>
+  <circle cx="182" cy="109" r="9" fill="none" stroke="${engrave}" stroke-width="1.6"/>
+  <circle cx="226" cy="109" r="9" fill="none" stroke="${engrave}" stroke-width="1.6"/>
+  <circle cx="182" cy="109" r="9" fill="url(#dial{i})"/>
+  <circle cx="226" cy="109" r="9" fill="url(#dial{i})"/>
+  <path d="M182 102v14M175 109h14M226 102v14M219 109h14" stroke="${engrave}" stroke-width="1.3"/>
+  <rect x="193" y="106.5" width="22" height="4.5" fill="rgba(0,0,0,0.55)"/>` : `
+  <text x="166" y="125" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-weight="600" font-size="7" letter-spacing="2.4" fill="${engrave}">${a.sub ?? ""}</text>
+  <text x="166" y="137" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-weight="600" font-size="5.6" letter-spacing="1.6" fill="${faint}">HDR-${a.label ?? ""}</text>`;
   return stage(a, `
-  <g transform="rotate(9 240 105)">
-    <rect x="240" y="84" width="54" height="42" rx="4" fill="${a.top}"/>
-    <rect x="247" y="89.5" width="40" height="31" rx="2" fill="#0d1219"/>
-    <rect x="247" y="89.5" width="40" height="31" fill="url(#shn{i})"/>
-    <rect x="247" y="89.5" width="40" height="31" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="1.4"/>
-  </g>
-  <rect x="196" y="63" width="46" height="17" rx="6" fill="${a.top}"/>
-  <rect x="196" y="63" width="46" height="17" rx="6" fill="url(#dial{i})"/>
-  <rect x="228" y="67" width="10" height="9" rx="2" fill="#0d1219"/>
-  <circle cx="98" cy="69" r="9.5" fill="${a.top}"/>
-  <circle cx="98" cy="69" r="9.5" fill="url(#dial{i})"/>
-  <circle cx="98" cy="69" r="4" fill="${a.band}"/>
-  <rect x="58" y="76" width="198" height="66" rx="13" fill="url(#mt{i})"/>
-  <clipPath id="hc{i}"><rect x="58" y="76" width="198" height="66" rx="13"/></clipPath>
+  <path d="M256 86 C 288 95, 293 118, 262 141" fill="none" stroke="#0b0c0f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M256 86 C 288 95, 293 118, 262 141" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="2" stroke-linecap="round"/>
+  ${evf}
+  <rect x="38" y="84" width="34" height="60" rx="6" fill="${a.band}"/>
+  <rect x="38" y="84" width="34" height="60" rx="6" fill="url(#lt{i})" opacity="0.35"/>
+  <rect x="41.5" y="87.5" width="27" height="53" rx="4" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+  <text transform="rotate(-90 55 114)" x="55" y="114" text-anchor="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-weight="600" font-size="6" letter-spacing="2.5" fill="${engrave}">SONY</text>
+  <rect x="100" y="68" width="156" height="16" rx="7" fill="${a.top}"/>
+  <rect x="100" y="68" width="156" height="16" rx="7" fill="url(#dial{i})" opacity="0.5"/>
+  <rect x="140" y="70.5" width="6" height="2.6" rx="1.3" fill="rgba(0,0,0,0.6)"/>
+  <rect x="150" y="70.5" width="6" height="2.6" rx="1.3" fill="rgba(0,0,0,0.6)"/>
+  <rect x="198" y="64" width="38" height="11" rx="5.5" fill="#101114" stroke="rgba(255,255,255,0.14)" stroke-width="0.8"/>
+  <line x1="217" y1="66.5" x2="217" y2="72.5" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+  <text x="203" y="72.5" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="5" fill="${faint}">W</text>
+  <text x="226" y="72.5" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="5" fill="${faint}">T</text>
+  <circle cx="246" cy="71" r="2.6" fill="#101114" stroke="rgba(255,255,255,0.16)" stroke-width="0.8"/>
+  <rect x="66" y="78" width="208" height="70" rx="13" fill="url(#env{i})"/>
+  <clipPath id="hc{i}"><rect x="66" y="78" width="208" height="70" rx="13"/></clipPath>
   <g clip-path="url(#hc{i})">
-    <rect x="58" y="76" width="198" height="66" filter="url(#grk{i})" opacity="0.30"/>
-    <rect x="58" y="76" width="198" height="66" filter="url(#grw{i})" opacity="0.13"/>
-    <rect x="58" y="76" width="198" height="66" fill="url(#mtl{i})" opacity="0.45"/>
-    <rect x="58" y="77.5" width="198" height="4" fill="url(#spc{i})" opacity="0.7"/>
-    ${shade(58, 104, 198, 38)}
-    ${sheen(58, 76, 198, 66)}
-    <line x1="62" y1="77.2" x2="252" y2="77.2" stroke="rgba(255,255,255,0.30)" stroke-width="1"/>
-    <line x1="254.8" y1="82" x2="254.8" y2="136" stroke="rgba(255,255,255,0.13)" stroke-width="1.2"/>
+    <rect x="66" y="78" width="208" height="70" filter="url(#grk{i})" opacity="0.28"/>
+    <rect x="66" y="78" width="208" height="70" filter="url(#grw{i})" opacity="0.12"/>
+    <rect x="66" y="78" width="208" height="70" fill="url(#mtl{i})" opacity="0.35"/>
+    <rect x="66" y="79.5" width="208" height="4" fill="url(#spc{i})" opacity="0.7"/>
+    ${shade(66, 110, 208, 38)}
+    ${sheen(66, 78, 208, 70)}
+    <line x1="70" y1="79.2" x2="270" y2="79.2" stroke="rgba(255,255,255,0.30)" stroke-width="1"/>
+    <rect x="238" y="78" width="36" height="70" fill="rgba(255,255,255,0.02)"/>
+    <line x1="238" y1="80" x2="238" y2="146" stroke="rgba(0,0,0,0.4)" stroke-width="1.2"/>
+    <line x1="239.4" y1="80" x2="239.4" y2="146" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
   </g>
-  <ellipse cx="44" cy="112" rx="22" ry="26" fill="#000" opacity="0.35" filter="url(#soft{i})"/>
-  <rect x="30" y="86" width="38" height="46" rx="7" fill="${a.band}"/>
-  <rect x="30" y="86" width="38" height="46" rx="7" fill="url(#lt{i})" opacity="0.4"/>
-  <rect x="30" y="86" width="38" height="46" rx="7" fill="url(#mtl{i})" opacity="0.5"/>
-  <rect x="30" y="86" width="38" height="46" rx="7" fill="url(#shd{i})" opacity="0.55"/>
-  <ellipse cx="29" cy="109" rx="9.5" ry="21" fill="url(#ls{i})"/>
-  <ellipse cx="29" cy="109" rx="4.6" ry="11" fill="#0a1420"/>
-  <path d="M23 92 A19 19 0 0 1 33 95" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round"/>
-  <circle cx="24" cy="100" r="2.4" fill="rgba(170,205,240,0.85)"/>
+  <ellipse cx="114" cy="117" rx="36" ry="35" fill="#000" opacity="0.35" filter="url(#soft{i})"/>
+  <circle cx="112" cy="113" r="34" fill="url(#pl{i})"/>
+  <clipPath id="hl{i}"><circle cx="112" cy="113" r="34"/></clipPath>
+  <g clip-path="url(#hl{i})">
+    <rect x="78" y="79" width="68" height="68" fill="url(#mtl{i})" opacity="0.5"/>
+    ${hcTurn}
+  </g>
+  <circle cx="112" cy="113" r="34" fill="none" stroke="rgba(0,0,0,0.45)" stroke-width="1"/>
+  <circle cx="112" cy="113" r="28.5" fill="#101114"/>
+  <circle cx="112" cy="113" r="28.5" fill="url(#dial{i})"/>
+  <defs><path id="za{i}" d="M 88 113 A 24 24 0 0 1 136 113"/></defs>
+  <text font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-weight="600" font-size="6.2" letter-spacing="2" fill="rgba(235,240,245,0.85)"><textPath href="#za{i}" startOffset="50%" text-anchor="middle">ZEISS</textPath></text>
+  <text x="112" y="135" text-anchor="middle" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-size="4.3" letter-spacing="1" fill="${faint}">1.9-57mm</text>
+  <circle cx="112" cy="113" r="21" fill="#0a0e14" stroke="rgba(255,255,255,0.13)" stroke-width="1"/>
+  <circle cx="112" cy="113" r="17.5" fill="url(#ls{i})"/>
+  <path d="M99 103 A 14 14 0 0 1 108 97" fill="none" stroke="rgba(150,110,255,0.5)" stroke-width="2.6" stroke-linecap="round"/>
+  <ellipse cx="121" cy="122" rx="5" ry="3.4" fill="#59d8c0" opacity="0.25" transform="rotate(-20 121 122)"/>
+  <circle cx="104.5" cy="104.5" r="3.2" fill="rgba(255,255,255,0.92)"/>
+  <circle cx="119" cy="120" r="1.5" fill="rgba(180,220,255,0.5)"/>
+  <circle cx="112" cy="113" r="5" fill="#04060a" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+  ${a.cassette ? "" : `<rect x="166" y="94" width="24" height="10" rx="4" fill="#0b0f16"/>
+  <rect x="166" y="94" width="24" height="10" rx="4" fill="url(#shn{i})"/>
+  <rect x="166" y="94" width="24" height="10" rx="4" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="0.8"/>
+  <circle cx="200" cy="99" r="1.9" fill="#57431c" stroke="rgba(255,196,86,0.45)" stroke-width="0.7"/>`}
   ${cassette}
-  <circle cx="246" cy="90" r="7" fill="${a.accent}" opacity="0.30"/>
-  <circle cx="246" cy="90" r="3.1" fill="${a.accent}"/>
-  <text x="238" y="103" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-weight="600" font-size="5.4" letter-spacing="1" fill="${a.accent}">REC</text>
-  <path d="M88 132h44M88 136.5h30" stroke="${faint}" stroke-width="1.6"/>
-  <path d="M216 88v46M221.5 88v46M227 88v46" stroke="rgba(0,0,0,0.3)" stroke-width="2"/>
-  <path d="M216 88v46M221.5 88v46" stroke="rgba(255,255,255,0.07)" stroke-width="0.8"/>`);
+  <circle cx="256" cy="96" r="6.5" fill="${a.accent}" opacity="0.30"/>
+  <circle cx="256" cy="96" r="3" fill="${a.accent}"/>
+  <text x="250" y="109" font-family="Instrument Sans, Helvetica, Arial, sans-serif" font-weight="600" font-size="5.2" letter-spacing="1" fill="${a.accent}">REC</text>
+  <path d="M170 141h34M170 144.5h22" stroke="${faint}" stroke-width="1.4"/>`);
 }
 
 export function shelfArt(id: string): string | null {
