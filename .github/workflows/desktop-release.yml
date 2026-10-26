@@ -1,0 +1,81 @@
+name: Signed macOS release
+on:
+  workflow_dispatch:
+concurrency:
+  group: desktop-release
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: macos-15
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - name: Require approved signing credentials
+        env:
+          VITE_DESKTOP_SMOKE: '0'
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          for name in APPLE_CERTIFICATE APPLE_CERTIFICATE_PASSWORD APPLE_SIGNING_IDENTITY APPLE_ID APPLE_PASSWORD APPLE_TEAM_ID; do
+            test -n "${!name}" || { echo "Required signing configuration unavailable: $name" >&2; exit 1; }
+          done
+      - run: bun install --frozen-lockfile
+        working-directory: web
+      - run: bun test && bun run build
+        working-directory: web
+      - name: Sign and notarize universal application
+        uses: tauri-apps/tauri-action@v0
+        env:
+          VITE_DESKTOP_SMOKE: '0'
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        with:
+          projectPath: web
+          tauriScript: bun --bun tauri
+          args: --target universal-apple-darwin --bundles app --ci -- --locked
+      - name: Verify notarization and prepare immutable release
+        run: |
+          app=web/src-tauri/target/universal-apple-darwin/release/bundle/macos/OpenDazz.app
+          xcrun stapler staple "$app"
+          xcrun stapler validate "$app"
+          codesign --verify --deep --strict "$app"
+          spctl --assess --type execute --verbose=2 "$app"
+          scripts/package-macos.sh "$app" "$RUNNER_TEMP/release"
+          version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")
+          echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
+      - name: Publish versioned assets (existing versions are never replaced)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="desktop-v$RELEASE_VERSION"
+          git fetch origin --tags
+          if git show-ref --verify --quiet "refs/tags/$tag"; then
+            echo 'Version tag already exists; choose a new version instead of replacing it.' >&2
+            exit 1
+          fi
+          git tag "$tag" "$GITHUB_SHA"
+          git push origin "refs/tags/$tag"
+          gh release create "$tag" --verify-tag \
+            "$RUNNER_TEMP/release/OpenDazz-$RELEASE_VERSION-universal.zip" \
+            "$RUNNER_TEMP/release/SHA256SUMS" "$RUNNER_TEMP/release/install-macos.sh" \
+            --target "$GITHUB_SHA" --title "OpenDazz desktop $RELEASE_VERSION" \
+            --notes 'Signed and notarized universal macOS 14+ app. See docs/DESKTOP.md for the checksum-verifying, per-user installer. Included LUT packs retain their individual licenses.'

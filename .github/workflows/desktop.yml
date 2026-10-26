@@ -1,0 +1,103 @@
+name: macOS desktop
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  macos:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: web/src-tauri -> target
+      - run: bun install --frozen-lockfile
+        working-directory: web
+      - name: Installer safety tests
+        run: bash tools/test-macos-installer.sh
+      - run: bun run build:desktop
+        working-directory: web
+      - name: Check desktop Rust
+        run: cargo clippy --locked --manifest-path web/src-tauri/Cargo.toml --all-features -- -D warnings
+      - name: Universal development app (not a signed distribution release)
+        working-directory: web
+        env:
+          APPLE_SIGNING_IDENTITY: '-'
+        run: bun run desktop:build -- --target universal-apple-darwin --bundles app --ci -- --locked
+      - name: Package both architectures
+        run: scripts/package-macos.sh web/src-tauri/target/universal-apple-darwin/release/bundle/macos/OpenDazz.app "$RUNNER_TEMP/desktop-artifacts"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OpenDazz-universal-development
+          path: ${{ runner.temp }}/desktop-artifacts/
+          retention-days: 3
+          if-no-files-found: error
+      - name: Prepare native WebKit export smoke build
+        working-directory: web
+        env:
+          VITE_DESKTOP_SMOKE: '1'
+          APPLE_SIGNING_IDENTITY: '-'
+        run: |
+          brew list ffmpeg >/dev/null 2>&1 || brew install ffmpeg
+          ffmpeg -y -v error -f lavfi -i testsrc2=size=320x240:rate=12 -f lavfi -i sine=frequency=440:sample_rate=48000 -t 2 -c:v libx264 -pix_fmt yuv420p -c:a aac public/samples/desktop-smoke.mp4
+          bun run desktop:build -- --features smoke-test --no-bundle --ci -- --locked
+      - name: Native WebKit runtime (${{ runner.arch }}) and real exports
+        shell: bash
+        run: |
+          uname -m
+          web/src-tauri/target/release/opendazz-desktop > "$RUNNER_TEMP/desktop-smoke.log" 2>&1 &
+          app_pid=$!
+          for attempt in {1..180}; do
+            if ! kill -0 "$app_pid" 2>/dev/null; then
+              wait "$app_pid"
+              cat "$RUNNER_TEMP/desktop-smoke.log"
+              test -f "$TMPDIR/opendazz-smoke/photo.png"
+              test -f "$TMPDIR/opendazz-smoke/video.mp4"
+              exit 0
+            fi
+            sleep 3
+          done
+          kill "$app_pid" || true
+          cat "$RUNNER_TEMP/desktop-smoke.log"
+          exit 1
+      - name: Decode native export files
+        run: |
+          ffprobe -v error -show_streams -of json "$TMPDIR/opendazz-smoke/photo.png"
+          ffprobe -v error -count_frames -show_streams -of json "$TMPDIR/opendazz-smoke/video.mp4"
+          ffmpeg -v error -i "$TMPDIR/opendazz-smoke/video.mp4" -f null -
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          root = Path(os.environ['TMPDIR'])/'opendazz-smoke'
+          def streams(name): return json.loads(subprocess.check_output(['ffprobe','-v','error','-count_frames','-show_streams','-of','json',str(root/name)]))['streams']
+          photo = streams('photo.png')[0]
+          assert (photo['width'], photo['height']) == (1280,1920)
+          video = streams('video.mp4')
+          v = next(s for s in video if s['codec_type']=='video')
+          assert (v['width'], v['height'], int(v['nb_read_frames'])) == (320,240,24)
+          assert abs(float(v['duration'])-2)<.05
+          assert any(s['codec_name']=='aac' for s in video)
+          rgb=subprocess.check_output(['ffmpeg','-v','error','-i',str(root/'photo.png'),'-vf','scale=64:64','-f','rawvideo','-pix_fmt','rgb24','-'])
+          assert max(max(rgb[i:i+3])-min(rgb[i:i+3]) for i in range(0,len(rgb),3))<=2
+          audio=subprocess.check_output(['ffmpeg','-v','error','-i',str(root/'video.mp4'),'-map','0:a:0','-f','s16le','-'])
+          assert len(audio)>48000 and any(audio)
+
+          PY
+      - name: Runtime log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-webkit-runtime-log
+          path: ${{ runner.temp }}/desktop-smoke.log
+          retention-days: 3
+          if-no-files-found: ignore

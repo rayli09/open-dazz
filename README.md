@@ -27,7 +27,7 @@ Open the URL printed by Vite. CLI help (stable Rust, from the repo root):
 
 ## Docs
 
-[Development & limits](web/README.md) · [CLI & looks](library/README.md) · [Recipes](recipes/README.md) · [Testing](docs/TESTING.md)
+[Development & limits](web/README.md) · [CLI & looks](library/README.md) · [Recipes](recipes/README.md) · [Testing](docs/TESTING.md) · [macOS desktop & installer](docs/DESKTOP.md)
 
 ## License
 

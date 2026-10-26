@@ -1,5 +1,6 @@
 [workspace]
 resolver = "2"
+exclude = ["web/src-tauri"]
 members = ["crates/opendazz-core", "crates/opendazz-cli", "crates/opendazz-wasm", "crates/ntsc-rs"]
 
 [workspace.dependencies]

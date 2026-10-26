@@ -1,3 +1,5 @@
+import { saveMedia } from "./save-media";
+import { setupDesktop } from "./desktop";
 import { setupMediaSession, browserSessionStorage } from "./media-session";
 import { setupSessionUI } from "./session-ui";
 import { ResourceCache, fetchText } from "./resource-cache";
@@ -784,7 +786,6 @@ let exportMediaVersion = 0;
 let photoExportBusy = false;
 let photoSize: { width: number; height: number } | null = null;
 let photoExportController: AbortController | null = null;
-let resultUrl: string | null = null;
 
 
 function syncExportButtons() {
@@ -838,7 +839,6 @@ function setVideoButtons(on: boolean, label?: string) {
 }
 
 function hideResultVideo() {
-  if (resultUrl) { URL.revokeObjectURL(resultUrl); resultUrl = null; }
 }
 
 function markMediaError(message: string) {
@@ -1088,11 +1088,9 @@ async function developCurrentVideo() {
       }
     }
     if (videoCancel || request !== mediaVersion) throw new Error("cancelled");
-    resultUrl = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = resultUrl;
-    a.download = `opendazz-${lookName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.mp4`;
-    a.click();
+    const saved = await saveMedia(blob, `opendazz-${lookName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.mp4`, () => !videoCancel && request === mediaVersion);
+    if (request !== mediaVersion) return;
+    if (!saved) { $("#cap-state").textContent = "VIDEO SAVE CANCELLED"; return; }
     if (exportedItem && exportedSignature) mediaStore.getState().markExported(exportedItem.id, exportedSignature);
     $("#cap-state").textContent = "VIDEO DEVELOPED — SAVED AS MP4";
   } catch (e) {
@@ -1190,10 +1188,9 @@ async function exportCurrentMedia() {
     catch (error) { bitmap.close(); throw error; }
     const blob = await renderOriginalPhoto(bitmap, snapshot, controller.signal);
     if (controller.signal.aborted || request !== mediaVersion) return;
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `opendazz-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
-    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    const saved = await saveMedia(blob, `opendazz-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`, () => !controller.signal.aborted && request === mediaVersion);
+    if (controller.signal.aborted || request !== mediaVersion) return;
+    if (!saved) { $("#cap-state").textContent = "PHOTO SAVE CANCELLED"; return; }
     mediaStore.getState().markExported(item.id, exportedSignature);
     $("#cap-state").textContent = "ORIGINAL-SIZE PNG SAVED";
   } catch (error) {
@@ -1280,6 +1277,7 @@ async function boot() {
     void activateMedia(mediaStore.getState().selectedId);
   });
   const session = setupMediaSession(mediaStore, browserSessionStorage());
+  void setupDesktop(session.flush).catch(error => showError(`Desktop setup failed: ${error}`));
   const cleanupSessionUI = setupSessionUI($("#session-panel"), () => $<HTMLInputElement>("#file").click(), session.reset);
   const cleanupMedia = () => { session.destroy(); cleanupSessionUI(); cancelMediaDecode(); cancelExportForInput(); ++mediaVersion; ++selectionVersion; ++playerVersion; clearTimeout(applyTimer); origPixels = null; current = null; recipe = null; currentVideo = null; cleanupSelection(); cleanupImport(); cleanupThumbnails(); dock.destroy(); previewPlayer?.destroy(); hideResultVideo(); mediaStore.getState().clear(); removeEventListener("pagehide", onMediaPageHide); };
   const onMediaPageHide = (event: PageTransitionEvent) => { if (!event.persisted) cleanupMedia(); else { session.flush(); cancelExportForInput(); previewPlayer?.video.pause(); } };
@@ -1331,3 +1329,5 @@ async function boot() {
 }
 
 boot();
+
+if (import.meta.env.VITE_DESKTOP_SMOKE === "1") void import("./desktop-smoke");
