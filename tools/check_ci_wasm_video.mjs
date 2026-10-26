@@ -1,11 +1,11 @@
 // Before/after regression probe for CI-only loop and RGBA conversion repairs.
-// node --experimental-wasm-modules tools/check_ci_wasm_video.mjs PKG_DIR OUTPUT_DIR
+// bun tools/check_ci_wasm_video.mjs PKG_DIR OUTPUT_DIR
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { loadWasm } from './load-wasm.mjs';
 const [pkg, output] = process.argv.slice(2);
 if (!pkg || !output) throw new Error('Expected package and output directories');
-const engine = await import(pathToFileURL(resolve(pkg, 'opendazz_wasm.js')).href);
+const engine = await loadWasm(resolve(pkg));
 mkdirSync(output, { recursive: true });
 for (const [w, h] of [[64, 48], [65, 49], [128, 96]]) {
   const input = new Uint8Array(w * h * 4);

@@ -1,4 +1,4 @@
-import { test } from "node:test";
+import { test } from "bun:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { SIMPLE_PRESETS, DEFAULT_PHOTO, presetForRecipe, presetsForMedia, selectionForMedia, selectionForMode } from "../src/simple-presets.ts";
@@ -9,9 +9,9 @@ const root = new URL("../../", import.meta.url);
 const catalog = JSON.parse(readFileSync(new URL("library/catalog.json",root),"utf8"));
 const looks = new Map<string,any>(Object.values(catalog.brands).flatMap((b:any)=>Object.values(b.tiers).flat()).map((l:any)=>[l.id,l]));
 
-test("nine unique photo looks have real recipes and five Fuji photo-v1 profiles lead the shelf", () => {
+test("eleven unique photo looks have real recipes and five Fuji photo-v1 profiles lead the shelf", () => {
   const photos=presetsForMedia("photo");
-  assert.equal(photos.length,9);
+  assert.equal(photos.length,11);
   assert.equal(new Set(SIMPLE_PRESETS.map(p=>p.id)).size,SIMPLE_PRESETS.length);
   assert.equal(new Set(SIMPLE_PRESETS.map(p=>p.recipeId)).size,SIMPLE_PRESETS.length);
   assert.equal(DEFAULT_PHOTO.id,"chrome");
@@ -29,7 +29,7 @@ test("nine unique photo looks have real recipes and five Fuji photo-v1 profiles 
       assert.equal(recipeForMedia(recipe,simple,true).processing,"legacy");
     }
   }
-  assert.equal(photos.filter(p=>p.artKey==="street-compact").length,3);
+  assert.equal(photos.filter(p=>p.artKey==="street-compact").length,5);
   assert.equal(photos.filter(p=>p.artKey==="instant-ivory").length,1);
 });
 

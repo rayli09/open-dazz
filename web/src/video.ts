@@ -32,6 +32,7 @@ const CHUNK_FRAMES = 24;
 
 let ff: FFmpeg | null = null;
 let loading: Promise<FFmpeg> | null = null;
+let workerGeneration = 0;
 
 export function ffmpegLoaded(): boolean {
   return ff !== null;
@@ -40,6 +41,7 @@ export function ffmpegLoaded(): boolean {
 export async function getFFmpeg(): Promise<FFmpeg> {
   if (ff) return ff;
   if (!loading) {
+    const generation = workerGeneration;
     loading = (async () => {
       // Loaded from our own origin, outside the Vite bundle (see
       // scripts/sync-ffmpeg.mjs for why). Only the type comes from
@@ -54,15 +56,20 @@ export async function getFFmpeg(): Promise<FFmpeg> {
         wasmURL: "/ffmpeg/ffmpeg-core.wasm",
         classWorkerURL: "/ffmpeg/worker.js",
       });
+      if (generation !== workerGeneration) { inst.terminate(); throw new Error("cancelled"); }
       ff = inst;
       return inst;
-    })();
+    })().catch(error => {
+      if (generation === workerGeneration) loading = null;
+      throw error;
+    });
   }
   return loading;
 }
 
 /** Hard stop: kills the worker; the next getFFmpeg() rebuilds it. */
 export function resetFFmpeg() {
+  workerGeneration++;
   try {
     ff?.terminate();
   } catch {
@@ -119,7 +126,7 @@ export async function probeVideo(inst: FFmpeg, file: File): Promise<VideoProbe> 
 export async function posterFrame(inst: FFmpeg, probe: VideoProbe): Promise<Blob> {
   const at = Math.min(0.5, Math.max(0, probe.duration / 2)).toFixed(2);
   const code = await inst.exec([
-    "-ss", at, "-i", "input", "-frames:v", "1",
+    "-y", "-ss", at, "-i", "input", "-frames:v", "1",
     "-vf", `scale=${probe.w}:${probe.h}`, "-q:v", "4", "poster.jpg",
   ]);
   if (code !== 0) throw new Error("could not extract a preview frame");
@@ -146,9 +153,10 @@ export async function developVideo(inst: FFmpeg, opts: DevelopOptions): Promise<
   let frameNo = 0;
 
   for (let start = 0; start < total; start += CHUNK_FRAMES) {
+    if (opts.isCancelled()) throw new Error("cancelled");
     const n = Math.min(CHUNK_FRAMES, total - start);
     const code = await inst.exec([
-      "-ss", (start / fps).toFixed(3), "-i", "input",
+      "-y", "-ss", (start / fps).toFixed(3), "-i", "input",
       "-t", (n / fps).toFixed(3),
       "-vf", `fps=${fps},scale=${w}:${h}`,
       "-f", "rawvideo", "-pix_fmt", "rgb24", "chunk.raw",
@@ -181,7 +189,7 @@ export async function developVideo(inst: FFmpeg, opts: DevelopOptions): Promise<
     if (frames === 0) break;
     await inst.writeFile("out.raw", out);
     const enc = await inst.exec([
-      "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", `${w}x${h}`,
+      "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", `${w}x${h}`,
       "-r", String(fps), "-i", "out.raw",
       "-c:v", "libx264", "-preset", "ultrafast", "-crf", "20",
       "-pix_fmt", "yuv420p", "-an", `chunk${chunks.length}.mp4`,
@@ -193,12 +201,12 @@ export async function developVideo(inst: FFmpeg, opts: DevelopOptions): Promise<
   if (chunks.length === 0) throw new Error("no frames could be read from this video");
 
   await inst.writeFile("list.txt", chunks.map((c) => `file '${c}'`).join("\n"));
-  const args: string[] = ["-f", "concat", "-safe", "0", "-i", "list.txt", "-i", "input", "-map", "0:v:0"];
+  const args: string[] = ["-y", "-f", "concat", "-safe", "0", "-i", "list.txt", "-i", "input", "-map", "0:v:0"];
   if (probe.hasAudio) {
     if (opts.camcorderAudio) {
       const dur = Math.ceil(probe.duration) + 1;
       const fc =
-        `[1:a]highpass=f=95,lowpass=f=12500,` +
+        `[1:a]aformat=channel_layouts=stereo,highpass=f=95,lowpass=f=12500,` +
         `pan=stereo|c0=0.82*c0+0.18*c1|c1=0.82*c1+0.18*c0,` +
         `dynaudnorm=f=250:g=12:p=0.9,acompressor=threshold=0.5:ratio=3:attack=20:release=250,` +
         `volume=1.1[a1];` +
@@ -209,7 +217,9 @@ export async function developVideo(inst: FFmpeg, opts: DevelopOptions): Promise<
       args.push("-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k");
     }
   }
-  args.push("-shortest", "-movflags", "+faststart", "out.mp4");
+  // A short audio track must not truncate the developed video.
+  args.push("-t", String(frameNo / fps), "-movflags", "+faststart", "out.mp4");
+  if (opts.isCancelled()) throw new Error("cancelled");
   const fin = await inst.exec(args);
   if (fin !== 0) throw new Error("final assembly failed");
   const data = (await inst.readFile("out.mp4")) as Uint8Array;

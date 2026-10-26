@@ -94,7 +94,7 @@ function syncShelfUI() {
     button.classList.toggle("is-active", active);
   });
   $("#simple-hint").textContent = simpleMedia === "photo"
-    ? "Fuji first. Nine looks for everyday photos."
+    ? "Fuji first. Eleven looks for everyday photos."
     : "Camera effects. Preview a photo or develop a clip.";
   updateCounter();
 }
@@ -187,7 +187,7 @@ function layout() {
           </div>
           <span id="film-counter" class="ml-auto font-mono text-[10px] bg-ink text-accentink px-1.5 py-0.5"></span>
         </div>
-        <p id="simple-hint" class="simple-hint">Fuji first. Nine looks for everyday photos.</p>
+        <p id="simple-hint" class="simple-hint">Fuji first. Eleven looks for everyday photos.</p>
         <button id="simple-open-pro" class="simple-pro-link">All looks in Pro ${icon("arrow-up-right", "w-3 h-3")}</button>
       </div>
       <div id="strip" class="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto cabinet-scroll px-3 pb-3 lg:flex-1 lg:min-h-0"></div>
@@ -522,13 +522,15 @@ function setSplit(pct: number) {
   $("#split-label").textContent = `${Math.round(split)} / ${Math.round(100 - split)}`;
 }
 
+let previewBusy = true;
 function setBusy(b: boolean) {
+  previewBusy = b;
   $("#spin")?.classList.toggle("hidden", !b);
   $("#cap-state").textContent = b ? "DEVELOPING…" : "READY";
   for (const id of ["#btn-export", "#btn-export-simple"]) {
     const ex = $<HTMLButtonElement>(id);
-    ex.disabled = b;
-    ex.classList.toggle("opacity-50", b);
+    ex.disabled = b || videoBusy;
+    ex.classList.toggle("opacity-50", ex.disabled);
   }
 }
 function progress(p: number) {
@@ -540,12 +542,15 @@ function progress(p: number) {
 function hideStageLoad() { $("#stage-load")?.classList.add("hidden"); }
 
 function scheduleApply() {
+  setBusy(true);
+  syncExportButtons();
   clearTimeout(applyTimer);
   applyTimer = setTimeout(applyNow, 90);
 }
 
 function finishDevelop() {
   setBusy(false);
+  syncExportButtons();
   hideStageLoad();
   progress(100);
   fitStage();
@@ -645,8 +650,10 @@ async function decodeImage(blob: Blob): Promise<ImageBitmap> {
   catch { return await createImageBitmap(jpg); }
 }
 
-async function loadPhoto(source: Blob | string, name: string, request = ++mediaVersion): Promise<boolean> {
+async function loadPhoto(source: Blob | string, name: string, request?: number): Promise<boolean> {
+  if (request === undefined) { cancelExportForInput(); request = ++mediaVersion; }
   setBusy(true);
+  syncExportButtons();
   let bmp: ImageBitmap;
   try {
     bmp = await decodeImage(source instanceof Blob ? source : await (await fetch(source)).blob());
@@ -687,17 +694,38 @@ interface LoadedVideo {
 let currentVideo: LoadedVideo | null = null;
 let videoBusy = false;
 let videoCancel = false;
+let exportMediaVersion = 0;
+let photoExportBusy = false;
 let resultUrl: string | null = null;
 
 function isVideoFile(f: File): boolean {
   return f.type.startsWith("video/") || /\.(mp4|m4v|mov|webm|mkv)$/i.test(f.name);
 }
 
+function syncExportButtons() {
+  for (const id of ["#btn-export", "#btn-export-simple"]) {
+    const b = document.querySelector<HTMLButtonElement>(id);
+    if (!b) continue;
+    const label = videoBusy ? "Exporting MP4…" : currentVideo ? "Export MP4" : "Export PNG";
+    b.innerHTML = `${icon("download", "w-4 h-4")}${label}`;
+    b.title = currentVideo ? "Export the full filtered video as MP4" : "Export the filtered photo as PNG";
+    b.disabled = videoBusy || previewBusy || photoExportBusy;
+  }
+}
+
+function cancelExportForInput() {
+  if (videoBusy) {
+    videoCancel = true;
+    resetFFmpeg();
+  }
+}
+
 function setVideoButtons(on: boolean, label?: string) {
+  syncExportButtons();
   for (const id of ["#btn-video-simple", "#btn-video"]) {
     const b = document.querySelector<HTMLButtonElement>(id);
     if (!b) continue;
-    b.style.display = on ? "" : "none";
+    b.style.display = on && videoBusy ? "" : "none";
     const span = b.querySelector("[data-vlabel]");
     if (span && label) span.textContent = label;
     if (span && !label && id === "#btn-video-simple") span.textContent = "DEVELOP VIDEO";
@@ -719,6 +747,7 @@ function hideResultVideo() {
 }
 
 async function loadMedia(f: File) {
+  cancelExportForInput();
   hideResultVideo();
   if (isVideoFile(f)) {
     await loadVideoFile(f);
@@ -730,6 +759,7 @@ async function loadMedia(f: File) {
 }
 
 async function loadVideoFile(f: File) {
+  cancelExportForInput();
   const request = ++mediaVersion;
   currentVideo = null;
   setVideoButtons(false);
@@ -794,24 +824,29 @@ function finishVideoLoad(f: File, w: number, h: number, dur: number, routeLabel:
   // things settle.
   setTimeout(() => {
     if (request === mediaVersion && currentVideo && !videoBusy) {
-      $("#cap-state").textContent = "VIDEO READY — PICK A LOOK, THEN DEVELOP VIDEO";
+      $("#cap-state").textContent = "VIDEO READY — PICK A LOOK, THEN EXPORT MP4";
     }
   }, 160);
 }
 
-async function makeFrameProcessor(): Promise<(px: Uint8Array, w: number, h: number, fr: number) => Uint8Array> {
+type FrameProcessor = ((px: Uint8Array, w: number, h: number, fr: number) => Uint8Array) & { dispose?: () => void };
+
+async function makeFrameProcessor(): Promise<FrameProcessor> {
   const eng = engine;
   if (!eng || !current) throw new Error("engine or look not ready");
   if (current.brand === "camcorder") {
     if (current.id === "camcorder/cx405") {
       const sim = new eng.CamcorderSim(7n);
-      return (px, w, h, fr) => sim.process(px, w, h, fr);
+      const process: FrameProcessor = (px, w, h, fr) => sim.process(px, w, h, fr);
+      process.dispose = () => sim.free();
+      return process;
     }
     return (px, w, h, fr) => eng.apply_vhs(px, w, h, "vhs", fr);
   }
   if (!recipe) throw new Error("recipe not loaded yet");
-  const cube = await cubeFor(current);
-  const effective = recipeForMedia(recipe, store.get(modeAtom) === "simple", true);
+  const entry = current;
+  const effective = recipeForMedia(structuredClone(recipe), store.get(modeAtom) === "simple", true);
+  const cube = await cubeFor(entry);
   const json = JSON.stringify(effective);
   return (px, w, h) => eng.apply(px, w, h, json, cube);
 }
@@ -819,60 +854,71 @@ async function makeFrameProcessor(): Promise<(px: Uint8Array, w: number, h: numb
 async function developViaFFmpeg(
   cv: LoadedVideo,
   process: (px: Uint8Array, w: number, h: number, fr: number) => Uint8Array,
+  camcorderAudio: boolean,
 ): Promise<Blob> {
   const inst = await getFFmpeg();
-  if (!cv.ffProbe) cv.ffProbe = await probeVideo(inst, cv.file);
+  // Always restore this source: another upload may have used the shared FFmpeg FS.
+  cv.ffProbe = await probeVideo(inst, cv.file);
+  if (cv.ffProbe.duration > VIDEO_MAX_SECONDS) throw new Error(`compat export caps at ${VIDEO_MAX_SECONDS}s; trim the clip first`);
   return developVideo(inst, {
     probe: cv.ffProbe,
-    camcorderAudio: current?.id === "camcorder/cx405",
+    camcorderAudio,
     process,
     onProgress: (done, total) => {
+      if (videoCancel || exportMediaVersion !== mediaVersion) return;
       const pct = Math.round((done / total) * 100);
       $("#cap-state").textContent = `DEVELOPING VIDEO — ${pct}% · FRAME ${done}/${total}`;
       progress(Math.max(2, pct));
     },
-    isCancelled: () => videoCancel,
+    isCancelled: () => videoCancel || exportMediaVersion !== mediaVersion,
   });
 }
 
 async function developCurrentVideo() {
   if (videoBusy) {
-    videoCancel = true;
     return;
   }
   if (!currentVideo) return;
   videoBusy = true;
   videoCancel = false;
+  exportMediaVersion = mediaVersion;
+  const request = mediaVersion;
+  const lookName = current?.name ?? "video";
+  const camcorderAudio = current?.id === "camcorder/cx405";
   hideResultVideo();
   setVideoButtons(true, "■ CANCEL");
   const cv = currentVideo;
+  let process: FrameProcessor | undefined;
   try {
-    const process = await makeFrameProcessor();
+    process = await makeFrameProcessor();
+    if (videoCancel || request !== mediaVersion) throw new Error("cancelled");
     let blob: Blob;
     // The CX405 always takes the ffmpeg route: its audio chain is
     // real signal processing, which the WebCodecs path (built on
     // audio passthrough) deliberately does not do.
-    if (current?.id === "camcorder/cx405" || cv.route === "ffmpeg" || !cv.wcProbe) {
-      blob = await developViaFFmpeg(cv, process);
+    if (camcorderAudio || cv.route === "ffmpeg" || !cv.wcProbe || !cv.wcProbe.audioPassthrough) {
+      blob = await developViaFFmpeg(cv, process, camcorderAudio);
     } else {
       try {
         blob = await developWebCodecs(cv.file, {
           probe: cv.wcProbe,
           process,
           onProgress: (frac) => {
+            if (videoCancel || request !== mediaVersion) return;
             const pct = Math.round(frac * 100);
             $("#cap-state").textContent = `DEVELOPING VIDEO (FAST PATH) — ${pct}%`;
             progress(Math.max(2, pct));
           },
-          isCancelled: () => videoCancel,
+          isCancelled: () => videoCancel || exportMediaVersion !== mediaVersion,
         });
       } catch (e) {
-        if (String((e as Error)?.message ?? e).includes("cancelled")) throw e;
+        if (videoCancel || request !== mediaVersion || String((e as Error)?.message ?? e).includes("cancelled")) throw e;
         console.warn("[open-dazz] webcodecs develop failed, falling back to ffmpeg", e);
         $("#cap-state").textContent = "FAST PATH FAILED — SWITCHING TO COMPAT ENGINE…";
-        blob = await developViaFFmpeg(cv, process);
+        blob = await developViaFFmpeg(cv, process, camcorderAudio);
       }
     }
+    if (videoCancel || request !== mediaVersion) throw new Error("cancelled");
     resultUrl = URL.createObjectURL(blob);
     const v = document.querySelector<HTMLVideoElement>("#vid-result");
     if (v) {
@@ -882,21 +928,24 @@ async function developCurrentVideo() {
     }
     const a = document.createElement("a");
     a.href = resultUrl;
-    a.download = `opendazz-${(current?.name ?? "video").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.mp4`;
+    a.download = `opendazz-${lookName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.mp4`;
     a.click();
     $("#cap-state").textContent = "VIDEO DEVELOPED — SAVED AS MP4";
   } catch (e) {
-    if (String((e as Error)?.message ?? e).includes("cancelled")) {
+    if (request !== mediaVersion) return;
+    if (videoCancel || String((e as Error)?.message ?? e).includes("cancelled")) {
       resetFFmpeg();
       $("#cap-state").textContent = "VIDEO DEVELOP CANCELLED";
     } else {
-      showError("video develop failed — see console");
+      showError(`video export failed — ${(e as Error)?.message ?? e}`);
       console.error("[open-dazz] video develop failed", e);
     }
   } finally {
+    process?.dispose?.();
     progress(100);
     videoBusy = false;
-    if (currentVideo) setVideoButtons(true);
+    setVideoButtons(!!currentVideo);
+    syncExportButtons();
   }
 }
 
@@ -919,16 +968,35 @@ function showError(msg: string) {
   console.error("[open-dazz]", msg);
 }
 
-// Export is deliberately plain: the developed pixels, nothing added.
-function exportPNG() {
+// Export follows the loaded input; the video poster is preview only.
+async function exportCurrentMedia() {
+  if (videoBusy) return; // Repeated Export clicks never cancel or duplicate work.
+  if (previewBusy || photoExportBusy) return;
+  if (currentVideo) return developCurrentVideo();
+  photoExportBusy = true;
+  syncExportButtons();
+  const request = mediaVersion;
+  const selection = selectionVersion;
+  const name = current?.name ?? "photo";
   const src = $<HTMLCanvasElement>("#after");
-  src.toBlob((b) => {
-    if (!b) return;
+  try {
+    const blob = await new Promise<Blob | null>(resolve => src.toBlob(resolve, "image/png"));
+    if (!blob || request !== mediaVersion || selection !== selectionVersion) return;
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(b);
-    a.download = `opendazz-${(current?.name ?? "photo").toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
-    a.click(); URL.revokeObjectURL(a.href);
-  }, "image/png");
+    a.href = URL.createObjectURL(blob);
+    a.download = `opendazz-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  } finally {
+    photoExportBusy = false;
+    syncExportButtons();
+  }
+}
+
+function cancelVideoExport() {
+  if (!videoBusy) return developCurrentVideo();
+  videoCancel = true;
+  resetFFmpeg();
 }
 
 async function boot() {
@@ -979,11 +1047,11 @@ async function boot() {
     const f = (e.target as HTMLInputElement).files?.[0];
     if (f) loadMedia(f);
   });
-  $("#btn-video").addEventListener("click", developCurrentVideo);
-  $("#btn-video-simple").addEventListener("click", developCurrentVideo);
+  $("#btn-video").addEventListener("click", cancelVideoExport);
+  $("#btn-video-simple").addEventListener("click", cancelVideoExport);
   $("#btn-s1").addEventListener("click", () => { currentVideo = null; setVideoButtons(false); loadPhoto("/samples/sample-1.jpg", "Sample I — the portrait"); });
   $("#btn-s2").addEventListener("click", () => { currentVideo = null; setVideoButtons(false); loadPhoto("/samples/sample-2.jpg", "Sample II — the lake"); });
-  $("#btn-export").addEventListener("click", exportPNG);
+  $("#btn-export").addEventListener("click", exportCurrentMedia);
   document.querySelectorAll<HTMLButtonElement>("[data-simple-media]").forEach(button => button.addEventListener("click", () => {
     simpleMedia = button.dataset.simpleMedia as PresetMedia;
     const next = selectionForMedia(simpleMedia, lastSimpleSelection[simpleMedia]);
@@ -997,7 +1065,7 @@ async function boot() {
     store.set(modeAtom, "pro");
   });
   addEventListener("resize", () => fitStage());
-  $("#btn-export-simple").addEventListener("click", exportPNG);
+  $("#btn-export-simple").addEventListener("click", exportCurrentMedia);
   const wrap = $("#printwrap");
   const drag = (e: PointerEvent) => {
     const r = wrap.getBoundingClientRect();

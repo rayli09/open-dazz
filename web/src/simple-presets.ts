@@ -18,6 +18,8 @@ export const SIMPLE_PRESETS: readonly SimplePreset[] = [
   { id: "portrait", recipeId: "fuji/community/080-soft-portrait-john-peltier", artKey: "fuji-silver", label: "Portrait", description: "Gentle skin · soft color", media: "photo" },
   { id: "vivid", recipeId: "fuji/community/201-velvia-veijo-matikainen", artKey: "fuji-silver", label: "Vivid", description: "Bold color · open skies", media: "photo" },
   { id: "acros", recipeId: "fuji/community/075-acros-john-peltier", artKey: "fuji-silver", label: "Acros", description: "Rich monochrome · street", media: "photo" },
+  { id: "ricoh-negative", recipeId: "ricoh/community/ricoh-superior-100-negative-film", artKey: "street-compact", label: "Ricoh Negative", description: "Negative color · everyday street", media: "photo" },
+  { id: "ricoh-bw", recipeId: "ricoh/community/ricoh-high-minus-contrast-monochrome", artKey: "street-compact", label: "Ricoh B&W", description: "High contrast · monochrome", media: "photo" },
   { id: "portra", recipeId: "kodak/community/kodak-portra-400", artKey: "street-compact", label: "Portra", description: "Soft warmth · people", media: "photo" },
   { id: "gold", recipeId: "kodak/community/kodak-gold-200", artKey: "street-compact", label: "Gold", description: "Golden color · daylight", media: "photo" },
   { id: "superia", recipeId: "fuji/community/fuji-superia-x-minus-tra-400", artKey: "street-compact", label: "Superia", description: "Fresh greens · everyday color", media: "photo" },

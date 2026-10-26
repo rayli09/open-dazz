@@ -14,14 +14,14 @@
 
 ## Run locally
 
-Node.js 24:
+Bun 1.4.3:
 
 ```sh
 git clone https://github.com/rayli09/open-dazz.git
 cd open-dazz/web
-npm ci
-npm run build
-npm run preview
+bun install --frozen-lockfile
+bun run build
+bun run preview
 ```
 
 Open the URL printed by Vite. CLI help (stable Rust, from the repo root):

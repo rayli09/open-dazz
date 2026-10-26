@@ -1,6 +1,6 @@
 // Copy the repo library into public/ so the dev server and the build can
 // serve catalog.json, recipes and LUTs as static files. Runs before
-// `npm run dev` and `npm run build` (also on Vercel, where the build
+// `bun run dev` and `bun run build` (also on Vercel, where the build
 // runs inside the repo checkout, so ../library exists).
 import { cpSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";

@@ -109,6 +109,7 @@ export async function developWebCodecs(file: File, opts: WcDevelopOptions): Prom
     format: new Mp4OutputFormat({ fastStart: "in-memory" }),
     target: new BufferTarget(),
   });
+  let audioPump: Promise<void> | null = null;
   try {
     const vtrack = await input.getPrimaryVideoTrack();
     if (!vtrack) throw new Error("no video track");
@@ -120,16 +121,17 @@ export async function developWebCodecs(file: File, opts: WcDevelopOptions): Prom
     output.addVideoTrack(videoSource);
 
     // Audio passthrough runs concurrently with the frame pump.
-    let audioPump: Promise<void> | null = null;
+    let pumpAudio: (() => Promise<void>) | null = null;
     const atrack = await input.getPrimaryAudioTrack();
     if (atrack && probe.audioPassthrough) {
       const audioSource = new EncodedAudioPacketSource(atrack.codec as "aac");
       output.addAudioTrack(audioSource);
-      audioPump = (async () => {
+      pumpAudio = async () => {
         const sink = new EncodedPacketSink(atrack);
         const decoderConfig = await atrack.getDecoderConfig();
         let first = true;
         for await (const packet of sink.packets()) {
+          if (opts.isCancelled()) throw new Error("cancelled");
           if (packet.timestamp > probe.duration + 0.1) break;
           if (first) {
             await audioSource.add(packet, decoderConfig ? { decoderConfig } : undefined);
@@ -138,10 +140,15 @@ export async function developWebCodecs(file: File, opts: WcDevelopOptions): Prom
             await audioSource.add(packet);
           }
         }
-      })();
+      };
     }
 
+    if (atrack && !probe.audioPassthrough) throw new Error("audio requires compatibility export");
+    if (opts.isCancelled()) throw new Error("cancelled");
     await output.start();
+    audioPump = pumpAudio?.() ?? null;
+    // Attach a handler immediately while the frame pump runs.
+    audioPump?.catch(() => {});
     const sink = new VideoSampleSink(vtrack);
     const canvas = document.createElement("canvas");
     canvas.width = probe.w;
@@ -172,12 +179,14 @@ export async function developWebCodecs(file: File, opts: WcDevelopOptions): Prom
       opts.onProgress(Math.min(1, sample.timestamp / Math.max(0.001, probe.duration)));
     }
     if (audioPump) await audioPump;
+    if (opts.isCancelled()) throw new Error("cancelled");
     await output.finalize();
     const buffer = (output.target as BufferTarget).buffer;
     if (!buffer) throw new Error("muxing produced no output");
     return new Blob([buffer], { type: "video/mp4" });
   } catch (e) {
-    (output as unknown as { cancel?: () => Promise<void> }).cancel?.().catch(() => {});
+    await output.cancel().catch(() => {});
+    if (audioPump) await audioPump.catch(() => {});
     throw e;
   } finally {
     (input as unknown as { dispose?: () => void }).dispose?.();

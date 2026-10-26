@@ -4,18 +4,18 @@ Live app: **https://opendazz.vercel.app**. Vite, TypeScript and Tailwind serve a
 
 ## Run locally
 
-Use Node.js 24, matching CI. From `web/`:
+Use Bun 1.4.3, matching CI. From `web/`:
 
 ```sh
-npm ci
-npm test
-npm run build
-npm run preview
+bun install --frozen-lockfile
+bun test
+bun run build
+bun run preview
 ```
 
 Open the URL printed by Vite. `prebuild` synchronizes the repository's library and FFmpeg browser runtime into `public/`. The committed `src/pkg/` package lets the web app build without installing Rust tooling.
 
-`npm run dev` also synchronizes those assets, then starts Vite. The current dev-server path has a known import-analysis issue with `/ffmpeg/classes.js`; use the production build and preview for the working photo/video workflow. This does not affect the production build.
+`bun run dev` also synchronizes those assets, then starts Vite. The current dev-server path has a known import-analysis issue with `/ffmpeg/classes.js`; use the production build and preview for the working photo/video workflow. This does not affect the production build.
 
 After changing Rust engine code, rebuild the WASM package from the **repository root** with `wasm-pack` installed:
 
@@ -26,9 +26,9 @@ wasm-pack build crates/opendazz-wasm --target bundler \
 
 ## Product and implementation
 
-- **Simple:** nine curated Fuji-first photo recipes; separate CX405 and VHS effects. Recipe identity, artwork, labels and media grouping live in `src/simple-presets.ts`.
+- **Simple:** eleven curated Fuji-first photo recipes; separate CX405 and VHS effects. Recipe identity, artwork, labels and media grouping live in `src/simple-presets.ts`.
 - **Pro:** full catalogue, search/brand/type filters, recipe provenance and adjustment sliders.
-- **Preview/export:** compare original and processed pixels, export photos as PNG or develop clips into MP4. Both modes preserve the recipe's photo-processing profile; video uses the legacy processing override.
+- **Preview/export:** compare original and processed pixels; Export saves photos as PNG and full filtered clips as MP4 with audio when supported. Both modes preserve the recipe's photo-processing profile; video uses the legacy processing override.
 - **Assets:** `scripts/sync-library.mjs` copies `../library` before dev/build. Recipes and LUTs are fetched when needed. Original generated camera artwork and responsive derivatives are documented in `../design/camera-assets/manifest.json`.
 - **Style:** Graphite Darkroom, Instrument Sans, shared graphite surfaces and restrained silver controls. Desktop uses a two-column camera shelf; mobile keeps a substantial preview and reachable export controls before the shelf.
 
@@ -40,6 +40,6 @@ Video takes the WebCodecs route when supported (up to **120 seconds**) and other
 
 ## Validation and hosting
 
-[UI/export verification](../docs/verification/simple-shelf/README.md) records actual desktop/mobile screenshots, all-nine sample renders, mode parity and a decoded short MP4. [Design QA](../design-qa.md) documents the selected visual target and accepted differences. These are bounded regression checks, not claims of exact camera matching.
+[UI/export verification](../docs/verification/simple-shelf/README.md) records actual desktop/mobile screenshots, historical nine-look sample renders, mode parity and a decoded short MP4. [Design QA](../design-qa.md) documents the selected visual target and accepted differences. These are bounded regression checks, not claims of exact camera matching.
 
-Production frontend root: `web`; build command: `npm run build`. Existing hosting settings and Git integration are managed separately. Documentation changes do not rename hosting projects or modify infrastructure. See the root [license and credits](../README.md#license-and-credits) before reusing bundled looks.
+Production frontend root: `web`; build command: `bun run build`. Existing hosting settings and Git integration are managed separately. Documentation changes do not rename hosting projects or modify infrastructure. See the root [license and credits](../README.md#license) before reusing bundled looks.

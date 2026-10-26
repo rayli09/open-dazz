@@ -43,7 +43,7 @@ def main():
     ap.add_argument("--after", type=Path, required=True)
     ap.add_argument("--baseline-ref", required=True)
     ap.add_argument("--out", type=Path, default=ROOT / "tools/verify-out/fuji-photo-v1")
-    ap.add_argument("--check-wasm", action="store_true", help="compare committed browser WASM to native photo pixels (Node required)")
+    ap.add_argument("--check-wasm", action="store_true", help="compare committed browser WASM to native photo pixels (Bun required)")
     args = ap.parse_args()
     before, after, out = args.before.resolve(), args.after.resolve(), args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
@@ -124,7 +124,7 @@ def main():
     if args.check_wasm:
         cases_path = out / "wasm-cases.json"
         cases_path.write_text(json.dumps(wasm_cases))
-        result = subprocess.check_output(["node","--experimental-wasm-modules",str(ROOT/"tools/check_wasm_photo.mjs"),str(cases_path)],cwd=ROOT)
+        result = subprocess.check_output(["bun",str(ROOT/"tools/check_wasm_photo.mjs"),str(cases_path)],cwd=ROOT)
         manifest["wasm_native_parity"] = json.loads(result)
         manifest["browser_wasm_sha256"] = digest((ROOT/"web/src/pkg/opendazz_wasm_bg.wasm").read_bytes())
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
