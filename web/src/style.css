@@ -122,9 +122,10 @@ button { touch-action: manipulation; }
   background-repeat: repeat, no-repeat;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 5px rgba(0,0,0,0.45);
 }
-/* brushed metal: fine vertical streaks, for the shutter/print control */
+/* brushed metal: fine horizontal machined lines (same 2px rhythm
+   as the shelf art's line pattern), for metal control surfaces */
 .tex-metal {
-  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px);
+  background-image: repeating-linear-gradient(180deg, rgba(255,255,255,0.05) 0 1px, rgba(0,0,0,0.055) 1px 2px);
 }
 /* leatherette: a tight cross piqué, for quiet header bands */
 .tex-leather {
@@ -173,6 +174,21 @@ button, input, .dd-panel, .look-card, .strip-card { border-radius: 10px; }
    "no shadows" rule for the chrome (the stage stayspure black).
    ============================================================ */
 
+/* Shared metal tokens — the SAME texture language as the shelf
+   art's metal pass, so the app's chrome and the cameras it draws
+   are one material system:
+   --od-lines:  2px horizontal machined lines (the art's brl layer)
+   --od-silver: the env reflection rhythm for silver parts
+                (bright wall / dark gap / cool softbox core / falloff)
+   --od-plate:  the same rhythm in anodized-black values
+   --od-turn:   concentric turning rings for round knobs */
+:root {
+  --od-lines: repeating-linear-gradient(180deg, rgba(255,255,255,0.05) 0 1px, rgba(0,0,0,0.055) 1px 2px);
+  --od-silver: linear-gradient(180deg, #f5f7fa 0%, #ccd0d6 30%, #878d95 48%, #eef1f6 57%, #b7bcc4 74%, #71767e 100%);
+  --od-plate: linear-gradient(180deg, #41454c 0%, #232529 30%, #0f1013 48%, #2e3138 57%, #191a1e 74%, #0a0a0c 100%);
+  --od-turn: repeating-radial-gradient(circle at 50% 42%, rgba(255,255,255,0.13) 0 1px, rgba(0,0,0,0.10) 1px 2px);
+}
+
 /* leatherette body panels (two-layer piqué: light dot + dark dot) */
 .cabinet-aside, .ledger, .shelf-rail {
   background-color: #0a0a0b;
@@ -192,9 +208,7 @@ button, input, .dd-panel, .look-card, .strip-card { border-radius: 10px; }
 header {
   position: relative;
   z-index: 30;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.028) 0 1px, transparent 1px 3px),
-    linear-gradient(180deg, #3b3e44 0%, #1a1b1e 34%, #26282d 58%, #0b0b0d 100%);
+  background-image: var(--od-lines), var(--od-plate);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.28),
     inset 0 -1px 0 rgba(0,0,0,0.85),
@@ -204,7 +218,7 @@ header .font-display {
   text-shadow: 0 -1px 1px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.14);
 }
 header img { filter: drop-shadow(0 2px 3px rgba(0,0,0,0.65)); }
-header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,0,0.45); background-image: linear-gradient(180deg, #2b2d33, #16171a); }
+header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,0,0.45); background-image: var(--od-lines), linear-gradient(180deg, #2b2d33, #16171a); }
 
 /* --- dials: segmented switches sit in an inset well; the active
        segment is a raised metal index --- */
@@ -215,12 +229,12 @@ header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,
 }
 .seg > button { color: var(--color-ink2); text-shadow: 0 -1px 0 rgba(0,0,0,0.8); }
 .seg > button.bg-ink {
-  background-image: linear-gradient(180deg, #f2f3f5 0%, #c9ccd1 45%, #e3e5e9 70%, #a9adb5 100%);
+  background-image: var(--od-lines), var(--od-silver);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(0,0,0,0.25), 0 3px 8px rgba(0,0,0,0.55);
   text-shadow: 0 1px 0 rgba(255,255,255,0.35);
 }
 .gsize.bg-ink {
-  background-image: linear-gradient(180deg, #e8e9ec, #b9bcc2);
+  background-image: var(--od-lines), var(--od-silver);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 6px rgba(0,0,0,0.5);
 }
 
@@ -239,16 +253,16 @@ header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 5px 12px rgba(0,0,0,0.50);
 }
 #btn-load {
-  background-image: linear-gradient(180deg, #f2f3f5 0%, #c9ccd1 45%, #e3e5e9 70%, #a9adb5 100%);
+  background-image: var(--od-lines), var(--od-silver);
   text-shadow: 0 1px 0 rgba(255,255,255,0.35);
 }
-#btn-s1, #btn-s2 { background-image: linear-gradient(180deg, #2b2d33, #151619); }
+#btn-s1, #btn-s2 { background-image: var(--od-lines), linear-gradient(180deg, #2b2d33, #151619); }
 #btn-load:active, #btn-s1:active, #btn-s2:active { transform: translateY(1px); box-shadow: inset 0 2px 6px rgba(0,0,0,0.35), 0 2px 5px rgba(0,0,0,0.5); }
 
 /* --- the shutter: export buttons are silver release buttons
        with a red index dot --- */
 #btn-export, #btn-export-simple {
-  background-image: linear-gradient(180deg, #f2f3f5 0%, #c9ccd1 45%, #e3e5e9 70%, #a9adb5 100%);
+  background-image: var(--od-lines), var(--od-silver);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(0,0,0,0.25), 0 6px 16px rgba(0,0,0,0.55);
   text-shadow: 0 1px 0 rgba(255,255,255,0.35);
   color: #000;
@@ -263,7 +277,7 @@ header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,
 
 /* the simple-mode export deck is a metal control strip */
 .simple-only {
-  background-image: linear-gradient(180deg, #26282d, #141518);
+  background-image: var(--od-lines), var(--od-plate);
   border-color: #34373d;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 10px 24px rgba(0,0,0,0.50);
   border-radius: 12px;
@@ -272,14 +286,42 @@ header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,
 /* --- inset wells: search + dropdown triggers --- */
 #search, .dd-btn {
   background-color: #0c0c0e;
-  background-image: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(255,255,255,0.03));
+  background-image: var(--od-lines), linear-gradient(180deg, rgba(0,0,0,0.55), rgba(255,255,255,0.03));
   border-color: #2e3036;
   box-shadow: inset 0 2px 6px rgba(0,0,0,0.70), inset 0 -1px 0 rgba(255,255,255,0.05);
 }
+/* an open dropdown's trigger seats lit, like a pressed index */
+.dd.open .dd-btn {
+  border-color: #565b63;
+  box-shadow: inset 0 2px 7px rgba(0,0,0,0.8), inset 0 -1px 0 rgba(255,255,255,0.10), 0 0 0 1px rgba(255,255,255,0.05);
+}
+/* --- dropdown panels: a machined plate that drops from the well —
+       same env rhythm + line texture as every other metal surface,
+       with a cool softbox streak across its top --- */
 .dd-panel {
-  background-image: linear-gradient(180deg, #24262b, #131417);
-  border: 1px solid #3a3d43;
-  box-shadow: 0 24px 48px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.09);
+  background-image:
+    linear-gradient(115deg, rgba(238,244,255,0.09) 0%, rgba(238,244,255,0.02) 34%, transparent 52%),
+    var(--od-lines),
+    var(--od-plate);
+  border: 1px solid #43464d;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.16), inset 0 -1px 0 rgba(0,0,0,0.6);
+}
+.dd-panel > button {
+  border-radius: 0;
+  color: #d7d9dd;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+}
+.dd-panel > button:last-child { border-bottom: none; }
+.dd-panel > button:hover {
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02));
+  color: #ffffff;
+}
+/* the chosen row is a silver index plate, like the seg's active segment */
+.dd-panel > button.bg-accent {
+  background-image: var(--od-lines), var(--od-silver);
+  color: #000;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
 }
 
 /* --- cards sit ON the leather, raised --- */
@@ -297,7 +339,7 @@ header a { box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 8px rgba(0,0,
     radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
     radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
     radial-gradient(circle at center, #4a4d54 0 2.4px, #232529 3.2px, #0b0c0e 4.4px, transparent 5.6px),
-    linear-gradient(180deg, #26282d 0%, #17181b 55%, #101114 100%);
+    var(--od-plate);
   background-size: 11px 11px, 11px 11px, 11px 11px, 11px 11px, 100% 100%;
   background-position: 6px 6px, calc(100% - 6px) 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), 0 0;
   background-repeat: no-repeat;
@@ -339,7 +381,7 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 input[type="range"]::-webkit-slider-thumb {
   width: 18px; height: 18px; margin-top: -7px; border-radius: 9999px;
-  background: radial-gradient(circle at 34% 28%, #f4f5f7, #c9ccd1 42%, #8f939b 78%, #6d7076);
+  background: var(--od-turn), radial-gradient(circle at 34% 28%, #f4f5f7, #c9ccd1 42%, #8f939b 78%, #6d7076);
   border: 1px solid #0a0a0b;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 3px 7px rgba(0,0,0,0.65);
 }
@@ -350,14 +392,14 @@ input[type="range"]::-moz-range-track {
 }
 input[type="range"]::-moz-range-thumb {
   width: 18px; height: 18px; border-radius: 9999px;
-  background: radial-gradient(circle at 34% 28%, #f4f5f7, #c9ccd1 42%, #8f939b 78%, #6d7076);
+  background: var(--od-turn), radial-gradient(circle at 34% 28%, #f4f5f7, #c9ccd1 42%, #8f939b 78%, #6d7076);
   border: 1px solid #0a0a0b;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 3px 7px rgba(0,0,0,0.65);
 }
 
 /* machined scrollbar */
 .cabinet-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #3a3d43, #1b1c1f);
+  background: var(--od-lines), linear-gradient(180deg, #3a3d43, #1b1c1f);
   border-radius: 4px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
 }
