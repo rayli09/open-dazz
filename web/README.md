@@ -28,7 +28,7 @@ Both `.d.ts` files in `src/pkg/` come from wasm-bindgen; the client imports thei
 
 ## Product and implementation
 
-- **Simple:** eleven curated Fuji-first photo recipes; separate CX405 and VHS effects. Recipe identity, artwork, labels and media grouping live in `src/simple-presets.ts`.
+- **Simple:** eleven curated Fuji-first photo recipes; separate N95/4S-inspired, CX405 and VHS video effects. Recipe identity, artwork, labels and media grouping live in `src/simple-presets.ts`.
 - **Pro:** full catalogue, search/brand/type filters, recipe provenance and adjustment sliders.
 - **Preview/export:** compare original and processed pixels; Export saves the selected photo as PNG or the complete filtered clip as MP4 with audio when supported. Both modes preserve photo profiles; video uses the legacy processing override.
 - **Media dock:** import multiple files with the picker or Uppy drag/drop. Each item keeps its own look, sliders, comparison and playback position in a Zustand session store. Arrow keys select, Alt+arrows reorder and Delete removes; touch controls provide the same actions.

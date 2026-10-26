@@ -16,3 +16,7 @@ new engine.CamcorderSim(7);
 // @ts-expect-error generated return type is bytes, not a number
 const wrong: number = engine.apply_vhs(rgba, 1, 1, "vhs", 0);
 void wrong;
+
+const phone: Uint8Array = engine.apply_phone(rgba, 1, 1, "nokia-n95", 2);
+// @ts-expect-error frame number must cross the generated ABI as a number
+engine.apply_phone(phone, 1, 1, "iphone-4s", "2");

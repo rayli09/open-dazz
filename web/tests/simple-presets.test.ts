@@ -35,7 +35,7 @@ test("eleven unique photo looks have real recipes and five Fuji photo-v1 profile
 });
 
 test("video cameras are separate and mode/media selection recovers to a real default", () => {
-  assert.deepEqual(presetsForMedia("video").map(p=>p.recipeId),["camcorder/cx405","camcorder/vhs"]);
+  assert.deepEqual(presetsForMedia("video").map(p=>p.recipeId),["camcorder/nokia-n95","camcorder/iphone-4s","camcorder/cx405","camcorder/vhs"]);
   const photo=presetsForMedia("photo")[6];
   assert.equal(selectionForMode("pro",photo.recipeId),photo.recipeId);
   assert.equal(selectionForMode("simple",photo.recipeId),photo.recipeId);
@@ -58,7 +58,7 @@ test("approved art has optimized alpha WebP candidates; unknown and video art us
   assert.equal(artKeyForRecipe("hasselblad/official/standard"),"hasselblad-medium-format");
   assert.equal(artKeyForRecipe("leica/official/standard"),"leica-rangefinder");
   assert.equal(artKeyForRecipe("camcorder/cx405"),"cx405-camcorder");
-  for(const key of ["fuji-silver","street-compact","instant-ivory","cx405-camcorder","leica-rangefinder","hasselblad-medium-format"]) {
+  for(const key of ["nokia-n95","iphone-4s","fuji-silver","street-compact","instant-ivory","cx405-camcorder","leica-rangefinder","hasselblad-medium-format"]) {
     const asset=cameraAsset(key)!;assert.ok(asset);
     assert.ok(asset.srcset.includes("384w") && asset.srcset.includes("768w"));
     for(const width of [384,768]) {

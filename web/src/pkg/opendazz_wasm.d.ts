@@ -30,6 +30,12 @@ export function apply(rgba: Uint8Array, width: number, height: number, recipe_js
 export function apply_camcorder(rgba: Uint8Array, width: number, height: number): Uint8Array;
 
 /**
+ * Early-phone inspired RGB signal processing. Same dimensions and alpha;
+ * timing/audio are unchanged. Presets: nokia-n95 | iphone-4s.
+ */
+export function apply_phone(rgba: Uint8Array, width: number, height: number, preset: string, frame: number): Uint8Array;
+
+/**
  * Run the NTSC/VHS composite simulation (vendored ntsc-rs) on an
  * RGBA buffer. `preset`: broadcast | vhs | vhs-heavy. Stills use
  * frame 0; the tape artifacts are deterministic per frame index.

@@ -91,6 +91,28 @@ pub fn apply_camcorder(rgba: &[u8], width: u32, height: u32) -> Result<Vec<u8>, 
     Ok(restore_alpha(&out, rgba))
 }
 
+/// Early-phone inspired RGB signal processing. Same dimensions and alpha;
+/// timing/audio are unchanged. Presets: nokia-n95 | iphone-4s.
+#[wasm_bindgen]
+pub fn apply_phone(
+    rgba: &[u8],
+    width: u32,
+    height: u32,
+    preset: &str,
+    frame: u32,
+) -> Result<Vec<u8>, JsError> {
+    use opendazz_core::video::phone::{apply_phone, PhonePreset};
+    let preset = PhonePreset::parse(preset).ok_or_else(|| JsError::new("unknown phone preset"))?;
+    let npix = (width as usize)
+        .checked_mul(height as usize)
+        .filter(|&n| n > 0 && n.checked_mul(4) == Some(rgba.len()))
+        .ok_or_else(|| JsError::new("RGBA buffer size does not match positive dimensions"))?;
+    let rgb = strip_alpha(rgba, npix)?;
+    let out = apply_phone(&rgb, width as usize, height as usize, preset, frame)
+        .map_err(|e| JsError::new(&e))?;
+    Ok(restore_alpha(&out, rgba))
+}
+
 /// Stateful CX405 camcorder for VIDEO: one instance per clip, so
 /// the drift/noise streams evolve across frames exactly like the
 /// core pipeline (and the CLI) instead of restarting every frame.

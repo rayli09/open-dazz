@@ -4,6 +4,7 @@
 //! tape artifacts animate.
 
 pub mod camcorder;
+pub mod phone;
 pub mod vhs;
 
 pub use camcorder::Camcorder;

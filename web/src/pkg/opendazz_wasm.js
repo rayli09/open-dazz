@@ -5,5 +5,5 @@ import { __wbg_set_wasm } from "./opendazz_wasm_bg.js";
 __wbg_set_wasm(wasm);
 
 export {
-    CamcorderSim, apply, apply_camcorder, apply_vhs, engine_version
+    CamcorderSim, apply, apply_camcorder, apply_phone, apply_vhs, engine_version
 } from "./opendazz_wasm_bg.js";

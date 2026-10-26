@@ -1,5 +1,5 @@
 export type PresetMedia = "photo" | "video";
-export type ArtKey = "fuji-silver" | "street-compact" | "instant-ivory" | "cx405" | "vhs" | "cx405-camcorder" | "leica-rangefinder" | "hasselblad-medium-format";
+export type ArtKey = "nokia-n95" | "iphone-4s" | "fuji-silver" | "street-compact" | "instant-ivory" | "cx405" | "vhs" | "cx405-camcorder" | "leica-rangefinder" | "hasselblad-medium-format";
 
 export interface SimplePreset {
   id: string;
@@ -24,6 +24,8 @@ export const SIMPLE_PRESETS: readonly SimplePreset[] = [
   { id: "gold", recipeId: "kodak/community/kodak-gold-200", artKey: "street-compact", label: "Gold", description: "Golden color · daylight", media: "photo" },
   { id: "superia", recipeId: "fuji/community/fuji-superia-x-minus-tra-400", artKey: "street-compact", label: "Superia", description: "Fresh greens · everyday color", media: "photo" },
   { id: "instant", recipeId: "polaroid/community/polaroid-sx-minus-70", artKey: "instant-ivory", label: "Instant", description: "Creamy color · instant mood", media: "photo" },
+  { id: "nokia-n95", recipeId: "camcorder/nokia-n95", artKey: "nokia-n95", label: "Nokia N95", description: "Inspired · VGA-era texture", media: "video" },
+  { id: "iphone-4s", recipeId: "camcorder/iphone-4s", artKey: "iphone-4s", label: "iPhone 4S", description: "Inspired · crisp early SDR", media: "video" },
   { id: "cx405", recipeId: "camcorder/cx405", artKey: "cx405-camcorder", label: "CX405", description: "Soft digital video · camcorder", media: "video" },
   { id: "vhs", recipeId: "camcorder/vhs", artKey: "vhs", label: "VHS-C", description: "Tape color · analog video", media: "video" },
 ];
@@ -34,7 +36,7 @@ export const presetForRecipe = (recipeId: string | undefined) => SIMPLE_PRESETS.
 
 export function selectionForMedia(media: PresetMedia, currentRecipeId?: string): SimplePreset {
   const current = presetForRecipe(currentRecipeId);
-  return current?.media === media ? current : presetsForMedia(media)[0];
+  return current?.media === media ? current : media === "video" ? SIMPLE_PRESETS.find(p => p.id === "cx405")! : DEFAULT_PHOTO;
 }
 
 export function selectionForMode(mode: "simple" | "pro", currentRecipeId?: string): string {

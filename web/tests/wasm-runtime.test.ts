@@ -43,3 +43,25 @@ test("actual Ricoh recipes filter pixels and retain alpha through browser WASM",
     }
   }
 });
+
+test("phone WASM ABI filters multiple frames deterministically and preserves alpha", () => {
+  const input = new Uint8Array(64 * 48 * 4);
+  for (let i = 0; i < input.length; i += 4) {
+    input[i] = (i * 7) % 256; input[i+1] = (i * 3) % 256;
+    input[i+2] = (i * 11) % 256; input[i+3] = (i / 4) % 256;
+  }
+  const results = [];
+  for (const preset of ["nokia-n95", "iphone-4s"]) {
+    const output = engine.apply_phone(input, 64, 48, preset, 4);
+    assert.equal(output.length, input.length);
+    assert.notDeepEqual(output, input);
+    assert.deepEqual(output, engine.apply_phone(input, 64, 48, preset, 4));
+    assert.notDeepEqual(output, engine.apply_phone(input, 64, 48, preset, 5));
+    for (let i = 3; i < input.length; i += 4) assert.equal(output[i], input[i]);
+    results.push(output);
+  }
+  assert.notDeepEqual(results[0], results[1]);
+  assert.throws(() => engine.apply_phone(input, 64, 48, "iphone", 0), /unknown phone/);
+  assert.throws(() => engine.apply_phone(input, 0, 48, "nokia-n95", 0), /positive dimensions/);
+  assert.throws(() => engine.apply_phone(input.subarray(4), 64, 48, "iphone-4s", 0), /positive dimensions/);
+});

@@ -1,3 +1,4 @@
+import { PHONE_LOOKS, PHONE_META, PHONE_OUTPUT_NOTE, phonePresetForLook } from "./video-phones";
 // open-dazz Photo Workshop — a film-development bench in the browser.
 // Engine: opendazz-core (Rust) compiled to WebAssembly. No uploads:
 // every photograph is developed locally on this machine.
@@ -43,10 +44,12 @@ let current: LookEntry | null = null;
 // live in a synthetic "camcorder" brand injected into the catalog
 // at boot; applyNow routes them to their own engine stages. ---
 const VIDEO_LOOKS: LookEntry[] = [
+  ...PHONE_LOOKS,
   { id: "camcorder/cx405", name: "Sony CX405", brand: "camcorder", tier: "video", recipe: "", baseLut: null, hasLut: false, baseFilm: "HDR-CX405", creator: "open-dazz", license: null },
   { id: "camcorder/vhs", name: "VHS-C", brand: "camcorder", tier: "video", recipe: "", baseLut: null, hasLut: false, baseFilm: "VHS tape", creator: "ntsc-rs", license: null },
 ];
 const VIDEO_META: Record<string, { meta: string; note: string }> = {
+  ...PHONE_META,
   "camcorder/cx405": {
     meta: "camcorder · HDR-CX405 · open-dazz",
     note: "A consumer camcorder, simulated as a signal chain: soft luma, smeared chroma, hunting auto-exposure, milky night blacks, sensor noise. The look is the hardware — no develop sliders.",
@@ -238,6 +241,7 @@ function layout() {
           </figcaption>
         </figure>
       </div>
+      <p id="phone-output-note" hidden class="mx-4 mb-3 text-[11px] leading-relaxed text-ink2"></p>
       <div class="simple-only items-center justify-end gap-3 mx-4 mb-4 border border-rule bg-mat px-3 py-2.5">
         <button id="btn-video-simple" title="Develop the loaded video with the current look" style="display:none" class="bg-paper text-ink border border-ink px-3 py-2 hover:bg-paper2 transition-colors items-center gap-2 shrink-0">
           ${icon("video", "w-4 h-4")}
@@ -285,7 +289,7 @@ function sliderRow(key: string, label: string, min: number, max: number, step: n
 
 function renderSliders() {
   if (current?.brand === "camcorder") {
-    $("#sliders").innerHTML = `<div class="font-mono text-[10.5px] leading-relaxed text-ink2 px-1 py-2">Signal-chain camera — the look is the hardware; there are no develop sliders.</div>`;
+    $("#sliders").innerHTML = `<div class="font-mono text-[10.5px] leading-relaxed text-ink2 px-1 py-2">Signal-chain simulation — fixed processing; there are no develop sliders.</div>`;
     return;
   }
   if (!recipe) return;
@@ -487,6 +491,9 @@ async function selectLook(id: string, restoredRecipe?: Recipe | null) {
   }
   developFx = true;
   current = entry;
+  const phoneNote = $("#phone-output-note");
+  phoneNote.hidden = !phonePresetForLook(id);
+  phoneNote.textContent = phonePresetForLook(id) ? PHONE_OUTPUT_NOTE : "";
   recipe = null;
   if (mediaId) mediaStore.getState().updateEdit(mediaId, { lookId: id, recipe: null, collection: simpleMedia, photoLookId: lastSimpleSelection.photo, videoLookId: lastSimpleSelection.video });
   setBusy(true);
@@ -595,8 +602,8 @@ async function applyNow() {
   if (!engine) { setBusy(true); return; } // engineP.then re-invokes applyNow
   if (current.brand === "camcorder") {
     // Video cameras: signal-chain stages run at <=1280px on the
-    // long edge (both looks are destruction effects; the result is
-    // drawn back up to bench size, like the hardware does).
+    // long edge; phone presets may reduce detail further internally.
+    // Draw back up to bench size without changing framing.
     setBusy(true);
     const scale = Math.min(1, 1280 / Math.max(imgW, imgH));
     const vw = Math.max(2, Math.round(imgW * scale));
@@ -606,7 +613,9 @@ async function applyNow() {
     const tctx = tmp.getContext("2d")!;
     tctx.drawImage($<HTMLCanvasElement>("#before"), 0, 0, vw, vh);
     const px = tctx.getImageData(0, 0, vw, vh).data;
-    const out = current.id === "camcorder/cx405"
+    const phone = phonePresetForLook(current.id);
+    const out = phone ? engine.apply_phone(new Uint8Array(px), vw, vh, phone, 0)
+      : current.id === "camcorder/cx405"
       ? engine.apply_camcorder(new Uint8Array(px), vw, vh)
       : engine.apply_vhs(new Uint8Array(px), vw, vh, "vhs", 0);
     const res = document.createElement("canvas");
@@ -924,6 +933,8 @@ async function makeFrameProcessor(): Promise<FrameProcessor> {
   const entry = item ? findLook(item.edit.lookId) : undefined;
   if (!eng || !entry || !item) throw new Error("engine or look not ready");
   if (entry.brand === "camcorder") {
+    const phone = phonePresetForLook(entry.id);
+    if (phone) return (px, w, h, fr) => eng.apply_phone(px, w, h, phone, fr);
     if (entry.id === "camcorder/cx405") {
       const sim = new eng.CamcorderSim(7n);
       const process: FrameProcessor = (px, w, h, fr) => sim.process(px, w, h, fr);

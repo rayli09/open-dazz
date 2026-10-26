@@ -1,7 +1,7 @@
 import type { ArtKey } from "./simple-presets.ts";
 import { presetForRecipe } from "./simple-presets.ts";
 
-const IMAGE_KEYS = ["fuji-silver", "street-compact", "instant-ivory", "cx405-camcorder", "leica-rangefinder", "hasselblad-medium-format"] as const;
+const IMAGE_KEYS = ["nokia-n95", "iphone-4s", "fuji-silver", "street-compact", "instant-ivory", "cx405-camcorder", "leica-rangefinder", "hasselblad-medium-format"] as const;
 
 export function artKeyForRecipe(recipeId: string): ArtKey | undefined {
   const preset = presetForRecipe(recipeId);

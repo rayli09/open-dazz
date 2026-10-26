@@ -156,6 +156,58 @@
           "sha256": "004b61a762c96e6095a4ac34a3fa7155e8e7978f437cf53a5b63671fcb2a3d9c"
         }
       ]
+    },
+    {
+      "name": "nokia-n95",
+      "source": "Original image generation; studio family reference cx405-camcorder. Not a product photograph or calibrated device reference.",
+      "original": "design/camera-assets/originals/nokia-n95.png",
+      "sha256": "55dd64c5d2caa5b7f0d3195320d89d38feaac5fab6a7c94a8f4dc9e86fc916b1",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "derivatives": [
+        {
+          "path": "web/public/cameras/nokia-n95-384.webp",
+          "bytes": 13702,
+          "sha256": "554496fe44a077d22ac4c879be3439ac3dbdffa456f7d92908c9d23d4a4f65a1"
+        },
+        {
+          "path": "web/public/cameras/nokia-n95-768.webp",
+          "bytes": 34682,
+          "sha256": "11bb8d81f81bde37556f902a045e6bfd6e40bc42a93b35f667461d6d3d6f13d2"
+        }
+      ]
+    },
+    {
+      "name": "iphone-4s",
+      "source": "Original image generation; studio family reference cx405-camcorder. Not a product photograph or calibrated device reference.",
+      "original": "design/camera-assets/originals/iphone-4s.png",
+      "sha256": "93451ae2aafe3c01b5e0fc1052115e4e3426f420fbc3fda3832f5fb1baf8d7a1",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "derivatives": [
+        {
+          "path": "web/public/cameras/iphone-4s-384.webp",
+          "bytes": 12308,
+          "sha256": "5430d165b8faf9317370e1a2b09847504456aebc7407a05c015e89f5150c1b2b"
+        },
+        {
+          "path": "web/public/cameras/iphone-4s-768.webp",
+          "bytes": 30238,
+          "sha256": "2b3372873a8e8f9e258716bb89e9172e39f1304af67bee8ce0d8ffd0720c13da"
+        }
+      ]
     }
   ]
 }
