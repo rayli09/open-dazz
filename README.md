@@ -10,8 +10,6 @@
 </p>
 <p align="center"><a href="https://opendazz.vercel.app"><strong>Open the app</strong></a></p>
 
-![OpenDazz photo workshop with curated camera looks and a before/after preview](docs/verification/simple-shelf/desktop-photos.jpg)
-
 ## Run locally
 
 Bun 1.4.3:
@@ -29,7 +27,7 @@ Open the URL printed by Vite. CLI help (stable Rust, from the repo root):
 
 ## Docs
 
-[Development & limits](web/README.md) · [CLI & looks](library/README.md) · [Recipes](recipes/README.md) · [Verification](docs/verification/simple-shelf/README.md)
+[Development & limits](web/README.md) · [CLI & looks](library/README.md) · [Recipes](recipes/README.md) · [Testing](docs/TESTING.md)
 
 ## License
 

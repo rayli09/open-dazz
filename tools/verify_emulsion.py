@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Round 3: spot-verify the EmulsionPresets bakes (flagship stocks).
-Run: uv run --with numpy --with pillow python tools/verify_round3.py"""
+"""EmulsionPresets flagship render checks.
+Run: uv run --with numpy --with pillow python tools/verify_emulsion.py"""
 import json, subprocess
 from pathlib import Path
 import numpy as np
@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "target/release/opendazz"
-OUT = ROOT / "tools/verify-out"; OUT.mkdir(exist_ok=True)
+OUT = ROOT / "tools/verify-out/emulsion"; OUT.mkdir(parents=True, exist_ok=True)
 FLAGSHIPS = [  # (fully-qualified id, display) — ids needed: FXW has same-named Fuji looks
     ("kodak/community/kodak-portra-400", "Kodak Portra 400"),
     ("kodak/community/kodak-ektar-100", "Kodak Ektar 100"),
@@ -68,9 +68,10 @@ def main():
         for i, (label, tile) in enumerate(tiles):
             sheet.paste(tile.resize((tw, th)), (0, i * (th + 20) + 20))
             d.text((6, i * (th + 20) + 4), f"{tag} — {label}", fill="black")
-        sheet.save(ROOT / f"docs/verification/sheet-round3-{tag}.jpg", quality=88)
-    (OUT / "round3.json").write_text(json.dumps(results, indent=2))
-    print("round 3:", "ALL PASS" if ok else "FAILURES PRESENT")
+        sheet.save(OUT / f"sheet-{tag}.jpg", quality=88)
+    (OUT / "results.json").write_text(json.dumps(results, indent=2))
+    print("EmulsionPresets flagship render checks:", "ALL PASS" if ok else "FAILURES PRESENT")
+    return 0 if ok else 1
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -23,6 +23,8 @@ crates/opendazz-core/src/
     grain.rs
   video/
     mod.rs
+    phone.rs      N95 / iPhone 4S inspired display-sRGB simulations
+    camcorder.rs  CX405 signal-chain simulation
     vhs.rs        NTSC/VHS simulation over vendored ntsc-rs
                   (presets + full settings JSON surface)
 ```

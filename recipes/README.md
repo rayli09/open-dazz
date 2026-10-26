@@ -15,7 +15,7 @@ A recipe is a JSON object. Camera-agnostic: parameters are engine-relative, not 
 }
 ```
 
-Open questions: how to represent camera-style recipes (Fuji X Weekly format) — translate into engine params at import time, keep the original alongside for provenance.
+Imported camera-style settings are translated into engine parameters; original settings, source and license remain in recipe provenance.
 
 Path resolution: `baseLut` is resolved relative to the recipe file's own
 directory. The CLI implements this; the web app maps it to a bundled pack.
@@ -30,4 +30,4 @@ Omitting `processing` selects `legacy` and preserves existing/custom recipe
 bytes. Official base LUTs and their strength=1 defaults are unchanged. Video
 callers explicitly select legacy processing, including the poster frame.
 `fujiPhotoV1` is a JPEG rendering approximation, not a Fuji RAW engine or a
-claim of camera-matched color. See `docs/verification/fuji-photo-v1-2026-10-26.md`.
+claim of camera-matched color. See the [color guardrails](../docs/COLOR_TEST_CASES.md) and [testing guide](../docs/TESTING.md).

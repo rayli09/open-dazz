@@ -49,3 +49,9 @@ with a bespoke libavcodec Wasm — not worth it here.)
 - **Server transcode**: per-export COGS + infra for a
   local-first app whose pitch is that media never leaves the
   device.
+
+## Inspired phone looks
+
+`video/phone.rs` adds authored N95/4S detail, color, sharpening, noise and block-texture simulations in display-sRGB; these are not calibrated device profiles, native capture, HDR reconstruction or codec emulation. The reference detail envelopes are aspect-fitted (N95 640×480, 4S 1920×1080), while output geometry and audio/timing remain owned by the existing browser/CLI route. Browser delivery is still limited to 854px width; reduced preview cadence/resolution and encoding mean preview/export pixels need not match exactly.
+
+Specification references: [Apple iPhone 4S](https://support.apple.com/en-us/112004); [Nokia's 2006 N95 data sheet, manufacturer document mirrored on Scribd](https://www.scribd.com/document/286469187/Nokia-N95-Datasheet). The N95 reference is VGA-era up to 30fps; the 4S reference is 1080p up to 30fps. These establish device-era constraints, not measured color response. Original artwork provenance stays in [the asset manifest](../design/camera-assets/manifest.json).

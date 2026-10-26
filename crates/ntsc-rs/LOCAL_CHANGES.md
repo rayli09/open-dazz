@@ -12,5 +12,6 @@ The two nested YIQ blit helpers retain their upstream eight-argument signatures.
 Their function-local `too_many_arguments` allowances preserve the separate
 borrowed Y/I/Q planes, metadata and SIMD dispatch boundary instead of redesigning
 unsafe conversion code for an argument-count lint. No crate-wide suppression or
-CI flag change was introduced. See `docs/verification/ci-repair-2026-10-26.md`
-at the repository root for test and before/after pixel evidence.
+CI flag change was introduced. The [testing guide](../../docs/TESTING.md) lists strict gates;
+[CX405 golden tests](../opendazz-core/tests/camcorder_golden.rs) retain the
+reference-pixel regression checks.

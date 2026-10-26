@@ -1,5 +1,5 @@
 // Requires scratch Playwright + Chromium and ffmpeg/ffprobe, as documented in
-// docs/verification. Run against a production build/preview.
+// docs/TESTING.md. Run against a production build/preview.
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";

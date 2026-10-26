@@ -1,50 +1,10 @@
-# OpenDazz design assets
+# Design sources
 
-One drawing system for everything user-facing. If an icon ships in the
-chrome, it is drawn here — no third-party icon fonts (Lucide was retired
-in P2; it remains only as an internal reference for proportions).
+The main editor uses quiet matte Graphite surfaces with restrained satin controls, consistent top-left light and Instrument Sans/system fallback typography. `web/src/camera-controls.css` owns shared mode, dial and shutter materials; `web/src/workshop-material.css` integrates them into the editor. `web/materials.html` remains a working control reference with its own regression harness.
 
-## The system
+- [Camera source manifest](camera-assets/manifest.json): eight original generated 1536×1024 transparent PNGs, source/Library identifiers, hashes and responsive derivative paths. Keep these originals; the 384/768px WebP assets under `web/public/cameras/` are delivery derivatives. Phone artwork is original illustration, not scraped product photography or a calibration reference.
+- [Graphite reference](reference/graphite-darkroom.png): approved visual source, retained for design continuity.
+- [Aperture logo concept](reference/aperture-logo.webp): original selected generated concept (generation ID `599bc582-89a3-433b-b963-03b419a22fb3`). The maintained production vector is `web/public/logo.svg`; public favicon/app icons are production assets. Unselected alternatives are recoverable through Git history.
+- `web/src/icons.ts`: shared 24-unit icon grid, 1.6-unit strokes, brand sigils and camera glyphs. Interactive controls use CSS/SVG rather than rasterized faces.
 
-- **Grid**: 24 × 24, stroke 1.6, squared line terminals, `currentColor`.
-- **Corners**: squared everywhere. The only circles are lenses, dials,
-  and the shutter ring — things that are round on a real camera.
-- **Type**: IBM Plex Mono is the only voice. Engraved labels are
-  uppercase, letter-spaced, 10–11px.
-- **Palette**: DAZZ BLACK (Ray's full-copy call, 2026-10-25) — pure
-  black stage #000, white ink, muted gray #8f8f8f, hairline #262626,
-  accent = white itself (selections are white bands, black text).
-  No light theme: like Dazz's own site, the photograph is the only
-  color on stage. Type is one grotesque (Instrument Sans 400–700);
-  the mono voice and the squared corners retired with the copy —
-  interactive surfaces carry ~10px radius, photos 14px, and there
-  are no shadows anywhere.
-
-## Inventory (`web/src/icons.ts`)
-
-- **Brand sigils × 15** — one mark per brand: Fuji peaks, Kodak
-  canister-K, Ilford half-tone square, CineStill sprocket frame with
-  glow, Agfa rhombus, Lomo fisheye, Rollei twin-lens, Foma stacked
-  sheets, Adox flask, Polaroid instant frame, Bergger crescent,
-  Kentmere battlement, Orwo globe, Ricoh finder corners, Emulsion drop.
-  Brands arriving later get a sigil drawn to the same system before
-  they ship, never a stock glyph.
-- **Camera glyphs × 6** — rangefinder, SLR, compact, instant, cine,
-  half-frame. Chosen per look by `glyphFor` (brand + name rules).
-- **Control icons × 19** — search, chevron, check, sun, moon, upload,
-  print, user, mountain, sliders, external, compare, layers, palette,
-  contrast, video, official seal, users, swatch fallback.
-
-## Textures (`web/src/style.css`)
-
-- `body::after` — paper grain (multiply light / overlay dark).
-- `.tex-filmleader` — punched sprocket row; used on the shelf rail.
-- `.tex-metal` — brushed streaks; used on the shutter/print control.
-- `.tex-leather` — cross piqué for quiet header bands.
-
-## Logo & app icons
-
-The mark is a 56 × 56 pixel grid (Fuji peak, lemon snowcap, film strip)
-in `web/public/logo.png` (+ `logo-dark.png`, `logo-64.png` favicon).
-App icons (`icon-192/512`, `apple-touch-icon`) are the same mark on
-paper with an 8% pad — regenerate from `logo.png`, never redraw.
+Generated QA screenshots, contact sheets and delivery reports belong in ignored `tools/verify-out/` or `/tmp`, not alongside source artwork. See [Testing](../docs/TESTING.md).

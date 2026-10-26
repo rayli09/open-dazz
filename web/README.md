@@ -34,7 +34,7 @@ Both `.d.ts` files in `src/pkg/` come from wasm-bindgen; the client imports thei
 - **Media dock:** import multiple files with the picker or Uppy drag/drop. Each item keeps its own look, sliders, comparison and playback position in a Zustand session store. Arrow keys select, Alt+arrows reorder and Delete removes; touch controls and 30-second removal undo are available.
 - **Player:** Video.js HTML components provide accessible play/pause, seeking, time, mute/volume and filtered fullscreen. The live WASM preview uses up to a 480px long edge at about 12 fps and source audio; original comparison is explicitly labelled. Export remains a separate complete-clip render, including CX405 audio processing.
 - **Assets:** `scripts/sync-library.mjs` copies `../library` before dev/build. Recipes and LUTs are fetched when needed. Original generated camera artwork and responsive derivatives are documented in `../design/camera-assets/manifest.json`.
-- **Style:** Graphite Darkroom, Instrument Sans, shared graphite surfaces and restrained silver controls. Desktop uses a two-column camera shelf; mobile keeps a substantial preview and reachable export controls before the shelf.
+- **Style:** shared Graphite camera materials in `src/camera-controls.css` and `src/workshop-material.css`; the main editor and isolated `materials.html` study share controls. Pro provides a strength dial, native sliders and direct numeric input.
 
 ## Browser limits
 
@@ -46,6 +46,6 @@ Video takes the WebCodecs route when supported (up to **120 seconds**) and other
 
 ## Validation and hosting
 
-[Recovery/export verification](../docs/verification/recovery-export/README.md) covers original-size downloads, failure retries and settings recovery. [Phone video verification](../docs/verification/phone-video/README.md) includes device art, decoded clips and screenshots. These are bounded Chromium regressions; real-device Safari/HEIC/HDR and long-video certification remains outstanding.
+[Testing](../docs/TESTING.md) covers type/binding checks, original-size downloads, retry/recovery, media/player state and phone simulations. Browser regressions are bounded Chromium checks; real-device Safari/HEIC/HDR and long-video certification remains outstanding.
 
 Production frontend root: `web`; build command: `bun run build`. Existing hosting settings and Git integration are managed separately. Documentation changes do not rename hosting projects or modify infrastructure. See the root [license and credits](../README.md#license) before reusing bundled looks.

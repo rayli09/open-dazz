@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Round 4: verify the Hald-derived B&W bases joined to Fuji recipes.
-Run: uv run --with numpy --with pillow python tools/verify_round4.py"""
+"""Hald-derived Fuji B&W render checks.
+Run: uv run --with numpy --with pillow python tools/verify_fuji_bw.py"""
 import json, subprocess
 from pathlib import Path
 import numpy as np
@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "target/release/opendazz"
-OUT = ROOT / "tools/verify-out"; OUT.mkdir(exist_ok=True)
+OUT = ROOT / "tools/verify-out/fuji-bw"; OUT.mkdir(parents=True, exist_ok=True)
 
 def pick(film):
     for p in sorted((ROOT / "library/fuji/community/recipes").glob("*.json")):
@@ -52,9 +52,10 @@ def main():
         for i, (label, tile) in enumerate(tiles):
             sheet.paste(tile.resize((tw, th)), (0, i * (th + 20) + 20))
             d.text((6, i * (th + 20) + 4), f"{tag} - {label}", fill="black")
-        sheet.save(ROOT / f"docs/verification/sheet-round4-{tag}.jpg", quality=88)
-    (OUT / "round4.json").write_text(json.dumps(results, indent=2))
-    print("round 4:", "ALL PASS" if ok else "FAILURES PRESENT")
+        sheet.save(OUT / f"sheet-{tag}.jpg", quality=88)
+    (OUT / "results.json").write_text(json.dumps(results, indent=2))
+    print("Hald-derived Fuji B&W render checks:", "ALL PASS" if ok else "FAILURES PRESENT")
+    return 0 if ok else 1
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -11,8 +11,8 @@ For each neutral RAW render in tests/images/rendered/ (1600px versions):
      and clipped-highlight percentages; sky-banding proxy (unique colors in
      a smooth sky crop, after vs before) on the landscape shot.
   4. Directional assertions for sim character + recipe parameter effects.
-Outputs: tools/verify-out/metrics.json, contact sheets + a numbers report
-under docs/verification/.
+Outputs: metrics, contact sheets and a numbers report under the ignored
+tools/verify-out/lut-quality/.
 
 Run: uv run --with numpy --with pillow python tools/verify_filters.py
 """
@@ -24,8 +24,8 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "target/release/opendazz"
 RENDERED = ROOT / "tests/images/rendered"
-OUT = ROOT / "tools/verify-out"
-DOCS = ROOT / "docs/verification"
+OUT = ROOT / "tools/verify-out/lut-quality"
+DOCS = OUT
 SIM_DIR = ROOT / "library/fuji/official/recipes"
 LUT_DIR = ROOT / "library/fuji/official/luts"
 RECIPES = [
@@ -142,7 +142,7 @@ def main():
             sheet.paste(t, (x, y + 22))
             d.text((x + 6, y + 5), label, fill="black")
         sheet.save(DOCS / f"sheet-{tag}.jpg", quality=88)
-        print(f"sheet -> docs/verification/sheet-{tag}.jpg")
+        print(f"sheet -> {DOCS / f'sheet-{tag}.jpg'}")
 
         # banding proxy on the landscape sky
         if tag == "DSCF0733":
@@ -201,7 +201,7 @@ def main():
     lines.append("## Assertions\n")
     for n, p, d in assertions:
         lines.append(f"- [{'PASS' if p else 'FAIL'}] **{n}** — {d}")
-    (DOCS / "numbers-2026-10-25.md").write_text("\n".join(lines) + "\n")
+    (DOCS / "numbers.md").write_text("\n".join(lines) + "\n")
     print(f"\n{sum(1 for _, p, _ in assertions if p)}/{len(assertions)} assertions passed")
     return 0 if all(p for _, p, _ in assertions) else 1
 

@@ -97,10 +97,11 @@ at saturated gamut boundaries.
 The existing cubes, bands and ΔE goldens are unchanged. Fixture loading now
 requires every `(sim, patch)` exactly once, so missing/duplicate rows fail.
 
-`npm test --prefix web` checks media routing and serialization of an actual
+`cd web && bun test` checks media routing and serialization of an actual
 imported recipe. Both browser video routes use the same legacy frame callback.
-The measured before/after images, exact scope, commands and limitations live
-in `verification/fuji-photo-v1-2026-10-26.md`.
+The [testing guide](TESTING.md) lists reproducible checks and scratch-output
+locations. Existing cubes expect display-sRGB input; do not blanket-linearize
+LUT ingress. Intentional photo-profile changes must preserve legacy video bytes.
 
 ## Rules for LUT changes
 

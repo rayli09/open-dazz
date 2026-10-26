@@ -10,3 +10,9 @@ tests/images/src/
 tests/images/rendered/
 tools/verify-out/
 web/public/ffmpeg/
+
+# One-off verification reports/captures belong in tools/verify-out/ or /tmp.
+/docs/verification/
+/design-qa.md
+/QA-verification.md
+/QA-verificaiton.md
