@@ -1,5 +1,6 @@
 {
   "name": "Across",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/acros.cube",
   "grain": {
     "amount": 0.0,

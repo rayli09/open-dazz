@@ -1,5 +1,6 @@
 {
   "name": "Monochrome R",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/mono-r.cube",
   "grain": {
     "amount": 0.25,

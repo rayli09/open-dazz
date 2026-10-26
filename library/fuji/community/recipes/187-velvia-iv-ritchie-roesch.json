@@ -1,5 +1,6 @@
 {
   "name": "Velvia (IV)",
+  "processing": "fujiPhotoV1",
   "baseLut": "../../official/luts/velvia_sRGB.cube",
   "grain": {
     "amount": 0.25,

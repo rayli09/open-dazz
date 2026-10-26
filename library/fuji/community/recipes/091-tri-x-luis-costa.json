@@ -1,5 +1,6 @@
 {
   "name": "Tri-X",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/acros-r.cube",
   "grain": {
     "amount": 0.0,

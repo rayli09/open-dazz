@@ -1,5 +1,6 @@
 {
   "name": "Monichrome Deep Extra",
+  "processing": "fujiPhotoV1",
   "baseLut": "../hald-bases/luts/mono.cube",
   "grain": {
     "amount": 0.55,

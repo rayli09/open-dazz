@@ -15,7 +15,7 @@ pub mod white_balance;
 
 use crate::image::{f32_to_px, px_to_f32};
 use crate::lut::Lut3d;
-use crate::recipe::Recipe;
+use crate::recipe::{Processing, Recipe};
 use image::RgbImage;
 
 /// Apply a recipe to an image (see module docs for stage order).
@@ -26,7 +26,12 @@ pub fn apply_recipe(img: &RgbImage, recipe: &Recipe, lut: Option<&Lut3d>) -> Rgb
     for (x, y, px) in img.enumerate_pixels() {
         let mut px = px_to_f32(px);
 
-        white_balance::apply(&mut px, &recipe.white_balance);
+        let photo = recipe.processing == Processing::FujiPhotoV1;
+        if photo {
+            white_balance::apply_photo(&mut px, &recipe.white_balance);
+        } else {
+            white_balance::apply(&mut px, &recipe.white_balance);
+        }
 
         // Base LUT, blended by recipe strength.
         if let Some(lut) = lut {
@@ -37,13 +42,21 @@ pub fn apply_recipe(img: &RgbImage, recipe: &Recipe, lut: Option<&Lut3d>) -> Rgb
             px[2] += (s[2] - px[2]) * k;
         }
 
-        tone::apply(&mut px, &recipe.tone);
+        if photo {
+            tone::apply_photo(&mut px, &recipe.tone);
+        } else {
+            tone::apply(&mut px, &recipe.tone);
+        }
 
         out.put_pixel(x, y, f32_to_px(px));
     }
 
     let mut out = halation::apply(&out, recipe.halation);
-    grain::apply(&mut out, recipe);
+    if recipe.processing == Processing::FujiPhotoV1 {
+        grain::apply_photo(&mut out, recipe);
+    } else {
+        grain::apply(&mut out, recipe);
+    }
     out
 }
 
@@ -66,12 +79,10 @@ mod tests {
         let cube = "LUT_3D_SIZE 2\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n1 0 0\n";
         let lut = crate::lut::Lut3d::parse_cube(cube).unwrap();
         let img = RgbImage::from_pixel(2, 2, image::Rgb([10, 20, 30]));
-        let recipe: Recipe =
-            serde_json::from_str(r#"{"name":"s0","strength":0.0}"#).unwrap();
+        let recipe: Recipe = serde_json::from_str(r#"{"name":"s0","strength":0.0}"#).unwrap();
         let out = apply_recipe(&img, &recipe, Some(&lut));
         assert_eq!(out.get_pixel(0, 0), img.get_pixel(0, 0));
-        let full: Recipe =
-            serde_json::from_str(r#"{"name":"s1","strength":1.0}"#).unwrap();
+        let full: Recipe = serde_json::from_str(r#"{"name":"s1","strength":1.0}"#).unwrap();
         let out = apply_recipe(&img, &full, Some(&lut));
         assert_eq!(*out.get_pixel(0, 0), image::Rgb([255, 0, 0]));
     }

@@ -1,5 +1,6 @@
 {
   "name": "Flat Landscape",
+  "processing": "fujiPhotoV1",
   "baseLut": "../../official/luts/astia_sRGB.cube",
   "grain": {
     "amount": 0.0,

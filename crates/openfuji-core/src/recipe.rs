@@ -14,6 +14,10 @@ pub struct Recipe {
     /// out-of-box strength; lower values are a creative fade.
     #[serde(default = "default_strength")]
     pub strength: f32,
+    /// Opt-in photo rendering for imported Fuji camera-setting recipes.
+    /// Omitted on existing/custom looks to preserve their output contract.
+    #[serde(default)]
+    pub processing: Processing,
     #[serde(default)]
     pub grain: Grain,
     #[serde(default)]
@@ -24,6 +28,14 @@ pub struct Recipe {
     pub white_balance: WhiteBalance,
     pub source: Option<String>,
     pub license: Option<String>,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum Processing {
+    #[default]
+    Legacy,
+    FujiPhotoV1,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -38,7 +50,10 @@ pub struct Grain {
 
 impl Default for Grain {
     fn default() -> Self {
-        Grain { amount: 0.0, size: default_grain_size() }
+        Grain {
+            amount: 0.0,
+            size: default_grain_size(),
+        }
     }
 }
 

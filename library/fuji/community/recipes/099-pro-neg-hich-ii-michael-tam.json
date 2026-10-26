@@ -1,5 +1,6 @@
 {
   "name": "Pro Neg Hich II",
+  "processing": "fujiPhotoV1",
   "baseLut": "../../official/luts/pro neg hi_sRGB.cube",
   "grain": {
     "amount": 0.0,

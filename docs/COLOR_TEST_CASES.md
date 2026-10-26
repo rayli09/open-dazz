@@ -86,7 +86,22 @@ independent layer on top of the character bands:
   guardrails_deltae bless_goldens -- --ignored`, in the same
   commit as the band review.
 
-## Rules
+## Full-recipe photo quality (2026-10-26)
+
+`cargo test -p openfuji-core --test fuji_photo` adds seven tests beyond the
+bare-LUT checks above: all 81 highlight/shadow combinations, neutral/skin WB
+ramps, highlight gradation through all 11 actual official cubes, paired
+grain-free public portrait clipping, grain endpoints/determinism, library
+profile coverage, and frozen full-pipeline bytes for five legacy looks.
+The existing cubes, bands and ΔE goldens are unchanged. Fixture loading now
+requires every `(sim, patch)` exactly once, so missing/duplicate rows fail.
+
+`npm test --prefix web` checks media routing and serialization of an actual
+imported recipe. Both browser video routes use the same legacy frame callback.
+The measured before/after images, exact scope, commands and limitations live
+in `verification/fuji-photo-v1-2026-10-26.md`.
+
+## Rules for LUT changes
 
 - A failing band means the LUT's character changed. Re-measure,
   understand why, and update this table and the bands together

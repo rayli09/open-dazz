@@ -1,0 +1,290 @@
+{
+  "baseline_commit": "306ee16f23f929ad7230a0662e8b162770ae34a5",
+  "after_parent_commit": "306ee16f23f929ad7230a0662e8b162770ae34a5",
+  "engine_source_hashes": {
+    "crates/openfuji-core/src/pipeline/grain.rs": "ace7c237a447bd757df959911f40fa623e314f113c90396dcff0e1214a9082a7",
+    "crates/openfuji-core/src/pipeline/halation.rs": "563fb547b77dcac7da4b61ce824ffc5b7ae5064962eaba370b820f1c6560311f",
+    "crates/openfuji-core/src/pipeline/mod.rs": "61502f7ea6a2562f4c6647d61ecc0498fc416a67c3b85aa52848e259d2d036ec",
+    "crates/openfuji-core/src/pipeline/tone.rs": "6ae04b58568c0fd4babad3893c5a2ccc0769ad1d0ff3416b4d82e2dfc1a3454e",
+    "crates/openfuji-core/src/pipeline/white_balance.rs": "ea20d53625ee101c5a250db543cb3f4c9977ef05494a08f8ec6cca31ae884e59",
+    "crates/openfuji-core/src/recipe.rs": "79ba9e03000cb178098acc671eb78e1c0091d5d9ddac11d24457fddeb8400720",
+    "crates/openfuji-wasm/src/lib.rs": "788852fc4d670bc30934363114d87e72678c4eba6b30f4b67f1b9ad124e772d0"
+  },
+  "binaries": {
+    "before": "911b659e517d6cd0601c36c0c9354d1cfcdbb542d350b1f0cc5134abe00887da",
+    "after": "a2f2d9f7292e7b0be260164f77bfbd853f3a5cafd94830b54803402c3623a8a8"
+  },
+  "harness_sha256": "b64e9fb5bfe5c4f8e685d184c29d729daa1a9a9b1a46dc98d954a02f4c6cee9b",
+  "settings": "native resolution, display-sRGB, recipe strength unchanged, grain/halation as authored",
+  "comparisons": [
+    {
+      "sample": "web/public/samples/sample-1.jpg",
+      "input_sha256": "fe15720e4e746f4cb7c94a2c31c0182d721b0ec77674ce5e37eee56552fa0ab7",
+      "look": "Docu Classic Chrome",
+      "recipe": "library/fuji/community/recipes/005-docu-classic-chrome-john-peltier.json",
+      "recipe_before_sha256": "c47cf6a4453328e8018918c1812794a7b71fd19488f24560d731ec4e0fd27e16",
+      "recipe_after_sha256": "5c634194ea266258ffe8b3562a19a97b8e7ef358a08fc0294db5e49c62614f8e",
+      "lut_sha256": "e71a3a03b5f66816e9a588adf673b38d7d90a96fa5602cdeca0427c29eee3f90",
+      "before": {
+        "output_sha256": "e636dc917663d2e634965dac1133226671b1639e1b7b05b38db1744853d2fca7",
+        "whole_image": {
+          "red_ge_254_pct": 5.3632,
+          "any_channel_ge_254_pct": 5.3689,
+          "all_channels_le_4_pct": 5.6722
+        },
+        "face_crop": {
+          "red_ge_254_pct": 35.6446,
+          "any_channel_ge_254_pct": 35.6446,
+          "all_channels_le_4_pct": 1.4357
+        }
+      },
+      "after": {
+        "output_sha256": "858bc91a8e00972323feabaa9ce0ba36d863db8ff83bcb1df028de411d4b3945",
+        "whole_image": {
+          "red_ge_254_pct": 1.0245,
+          "any_channel_ge_254_pct": 1.0481,
+          "all_channels_le_4_pct": 4.6117
+        },
+        "face_crop": {
+          "red_ge_254_pct": 4.9048,
+          "any_channel_ge_254_pct": 4.9048,
+          "all_channels_le_4_pct": 0.9208
+        }
+      }
+    },
+    {
+      "sample": "web/public/samples/sample-1.jpg",
+      "input_sha256": "fe15720e4e746f4cb7c94a2c31c0182d721b0ec77674ce5e37eee56552fa0ab7",
+      "look": "Vision3 500T (Fuji recipe)",
+      "recipe": "library/fuji/community/recipes/021-kodak-vision3-500t-piotr-skrzypek.json",
+      "recipe_before_sha256": "b7309972e16d1d51290dbba72171d3185b9de9945cd2110f3783d97917876017",
+      "recipe_after_sha256": "bb4928a002c249fcf67095432cdd8125c08838836a9eb008714d3802f295c456",
+      "lut_sha256": "0a8ee6cd95e2102f535684e5f6af3cbb7bad8c6595dc16c400a6156115b01190",
+      "before": {
+        "output_sha256": "1181c6caeeb54de1872ae7d1f3a709ff35a8c104ca09b38ee64f34022bfe8e38",
+        "whole_image": {
+          "red_ge_254_pct": 9.2659,
+          "any_channel_ge_254_pct": 10.2458,
+          "all_channels_le_4_pct": 0.0
+        },
+        "face_crop": {
+          "red_ge_254_pct": 60.5946,
+          "any_channel_ge_254_pct": 60.5982,
+          "all_channels_le_4_pct": 0.0
+        }
+      },
+      "after": {
+        "output_sha256": "8314097f2c9c939a8bb87b3dbf826d3543a9519a38e90c708234881e69f1c94b",
+        "whole_image": {
+          "red_ge_254_pct": 0.6445,
+          "any_channel_ge_254_pct": 0.6456,
+          "all_channels_le_4_pct": 0.0461
+        },
+        "face_crop": {
+          "red_ge_254_pct": 1.9268,
+          "any_channel_ge_254_pct": 1.9268,
+          "all_channels_le_4_pct": 0.0101
+        }
+      }
+    },
+    {
+      "sample": "web/public/samples/sample-1.jpg",
+      "input_sha256": "fe15720e4e746f4cb7c94a2c31c0182d721b0ec77674ce5e37eee56552fa0ab7",
+      "look": "Portra 400 New (Fuji recipe)",
+      "recipe": "library/fuji/community/recipes/033-kodak-portra-400-new-ritchie-roesch.json",
+      "recipe_before_sha256": "76b8a991d5468ad915239e7efd89001ac28f5e137301f6b7bfe66e3fc0246725",
+      "recipe_after_sha256": "e117440be0c8b17d82e5781fee43b20b366981830d5f7ae7f5fa05a634fc9078",
+      "lut_sha256": "e71a3a03b5f66816e9a588adf673b38d7d90a96fa5602cdeca0427c29eee3f90",
+      "before": {
+        "output_sha256": "6bc0293283104beb18474ee2afa94fdcf17f0981036ca61fd5597d1b175b7a1a",
+        "whole_image": {
+          "red_ge_254_pct": 5.0091,
+          "any_channel_ge_254_pct": 5.0091,
+          "all_channels_le_4_pct": 15.6802
+        },
+        "face_crop": {
+          "red_ge_254_pct": 34.2327,
+          "any_channel_ge_254_pct": 34.2327,
+          "all_channels_le_4_pct": 4.1048
+        }
+      },
+      "after": {
+        "output_sha256": "24dc31d9fc4afe61e630681d0a83e65011a87e02a283fa4a936f9da230cfe582",
+        "whole_image": {
+          "red_ge_254_pct": 0.2518,
+          "any_channel_ge_254_pct": 0.2533,
+          "all_channels_le_4_pct": 3.1292
+        },
+        "face_crop": {
+          "red_ge_254_pct": 0.5452,
+          "any_channel_ge_254_pct": 0.5452,
+          "all_channels_le_4_pct": 0.5893
+        }
+      }
+    },
+    {
+      "sample": "web/public/samples/sample-2.jpg",
+      "input_sha256": "ecc24a95f3b96359e8cc78d13cb194b73be252c2f1aa6733c01b5a3a59660f9d",
+      "look": "Docu Classic Chrome",
+      "recipe": "library/fuji/community/recipes/005-docu-classic-chrome-john-peltier.json",
+      "recipe_before_sha256": "c47cf6a4453328e8018918c1812794a7b71fd19488f24560d731ec4e0fd27e16",
+      "recipe_after_sha256": "5c634194ea266258ffe8b3562a19a97b8e7ef358a08fc0294db5e49c62614f8e",
+      "lut_sha256": "e71a3a03b5f66816e9a588adf673b38d7d90a96fa5602cdeca0427c29eee3f90",
+      "before": {
+        "output_sha256": "60536e6ef5f656304632a0caedf7da97d09d969be5bced6e0a2cd4a80a423660",
+        "whole_image": {
+          "red_ge_254_pct": 6.383,
+          "any_channel_ge_254_pct": 10.7179,
+          "all_channels_le_4_pct": 2.7523
+        },
+        "landscape": {
+          "red_ge_254_pct": 6.383,
+          "any_channel_ge_254_pct": 10.7179,
+          "all_channels_le_4_pct": 2.7523
+        }
+      },
+      "after": {
+        "output_sha256": "7dceda8eeff8960ff63129c8f00ea30d60d4f2a8904c910cae811f7013144064",
+        "whole_image": {
+          "red_ge_254_pct": 1.898,
+          "any_channel_ge_254_pct": 5.2913,
+          "all_channels_le_4_pct": 2.591
+        },
+        "landscape": {
+          "red_ge_254_pct": 1.898,
+          "any_channel_ge_254_pct": 5.2913,
+          "all_channels_le_4_pct": 2.591
+        }
+      }
+    },
+    {
+      "sample": "web/public/samples/sample-2.jpg",
+      "input_sha256": "ecc24a95f3b96359e8cc78d13cb194b73be252c2f1aa6733c01b5a3a59660f9d",
+      "look": "Vision3 500T (Fuji recipe)",
+      "recipe": "library/fuji/community/recipes/021-kodak-vision3-500t-piotr-skrzypek.json",
+      "recipe_before_sha256": "b7309972e16d1d51290dbba72171d3185b9de9945cd2110f3783d97917876017",
+      "recipe_after_sha256": "bb4928a002c249fcf67095432cdd8125c08838836a9eb008714d3802f295c456",
+      "lut_sha256": "0a8ee6cd95e2102f535684e5f6af3cbb7bad8c6595dc16c400a6156115b01190",
+      "before": {
+        "output_sha256": "681844dc7703d361f9654468651a829392234cf4f078991b98fbbc1f484c6363",
+        "whole_image": {
+          "red_ge_254_pct": 12.5249,
+          "any_channel_ge_254_pct": 24.7205,
+          "all_channels_le_4_pct": 0.0
+        },
+        "landscape": {
+          "red_ge_254_pct": 12.5249,
+          "any_channel_ge_254_pct": 24.7205,
+          "all_channels_le_4_pct": 0.0
+        }
+      },
+      "after": {
+        "output_sha256": "c60f6b0b2626b65d0b3d345a9ceda3b7d42a9409b85f0f3fc0a040acb122c1ec",
+        "whole_image": {
+          "red_ge_254_pct": 1.4796,
+          "any_channel_ge_254_pct": 4.8811,
+          "all_channels_le_4_pct": 0.3272
+        },
+        "landscape": {
+          "red_ge_254_pct": 1.4796,
+          "any_channel_ge_254_pct": 4.8811,
+          "all_channels_le_4_pct": 0.3272
+        }
+      }
+    },
+    {
+      "sample": "web/public/samples/sample-2.jpg",
+      "input_sha256": "ecc24a95f3b96359e8cc78d13cb194b73be252c2f1aa6733c01b5a3a59660f9d",
+      "look": "Portra 400 New (Fuji recipe)",
+      "recipe": "library/fuji/community/recipes/033-kodak-portra-400-new-ritchie-roesch.json",
+      "recipe_before_sha256": "76b8a991d5468ad915239e7efd89001ac28f5e137301f6b7bfe66e3fc0246725",
+      "recipe_after_sha256": "e117440be0c8b17d82e5781fee43b20b366981830d5f7ae7f5fa05a634fc9078",
+      "lut_sha256": "e71a3a03b5f66816e9a588adf673b38d7d90a96fa5602cdeca0427c29eee3f90",
+      "before": {
+        "output_sha256": "b6bc803322779d9f43bc914fd569b7bea14c6bc78712672110a153381073b97f",
+        "whole_image": {
+          "red_ge_254_pct": 5.1683,
+          "any_channel_ge_254_pct": 5.3087,
+          "all_channels_le_4_pct": 6.4041
+        },
+        "landscape": {
+          "red_ge_254_pct": 5.1683,
+          "any_channel_ge_254_pct": 5.3087,
+          "all_channels_le_4_pct": 6.4041
+        }
+      },
+      "after": {
+        "output_sha256": "2af70109aedb1ba8ef590d5837d8fcb65b86a11f864424f4016c05ed4741b551",
+        "whole_image": {
+          "red_ge_254_pct": 1.2863,
+          "any_channel_ge_254_pct": 2.5193,
+          "all_channels_le_4_pct": 1.8897
+        },
+        "landscape": {
+          "red_ge_254_pct": 1.2863,
+          "any_channel_ge_254_pct": 2.5193,
+          "all_channels_le_4_pct": 1.8897
+        }
+      }
+    }
+  ],
+  "grain_free_face": [
+    {
+      "look": "Docu Classic Chrome",
+      "before": {
+        "red_ge_254_pct": 58.781,
+        "any_channel_ge_254_pct": 58.781,
+        "all_channels_le_4_pct": 0.9315
+      },
+      "after": {
+        "red_ge_254_pct": 2.4964,
+        "any_channel_ge_254_pct": 2.4964,
+        "all_channels_le_4_pct": 0.9381
+      }
+    },
+    {
+      "look": "Vision3 500T (Fuji recipe)",
+      "before": {
+        "red_ge_254_pct": 60.3655,
+        "any_channel_ge_254_pct": 60.3702,
+        "all_channels_le_4_pct": 0.0
+      },
+      "after": {
+        "red_ge_254_pct": 1.8042,
+        "any_channel_ge_254_pct": 1.8042,
+        "all_channels_le_4_pct": 0.0113
+      }
+    },
+    {
+      "look": "Portra 400 New (Fuji recipe)",
+      "before": {
+        "red_ge_254_pct": 43.9268,
+        "any_channel_ge_254_pct": 43.9268,
+        "all_channels_le_4_pct": 4.931
+      },
+      "after": {
+        "red_ge_254_pct": 0.1065,
+        "any_channel_ge_254_pct": 0.1065,
+        "all_channels_le_4_pct": 0.5917
+      }
+    }
+  ],
+  "wasm_native_parity": [
+    {
+      "name": "Docu Classic Chrome",
+      "mean": 0,
+      "max": 0
+    },
+    {
+      "name": "Vision3 500T (Fuji recipe)",
+      "mean": 0,
+      "max": 0
+    },
+    {
+      "name": "Portra 400 New (Fuji recipe)",
+      "mean": 0,
+      "max": 0
+    }
+  ],
+  "browser_wasm_sha256": "b15e6992d8160424b7421d41eacf23e351fe701435734c5d3a7c036ff3a0d137"
+}
