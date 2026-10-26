@@ -50,7 +50,27 @@ const FEATURED: [string, string][] = [
   ["cinestill/community/cinestill-800t", "800T"],
   ["polaroid/community/polaroid-sx-minus-70", "SX-70"],
   ["agfa/community/agfa-vista-200", "Vista"],
+  ["camcorder/cx405", "CX405"],
+  ["camcorder/vhs", "VHS"],
 ];
+
+// --- Video cameras: signal-chain simulations, not LUT looks. They
+// live in a synthetic "camcorder" brand injected into the catalog
+// at boot; applyNow routes them to their own engine stages. ---
+const VIDEO_LOOKS: LookEntry[] = [
+  { id: "camcorder/cx405", name: "Sony CX405", brand: "camcorder", tier: "video", recipe: "", baseLut: null, hasLut: false, baseFilm: "HDR-CX405", creator: "open-fuji", license: null },
+  { id: "camcorder/vhs", name: "VHS-C", brand: "camcorder", tier: "video", recipe: "", baseLut: null, hasLut: false, baseFilm: "VHS tape", creator: "ntsc-rs", license: null },
+];
+const VIDEO_META: Record<string, { meta: string; note: string }> = {
+  "camcorder/cx405": {
+    meta: "camcorder · HDR-CX405 · open-fuji",
+    note: "A consumer camcorder, simulated as a signal chain: soft luma, smeared chroma, hunting auto-exposure, milky night blacks, sensor noise. The look is the hardware — no develop sliders.",
+  },
+  "camcorder/vhs": {
+    meta: "camcorder · VHS tape · ntsc-rs",
+    note: "NTSC composite + VHS tape simulation: chroma bleed, head-switching, tracking noise, tape smear. The look is the hardware — no develop sliders.",
+  },
+};
 let shelfMode = true;
 let developFx = false;
 let flatIds: string[] = [];
@@ -59,7 +79,8 @@ let flatIds: string[] = [];
 function glyphFor(l: LookEntry): string {
   const s = `${l.id} ${l.name}`.toLowerCase();
   let kind = "compact";
-  if (/video|cine|vision|movie/.test(s)) kind = "cine";
+  if (l.brand === "camcorder") kind = "cine";
+  else if (/video|cine|vision|movie/.test(s)) kind = "cine";
   else if (/instant|polaroid|sx-70|sx70/.test(s)) kind = "instant";
   else if (/half/.test(s)) kind = "halfframe";
   else if (l.brand === "fuji") kind = "rangefinder";
@@ -71,7 +92,7 @@ function glyphFor(l: LookEntry): string {
 function buildFlat() {
   flatIds = [];
   const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
-  for (const b of brands) for (const t of ["official", "community"]) for (const l of catalog.brands[b].tiers[t] ?? []) flatIds.push(l.id);
+  for (const b of brands) for (const t of ["official", "community", "video"]) for (const l of catalog.brands[b].tiers[t] ?? []) flatIds.push(l.id);
 }
 function updateCounter() {
   const el = document.querySelector("#film-counter");
@@ -100,6 +121,7 @@ type TypeFilter = "all" | "official" | "bw" | "video" | "color";
 let activeType: TypeFilter = "all";
 
 function lookType(l: LookEntry): "bw" | "video" | "color" {
+  if (l.brand === "camcorder") return "video";
   if (/cine|vision|movie|video/i.test(`${l.id} ${l.name}`)) return "video";
   const s = `${l.name} ${l.baseFilm ?? ""}`;
   if (
@@ -251,6 +273,10 @@ function sliderRow(key: string, label: string, min: number, max: number, step: n
 
 function renderSliders() {
   if (!recipe) return;
+  if (current?.brand === "camcorder") {
+    $("#sliders").innerHTML = `<div class="font-mono text-[10.5px] leading-relaxed text-ink2 px-1 py-2">Signal-chain camera — the look is the hardware; there are no develop sliders.</div>`;
+    return;
+  }
   const R: Record<string, any> = recipe;
   const g = R.grain ?? { amount: 0, size: "small" };
   const wb = R.whiteBalance ?? { tempShift: 0, tintShift: 0 };
@@ -352,7 +378,7 @@ function renderCabinet(filter = "") {
     if (activeBrand && brand !== activeBrand) continue;
     const data = catalog.brands[brand];
     let groups = "";
-    for (const tier of ["official", "community"]) {
+    for (const tier of ["official", "community", "video"]) {
       const looks = (data.tiers[tier] ?? []).filter((l) => lookMatches(l, f));
       if (!looks.length) continue;
       let cards = "";
@@ -360,7 +386,7 @@ function renderCabinet(filter = "") {
         const sel = current?.id === look.id;
         cards += `<button data-look="${look.id}" class="look-card active:scale-[0.98] text-left border ${sel ? "border-ink" : "border-rule"} bg-mat hover:border-ink transition-colors">
           <span class="relative block">
-            <img loading="lazy" src="${thumbUrl(look.id)}" alt="" class="w-full aspect-[3/2] object-cover block" />
+            ${shelfArt(look.id) ?? `<img loading="lazy" src="${thumbUrl(look.id)}" alt="" class="w-full aspect-[3/2] object-cover block" />`}
             ${look.tier === "official" ? `<span class="absolute top-1 left-1 bg-paper/90 p-[3px]">${icon("badge-check", "w-3.5 h-3.5 block")}</span>` : ""}
           </span>
           <span class="block px-2 py-1.5 ${sel ? "bg-accent text-accentink" : ""}">
@@ -372,7 +398,7 @@ function renderCabinet(filter = "") {
         </button>`;
       }
       groups += `<div class="flex items-center gap-1.5 font-mono text-[9.5px] tracking-[0.18em] text-ink2 px-1 pt-3 pb-1.5">
-        ${icon(tier === "official" ? "badge-check" : "users", "w-3 h-3")}${tier === "official" ? "Official" : "Community"}</div>
+        ${icon(tier === "official" ? "badge-check" : tier === "video" ? "video" : "users", "w-3 h-3")}${tier === "official" ? "Official" : tier === "video" ? "Video" : "Community"}</div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">${cards}</div>`;
     }
     if (groups) html += `<div><div class="flex items-center gap-2 px-1 pt-3">
@@ -398,7 +424,7 @@ function renderStrip() {
     const brands = Object.keys(catalog.brands).sort((a, b) => (a === "fuji" ? -1 : b === "fuji" ? 1 : a.localeCompare(b)));
     for (const brand of brands) {
       if (activeBrand && brand !== activeBrand) continue;
-      for (const tier of ["official", "community"]) {
+      for (const tier of ["official", "community", "video"]) {
         for (const l of (catalog.brands[brand].tiers[tier] ?? []).filter((x) => lookMatches(x, f))) items.push({ look: l, label: l.name });
       }
     }
@@ -432,6 +458,15 @@ async function selectLook(id: string) {
   current = entry;
   updateCounter();
   renderCabinet($<HTMLInputElement>("#search").value);
+  if (entry.brand === "camcorder") {
+    recipe = {}; // marker — video cameras run their own engine stage
+    renderSliders();
+    $("#led-name").textContent = entry.name;
+    $("#led-meta").innerHTML = VIDEO_META[entry.id].meta;
+    $("#led-note").textContent = VIDEO_META[entry.id].note;
+    scheduleApply();
+    return;
+  }
   $("#cap-state").textContent = "LOADING…";
   const recipeUrl = "/" + entry.recipe;
   const rj: Record<string, any> = await (await fetch(recipeUrl)).json();
@@ -482,18 +517,7 @@ function scheduleApply() {
   applyTimer = setTimeout(applyNow, 90);
 }
 
-async function applyNow() {
-  if (!origPixels || !recipe || !current) return;
-  if (!engine) { setBusy(true); return; } // engineP.then re-invokes applyNow
-  setBusy(true);
-  const cube = await cubeFor(current);
-  const input = new Uint8Array(origPixels);
-  const effective = store.get(modeAtom) === "simple"
-    ? { ...(recipe as any), strength: 1 }
-    : recipe;
-  const out = engine.apply(input, imgW, imgH, JSON.stringify(effective), cube);
-  const ctx = $<HTMLCanvasElement>("#after").getContext("2d")!;
-  ctx.putImageData(new ImageData(new Uint8ClampedArray(out), imgW, imgH), 0, 0);
+function finishDevelop() {
   setBusy(false);
   hideStageLoad();
   progress(100);
@@ -508,6 +532,46 @@ async function applyNow() {
       setTimeout(() => c.classList.remove("developing"), 750);
     }
   }
+}
+
+async function applyNow() {
+  if (!origPixels || !current) return;
+  if (!engine) { setBusy(true); return; } // engineP.then re-invokes applyNow
+  if (current.brand === "camcorder") {
+    // Video cameras: signal-chain stages run at <=1280px on the
+    // long edge (both looks are destruction effects; the result is
+    // drawn back up to bench size, like the hardware does).
+    setBusy(true);
+    const scale = Math.min(1, 1280 / Math.max(imgW, imgH));
+    const vw = Math.max(2, Math.round(imgW * scale));
+    const vh = Math.max(2, Math.round(imgH * scale));
+    const tmp = document.createElement("canvas");
+    tmp.width = vw; tmp.height = vh;
+    const tctx = tmp.getContext("2d")!;
+    tctx.drawImage($<HTMLCanvasElement>("#before"), 0, 0, vw, vh);
+    const px = tctx.getImageData(0, 0, vw, vh).data;
+    const out = current.id === "camcorder/cx405"
+      ? engine.apply_camcorder(new Uint8Array(px), vw, vh)
+      : engine.apply_vhs(new Uint8Array(px), vw, vh, "vhs", 0);
+    const res = document.createElement("canvas");
+    res.width = vw; res.height = vh;
+    res.getContext("2d")!.putImageData(new ImageData(new Uint8ClampedArray(out), vw, vh), 0, 0);
+    const ctx = $<HTMLCanvasElement>("#after").getContext("2d")!;
+    ctx.drawImage(res, 0, 0, imgW, imgH);
+    finishDevelop();
+    return;
+  }
+  if (!recipe) return;
+  setBusy(true);
+  const cube = await cubeFor(current);
+  const input = new Uint8Array(origPixels);
+  const effective = store.get(modeAtom) === "simple"
+    ? { ...(recipe as any), strength: 1 }
+    : recipe;
+  const out = engine.apply(input, imgW, imgH, JSON.stringify(effective), cube);
+  const ctx = $<HTMLCanvasElement>("#after").getContext("2d")!;
+  ctx.putImageData(new ImageData(new Uint8ClampedArray(out), imgW, imgH), 0, 0);
+  finishDevelop();
 }
 
 async function loadPhoto(source: Blob | string, name: string) {
@@ -564,6 +628,7 @@ async function boot() {
   layout();
   progress(45);
   catalog = await fetchCatalog();
+  catalog.brands["camcorder"] = { tiers: { video: VIDEO_LOOKS }, total: VIDEO_LOOKS.length };
   buildFlat();
   updateCounter();
   try { renderChips(); } catch (e) { console.error("chips failed", e); }

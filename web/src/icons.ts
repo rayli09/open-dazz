@@ -49,6 +49,7 @@ const SIGILS: Record<string, string> = {
   orwo: '<circle cx="12" cy="12" r="8.6"/><path d="M12 3.4c-4.8 4.9-4.8 12.3 0 17.2"/><path d="M12 3.4c4.8 4.9 4.8 12.3 0 17.2"/><path d="M3.6 12h16.8"/>',
   ricoh: '<path d="M9 4H4v5"/><path d="M15 4h5v5"/><path d="M20 15v5h-5"/><path d="M9 20H4v-5"/>',
   emulsion: '<path d="M12 3.5c3.4 4.3 5.9 7.6 5.9 10.6a5.9 5.9 0 0 1-11.8 0C6.1 11.1 8.6 7.8 12 3.5z"/><path d="M9.3 14.2a2.9 2.9 0 0 0 2 3.4"/>',
+  camcorder: '<rect x="2.5" y="9" width="13" height="8.5" rx="1.6"/><path d="M15.5 11l6-2.4v9.3l-6-2.4"/><circle cx="6.8" cy="13.2" r="1.7"/><path d="M9.5 9V6.8h6V9"/>',
 };
 export function brandSigil(brand: string, cls = "w-4 h-4"): string {
   return svg(SIGILS[brand] ?? CONTROLS["swatch-book"], cls);
