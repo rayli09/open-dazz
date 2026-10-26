@@ -1,4 +1,4 @@
-# open-fuji roadmap — closing the gap to Dazz Cam
+# open-dazz roadmap — closing the gap to Dazz Cam
 
 _Written 2026-10-25, after the Dazz-style simple mode shipped. Dazz Cam is
 the benchmark for feel; this doc is the honest gap list and the order we
