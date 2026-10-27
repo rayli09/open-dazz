@@ -43,7 +43,13 @@ export default defineConfig(({ mode }) => ({
       }
       removeLuts(library);
     },
-  }] : []), ...(mode === "desktop" ? [{
+  }] : []), ...(mode === "ios" ? [{
+    name: "ios-photo-assets",
+    writeBundle(options) {
+      if (!options.dir) throw new Error("Missing build output directory");
+      rmSync(join(options.dir, "ffmpeg"), { recursive: true, force: true });
+    },
+  }] : []), ...(["desktop", "ios"].includes(mode) ? [{
     name: "desktop-local-only",
     transformIndexHtml(html: string) { return html.replace(/<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>/g, ""); },
   }] : [])],

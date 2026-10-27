@@ -23,3 +23,5 @@ apps/web/public/samples/desktop-smoke.mp4
 
 # Generated copy of the canonical library.
 apps/web/public/library/
+
+apps/web/dist-ios/

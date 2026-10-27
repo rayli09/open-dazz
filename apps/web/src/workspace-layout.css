@@ -139,3 +139,11 @@ main { --looks-track:228px; --adjustments-track:252px; grid-template-columns:var
   header .font-display { font-size:17px; }
   #editing-mode { width:148px; }
 }
+
+/* iOS photo prototype: retain scrollable content inside the device safe area. */
+html[data-platform="ios"] body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+html[data-platform="ios"] [data-simple-media="video"] { display: none; }
+.ios-share-dialog { max-width: min(90vw, 360px); border: 1px solid #465158; border-radius: 12px; padding: 20px; background: #252c30; color: #fff; }
+.ios-share-dialog::backdrop { background: #0009; }
+.ios-share-dialog div { display: flex; justify-content: end; gap: 12px; margin-top: 20px; }
+.ios-share-dialog button { min-height: 44px; padding: 8px 16px; border: 1px solid #66747a; border-radius: 8px; background: #39454a; color: #fff; }

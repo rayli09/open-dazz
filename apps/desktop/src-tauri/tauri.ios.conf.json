@@ -1,0 +1,9 @@
+{
+  "build": {
+    "beforeBuildCommand": "bun run --cwd ../web build:ios",
+    "beforeDevCommand": "bun run --cwd ../web dev --host 0.0.0.0 --port 4173 --strictPort --mode ios",
+    "devUrl": "http://127.0.0.1:4173",
+    "frontendDist": "../../web/dist-ios"
+  },
+  "bundle": { "targets": "all" }
+}

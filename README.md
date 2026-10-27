@@ -29,7 +29,7 @@ Workspaces: [web frontend](apps/web/), [Apple Silicon desktop](apps/desktop/), [
 
 ## Docs
 
-[Development & limits](apps/web/README.md) · [CLI & looks](library/README.md) · [Recipes](recipes/README.md) · [Testing](docs/TESTING.md) · [macOS desktop & installer](docs/DESKTOP.md)
+[Development & limits](apps/web/README.md) · [CLI & looks](library/README.md) · [Recipes](recipes/README.md) · [Testing](docs/TESTING.md) · [macOS desktop & installer](docs/DESKTOP.md) · [iOS prototype](docs/IOS.md)
 
 ## License
 

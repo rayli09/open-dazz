@@ -1,9 +1,14 @@
 {
   "name": "opendazz-workspace",
   "private": true,
-  "workspaces": ["apps/web", "apps/desktop"],
+  "workspaces": [
+    "apps/web",
+    "apps/desktop"
+  ],
   "packageManager": "bun@1.4.3",
-  "engines": { "bun": "1.4.3" },
+  "engines": {
+    "bun": "1.4.3"
+  },
   "scripts": {
     "dev": "bun run --cwd apps/web dev",
     "build": "bun run --cwd apps/web build",
@@ -11,6 +16,8 @@
     "test": "bun run --cwd apps/web test",
     "typecheck": "bun run --cwd apps/web typecheck",
     "desktop:dev": "bun run --cwd apps/desktop dev",
-    "desktop:build": "bun run --cwd apps/desktop build"
+    "desktop:build": "bun run --cwd apps/desktop build",
+    "ios:dev": "bun run --cwd apps/desktop ios:dev",
+    "ios:build": "bun run --cwd apps/desktop ios:build"
   }
 }

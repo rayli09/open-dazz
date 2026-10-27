@@ -223,7 +223,7 @@ function layout() {
     <!-- THE BENCH -->
     <section class="order-1 lg:order-2 bench-grid relative flex flex-col min-h-0">
       <div class="import-toolbar flex flex-wrap items-center gap-2 px-4 pt-4">
-        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}Photo / Video</button>
+        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}${import.meta.env.MODE === "ios" ? "Photo" : "Photo / Video"}</button>
         <button id="toggle-looks" class="workspace-toggle" aria-expanded="true" aria-controls="look-shelf look-cabinet">${icon("camera", "w-4 h-4")}Looks</button>
         <button id="toggle-adjustments" class="workspace-toggle" aria-expanded="true" aria-controls="adjustments-panel">${icon("sliders", "w-4 h-4")}Adjust</button>
         <details class="sample-menu"><summary>Samples</summary><div>
@@ -231,7 +231,7 @@ function layout() {
         <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("mountain", "w-[18px] h-[18px]")}Sample II</button>
         </div></details>
         <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
-        <input id="file" type="file" multiple accept="${MEDIA_FILE_TYPES.join(",")}" class="hidden" />
+        <input id="file" type="file" multiple accept="${import.meta.env.MODE === "ios" ? "image/*,.heic,.heif" : MEDIA_FILE_TYPES.join(",")}" class="hidden" />
       </div>
       <section id="session-panel" hidden class="mx-4 mt-3 p-3 border border-rule rounded-lg bg-mat text-[12px] leading-relaxed max-h-40 overflow-y-auto" aria-label="Saved editing settings"></section>
       <div id="stage-wrap" class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-6 overflow-hidden">
@@ -1203,11 +1203,11 @@ async function exportCurrentMedia() {
     if (controller.signal.aborted || request !== mediaVersion) return;
     if (!saved) { $("#cap-state").textContent = "PHOTO SAVE CANCELLED"; return; }
     mediaStore.getState().markExported(item.id, exportedSignature);
-    $("#cap-state").textContent = "ORIGINAL-SIZE PNG SAVED";
+    $("#cap-state").textContent = import.meta.env.MODE === "ios" ? "PHOTO SHARED" : "ORIGINAL-SIZE PNG SAVED";
   } catch (error) {
     if (controller.signal.aborted || request !== mediaVersion) return;
     const detail = error instanceof Error ? error.message : "";
-    showWorkFailure(detail.startsWith("Original-size export supports") ? detail : "Could not export the original-size photo. Check your connection and try again, or use a smaller copy in a current browser.", exportCurrentMedia, error);
+    showWorkFailure((detail.startsWith("Original-size export supports") || detail.startsWith("Sharing this photo")) ? detail : "Could not export the original-size photo. Check your connection and try again, or use a smaller copy in a current browser.", exportCurrentMedia, error);
   } finally {
     if (photoExportController === controller) { photoExportController = null; photoExportBusy = false; syncExportButtons(); }
   }
@@ -1243,7 +1243,7 @@ async function boot() {
       await new Promise<void>(resolve => showWorkFailure("Could not load the filter catalog. Check your connection, then try again.", async () => { clearWorkFailure(); resolve(); }, error));
     }
   }
-  catalog.brands["camcorder"] = { tiers: { video: VIDEO_LOOKS }, total: VIDEO_LOOKS.length };
+  if (import.meta.env.MODE !== "ios") catalog.brands["camcorder"] = { tiers: { video: VIDEO_LOOKS }, total: VIDEO_LOOKS.length };
   updateCounter();
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
@@ -1282,6 +1282,10 @@ async function boot() {
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
   const dock = setupMediaDock($("#media-dock"), () => $<HTMLInputElement>("#file").click());
   const cleanupThumbnails = setupMediaThumbnails();
+  if (import.meta.env.MODE === "ios") {
+    document.documentElement.dataset.platform = "ios";
+    document.querySelector<HTMLButtonElement>('[data-simple-media="video"]')?.remove();
+  }
   const cleanupImport = setupMediaImport($<HTMLInputElement>("#file"), document.body, dock.announce);
   const cleanupSelection = mediaStore.subscribe(state => state.selectedId, id => { void activateMedia(id); });
   $("#empty-add").addEventListener("click", () => $<HTMLInputElement>("#file").click());

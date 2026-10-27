@@ -20,7 +20,7 @@ export function setupMediaImport(
       maxNumberOfFiles: MAX_MEDIA,
       maxFileSize: MAX_FILE_BYTES,
       minFileSize: 1,
-      allowedFileTypes: [...MEDIA_FILE_TYPES],
+      allowedFileTypes: import.meta.env.MODE === "ios" ? ["image/*", ".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp"] : [...MEDIA_FILE_TYPES],
     },
   });
   const warnings: string[] = [];

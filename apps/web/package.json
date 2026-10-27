@@ -11,7 +11,8 @@
     "preview": "bun --bun vite preview",
     "predev": "bun scripts/sync-library.mjs && bun scripts/sync-ffmpeg.mjs",
     "prebuild": "bun scripts/sync-library.mjs && bun scripts/sync-ffmpeg.mjs",
-    "build:desktop": "bun run build --mode desktop --outDir dist-desktop"
+    "build:desktop": "bun run build --mode desktop --outDir dist-desktop",
+    "build:ios": "bun run build --mode ios --outDir dist-ios"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
