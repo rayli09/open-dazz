@@ -1,10 +1,33 @@
+import { createHash } from "node:crypto";
+import { readFileSync, readdirSync, rmSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import wasm from "vite-plugin-wasm";
 
 export default defineConfig(({ mode }) => ({
-  plugins: [tailwindcss(), wasm(), ...(mode === "desktop" ? [{
+  plugins: [tailwindcss(), wasm(), ...(mode === "production" ? [{
+    name: "remote-luts",
+    async writeBundle(options) {
+      if (!options.dir) throw new Error("Missing build output directory");
+      const library = join(options.dir, "library");
+      const manifest = readFileSync(join(library, "lut-manifest.json"));
+      const hash = createHash("sha256").update(manifest).digest("hex");
+      const response = await fetch(`https://dazz-assets.openpromo.app/manifests/${hash}.json`);
+      if (!response.ok || !Buffer.from(await response.arrayBuffer()).equals(manifest)) {
+        throw new Error("LUT assets are not published; run the bucket publisher before building");
+      }
+      function removeLuts(dir: string) {
+        for (const entry of readdirSync(dir, { withFileTypes: true })) {
+          const file = join(dir, entry.name);
+          if (entry.isDirectory()) removeLuts(file);
+          else if (entry.name.endsWith(".cube.gz")) rmSync(file);
+        }
+      }
+      removeLuts(library);
+    },
+  }] : []), ...(mode === "desktop" ? [{
     name: "desktop-local-only",
     transformIndexHtml(html: string) { return html.replace(/<link[^>]+(?:fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*>/g, ""); },
   }] : [])],

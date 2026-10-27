@@ -1,3 +1,4 @@
+import { lutAssetUrl } from "./lut-assets";
 import { relativeAssetPath } from "./asset-url";
 import "./material-sample.css";
 import { createStore } from "zustand/vanilla";
@@ -109,7 +110,7 @@ async function loadSample() {
       import("./pkg/opendazz_wasm.js"), fetchJson(path, RecipeSchema), fetch("/samples/sample-2.jpg"),
     ]);
     if (!response.ok) throw new Error(`Sample photo HTTP ${response.status}`);
-    const loadedCube = loadedRecipe.baseLut ? await fetchText(relativeAssetPath(loadedRecipe.baseLut, path)) : undefined;
+    const loadedCube = loadedRecipe.baseLut ? await fetchText(await lutAssetUrl(relativeAssetPath(loadedRecipe.baseLut, path))) : undefined;
     const blob = await response.blob(), bitmap = await createImageBitmap(blob, { imageOrientation: "from-image" });
     if (version !== loadVersion) { bitmap.close(); return; }
     previewWidth = Math.min(600, bitmap.width); previewHeight = Math.round(bitmap.height * previewWidth / bitmap.width);

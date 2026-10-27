@@ -1,4 +1,5 @@
 // Production main-page material rollout QA. No test hooks in shipped application.
+import { lutRoute } from './browser-lut-route.mjs';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -43,7 +44,7 @@ try {
  await page.reload();await ready();await shot('main-recovery');
  // Recoverable catalog/look error, then exact successful retry.
  await context.clearCookies();await page.evaluate(()=>localStorage.clear());await page.reload();await ready();let fail=true;
- await page.route('**/ricoh-superior-100-negative-film.cube.gz',r=>fail?r.fulfill({status:503,body:'temporary unavailable'}):r.continue());
+ await page.route(lutRoute('library/ricoh/community/luts/ricoh-superior-100-negative-film.cube.gz'),r=>fail?r.fulfill({status:503,body:'temporary unavailable'}):r.continue());
  await page.locator('[data-preset="ricoh-negative"]').click();await page.locator('#work-error').waitFor({state:'visible'});await shot('main-error-disabled');assert.equal(await page.locator('#btn-export-simple').isDisabled(),true);fail=false;await page.locator('#work-retry').click();await ready();
  checks.push('real PNG download, delete/undo, settings restore and actionable retry/disabled states');
  for (const width of [390,320]) {

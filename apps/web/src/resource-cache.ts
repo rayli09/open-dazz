@@ -16,7 +16,8 @@ export class ResourceCache<T> {
     delete(key: string) { this.entries.delete(key); }
 }
 export async function fetchText(url: string): Promise<string> {
-    const response = await fetch(url, { cache: "no-cache" });
+    const remoteLut = new URL(url, "http://localhost").hostname === "dazz-assets.openpromo.app";
+    const response = await fetch(url, { cache: remoteLut ? "default" : "no-cache" });
     if (!response.ok)
         throw new Error(`HTTP ${response.status} while loading ${url}`);
     if (new URL(url, "http://localhost").pathname.endsWith(".gz")) {

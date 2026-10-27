@@ -1,4 +1,5 @@
 // Run against a production build/preview; Playwright/Chromium/ffmpeg are external QA tools.
+import { lutRoute } from './browser-lut-route.mjs';
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -47,7 +48,7 @@ try {
     checks.push('actual 4032×3024 Fuji PNG, bounded preview, responsive UI and duplicate-click protection');
     // Persistent 503 first, then two rapid retry clicks share one recovery request.
     let requests = 0, fail = true;
-    await page.route('**/ricoh-superior-100-negative-film.cube.gz', async (r) => { requests++; if (fail)
+    await page.route(lutRoute('library/ricoh/community/luts/ricoh-superior-100-negative-film.cube.gz'), async (r) => { requests++; if (fail)
         await r.fulfill({ status: 503, body: 'temporary outage' });
     else
         await r.continue(); });
@@ -91,7 +92,7 @@ try {
     checks.push('original-size photo export retains its look snapshot while preview changes and remains dirty afterward');
     // Invalid 200 response must be rejected by LUT parsing and evicted.
     let invalid = true, invalidRequests = 0;
-    await page.route('**/acros.cube.gz', async (r) => { invalidRequests++; if (invalid)
+    await page.route(lutRoute('library/fuji/community/hald-bases/luts/acros.cube.gz'), async (r) => { invalidRequests++; if (invalid)
         await r.fulfill({ status: 200, body: 'LUT_3D_SIZE 2\n0 0 0' });
     else
         await r.continue(); });
