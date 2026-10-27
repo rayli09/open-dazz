@@ -88,7 +88,6 @@ media-slider-track { background:#65737c; box-shadow:inset 0 1px 1px #0008; }
 media-slider-thumb { width:17px; height:17px; background:var(--camera-satin); border:1px solid #dae2e7; box-shadow:0 2px 3px #0007; }
 #player-hint { color:#bdc7cc; font-size:11px; }
 #player-compare { font-size:11px; }
-#divider>div { width:36px; height:36px; background:var(--camera-satin); color:#172128; border-color:#ccd5da; }
 button:disabled { cursor:default; }
 @media(min-width:1024px) {
   .import-toolbar { padding-top:20px; }
@@ -135,9 +134,10 @@ button:disabled { cursor:default; }
 /* Give the first decode a real, readable loading well before dimensions exist. */
 #printwrap:has(#stage-load:not(.hidden)) { min-width:240px; min-height:180px; }
 #search:focus-visible { outline:2px solid var(--camera-accent); outline-offset:3px; }
-#printwrap:has(#stage-load:not(.hidden)) #divider { visibility:hidden; }
 @media(max-width:1023px) {
   /* A scrolling page must not shrink the Pro ledger into its fixed footer. */
   .ledger { flex:none; overflow:visible; }
   .ledger-content { flex:none; min-height:auto; overflow:visible; }
 }
+
+#printwrap:has(#stage-load:not(.hidden)) #photo-compare { visibility:hidden; }

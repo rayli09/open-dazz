@@ -1,3 +1,4 @@
+import { platform } from "./platform";
 import Uppy from "@uppy/core";
 import DropTarget from "@uppy/drop-target";
 import {
@@ -20,7 +21,7 @@ export function setupMediaImport(
       maxNumberOfFiles: MAX_MEDIA,
       maxFileSize: MAX_FILE_BYTES,
       minFileSize: 1,
-      allowedFileTypes: import.meta.env.MODE === "ios" ? ["image/*", ".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp"] : [...MEDIA_FILE_TYPES],
+      allowedFileTypes: !platform.video ? ["image/*", ".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp"] : [...MEDIA_FILE_TYPES],
     },
   });
   const warnings: string[] = [];

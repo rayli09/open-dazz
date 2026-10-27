@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["apps/cli", "apps/desktop/src-tauri", "crates/opendazz-core", "crates/opendazz-wasm", "crates/ntsc-rs"]
+members = ["apps/cli", "apps/desktop/src-tauri", "crates/opendazz-core", "crates/opendazz-wasm", "crates/ntsc-rs", "crates/tauri-plugin-photos", "crates/tauri-plugin-ios-ui"]
 # Portable engine/CLI checks stay usable without a platform GUI toolchain.
 default-members = ["apps/cli", "crates/opendazz-core", "crates/opendazz-wasm", "crates/ntsc-rs"]
 

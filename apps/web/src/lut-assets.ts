@@ -1,3 +1,4 @@
+import { platform } from "./platform";
 import { ResourceCache } from "./resource-cache";
 
 const ASSET_ORIGIN = "https://dazz-assets.openpromo.app";
@@ -5,7 +6,7 @@ const manifestCache = new ResourceCache<Record<string, string>>();
 
 /** The desktop app and dev server load the bundled library; web releases use immutable objects. */
 export async function lutAssetUrl(localPath: string): Promise<string> {
-    if (!import.meta.env.PROD || ["desktop", "ios"].includes(import.meta.env.MODE)) return localPath;
+    if (!import.meta.env.PROD || platform.kind !== "web") return localPath;
     const manifest = await manifestCache.get("manifest", async () => {
         const response = await fetch("/library/lut-manifest.json");
         if (!response.ok) throw new Error(`Unable to load LUT manifest (HTTP ${response.status})`);

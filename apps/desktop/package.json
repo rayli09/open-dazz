@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "bun --bun tauri dev",
     "build": "CARGO_PROFILE_RELEASE_LTO=thin CARGO_PROFILE_RELEASE_CODEGEN_UNITS=16 bun --bun tauri build --target aarch64-apple-darwin",
-    "ios:dev": "bun --bun tauri ios dev",
-    "ios:build": "bun --bun tauri ios build"
+    "ios:dev": "bun run ios:prepare && bun --bun tauri ios dev",
+    "ios:build": "bun run ios:prepare && bun --bun tauri ios build",
+    "ios:prepare": "bun scripts/prepare-ios-assets.mjs"
   },
   "devDependencies": {
     "@tauri-apps/cli": "2"

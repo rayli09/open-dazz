@@ -73,7 +73,6 @@ header a { color: var(--color-ink2); border: 0; min-height: 44px; }
 #printwrap::after { display: none; }
 #stage figcaption { padding-top: 10px; font-size: 10px; letter-spacing: .04em; line-height: 1.5; }
 #cap-state { color: #d9bc81; }
-#divider > div { width: 30px; height: 30px; background: #252b2f; border-color: #e9e9e6; box-shadow: 0 2px 6px #0005; }
 .simple-only { background: #1c2022; border: 1px solid var(--color-rule); border-radius: 10px; box-shadow: none; }
 #search, .dd-btn { background: #191c1e; border: 1px solid #41474b; min-height: 44px; }
 .dd-panel { opacity: 0; transform: translateY(-3px); pointer-events: none; transition: opacity .16s, transform .16s; background: #292e31; border: 1px solid #525a5e; box-shadow: 0 12px 32px #0006; overflow: hidden; }
@@ -118,7 +117,6 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
   #stage-wrap { padding: 12px; }
   .bench-grid > div:first-child { padding: 12px 12px 0; gap: 6px; }
   #btn-load, #btn-s1, #btn-s2 { padding-inline: 10px; font-size: 12px; }
-  #split-label { display: none; }
   .simple-only { margin: 0 12px 12px; padding: 8px; }
   .simple-only > button { flex: 1; justify-content: center; }
   .shelf-rail, .cabinet-aside { flex: none; overflow: visible; }

@@ -30,7 +30,6 @@ main { --looks-track:228px; --adjustments-track:252px; grid-template-columns:var
 [data-looks-open=false] .cabinet-aside,[data-looks-open=false] .shelf-rail,[data-adjustments-open=false] .ledger { display:none; }
 .import-toolbar,.bench-grid > .import-toolbar { flex:none; flex-wrap:nowrap; gap:6px; padding:6px 12px 2px; }
 #btn-load { padding-inline:12px; font-size:12px; }
-#split-label { font-variant-numeric:tabular-nums; white-space:nowrap; }
 #stage-wrap { padding:10px 12px; align-items:safe center; justify-content:safe center; }
 #stage-wrap:has(#video-workspace:not([hidden])) { overflow:auto; }
 #stage { width:min-content; flex:none; }
@@ -140,10 +139,80 @@ main { --looks-track:228px; --adjustments-track:252px; grid-template-columns:var
   #editing-mode { width:148px; }
 }
 
-/* iOS photo prototype: retain scrollable content inside the device safe area. */
-html[data-platform="ios"] body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+/* iOS safe areas remain in the shared responsive layout. */
+html[data-platform="ios"] body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); background:var(--camera-panel-light); }
 html[data-platform="ios"] [data-simple-media="video"] { display: none; }
-.ios-share-dialog { max-width: min(90vw, 360px); border: 1px solid #465158; border-radius: 12px; padding: 20px; background: #252c30; color: #fff; }
-.ios-share-dialog::backdrop { background: #0009; }
-.ios-share-dialog div { display: flex; justify-content: end; gap: 12px; margin-top: 20px; }
-.ios-share-dialog button { min-height: 44px; padding: 8px 16px; border: 1px solid #66747a; border-radius: 8px; background: #39454a; color: #fff; }
+
+@media (max-width: 600px) {
+  html[data-platform="ios"] header > div { min-height: 52px; padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); }
+  html[data-platform="ios"] #stage-wrap { padding: 6px 8px; }
+  html[data-platform="ios"] #stage { padding: 6px; }
+  html[data-platform="ios"] .import-toolbar { overflow-x: auto; scrollbar-width: none; }
+  html[data-platform="ios"] .import-toolbar::-webkit-scrollbar { display: none; }
+  html[data-platform="ios"] .workspace-toggle, html[data-platform="ios"] #btn-load { flex: none; min-height: 44px; }
+  html[data-platform="ios"] .bench-footer { margin-inline: 8px; }
+  html[data-platform="ios"] #btn-export, html[data-platform="ios"] #btn-export-simple { min-height: 48px; }
+}
+/* Shared comparison control and compact, horizontally browsable look dock. */
+#before[hidden] { display: none; }
+#before { pointer-events: none; }
+#printwrap { cursor: pointer; }
+.photo-compare { position:absolute; right:8px; bottom:8px; z-index:12; min-height:40px; padding:0 12px; border:1px solid #c7c3b5; border-radius:6px; background:#202629e8; color:#fff; font-size:12px; }
+.mobile-looks { display:none; }
+@media (max-width: 600px) {
+  [data-mode="simple"] .mobile-looks { display:flex; align-items:stretch; gap:6px; flex:none; min-width:0; padding:4px 8px 6px; }
+  [data-mode="simple"] #toggle-looks { display:none; }
+  .mobile-look-kinds { display:flex; flex:0 0 auto; align-items:center; gap:3px; }
+  .mobile-look-kinds button { width:44px; min-height:44px; border:1px solid #465158; background:#252c30; color:#e6ebed; font-size:9px; }
+  .mobile-look-kinds button[aria-pressed="true"] { border-color:#e2c68f; color:#f1dfbb; }
+  .mobile-look-strip { display:flex; flex:1; min-width:0; gap:8px; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x proximity; padding:2px 1px; scrollbar-width:none; }
+  .mobile-look-strip::-webkit-scrollbar { display:none; }
+  .mobile-look-card { flex:0 0 74px; min-width:0; scroll-snap-align:start; border:1px solid transparent; border-radius:6px; padding:3px; color:#e6ebed; background:#252c30; }
+  .mobile-look-card[aria-pressed="true"] { border-color:#e2c68f; }
+  .mobile-look-card img { display:block; width:100%; height:44px; object-fit:cover; border-radius:3px; }
+  .mobile-look-card .mobile-look-art { display:grid; place-items:center; height:44px; color:#bdc8cd; background:#182024; font-size:9px; letter-spacing:.12em; }
+  .mobile-look-card span:not(.mobile-look-art) { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-top:3px; font-size:10px; }
+}
+@media (max-width: 600px) {
+  html, body { overflow:hidden; overscroll-behavior:none; }
+  body { min-height:0; box-sizing:border-box; }
+  html[data-platform="ios"] #app { height:100%; }
+  html[data-platform="ios"] #media-dock { padding-bottom:4px; }
+  #stage-wrap { min-height:0; }
+  .mobile-look-strip { touch-action:pan-x; }
+}
+
+/* On phones the media dock opens on demand, giving the photo the main stage. */
+.mobile-media-toggle { display:none; }
+@media (max-width: 600px) {
+  .mobile-media-toggle { display:inline-flex; white-space:nowrap; }
+  #mobile-media-count { font-variant-numeric:tabular-nums; }
+  #media-dock { position:fixed; z-index:45; left:8px; right:8px; bottom:max(8px, env(safe-area-inset-bottom)); margin:0; }
+  html:not([data-media-open="true"]) #media-dock { display:none; }
+  .bench-footer { padding-bottom:max(8px, env(safe-area-inset-bottom)); }
+  html[data-platform="ios"] .bench-footer { padding-bottom:8px; }
+}
+
+#mobile-media-notice { display:none; }
+@media (max-width:600px) {
+  #mobile-media-notice:not([hidden]) { display:block; position:fixed; z-index:50; left:12px; right:12px; bottom:max(12px, env(safe-area-inset-bottom)); padding:10px 12px; border:1px solid #677276; border-radius:7px; background:#293236f5; color:#f0e2c6; font-size:12px; }
+}
+
+@media (max-width:600px) {
+  html[data-platform="ios"] #cap-file, html[data-platform="ios"] #export-spec, html[data-platform="ios"] .sample-menu { display:none; }
+  html[data-platform="ios"] .quality-bar:has(#cancel-photo[hidden]) { display:none; }
+  html[data-platform="ios"] #stage figcaption:has(#spin.hidden):has(#cap-state:empty) { display:none; }
+}
+
+#dock-close { display:none; }
+@media (max-width:600px) {
+  #dock-close { display:inline-flex; flex:none; align-items:center; justify-content:center; width:44px; min-height:44px; border:1px solid #465158; background:#252c30; color:#e6ebed; font-size:20px; }
+}
+
+@media (max-width:600px) {
+  html[data-platform="ios"][data-has-media="false"] .mobile-looks,
+  html[data-platform="ios"][data-has-media="false"] .bench-footer,
+  html[data-platform="ios"][data-has-media="false"] #btn-load,
+  html[data-platform="ios"][data-has-media="false"] #mobile-media-toggle,
+  html[data-platform="ios"][data-has-media="false"] #empty-message { display:none; }
+}

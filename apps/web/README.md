@@ -13,7 +13,7 @@ bun run build
 bun run preview
 ```
 
-Open the URL printed by Vite. The root `build`, `test` and `preview` scripts forward here; the separate `apps/desktop/` package bundles this same frontend. `prebuild` synchronizes the repository's library and FFmpeg browser runtime into `public/`. The committed `src/pkg/` package lets the web app build without installing Rust tooling.
+Open the URL printed by Vite. The root `build`, `test` and `preview` scripts forward here; the `apps/desktop/` Tauri package hosts this same frontend on macOS and iOS. `prebuild` synchronizes the repository's library and FFmpeg browser runtime into `public/`. The committed `src/pkg/` package lets the web app build without installing Rust tooling.
 
 `bun run dev` also synchronizes those assets, then starts Vite. The current dev-server path has a known import-analysis issue with `/ffmpeg/classes.js`; use the production build and preview for the working photo/video workflow. This does not affect the production build.
 

@@ -37,12 +37,21 @@ try {
   await page.waitForFunction(()=>!document.querySelector('#media-dock').classList.contains('dock-notice-active'));
   const exp=page.locator(mode==='simple'?'#btn-export-simple':'#btn-export');
   const exportBox=await exp.boundingBox(),dock=await page.locator('#media-dock').boundingBox();
-  assert.ok(exportBox.y>=0 && exportBox.y+exportBox.height<=dock.y+1,`${width}×${height}: export must remain above dock`);
-  assert.ok(dock.y+dock.height<=height, 'dock remains in the window');
+  assert.ok(exportBox.y>=0 && exportBox.y+exportBox.height<=height, `${width}×${height}: export must remain in the window`);
+  if (width > 600) {
+   assert.ok(dock && exportBox.y+exportBox.height<=dock.y+1, 'export stays above the dock');
+   assert.ok(dock.y+dock.height<=height, 'dock remains in the window');
+  } else {
+   assert.equal(dock, null, 'mobile media dock starts closed');
+   await page.locator('#mobile-media-toggle').click();
+   assert.equal(await page.locator('#media-dock').isVisible(), true);
+   await page.locator('#dock-close').click();
+   assert.equal(await page.locator('#media-dock').isVisible(), false);
+  }
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal page overflow');
   const photo=await page.locator('#printwrap').boundingBox(),stage=await page.locator('#stage-wrap').boundingBox();
   if(width===1280&&media==='portrait') assert.ok(photo.height>=350,'short laptop still provides a useful portrait preview');
-  if(width===390&&media==='portrait') assert.ok(photo.height>=440,'mobile portrait uses the reclaimed vertical room');
+  if(width===390&&media==='portrait') assert.ok(photo.height>=340,'mobile portrait leaves useful space for the look rail');
   const name=`${width}x${height}-${mode}-${media}`;
   await page.screenshot({path:`${out}/${name}.png`});
   results.push({name,stage,photo,video:await page.locator('.player-picture').boundingBox(),dock,export:exportBox});
@@ -52,6 +61,24 @@ try {
    if(mode==='pro') await page.locator('#toggle-adjustments').click();
    assert.equal(await exp.isVisible(),true,'export remains available with both panels collapsed');
    await page.screenshot({path:`${out}/${name}-focus.png`});await page.locator('#toggle-looks').click();
+  } else if (mode === 'simple' && width <= 600) {
+   const rail = page.locator('#mobile-look-strip');
+   assert.equal(await rail.isVisible(), true);
+   assert.ok(await rail.evaluate(e => e.scrollWidth > e.clientWidth), 'look rail scrolls horizontally');
+   assert.ok(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight), 'phone page does not scroll vertically');
+   const card = rail.locator('button').nth(1);
+   await card.click(); await ready();
+   assert.equal(await card.getAttribute('aria-pressed'), 'true');
+   await page.locator('#mobile-looks [data-simple-media="video"]').click();
+   assert.equal(await page.locator('#mobile-looks [data-simple-media="video"]').getAttribute('aria-pressed'), 'true');
+   assert.ok(await rail.locator('button').count() > 0, 'video looks remain reachable');
+   await page.locator('#mobile-looks [data-simple-media="photo"]').click(); await ready();
+   if (!media.endsWith('video')) {
+    const compare = page.locator('#photo-compare');
+    assert.equal(await compare.getAttribute('aria-pressed'), 'false');
+    await compare.click(); assert.equal(await compare.getAttribute('aria-pressed'), 'true');
+    await compare.click(); assert.equal(await compare.getAttribute('aria-pressed'), 'false');
+   }
   } else {
    assert.equal(await page.locator('#look-shelf').isVisible(),false);
    await page.locator('#toggle-looks').click();

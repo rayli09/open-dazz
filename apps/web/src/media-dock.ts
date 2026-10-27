@@ -10,14 +10,36 @@ const equalDockItems = (a: MediaItem[], b: MediaItem[]) =>
       item.error === b[i].error && item.edited === b[i].edited && item.exportedSignature === b[i].exportedSignature && item.edit === b[i].edit,
   );
 export function setupMediaDock(host: HTMLElement, browse: () => void) {
-  host.innerHTML = `<div class="dock-heading"><div><span class="dock-title">YOUR MEDIA</span><span id="media-count"></span></div><p id="media-notice" role="status" aria-live="polite">Drop photos and clips anywhere. Everything stays on your device.</p><button id="dock-add" type="button">+ Add media</button></div><div class="dock-body"><div id="media-items" role="toolbar" aria-label="Media dock. Arrow keys select; Alt plus arrows reorder; Delete removes."></div><div class="dock-tools"><button id="dock-left" aria-label="Move selected media left" title="Move left (Alt + ←)">←</button><button id="dock-right" aria-label="Move selected media right" title="Move right (Alt + →)">→</button><button id="dock-undo" type="button" title="Undo last removal (30 seconds)" hidden>Undo</button><button id="dock-remove" aria-label="Remove selected media" title="Remove selected media (Delete)">×</button></div></div>`;
+  host.innerHTML = `<div class="dock-heading"><div><span class="dock-title">YOUR MEDIA</span><span id="media-count"></span></div><p id="media-notice" role="status" aria-live="polite">Drop photos and clips anywhere. Everything stays on your device.</p><button id="dock-add" type="button">+ Add media</button></div><button id="dock-close" type="button" aria-label="Close photos">×</button><div class="dock-body"><div id="media-items" role="toolbar" aria-label="Media dock. Arrow keys select; Alt plus arrows reorder; Delete removes."></div><div class="dock-tools"><button id="dock-left" aria-label="Move selected media left" title="Move left (Alt + ←)">←</button><button id="dock-right" aria-label="Move selected media right" title="Move right (Alt + →)">→</button><button id="dock-undo" type="button" title="Undo last removal (30 seconds)" hidden>Undo</button><button id="dock-remove" aria-label="Remove selected media" title="Remove selected media (Delete)">×</button></div></div>`;
   const rail = host.querySelector<HTMLElement>("#media-items")!;
+  const toggle = document.querySelector<HTMLButtonElement>("#mobile-media-toggle")!;
+  const narrow = matchMedia("(max-width: 600px)");
+  let open = false;
+  const syncVisibility = () => {
+    const visible = !narrow.matches || open;
+    host.inert = !visible;
+    host.setAttribute("aria-hidden", String(!visible));
+    document.documentElement.dataset.mediaOpen = String(open && narrow.matches);
+    toggle.setAttribute("aria-expanded", String(open && narrow.matches));
+  };
+  const onToggle = () => { open = !open; syncVisibility(); };
+  const onResize = () => { open = false; syncVisibility(); };
+  toggle.addEventListener("click", onToggle);
+  const close = () => { open = false; syncVisibility(); toggle.focus({ preventScroll: true }); };
+  const onEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && open && narrow.matches) { event.preventDefault(); close(); } };
+  host.querySelector<HTMLButtonElement>("#dock-close")!.addEventListener("click", close);
+  document.addEventListener("keydown", onEscape);
+  narrow.addEventListener("change", onResize);
+  syncVisibility();
   let noticeTimer: ReturnType<typeof setTimeout> | undefined;
   const announce = (message: string) => {
     host.querySelector("#media-notice")!.textContent = message;
+    const mobileNotice = document.querySelector<HTMLElement>("#mobile-media-notice")!;
+    mobileNotice.textContent = message;
+    mobileNotice.hidden = !narrow.matches || /^Added \d+ items?\.$/.test(message);
     host.classList.add("dock-notice-active");
     clearTimeout(noticeTimer);
-    noticeTimer = setTimeout(() => host.classList.remove("dock-notice-active"), 3000);
+    noticeTimer = setTimeout(() => { host.classList.remove("dock-notice-active"); mobileNotice.hidden = true; }, 3000);
   };
   const render = () => {
     const state = mediaStore.getState();
@@ -29,6 +51,7 @@ export function setupMediaDock(host: HTMLElement, browse: () => void) {
     rail.replaceChildren();
     host.querySelector("#media-count")!.textContent =
       `${state.items.length} ${state.items.length === 1 ? "item" : "items"}`;
+    document.querySelector("#mobile-media-count")!.textContent = String(state.items.length);
     if (!state.items.length) {
       const empty = document.createElement("button");
       empty.className = "dock-empty";
@@ -97,6 +120,7 @@ export function setupMediaDock(host: HTMLElement, browse: () => void) {
     const button = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-media-id]");
     if (button?.dataset.mediaId) {
       mediaStore.getState().select(button.dataset.mediaId);
+      if (narrow.matches) { open = false; syncVisibility(); toggle.focus({ preventScroll: true }); }
       if (matchMedia("(max-width: 1023px)").matches)
         document.querySelector("main")?.scrollTo({ top: 0 });
     }
@@ -173,6 +197,10 @@ export function setupMediaDock(host: HTMLElement, browse: () => void) {
       clearTimeout(noticeTimer);
       stopItems(); stopUndo(); stopMode();
       stopSelection();
+      toggle.removeEventListener("click", onToggle);
+      document.removeEventListener("keydown", onEscape);
+      narrow.removeEventListener("change", onResize);
+      delete document.documentElement.dataset.mediaOpen;
       rail.removeEventListener("click", click);
       rail.removeEventListener("keydown", keydown);
       host.replaceChildren();

@@ -52,7 +52,7 @@ test("edits and playback restore by identity, with immutable recipe snapshots", 
   const { store, photo, video } = fixture();
   const [a, b] = store.getState().addFiles([{ file: photo() }, { file: video }]).added;
   const recipe = RecipeSchema.parse({ name: "A", strength: 0.4 });
-  store.getState().updateEdit(a, { lookId: "ricoh/look", recipe, split: 27 });
+  store.getState().updateEdit(a, { lookId: "ricoh/look", recipe });
   recipe.strength = 0.9;
   assert.equal(selectedMedia(store.getState())!.edit.recipe!.strength, 0.4);
   store.getState().select(b);
@@ -60,7 +60,7 @@ test("edits and playback restore by identity, with immutable recipe snapshots", 
     .getState()
     .updatePlayback(b, { currentTime: 1.7, volume: 0.3, playing: true, view: "original" });
   store.getState().select(a);
-  assert.equal(selectedMedia(store.getState())!.edit.split, 27);
+  assert.equal(selectedMedia(store.getState())!.edit.lookId, "ricoh/look");
   store.getState().select(b);
   const selected = selectedMedia(store.getState())!;
   assert.equal(selected.playback.currentTime, 1.7);

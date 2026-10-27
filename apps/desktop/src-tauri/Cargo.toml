@@ -13,5 +13,9 @@ tauri-build = { version = "2", features = [] }
 tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
+[target.'cfg(target_os = "ios")'.dependencies]
+tauri-plugin-photos = { path = "../../../crates/tauri-plugin-photos" }
+tauri-plugin-ios-ui = { path = "../../../crates/tauri-plugin-ios-ui" }
+
 [features]
 smoke-test = []

@@ -15,7 +15,7 @@ test("versioned settings-only recovery matches original identity, keeps item IDs
     const a = fixture(), disk = storage();
     const session = setupMediaSession(a.store, disk);
     const ids = a.store.getState().addFiles([{ file: file("a.jpg") }, { file: file("b.jpg") }]).added;
-    a.store.getState().updateEdit(ids[0], { lookId: "ricoh/community/test", recipe: recipe(), split: 27 });
+    a.store.getState().updateEdit(ids[0], { lookId: "ricoh/community/test", recipe: recipe() });
     a.store.getState().select(ids[1]);
     session.destroy();
     const raw = disk.value()!;
@@ -30,7 +30,7 @@ test("versioned settings-only recovery matches original identity, keeps item IDs
     expect(result.added).toEqual([ids[1], ids[0]]);
     expect(b.store.getState().selectedId).toBe(ids[1]);
     expect(b.store.getState().items.find(i => i.id === ids[0])!.edit.recipe!.strength).toBe(.53);
-    expect(b.store.getState().items.find(i => i.id === ids[0])!.edit.split).toBe(27);
+    expect(b.store.getState().items.find(i => i.id === ids[0])!.edit.lookId).toBe("ricoh/community/test");
     expect(b.store.getState().drafts).toHaveLength(0);
     expect(b.store.getState().items.map(i => i.id)).toEqual(ids);
     recovery.destroy();

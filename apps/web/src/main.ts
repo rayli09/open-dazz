@@ -1,3 +1,6 @@
+import { renderLookRail } from "./look-rail";
+import { setupPhotoCompare } from "./photo-compare";
+import { platform } from "./platform";
 import { lutAssetUrl } from "./lut-assets";
 import { relativeAssetPath } from "./asset-url";
 import { saveMedia } from "./save-media";
@@ -160,7 +163,7 @@ let recipe: Recipe | null = null;
 const cubeCache = new ResourceCache<string>();
 let origPixels: Uint8ClampedArray | null = null;
 let imgW = 0, imgH = 0;
-let split = 50;
+let photoCompare: ReturnType<typeof setupPhotoCompare> | null = null;
 let applyTimer: ReturnType<typeof setTimeout> | undefined;
 
 function layout() {
@@ -223,19 +226,20 @@ function layout() {
     <!-- THE BENCH -->
     <section class="order-1 lg:order-2 bench-grid relative flex flex-col min-h-0">
       <div class="import-toolbar flex flex-wrap items-center gap-2 px-4 pt-4">
-        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}${import.meta.env.MODE === "ios" ? "Photo" : "Photo / Video"}</button>
+        <button id="btn-load" class="flex items-center gap-2 font-mono text-[12px] bg-ink text-paper px-4 py-2.5 hover:bg-stamp transition-colors">${icon("upload", "w-[18px] h-[18px]")}${platform.video ? "Photo / Video" : "Add photo"}</button>
+        <button id="mobile-media-toggle" class="workspace-toggle mobile-media-toggle" type="button" aria-controls="media-dock" aria-expanded="false">${platform.video ? "Media" : "Photos"} <span id="mobile-media-count"></span></button>
         <button id="toggle-looks" class="workspace-toggle" aria-expanded="true" aria-controls="look-shelf look-cabinet">${icon("camera", "w-4 h-4")}Looks</button>
         <button id="toggle-adjustments" class="workspace-toggle" aria-expanded="true" aria-controls="adjustments-panel">${icon("sliders", "w-4 h-4")}Adjust</button>
         <details class="sample-menu"><summary>Samples</summary><div>
         <button id="btn-s1" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("user", "w-[18px] h-[18px]")}Sample I</button>
         <button id="btn-s2" class="flex items-center gap-2 font-mono text-[12px] border border-rule bg-mat px-4 py-2.5 hover:bg-paper2 transition-colors">${icon("mountain", "w-[18px] h-[18px]")}Sample II</button>
         </div></details>
-        <span class="font-mono text-[10px] text-ink2 ml-auto" id="split-label"></span>
-        <input id="file" type="file" multiple accept="${import.meta.env.MODE === "ios" ? "image/*,.heic,.heif" : MEDIA_FILE_TYPES.join(",")}" class="hidden" />
+
+        <input id="file" type="file" multiple accept="${platform.video ? MEDIA_FILE_TYPES.join(",") : "image/*,.heic,.heif"}" class="hidden" />
       </div>
       <section id="session-panel" hidden class="mx-4 mt-3 p-3 border border-rule rounded-lg bg-mat text-[12px] leading-relaxed max-h-40 overflow-y-auto" aria-label="Saved editing settings"></section>
       <div id="stage-wrap" class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-6 overflow-hidden">
-        <div id="media-empty" hidden><h2 id="empty-title">Your next frame starts here</h2><p id="empty-message">Add photos or short clips, then pick a look. Each item keeps its own edits.</p><button id="empty-add">Add media</button><button id="retry-media" hidden>Try again</button></div>
+        <div id="media-empty" hidden><h2 id="empty-title">${platform.kind === "ios" ? "Start with a photo" : "Your next frame starts here"}</h2><p id="empty-message">${platform.video ? "Add photos or short clips, then pick a look. Each item keeps its own edits." : "Choose a photo, then pick a look. Your edits stay with the photo."}</p><button id="empty-add">${platform.video ? "Add media" : "Choose photo"}</button><button id="retry-media" hidden>Try again</button></div>
         <figure id="stage" class="relative bg-mat p-3 md:p-4 border border-ink/60 stage-shadow max-w-full select-none touch-none inline-flex flex-col">
           <div id="printwrap" class="relative overflow-hidden bg-paper2">
             <canvas id="after" class="absolute inset-0 w-full h-full block"></canvas>
@@ -248,9 +252,7 @@ function layout() {
             <span class="vf absolute top-2 right-2 w-5 h-5 border-t-2 border-r-2 border-ink pointer-events-none z-10"></span>
             <span class="vf absolute bottom-2 left-2 w-5 h-5 border-b-2 border-l-2 border-ink pointer-events-none z-10"></span>
             <span class="vf absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 border-ink pointer-events-none z-10"></span>
-            <div id="divider" class="absolute top-0 bottom-0 w-[2px] bg-ink pointer-events-none">
-              <div class="absolute top-1/2 -translate-y-1/2 -left-[13px] w-[28px] h-[28px] rounded-full bg-mat border border-ink flex items-center justify-center">${icon("compare", "w-4 h-4")}</div>
-            </div>
+            <button id="photo-compare" type="button" class="photo-compare" aria-pressed="false">Edited</button>
           </div>
           <div id="video-workspace" hidden></div>
           <figcaption class="w-full shrink-0 flex flex-wrap justify-between gap-2 pt-3 font-mono text-[10px] tracking-[0.16em] text-ink2">
@@ -258,6 +260,7 @@ function layout() {
           </figcaption>
         </figure>
       </div>
+      <section id="mobile-looks" aria-label="Looks" class="mobile-looks">${platform.video ? '<div class="mobile-look-kinds" role="group" aria-label="Look collection"><button data-simple-media="photo" aria-pressed="true">PHOTO</button><button data-simple-media="video" aria-pressed="false">VIDEO</button></div>' : ""}<div id="mobile-look-strip" class="mobile-look-strip" role="group" aria-label="Choose a look"></div></section>
       <div id="work-error" hidden class="mx-4 mb-3 p-3 border border-rule bg-mat text-[12px]" role="alert"><span id="work-error-message"></span> <button id="work-retry" type="button" class="underline px-3 py-2">Try again</button></div>
       <div class="bench-footer"><div class="export-information">
       <div class="quality-bar flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink2"><span id="export-spec"></span><button id="cancel-photo" hidden type="button" class="border border-rule px-3 py-2">Cancel photo export</button></div>
@@ -267,12 +270,12 @@ function layout() {
           ${icon("video", "w-4 h-4")}
           <span data-vlabel class="font-mono text-[10px] tracking-[0.2em]">DEVELOP VIDEO</span>
         </button>
-        <button id="btn-export-simple" disabled title="Export the developed photo as a PNG" class="camera-shutter flex items-center justify-center gap-2 shrink-0">
+        <button id="btn-export-simple" disabled title="${platform.photoDestination === "photos" ? "Save the developed photo to Photos" : "Export the developed photo as a PNG"}" class="camera-shutter flex items-center justify-center gap-2 shrink-0">
           ${icon("download", "w-4 h-4")}
-          <span class="font-mono text-[10px] tracking-[0.2em]">EXPORT</span>
+          <span class="font-mono text-[10px] tracking-[0.2em]">${platform.photoDestination === "photos" ? "SAVE TO PHOTOS" : "EXPORT"}</span>
         </button>
       </div>
-      <div class="pro-actions"><button id="btn-export" disabled class="camera-shutter flex items-center justify-center gap-2">${icon("download", "w-4 h-4")}Export PNG</button>
+      <div class="pro-actions"><button id="btn-export" disabled class="camera-shutter flex items-center justify-center gap-2">${icon("download", "w-4 h-4")}${platform.photoDestination === "photos" ? "Save to Photos" : "Export PNG"}</button>
       <button id="btn-video" style="display:none" class="flex items-center justify-center gap-2">${icon("video", "w-4 h-4")}<span data-vlabel>Develop video (.mp4)</span></button></div></div>
     </section>
 
@@ -295,6 +298,7 @@ function layout() {
     </aside>
   </main>
 
+  <div id="mobile-media-notice" role="status" aria-live="polite" hidden></div>
   <section id="media-dock" aria-label="Your media"></section>
 `;
 }
@@ -493,25 +497,23 @@ function bindArtworkFallback(host: HTMLElement) {
 }
 
 function renderStrip() {
-  const host = $("#strip");
-  if (!host) return;
   syncShelfUI();
   const items = presetsForMedia(simpleMedia).filter(preset => findLook(preset.recipeId));
-  host.innerHTML = items.length ? items.map(preset => {
-    const sel = current?.id === preset.recipeId;
-    return `<button data-look="${preset.recipeId}" data-preset="${preset.id}" aria-pressed="${sel}" class="strip-card simple-preset-card shrink-0 text-left border ${sel ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">
-      ${renderArtwork(preset.recipeId, preset.artKey)}
-      <span class="strip-copy ${sel ? "is-selected" : ""}">
-        <span class="strip-title">${preset.label}</span>
-        <span class="strip-description">${preset.description}</span>
-      </span>
-    </button>`;
-  }).join("") : `<div class="font-mono text-[11px] text-ink2 py-3">No matches.</div>`;
-  host.querySelectorAll<HTMLButtonElement>(".strip-card").forEach((b) =>
-    b.addEventListener("click", () => {
-      selectLook(b.dataset.look!);
-    }));
-  bindArtworkFallback(host);
+  for (const host of [$("#strip"), $("#mobile-look-strip")]) {
+    if (!host) continue;
+    const mobile = host.id === "mobile-look-strip", scroll = host.scrollLeft;
+    if (mobile) {
+      renderLookRail(host, items.map(item => ({ id: item.recipeId, label: item.label, imageUrl: item.media === "video" ? cameraAsset(item.artKey)?.src : thumbUrl(item.recipeId) })), current?.id, id => { void selectLook(id); });
+      continue;
+    }
+    host.innerHTML = items.length ? items.map(preset => {
+      const selected = current?.id === preset.recipeId;
+      return `<button data-look="${preset.recipeId}" data-preset="${preset.id}" aria-pressed="${selected}" class="strip-card simple-preset-card shrink-0 text-left border ${selected ? "border-ink" : "border-rule"} bg-mat overflow-hidden active:scale-[0.97] transition-transform">${renderArtwork(preset.recipeId, preset.artKey)}<span class="strip-copy ${selected ? "is-selected" : ""}"><span class="strip-title">${preset.label}</span><span class="strip-description">${preset.description}</span></span></button>`;
+    }).join("") : `<div class="font-mono text-[11px] text-ink2 py-3">No matches.</div>`;
+    host.scrollLeft = scroll;
+    host.querySelectorAll<HTMLButtonElement>("[data-look]").forEach(button => button.addEventListener("click", () => selectLook(button.dataset.look!)));
+    if (!mobile) bindArtworkFallback(host);
+  }
 }
 
 function findLook(id: string): LookEntry | undefined {
@@ -523,7 +525,7 @@ function findLook(id: string): LookEntry | undefined {
 async function selectLook(id: string, restoredRecipe?: Recipe | null) {
   const entry = findLook(id); if (!entry) return;
   const focusedCard = document.activeElement as HTMLElement | null;
-  const focusHost = focusedCard?.matches("[data-look]") ? focusedCard.closest("#strip, #cabinet")?.id : undefined;
+  const focusHost = focusedCard?.matches("[data-look]") ? focusedCard.closest("#strip, #cabinet, #mobile-look-strip")?.id : undefined;
   const version = ++selectionVersion;
   const mediaId = activeMediaId;
   const preset = presetForRecipe(id);
@@ -533,6 +535,7 @@ async function selectLook(id: string, restoredRecipe?: Recipe | null) {
   }
   developFx = true;
   clearWorkFailure();
+  photoCompare?.reset();
   current = entry;
   const phoneNote = $("#phone-output-note");
   phoneNote.hidden = !phonePresetForLook(id);
@@ -594,19 +597,12 @@ async function cubeFor(entry: LookEntry): Promise<string | undefined> {
   });
 }
 
-function setSplit(pct: number) {
-  split = Math.min(100, Math.max(0, pct));
-  $("#before").style.clipPath = `inset(0 ${100 - split}% 0 0)`;
-  ($("#divider") as HTMLElement).style.left = `calc(${split}% - 1px)`;
-  $("#split-label").textContent = `${Math.round(split)} / ${Math.round(100 - split)}`;
-  if (activeMediaId) mediaStore.getState().updateEdit(activeMediaId, { split });
-}
 
 let previewBusy = true;
 function setBusy(b: boolean) {
   previewBusy = b;
   $("#spin")?.classList.toggle("hidden", !b);
-  $("#cap-state").textContent = b ? "DEVELOPING…" : "READY";
+  $("#cap-state").textContent = b ? "DEVELOPING…" : platform.kind === "ios" ? "" : "READY";
   syncExportButtons();
 }
 function progress(p: number) {
@@ -773,7 +769,7 @@ async function loadPhoto(source: Blob | string, name: string, request?: number):
   }
   $<HTMLCanvasElement>("#before").getContext("2d")!.putImageData(data, 0, 0);
   $("#cap-file").textContent = `${name.toUpperCase()} — PREVIEW ${imgW}×${imgH}`;
-  setSplit(split);
+  photoCompare?.reset();
   await applyNow();
   if (request === mediaVersion && activeMediaId && !currentVideo) {
     mediaStore.getState().updateStatus(activeMediaId, { status: "ready", error: null }); syncExportButtons();
@@ -806,9 +802,9 @@ function syncExportButtons() {
     if (!b) continue;
     const item = selectedMedia(mediaStore.getState());
     const video = item?.kind === "video";
-    const label = photoExportBusy ? "Exporting PNG…" : videoBusy ? "Exporting MP4…" : video ? "Export MP4" : "Export PNG";
+    const label = photoExportBusy ? (platform.photoDestination === "photos" ? "Saving to Photos…" : "Exporting PNG…") : videoBusy ? "Exporting MP4…" : video ? "Export MP4" : platform.photoDestination === "photos" ? "Save to Photos" : "Export PNG";
     b.innerHTML = `${icon("download", "w-4 h-4")}${label}`;
-    b.title = video ? "Export the full filtered video as MP4" : "Export the filtered photo as PNG";
+    b.title = video ? "Export the full filtered video as MP4" : platform.photoDestination === "photos" ? "Save the filtered photo to Photos" : "Export the filtered photo as PNG";
     b.disabled = !!workFailure || videoBusy || previewBusy || photoExportBusy || item?.status !== "ready" || (!recipe && current?.brand !== "camcorder");
   }
 }
@@ -880,10 +876,11 @@ async function activateMedia(id: string | null) {
   for (const selector of ["#before", "#after"]) { const canvas = $<HTMLCanvasElement>(selector); canvas.width = canvas.height = 1; }
   $("#video-workspace").hidden = true; $("#printwrap").hidden = false;
   const item = mediaStore.getState().items.find(item => item.id === id);
+  document.documentElement.dataset.hasMedia = String(!!item);
   if (!item) {
     setBusy(false); hideStageLoad(); $("#stage").hidden = true; $("#media-empty").hidden = false;
-    $("#empty-title").textContent = "Your next frame starts here";
-    $("#empty-message").textContent = "Add photos or short clips, then pick a look. Each item keeps its own edits.";
+    $("#empty-title").textContent = platform.kind === "ios" ? "Start with a photo" : "Your next frame starts here";
+    $("#empty-message").textContent = platform.video ? "Add photos or short clips, then pick a look. Each item keeps its own edits." : "Choose a photo, then pick a look. Your edits stay with the photo.";
     $("#retry-media").hidden = true; $("#sliders").replaceChildren(); $("#led-name").textContent = "Choose a look";
     return;
   }
@@ -891,7 +888,7 @@ async function activateMedia(id: string | null) {
   $("#stage-load").classList.remove("hidden"); $("#stage-load div").textContent = "OPENING MEDIA…";
   $("#cap-file").textContent = item.name; setBusy(true);
   mediaStore.getState().updateStatus(item.id, { status: "loading", error: null });
-  split = item.edit.split; simpleMedia = item.edit.collection;
+  photoCompare?.reset(); simpleMedia = item.edit.collection;
   lastSimpleSelection = { photo: item.edit.photoLookId, video: item.edit.videoLookId };
   try {
     if (!findLook(item.edit.lookId)) {
@@ -1203,11 +1200,11 @@ async function exportCurrentMedia() {
     if (controller.signal.aborted || request !== mediaVersion) return;
     if (!saved) { $("#cap-state").textContent = "PHOTO SAVE CANCELLED"; return; }
     mediaStore.getState().markExported(item.id, exportedSignature);
-    $("#cap-state").textContent = import.meta.env.MODE === "ios" ? "PHOTO SHARED" : "ORIGINAL-SIZE PNG SAVED";
+    $("#cap-state").textContent = platform.photoDestination === "photos" ? "SAVED TO PHOTOS" : "ORIGINAL-SIZE PNG SAVED";
   } catch (error) {
     if (controller.signal.aborted || request !== mediaVersion) return;
     const detail = error instanceof Error ? error.message : "";
-    showWorkFailure((detail.startsWith("Original-size export supports") || detail.startsWith("Sharing this photo")) ? detail : "Could not export the original-size photo. Check your connection and try again, or use a smaller copy in a current browser.", exportCurrentMedia, error);
+    showWorkFailure((detail.startsWith("Original-size export supports") || detail.startsWith("Photos access") || detail.startsWith("Could not save the photo to Photos")) ? detail : "Could not export the original-size photo. Check your connection and try again, or use a smaller copy in a current browser.", exportCurrentMedia, error);
   } finally {
     if (photoExportController === controller) { photoExportController = null; photoExportBusy = false; syncExportButtons(); }
   }
@@ -1243,7 +1240,7 @@ async function boot() {
       await new Promise<void>(resolve => showWorkFailure("Could not load the filter catalog. Check your connection, then try again.", async () => { clearWorkFailure(); resolve(); }, error));
     }
   }
-  if (import.meta.env.MODE !== "ios") catalog.brands["camcorder"] = { tiers: { video: VIDEO_LOOKS }, total: VIDEO_LOOKS.length };
+  if (platform.video) catalog.brands["camcorder"] = { tiers: { video: VIDEO_LOOKS }, total: VIDEO_LOOKS.length };
   updateCounter();
   try { renderChips(); } catch (e) { console.error("chips failed", e); }
   renderCabinet();
@@ -1282,10 +1279,8 @@ async function boot() {
   $("#btn-load").addEventListener("click", () => $<HTMLInputElement>("#file").click());
   const dock = setupMediaDock($("#media-dock"), () => $<HTMLInputElement>("#file").click());
   const cleanupThumbnails = setupMediaThumbnails();
-  if (import.meta.env.MODE === "ios") {
-    document.documentElement.dataset.platform = "ios";
-    document.querySelector<HTMLButtonElement>('[data-simple-media="video"]')?.remove();
-  }
+  document.documentElement.dataset.platform = platform.kind;
+  if (!platform.video) document.querySelector<HTMLButtonElement>('[data-simple-media="video"]')?.remove();
   const cleanupImport = setupMediaImport($<HTMLInputElement>("#file"), document.body, dock.announce);
   const cleanupSelection = mediaStore.subscribe(state => state.selectedId, id => { void activateMedia(id); });
   $("#empty-add").addEventListener("click", () => $<HTMLInputElement>("#file").click());
@@ -1294,9 +1289,13 @@ async function boot() {
     if (item && !findLook(item.edit.lookId)) mediaStore.getState().updateEdit(item.id, { lookId: DEFAULT_PHOTO.recipeId, recipe: null, collection: "photo", photoLookId: DEFAULT_PHOTO.recipeId });
     void activateMedia(mediaStore.getState().selectedId);
   });
-  const session = setupMediaSession(mediaStore, browserSessionStorage());
+  const session = platform.sessionRecovery
+    ? setupMediaSession(mediaStore, browserSessionStorage())
+    : { flush: () => {}, destroy: () => {}, reset: () => {} };
   void setupDesktop(session.flush).catch(error => showError(`Desktop setup failed: ${error}`));
-  const cleanupSessionUI = setupSessionUI($("#session-panel"), () => $<HTMLInputElement>("#file").click(), session.reset);
+  const cleanupSessionUI = platform.sessionRecovery
+    ? setupSessionUI($("#session-panel"), () => $<HTMLInputElement>("#file").click(), session.reset)
+    : () => {};
   const cleanupMedia = () => { session.destroy(); cleanupSessionUI(); cancelMediaDecode(); cancelExportForInput(); ++mediaVersion; ++selectionVersion; ++playerVersion; clearTimeout(applyTimer); origPixels = null; current = null; recipe = null; currentVideo = null; cleanupSelection(); cleanupImport(); cleanupThumbnails(); dock.destroy(); previewPlayer?.destroy(); hideResultVideo(); mediaStore.getState().clear(); removeEventListener("pagehide", onMediaPageHide); };
   const onMediaPageHide = (event: PageTransitionEvent) => { if (!event.persisted) cleanupMedia(); else { session.flush(); cancelExportForInput(); previewPlayer?.video.pause(); } };
   import.meta.hot?.dispose(cleanupMedia);
@@ -1321,14 +1320,8 @@ async function boot() {
   });
   addEventListener("resize", () => fitStage());
   $("#btn-export-simple").addEventListener("click", exportCurrentMedia);
-  const wrap = $("#printwrap");
-  const drag = (e: PointerEvent) => {
-    const r = wrap.getBoundingClientRect();
-    setSplit(((e.clientX - r.left) / r.width) * 100);
-  };
-  wrap.addEventListener("pointerdown", (e) => { drag(e); const mv = (ev: PointerEvent) => drag(ev);
-    const up = () => { removeEventListener("pointermove", mv); removeEventListener("pointerup", up); };
-    addEventListener("pointermove", mv); addEventListener("pointerup", up); });
+  photoCompare = setupPhotoCompare($("#printwrap"), $("#before"), $<HTMLButtonElement>("#photo-compare"));
+  import.meta.hot?.dispose(() => photoCompare?.destroy());
 
   const savedDrafts = [...mediaStore.getState().drafts];
   for (const draft of savedDrafts) if (draft.source.kind === "sample") mediaStore.getState().addSample(draft.source.url, draft.name);
@@ -1336,6 +1329,10 @@ async function boot() {
   if (preferred && mediaStore.getState().items.some(item => item.id === preferred)) mediaStore.getState().select(preferred);
   if (savedDrafts.length) {
     if (!mediaStore.getState().selectedId) void activateMedia(null);
+    return;
+  }
+  if (platform.kind === "ios") {
+    void activateMedia(null);
     return;
   }
   const initialMediaId = mediaStore.getState().addSample("/samples/sample-1.jpg", "Sample I — the portrait");

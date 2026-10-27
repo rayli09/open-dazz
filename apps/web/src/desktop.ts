@@ -1,9 +1,10 @@
+import { platform } from "./platform";
 import { isTauri } from "@tauri-apps/api/core";
 import { hasUnsavedEdits } from "./media-session";
 import { mediaStore } from "./media-store";
 import { uiStore } from "./state";
 export async function setupDesktop(beforeClose: () => void) {
-  if (!isTauri() || import.meta.env.MODE === "ios") return;
+  if (!isTauri() || platform.kind === "ios") return;
   const [{ getCurrentWindow }, { confirm }] = await Promise.all([import("@tauri-apps/api/window"), import("@tauri-apps/plugin-dialog")]);
   let closing = false;
   const unlisten = await getCurrentWindow().onCloseRequested(async event => {

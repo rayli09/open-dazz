@@ -77,6 +77,8 @@ pub fn run() {
 #[tauri::mobile_entry_point]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_photos::init())
+        .plugin(tauri_plugin_ios_ui::init())
         .setup(|app| {
             tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("index.html".into()))
                 .title("OpenDazz")

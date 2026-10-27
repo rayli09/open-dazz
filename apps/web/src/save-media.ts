@@ -1,3 +1,4 @@
+import { platform } from "./platform";
 import { isTauri } from "@tauri-apps/api/core";
 export interface NativeSave {
   choose: (name: string, extension: string) => Promise<string | null>;
@@ -15,28 +16,9 @@ export async function saveNative(blob: Blob, name: string, current: () => boolea
 }
 export async function saveMedia(blob: Blob, name: string, current: () => boolean): Promise<boolean> {
   if (!current()) return false;
-  if (import.meta.env.MODE === "ios") {
-    const file = new File([blob], name, { type: blob.type });
-    if (!navigator.canShare?.({ files: [file] })) throw new Error("Sharing this photo is unavailable on this device.");
-    // Rendering runs in a worker, so the original tap's user activation has
-    // expired. A second tap opens the iOS share sheet with fresh activation.
-    return new Promise<boolean>((resolve, reject) => {
-      const dialog = document.createElement("dialog");
-      dialog.className = "ios-share-dialog";
-      dialog.innerHTML = '<p>Your photo is ready.</p><p>Tap Share, then choose Save Image.</p><div><button type="button" data-cancel>Cancel</button><button type="button" data-share>Share photo</button></div>';
-      const finish = (saved: boolean) => { dialog.close(); dialog.remove(); resolve(saved); };
-      dialog.querySelector<HTMLButtonElement>("[data-cancel]")!.onclick = () => finish(false);
-      dialog.addEventListener("cancel", event => { event.preventDefault(); finish(false); });
-      dialog.querySelector<HTMLButtonElement>("[data-share]")!.onclick = () => {
-        if (!current()) { finish(false); return; }
-        void navigator.share({ files: [file], title: "OpenDazz photo" }).then(
-          () => finish(current()),
-          error => { if (error instanceof DOMException && error.name === "AbortError") finish(false); else { dialog.close(); dialog.remove(); reject(error); } },
-        );
-      };
-      document.body.append(dialog);
-      dialog.showModal();
-    });
+  if (platform.photoDestination === "photos") {
+    const { saveToPhotos } = await import("./ios-photos");
+    return saveToPhotos(blob, current);
   }
   if (isTauri()) {
     if (import.meta.env.VITE_DESKTOP_SMOKE === "1") {

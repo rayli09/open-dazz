@@ -1,0 +1,37 @@
+name: iOS simulator build
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios-sim
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: . -> target
+      - run: bun install --frozen-lockfile
+      - name: Install iOS project tools
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          brew list cocoapods >/dev/null 2>&1 || brew install cocoapods
+      - run: cargo metadata --locked --no-deps --format-version 1 > /dev/null
+      - name: Generate iOS project
+        working-directory: apps/desktop
+        run: bun --bun tauri ios init --ci --skip-targets-install
+      - name: Prepare branded iOS assets
+        working-directory: apps/desktop
+        run: bun run ios:prepare
+      - name: Build unsigned simulator app
+        working-directory: apps/desktop
+        run: bun --bun tauri ios build --target aarch64-sim --debug --no-sign --ci

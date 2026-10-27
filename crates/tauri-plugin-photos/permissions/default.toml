@@ -1,0 +1,3 @@
+[default]
+description = "Allow saving exported images to Photos."
+permissions = ["allow-save-photo"]

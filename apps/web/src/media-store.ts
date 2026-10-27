@@ -56,7 +56,7 @@ export const PlaybackSchema = z.object({
 export type Playback = z.infer<typeof PlaybackSchema>;
 export const MediaEditSchema = z.object({
   lookId: z.string().min(1).max(256), recipe: RecipeSchema.nullable(),
-  split: z.number().min(0).max(100), collection: z.enum(["photo", "video"]),
+  collection: z.enum(["photo", "video"]),
   photoLookId: z.string().min(1).max(256), videoLookId: z.string().min(1).max(256),
 });
 export type MediaEdit = z.infer<typeof MediaEditSchema>;
@@ -117,7 +117,6 @@ export const mediaKind = (file: Pick<File, "name" | "type">): MediaItem["kind"] 
 const initialEdit = (): MediaEdit => ({
   lookId: DEFAULT_PHOTO.recipeId,
   recipe: null,
-  split: 50,
   collection: "photo",
   photoLookId: DEFAULT_PHOTO.recipeId,
   videoLookId: "camcorder/cx405",
