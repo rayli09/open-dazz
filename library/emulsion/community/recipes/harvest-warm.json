@@ -1,6 +1,6 @@
 {
   "name": "Harvest Warm",
-  "baseLut": "../luts/harvest-warm.cube",
+  "baseLut": "../luts/harvest-warm.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

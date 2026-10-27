@@ -1,6 +1,6 @@
 {
   "name": "Platinum Print",
-  "baseLut": "../luts/platinum-print.cube",
+  "baseLut": "../luts/platinum-print.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

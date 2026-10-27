@@ -1,6 +1,6 @@
 {
   "name": "Faux Infrared",
-  "baseLut": "../luts/faux-infrared.cube",
+  "baseLut": "../luts/faux-infrared.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

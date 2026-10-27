@@ -1,6 +1,6 @@
 {
   "name": "Prohibition Sepia",
-  "baseLut": "../luts/prohibition-sepia.cube",
+  "baseLut": "../luts/prohibition-sepia.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

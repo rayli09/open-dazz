@@ -16,6 +16,7 @@ tools/verify-out/lut-quality/.
 
 Run: uv run --with numpy --with pillow python tools/verify_filters.py
 """
+import gzip
 import json, subprocess, sys
 from pathlib import Path
 import numpy as np
@@ -36,7 +37,7 @@ RECIPES = [
 
 def load_cube(path: Path):
     size, data = None, []
-    for line in path.read_text().splitlines():
+    for line in gzip.open(path, "rt").read().splitlines():
         line = line.strip()
         if not line or line.startswith("#"):
             continue

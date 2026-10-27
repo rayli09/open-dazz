@@ -1,6 +1,6 @@
 {
   "name": "Lith Print",
-  "baseLut": "../luts/lith-print.cube",
+  "baseLut": "../luts/lith-print.cube.gz",
   "grain": {
     "amount": 0.405,
     "size": "small"

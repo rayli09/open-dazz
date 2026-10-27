@@ -1,6 +1,6 @@
 {
   "name": "Cross Processed",
-  "baseLut": "../luts/cross-processed.cube",
+  "baseLut": "../luts/cross-processed.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

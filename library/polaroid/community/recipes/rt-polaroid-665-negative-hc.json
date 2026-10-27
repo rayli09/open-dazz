@@ -1,6 +1,6 @@
 {
   "name": "Polaroid 665 Negative HC",
-  "baseLut": "../luts/rt-polaroid-665-negative-hc.cube",
+  "baseLut": "../luts/rt-polaroid-665-negative-hc.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

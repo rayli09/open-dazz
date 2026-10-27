@@ -1,7 +1,7 @@
 {
   "name": "Kodak Tri-X 400",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/acros.cube",
+  "baseLut": "../hald-bases/luts/acros.cube.gz",
   "grain": {
     "amount": 0.55,
     "size": "large"

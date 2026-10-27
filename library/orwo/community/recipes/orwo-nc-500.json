@@ -1,6 +1,6 @@
 {
   "name": "ORWO NC 500",
-  "baseLut": "../luts/orwo-nc-500.cube",
+  "baseLut": "../luts/orwo-nc-500.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

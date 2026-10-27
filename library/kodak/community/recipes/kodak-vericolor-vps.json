@@ -1,6 +1,6 @@
 {
   "name": "Kodak Vericolor VPS",
-  "baseLut": "../luts/kodak-vericolor-vps.cube",
+  "baseLut": "../luts/kodak-vericolor-vps.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

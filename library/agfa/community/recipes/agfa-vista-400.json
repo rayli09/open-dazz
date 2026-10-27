@@ -1,6 +1,6 @@
 {
   "name": "Agfa Vista 400",
-  "baseLut": "../luts/agfa-vista-400.cube",
+  "baseLut": "../luts/agfa-vista-400.cube.gz",
   "grain": {
     "amount": 0.297,
     "size": "small"

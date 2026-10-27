@@ -1,6 +1,6 @@
 {
   "name": "Vintage Instant",
-  "baseLut": "../luts/vintage-instant.cube",
+  "baseLut": "../luts/vintage-instant.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

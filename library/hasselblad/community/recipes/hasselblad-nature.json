@@ -1,6 +1,6 @@
 {
   "name": "Hasselblad Nature (HNCS)",
-  "baseLut": "../luts/hasselblad-nature.cube",
+  "baseLut": "../luts/hasselblad-nature.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

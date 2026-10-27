@@ -1,6 +1,6 @@
 {
   "name": "Dust Bowl Documentary",
-  "baseLut": "../luts/dust-bowl-documentary.cube",
+  "baseLut": "../luts/dust-bowl-documentary.cube.gz",
   "grain": {
     "amount": 0.405,
     "size": "small"

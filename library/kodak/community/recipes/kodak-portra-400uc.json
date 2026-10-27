@@ -1,6 +1,6 @@
 {
   "name": "Kodak Portra 400UC",
-  "baseLut": "../luts/kodak-portra-400uc.cube",
+  "baseLut": "../luts/kodak-portra-400uc.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

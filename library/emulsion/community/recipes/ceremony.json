@@ -1,6 +1,6 @@
 {
   "name": "Ceremony",
-  "baseLut": "../luts/ceremony.cube",
+  "baseLut": "../luts/ceremony.cube.gz",
   "grain": {
     "amount": 0.108,
     "size": "small"

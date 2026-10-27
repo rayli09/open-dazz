@@ -1,6 +1,6 @@
 {
   "name": "Holi Vibrant",
-  "baseLut": "../luts/holi-vibrant.cube",
+  "baseLut": "../luts/holi-vibrant.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

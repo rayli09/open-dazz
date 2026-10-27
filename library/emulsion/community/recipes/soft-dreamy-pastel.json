@@ -1,6 +1,6 @@
 {
   "name": "Soft Dreamy Pastel",
-  "baseLut": "../luts/soft-dreamy-pastel.cube",
+  "baseLut": "../luts/soft-dreamy-pastel.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

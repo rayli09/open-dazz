@@ -1,6 +1,6 @@
 {
   "name": "Grass Natural Exterior",
-  "baseLut": "../luts/grass-natural-exterior.cube",
+  "baseLut": "../luts/grass-natural-exterior.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

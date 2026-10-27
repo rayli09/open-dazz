@@ -1,6 +1,6 @@
 {
   "name": "Kodak Farbwelt 200 Expired",
-  "baseLut": "../luts/kodak-farbwelt-200-expired.cube",
+  "baseLut": "../luts/kodak-farbwelt-200-expired.cube.gz",
   "grain": {
     "amount": 0.495,
     "size": "small"

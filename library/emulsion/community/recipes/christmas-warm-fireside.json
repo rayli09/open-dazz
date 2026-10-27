@@ -1,6 +1,6 @@
 {
   "name": "Christmas Warm Fireside",
-  "baseLut": "../luts/christmas-warm-fireside.cube",
+  "baseLut": "../luts/christmas-warm-fireside.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

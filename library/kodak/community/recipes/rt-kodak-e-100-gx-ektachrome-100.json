@@ -1,6 +1,6 @@
 {
   "name": "Kodak E-100 GX Ektachrome 100",
-  "baseLut": "../luts/rt-kodak-e-100-gx-ektachrome-100.cube",
+  "baseLut": "../luts/rt-kodak-e-100-gx-ektachrome-100.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

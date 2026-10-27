@@ -1,6 +1,6 @@
 {
   "name": "Todd Hido",
-  "baseLut": "../luts/todd-hido.cube",
+  "baseLut": "../luts/todd-hido.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

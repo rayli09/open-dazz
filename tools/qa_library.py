@@ -9,7 +9,7 @@ Fails loudly (exit 1) on any problem. Checks:
   4. (with --render) every look applies cleanly via the CLI to a
      small test image and produces a changed, non-degenerate output.
 """
-import json, os, subprocess, sys, tempfile
+import gzip, json, os, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -43,7 +43,7 @@ def main() -> int:
             else:
                 n_cube += 1
                 size, count = None, 0
-                for line in open(cp, errors="replace"):
+                for line in gzip.open(cp, "rt", errors="replace"):
                     if line.startswith("LUT_3D_SIZE"):
                         size = int(line.split()[1])
                     elif line and line[0].isdigit():

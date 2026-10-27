@@ -2436,6 +2436,7 @@ name = "opendazz-cli"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "flate2",
  "image",
  "opendazz-core",
  "serde_json",
@@ -2445,6 +2446,7 @@ dependencies = [
 name = "opendazz-core"
 version = "0.1.0"
 dependencies = [
+ "flate2",
  "image",
  "ntsc-rs",
  "palette",

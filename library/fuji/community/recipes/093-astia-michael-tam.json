@@ -1,7 +1,7 @@
 {
   "name": "Astia",
   "processing": "fujiPhotoV1",
-  "baseLut": "../../official/luts/astia_sRGB.cube",
+  "baseLut": "../../official/luts/astia_sRGB.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

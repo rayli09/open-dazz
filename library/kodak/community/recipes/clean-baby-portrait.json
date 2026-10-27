@@ -1,6 +1,6 @@
 {
   "name": "Clean Baby Portrait",
-  "baseLut": "../luts/clean-baby-portrait.cube",
+  "baseLut": "../luts/clean-baby-portrait.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kodak Aerochrome Video",
-  "baseLut": "../luts/kodak-aerochrome-video.cube",
+  "baseLut": "../luts/kodak-aerochrome-video.cube.gz",
   "grain": {
     "amount": 0.198,
     "size": "small"

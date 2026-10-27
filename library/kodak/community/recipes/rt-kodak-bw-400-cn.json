@@ -1,6 +1,6 @@
 {
   "name": "Kodak BW 400 CN",
-  "baseLut": "../luts/rt-kodak-bw-400-cn.cube",
+  "baseLut": "../luts/rt-kodak-bw-400-cn.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

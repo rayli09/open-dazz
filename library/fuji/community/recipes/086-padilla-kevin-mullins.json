@@ -1,7 +1,7 @@
 {
   "name": "Padilla",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/mono-r.cube",
+  "baseLut": "../hald-bases/luts/mono-r.cube.gz",
   "grain": {
     "amount": 0.55,
     "size": "small"

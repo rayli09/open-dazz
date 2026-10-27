@@ -1,6 +1,6 @@
 {
   "name": "WKW Hong Kong Video",
-  "baseLut": "../luts/wkw-hong-kong-video.cube",
+  "baseLut": "../luts/wkw-hong-kong-video.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

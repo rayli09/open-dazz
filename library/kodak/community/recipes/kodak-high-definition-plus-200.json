@@ -1,6 +1,6 @@
 {
   "name": "Kodak High Definition Plus 200",
-  "baseLut": "../luts/kodak-high-definition-plus-200.cube",
+  "baseLut": "../luts/kodak-high-definition-plus-200.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

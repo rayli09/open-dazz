@@ -1,6 +1,6 @@
 {
   "name": "Kodak Vision3 500T ECN-2",
-  "baseLut": "../luts/kodak-vision3-500t-ecn-minus-2.cube",
+  "baseLut": "../luts/kodak-vision3-500t-ecn-minus-2.cube.gz",
   "grain": {
     "amount": 0.279,
     "size": "small"

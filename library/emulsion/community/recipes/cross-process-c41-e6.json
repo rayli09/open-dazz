@@ -1,6 +1,6 @@
 {
   "name": "Cross Process C41→E6",
-  "baseLut": "../luts/cross-process-c41-e6.cube",
+  "baseLut": "../luts/cross-process-c41-e6.cube.gz",
   "grain": {
     "amount": 0.252,
     "size": "small"

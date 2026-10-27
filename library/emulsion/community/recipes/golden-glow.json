@@ -1,6 +1,6 @@
 {
   "name": "Golden Glow",
-  "baseLut": "../luts/golden-glow.cube",
+  "baseLut": "../luts/golden-glow.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kodak Vision3 250D ECN-2",
-  "baseLut": "../luts/kodak-vision3-250d-ecn-minus-2.cube",
+  "baseLut": "../luts/kodak-vision3-250d-ecn-minus-2.cube.gz",
   "grain": {
     "amount": 0.216,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Clean Bright Food",
-  "baseLut": "../luts/clean-bright-food.cube",
+  "baseLut": "../luts/clean-bright-food.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

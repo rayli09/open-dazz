@@ -1,6 +1,6 @@
 {
   "name": "RA-4 Color Print",
-  "baseLut": "../luts/ra-minus-4-color-print.cube",
+  "baseLut": "../luts/ra-minus-4-color-print.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

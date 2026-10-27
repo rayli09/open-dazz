@@ -1,6 +1,6 @@
 {
   "name": "BW Infrared",
-  "baseLut": "../luts/bw-infrared.cube",
+  "baseLut": "../luts/bw-infrared.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

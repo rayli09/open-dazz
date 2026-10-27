@@ -22,6 +22,7 @@ Utility & Tools presets are skipped: they are editing utilities, not looks.
 Usage: python3 tools/bake_emulsion.py /path/to/EmulsionPresets [--size 17]
 Run:   uv run --with numpy python tools/bake_emulsion.py <clone>
 """
+import gzip
 import argparse, json, re, sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -231,7 +232,7 @@ def write_cube(path, rgb, size, title):
     lines = [f'TITLE "{title}"', f"LUT_3D_SIZE {size}", "DOMAIN_MIN 0 0 0", "DOMAIN_MAX 1 1 1"]
     for row in rgb:
         lines.append(" ".join(f"{v:.4f}".rstrip("0").rstrip(".") or "0" for v in row))
-    path.write_text("\n".join(lines) + "\n")
+    path.write_bytes(gzip.compress(("\n".join(lines) + "\n").encode(), mtime=0))
 
 def main():
     ap = argparse.ArgumentParser()
@@ -256,11 +257,11 @@ def main():
         bdir = ROOT / "library" / brand / "community"
         (bdir / "luts").mkdir(parents=True, exist_ok=True)
         (bdir / "recipes").mkdir(parents=True, exist_ok=True)
-        write_cube(bdir / "luts" / f"{slug}.cube", rgb, args.size, f"{item['name']} (EmulsionPresets bake)")
+        write_cube(bdir / "luts" / f"{slug}.cube.gz", rgb, args.size, f"{item['name']} (EmulsionPresets bake)")
         ga, gs = f(attrs, "GrainAmount"), f(attrs, "GrainSize")
         recipe = {
             "name": item["name"],
-            "baseLut": f"../luts/{slug}.cube",
+            "baseLut": f"../luts/{slug}.cube.gz",
             "grain": {"amount": round(min(ga / 100 * 0.9, 0.9), 3), "size": "large" if gs >= 50 else "small"},
             "halation": 0,
             "tone": {"highlight": 0, "shadow": 0, "color": 0},

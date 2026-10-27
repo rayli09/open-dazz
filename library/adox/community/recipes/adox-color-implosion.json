@@ -1,6 +1,6 @@
 {
   "name": "Adox Color Implosion",
-  "baseLut": "../luts/adox-color-implosion.cube",
+  "baseLut": "../luts/adox-color-implosion.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

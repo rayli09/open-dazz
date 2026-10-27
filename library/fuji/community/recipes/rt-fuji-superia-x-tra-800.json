@@ -1,6 +1,6 @@
 {
   "name": "Fuji Superia X-Tra 800",
-  "baseLut": "../luts/rt-fuji-superia-x-tra-800.cube",
+  "baseLut": "../luts/rt-fuji-superia-x-tra-800.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

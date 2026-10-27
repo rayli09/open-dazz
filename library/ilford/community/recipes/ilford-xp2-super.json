@@ -1,6 +1,6 @@
 {
   "name": "Ilford XP2 Super",
-  "baseLut": "../luts/ilford-xp2-super.cube",
+  "baseLut": "../luts/ilford-xp2-super.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

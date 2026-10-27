@@ -1,6 +1,6 @@
 {
   "name": "Fuji FP-3000b Negative",
-  "baseLut": "../luts/rt-fuji-fp-3000b-negative.cube",
+  "baseLut": "../luts/rt-fuji-fp-3000b-negative.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

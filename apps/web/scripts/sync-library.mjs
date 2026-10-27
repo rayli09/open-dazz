@@ -2,7 +2,7 @@
 // serve catalog.json, recipes and LUTs as static files. Runs before
 // `bun run dev` and `bun run build` (also on Vercel, where the build
 // runs inside the repo checkout, so ../../library exists).
-import { cpSync, existsSync } from "node:fs";
+import { cpSync, existsSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -10,6 +10,7 @@ const webRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const src = join(webRoot, "..", "..", "library");
 const dst = join(webRoot, "public", "library");
 if (existsSync(src)) {
+  rmSync(dst, { recursive: true, force: true });
   cpSync(src, dst, { recursive: true });
   console.log("synced library -> public/library");
 } else {

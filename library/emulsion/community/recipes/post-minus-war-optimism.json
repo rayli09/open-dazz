@@ -1,6 +1,6 @@
 {
   "name": "Post-War Optimism",
-  "baseLut": "../luts/post-minus-war-optimism.cube",
+  "baseLut": "../luts/post-minus-war-optimism.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

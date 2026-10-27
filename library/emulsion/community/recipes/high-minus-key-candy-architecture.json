@@ -1,6 +1,6 @@
 {
   "name": "High-Key Candy Architecture",
-  "baseLut": "../luts/high-minus-key-candy-architecture.cube",
+  "baseLut": "../luts/high-minus-key-candy-architecture.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

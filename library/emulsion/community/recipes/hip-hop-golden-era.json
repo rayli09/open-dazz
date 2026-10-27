@@ -1,6 +1,6 @@
 {
   "name": "Hip Hop Golden Era",
-  "baseLut": "../luts/hip-hop-golden-era.cube",
+  "baseLut": "../luts/hip-hop-golden-era.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

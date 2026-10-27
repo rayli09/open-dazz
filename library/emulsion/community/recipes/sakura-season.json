@@ -1,6 +1,6 @@
 {
   "name": "Sakura Season",
-  "baseLut": "../luts/sakura-season.cube",
+  "baseLut": "../luts/sakura-season.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

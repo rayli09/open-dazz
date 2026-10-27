@@ -1,6 +1,6 @@
 {
   "name": "Kodak Plus-X 125",
-  "baseLut": "../luts/kodak-plus-minus-x-125.cube",
+  "baseLut": "../luts/kodak-plus-minus-x-125.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

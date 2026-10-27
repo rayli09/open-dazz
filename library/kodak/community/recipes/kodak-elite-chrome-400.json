@@ -1,6 +1,6 @@
 {
   "name": "Kodak Elite Chrome 400",
-  "baseLut": "../luts/kodak-elite-chrome-400.cube",
+  "baseLut": "../luts/kodak-elite-chrome-400.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

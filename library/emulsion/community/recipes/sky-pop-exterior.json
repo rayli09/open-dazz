@@ -1,6 +1,6 @@
 {
   "name": "Sky Pop Exterior",
-  "baseLut": "../luts/sky-pop-exterior.cube",
+  "baseLut": "../luts/sky-pop-exterior.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

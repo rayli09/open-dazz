@@ -1,6 +1,6 @@
 {
   "name": "Fujifilm Pro 400H",
-  "baseLut": "../luts/fujifilm-pro-400h.cube",
+  "baseLut": "../luts/fujifilm-pro-400h.cube.gz",
   "grain": {
     "amount": 0.189,
     "size": "small"

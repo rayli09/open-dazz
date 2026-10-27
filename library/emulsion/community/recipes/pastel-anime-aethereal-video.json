@@ -1,6 +1,6 @@
 {
   "name": "Pastel Anime Aethereal Video",
-  "baseLut": "../luts/pastel-anime-aethereal-video.cube",
+  "baseLut": "../luts/pastel-anime-aethereal-video.cube.gz",
   "grain": {
     "amount": 0.108,
     "size": "small"

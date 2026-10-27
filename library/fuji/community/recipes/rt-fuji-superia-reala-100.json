@@ -1,6 +1,6 @@
 {
   "name": "Fuji Superia Reala 100",
-  "baseLut": "../luts/rt-fuji-superia-reala-100.cube",
+  "baseLut": "../luts/rt-fuji-superia-reala-100.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

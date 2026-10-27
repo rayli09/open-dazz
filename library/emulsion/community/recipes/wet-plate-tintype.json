@@ -1,6 +1,6 @@
 {
   "name": "Wet Plate Tintype",
-  "baseLut": "../luts/wet-plate-tintype.cube",
+  "baseLut": "../luts/wet-plate-tintype.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

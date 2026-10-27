@@ -1,6 +1,6 @@
 {
   "name": "Mexican Pueblo",
-  "baseLut": "../luts/mexican-pueblo.cube",
+  "baseLut": "../luts/mexican-pueblo.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

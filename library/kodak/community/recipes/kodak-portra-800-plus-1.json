@@ -1,6 +1,6 @@
 {
   "name": "Kodak Portra 800 +1",
-  "baseLut": "../luts/kodak-portra-800-plus-1.cube",
+  "baseLut": "../luts/kodak-portra-800-plus-1.cube.gz",
   "grain": {
     "amount": 0.477,
     "size": "small"

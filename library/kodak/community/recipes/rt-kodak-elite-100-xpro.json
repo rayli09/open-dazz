@@ -1,6 +1,6 @@
 {
   "name": "Kodak Elite 100 XPRO",
-  "baseLut": "../luts/rt-kodak-elite-100-xpro.cube",
+  "baseLut": "../luts/rt-kodak-elite-100-xpro.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Ilford MG Warmtone",
-  "baseLut": "../luts/ilford-mg-warmtone.cube",
+  "baseLut": "../luts/ilford-mg-warmtone.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

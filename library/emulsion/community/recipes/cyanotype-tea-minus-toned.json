@@ -1,6 +1,6 @@
 {
   "name": "Cyanotype Tea-Toned",
-  "baseLut": "../luts/cyanotype-tea-minus-toned.cube",
+  "baseLut": "../luts/cyanotype-tea-minus-toned.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

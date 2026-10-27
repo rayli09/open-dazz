@@ -1,6 +1,6 @@
 {
   "name": "Streetwear Contrast",
-  "baseLut": "../luts/streetwear-contrast.cube",
+  "baseLut": "../luts/streetwear-contrast.cube.gz",
   "grain": {
     "amount": 0.108,
     "size": "small"

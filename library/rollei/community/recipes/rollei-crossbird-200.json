@@ -1,6 +1,6 @@
 {
   "name": "Rollei Crossbird 200",
-  "baseLut": "../luts/rollei-crossbird-200.cube",
+  "baseLut": "../luts/rollei-crossbird-200.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

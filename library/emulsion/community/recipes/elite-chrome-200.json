@@ -1,6 +1,6 @@
 {
   "name": "Elite Chrome 200",
-  "baseLut": "../luts/elite-chrome-200.cube",
+  "baseLut": "../luts/elite-chrome-200.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

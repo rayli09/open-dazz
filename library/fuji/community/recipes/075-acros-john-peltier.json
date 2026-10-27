@@ -1,7 +1,7 @@
 {
   "name": "Acros",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/acros.cube",
+  "baseLut": "../hald-bases/luts/acros.cube.gz",
   "grain": {
     "amount": 0.25,
     "size": "small"

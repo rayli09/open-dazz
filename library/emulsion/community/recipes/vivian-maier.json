@@ -1,6 +1,6 @@
 {
   "name": "Vivian Maier",
-  "baseLut": "../luts/vivian-maier.cube",
+  "baseLut": "../luts/vivian-maier.cube.gz",
   "grain": {
     "amount": 0.198,
     "size": "small"

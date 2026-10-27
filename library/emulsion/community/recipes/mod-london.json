@@ -1,6 +1,6 @@
 {
   "name": "Mod London",
-  "baseLut": "../luts/mod-london.cube",
+  "baseLut": "../luts/mod-london.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kodak Tri-X 400 +2",
-  "baseLut": "../luts/kodak-tri-minus-x-400-plus-2.cube",
+  "baseLut": "../luts/kodak-tri-minus-x-400-plus-2.cube.gz",
   "grain": {
     "amount": 0.747,
     "size": "large"

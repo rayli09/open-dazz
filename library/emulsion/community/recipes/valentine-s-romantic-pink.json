@@ -1,6 +1,6 @@
 {
   "name": "Valentine's Romantic Pink",
-  "baseLut": "../luts/valentine-s-romantic-pink.cube",
+  "baseLut": "../luts/valentine-s-romantic-pink.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

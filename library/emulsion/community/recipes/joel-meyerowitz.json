@@ -1,6 +1,6 @@
 {
   "name": "Joel Meyerowitz",
-  "baseLut": "../luts/joel-meyerowitz.cube",
+  "baseLut": "../luts/joel-meyerowitz.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

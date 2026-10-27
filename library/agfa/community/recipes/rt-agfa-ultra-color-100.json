@@ -1,6 +1,6 @@
 {
   "name": "Agfa Ultra Color 100",
-  "baseLut": "../luts/rt-agfa-ultra-color-100.cube",
+  "baseLut": "../luts/rt-agfa-ultra-color-100.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

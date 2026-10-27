@@ -1,6 +1,6 @@
 {
   "name": "Polaroid PX-100UV+ Warm",
-  "baseLut": "../luts/rt-polaroid-px-100uv-warm.cube",
+  "baseLut": "../luts/rt-polaroid-px-100uv-warm.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

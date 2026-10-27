@@ -1,6 +1,6 @@
 {
   "name": "Fuji Superia 800",
-  "baseLut": "../luts/fuji-superia-800.cube",
+  "baseLut": "../luts/fuji-superia-800.cube.gz",
   "grain": {
     "amount": 0.342,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Brazilian Amazon",
-  "baseLut": "../luts/brazilian-amazon.cube",
+  "baseLut": "../luts/brazilian-amazon.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Super 8 Home Movie Video",
-  "baseLut": "../luts/super-8-home-movie-video.cube",
+  "baseLut": "../luts/super-8-home-movie-video.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

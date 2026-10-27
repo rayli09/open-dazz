@@ -1,6 +1,6 @@
 {
   "name": "Zone Focus B&W",
-  "baseLut": "../luts/zone-focus-b-w.cube",
+  "baseLut": "../luts/zone-focus-b-w.cube.gz",
   "grain": {
     "amount": 0.405,
     "size": "small"

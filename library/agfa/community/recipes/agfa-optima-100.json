@@ -1,6 +1,6 @@
 {
   "name": "Agfa Optima 100",
-  "baseLut": "../luts/agfa-optima-100.cube",
+  "baseLut": "../luts/agfa-optima-100.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

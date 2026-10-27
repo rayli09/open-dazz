@@ -1,6 +1,6 @@
 {
   "name": "Golden Hour Selfie",
-  "baseLut": "../luts/golden-hour-selfie.cube",
+  "baseLut": "../luts/golden-hour-selfie.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

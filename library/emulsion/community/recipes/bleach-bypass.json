@@ -1,6 +1,6 @@
 {
   "name": "Bleach Bypass",
-  "baseLut": "../luts/bleach-bypass.cube",
+  "baseLut": "../luts/bleach-bypass.cube.gz",
   "grain": {
     "amount": 0.371,
     "size": "small"

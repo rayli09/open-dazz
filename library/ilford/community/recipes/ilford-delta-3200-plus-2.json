@@ -1,6 +1,6 @@
 {
   "name": "Ilford Delta 3200 +2",
-  "baseLut": "../luts/ilford-delta-3200-plus-2.cube",
+  "baseLut": "../luts/ilford-delta-3200-plus-2.cube.gz",
   "grain": {
     "amount": 0.792,
     "size": "large"

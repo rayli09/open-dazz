@@ -1,6 +1,7 @@
 import { test } from "bun:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { gunzipSync } from "node:zlib";
 import { loadWasm } from "../../../tools/load-wasm.mjs";
 import { RecipeSchema } from "../src/schemas.ts";
 import { recipeForMedia } from "../src/recipe-for-media.ts";
@@ -26,7 +27,7 @@ test("actual Ricoh recipes filter pixels and retain alpha through browser WASM",
   for (const file of ["ricoh-superior-100-negative-film", "ricoh-high-minus-contrast-monochrome"]) {
     const path = new URL(`library/ricoh/community/recipes/${file}.json`, root);
     const recipe = RecipeSchema.parse(JSON.parse(readFileSync(path, "utf8")));
-    const cube = readFileSync(new URL(recipe.baseLut, path), "utf8");
+    const cube = gunzipSync(readFileSync(new URL(recipe.baseLut, path))).toString("utf8");
     const output = engine.apply(
       input,
       2,

@@ -1,6 +1,6 @@
 {
   "name": "Earth Tones",
-  "baseLut": "../luts/earth-tones.cube",
+  "baseLut": "../luts/earth-tones.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

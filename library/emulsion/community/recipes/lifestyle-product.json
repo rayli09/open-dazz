@@ -1,6 +1,6 @@
 {
   "name": "Lifestyle Product",
-  "baseLut": "../luts/lifestyle-product.cube",
+  "baseLut": "../luts/lifestyle-product.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

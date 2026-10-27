@@ -1,7 +1,7 @@
 {
   "name": "Fuji Acros Grain Like",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/acros-r.cube",
+  "baseLut": "../hald-bases/luts/acros-r.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

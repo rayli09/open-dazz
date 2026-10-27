@@ -1,6 +1,6 @@
 {
   "name": "Ilford FP4 Plus 125",
-  "baseLut": "../luts/ilford-fp4-plus-125.cube",
+  "baseLut": "../luts/ilford-fp4-plus-125.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

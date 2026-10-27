@@ -1,6 +1,6 @@
 {
   "name": "Rollei IR 400",
-  "baseLut": "../luts/rt-rollei-ir-400.cube",
+  "baseLut": "../luts/rt-rollei-ir-400.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

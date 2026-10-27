@@ -1,6 +1,6 @@
 {
   "name": "David LaChapelle",
-  "baseLut": "../luts/david-lachapelle.cube",
+  "baseLut": "../luts/david-lachapelle.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

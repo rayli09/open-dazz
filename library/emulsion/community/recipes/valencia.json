@@ -1,6 +1,6 @@
 {
   "name": "Valencia",
-  "baseLut": "../luts/valencia.cube",
+  "baseLut": "../luts/valencia.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

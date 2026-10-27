@@ -1,6 +1,6 @@
 {
   "name": "Edwardian Pictorialist",
-  "baseLut": "../luts/edwardian-pictorialist.cube",
+  "baseLut": "../luts/edwardian-pictorialist.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

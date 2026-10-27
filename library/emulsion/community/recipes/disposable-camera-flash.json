@@ -1,6 +1,6 @@
 {
   "name": "Disposable Camera Flash",
-  "baseLut": "../luts/disposable-camera-flash.cube",
+  "baseLut": "../luts/disposable-camera-flash.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

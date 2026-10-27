@@ -1,6 +1,6 @@
 {
   "name": "Teal & Orange Cinematic Video",
-  "baseLut": "../luts/teal-orange-cinematic-video.cube",
+  "baseLut": "../luts/teal-orange-cinematic-video.cube.gz",
   "grain": {
     "amount": 0.108,
     "size": "small"

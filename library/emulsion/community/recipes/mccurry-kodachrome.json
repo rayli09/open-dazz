@@ -1,6 +1,6 @@
 {
   "name": "McCurry Kodachrome",
-  "baseLut": "../luts/mccurry-kodachrome.cube",
+  "baseLut": "../luts/mccurry-kodachrome.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

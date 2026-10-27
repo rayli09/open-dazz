@@ -1,6 +1,6 @@
 {
   "name": "Copper Tone",
-  "baseLut": "../luts/copper-tone.cube",
+  "baseLut": "../luts/copper-tone.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

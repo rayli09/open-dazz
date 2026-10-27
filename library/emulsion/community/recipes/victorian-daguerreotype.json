@@ -1,6 +1,6 @@
 {
   "name": "Victorian Daguerreotype",
-  "baseLut": "../luts/victorian-daguerreotype.cube",
+  "baseLut": "../luts/victorian-daguerreotype.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

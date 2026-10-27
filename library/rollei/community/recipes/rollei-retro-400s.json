@@ -1,6 +1,6 @@
 {
   "name": "Rollei Retro 400S",
-  "baseLut": "../luts/rollei-retro-400s.cube",
+  "baseLut": "../luts/rollei-retro-400s.cube.gz",
   "grain": {
     "amount": 0.405,
     "size": "small"

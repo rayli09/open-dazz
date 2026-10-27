@@ -20,3 +20,6 @@ apps/web/public/ffmpeg/
 apps/web/dist-desktop/
 apps/desktop/src-tauri/gen/
 apps/web/public/samples/desktop-smoke.mp4
+
+# Generated copy of the canonical library.
+apps/web/public/library/

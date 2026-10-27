@@ -1,6 +1,6 @@
 {
   "name": "Milky Way Core",
-  "baseLut": "../luts/milky-way-core.cube",
+  "baseLut": "../luts/milky-way-core.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

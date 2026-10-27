@@ -1,6 +1,6 @@
 {
   "name": "Albumen Print",
-  "baseLut": "../luts/albumen-print.cube",
+  "baseLut": "../luts/albumen-print.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

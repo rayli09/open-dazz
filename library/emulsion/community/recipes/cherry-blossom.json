@@ -1,6 +1,6 @@
 {
   "name": "Cherry Blossom",
-  "baseLut": "../luts/cherry-blossom.cube",
+  "baseLut": "../luts/cherry-blossom.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

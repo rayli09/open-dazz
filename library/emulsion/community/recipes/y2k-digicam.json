@@ -1,6 +1,6 @@
 {
   "name": "Y2K Digicam",
-  "baseLut": "../luts/y2k-digicam.cube",
+  "baseLut": "../luts/y2k-digicam.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

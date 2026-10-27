@@ -1,6 +1,6 @@
 {
   "name": "Fujifilm Nostalgic Negative",
-  "baseLut": "../luts/fujifilm-nostalgic-negative.cube",
+  "baseLut": "../luts/fujifilm-nostalgic-negative.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

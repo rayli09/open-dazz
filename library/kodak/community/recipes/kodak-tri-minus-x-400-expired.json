@@ -1,6 +1,6 @@
 {
   "name": "Kodak Tri-X 400 Expired",
-  "baseLut": "../luts/kodak-tri-minus-x-400-expired.cube",
+  "baseLut": "../luts/kodak-tri-minus-x-400-expired.cube.gz",
   "grain": {
     "amount": 0.693,
     "size": "small"

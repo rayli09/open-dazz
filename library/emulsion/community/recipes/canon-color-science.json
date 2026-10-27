@@ -1,6 +1,6 @@
 {
   "name": "Canon Color Science",
-  "baseLut": "../luts/canon-color-science.cube",
+  "baseLut": "../luts/canon-color-science.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

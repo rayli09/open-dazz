@@ -1,6 +1,6 @@
 {
   "name": "Fujifilm Eterna",
-  "baseLut": "../luts/fujifilm-eterna.cube",
+  "baseLut": "../luts/fujifilm-eterna.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

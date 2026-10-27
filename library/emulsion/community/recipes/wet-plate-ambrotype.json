@@ -1,6 +1,6 @@
 {
   "name": "Wet Plate Ambrotype",
-  "baseLut": "../luts/wet-plate-ambrotype.cube",
+  "baseLut": "../luts/wet-plate-ambrotype.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

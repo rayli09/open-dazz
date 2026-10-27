@@ -1,6 +1,6 @@
 {
   "name": "Van Dyke Brown",
-  "baseLut": "../luts/van-dyke-brown.cube",
+  "baseLut": "../luts/van-dyke-brown.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

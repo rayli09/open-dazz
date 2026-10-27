@@ -1,6 +1,6 @@
 {
   "name": "Fuji Pro 160NS",
-  "baseLut": "../luts/fuji-pro-160ns.cube",
+  "baseLut": "../luts/fuji-pro-160ns.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

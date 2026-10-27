@@ -1,6 +1,6 @@
 {
   "name": "Ricoh High-Contrast Monochrome",
-  "baseLut": "../luts/ricoh-high-minus-contrast-monochrome.cube",
+  "baseLut": "../luts/ricoh-high-minus-contrast-monochrome.cube.gz",
   "grain": {
     "amount": 0.529,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Star Trails",
-  "baseLut": "../luts/star-trails.cube",
+  "baseLut": "../luts/star-trails.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

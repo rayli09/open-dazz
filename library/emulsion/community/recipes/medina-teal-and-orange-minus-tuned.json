@@ -1,6 +1,6 @@
 {
   "name": "Medina Teal and Orange - Tuned",
-  "baseLut": "../luts/medina-teal-and-orange-minus-tuned.cube",
+  "baseLut": "../luts/medina-teal-and-orange-minus-tuned.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,7 +1,7 @@
 {
   "name": "Kodak Gold 200",
   "processing": "fujiPhotoV1",
-  "baseLut": "../../official/luts/classic chrome_sRGB.cube",
+  "baseLut": "../../official/luts/classic chrome_sRGB.cube.gz",
   "grain": {
     "amount": 0.55,
     "size": "small"

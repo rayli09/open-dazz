@@ -1,6 +1,6 @@
 {
   "name": "Fuji FP-3000b",
-  "baseLut": "../luts/rt-fuji-fp-3000b.cube",
+  "baseLut": "../luts/rt-fuji-fp-3000b.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kodak Portra 400 Noritsu",
-  "baseLut": "../luts/kodak-portra-400-noritsu.cube",
+  "baseLut": "../luts/kodak-portra-400-noritsu.cube.gz",
   "grain": {
     "amount": 0.297,
     "size": "small"

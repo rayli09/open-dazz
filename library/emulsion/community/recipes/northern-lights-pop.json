@@ -1,6 +1,6 @@
 {
   "name": "Northern Lights Pop",
-  "baseLut": "../luts/northern-lights-pop.cube",
+  "baseLut": "../luts/northern-lights-pop.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

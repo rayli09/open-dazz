@@ -8,10 +8,10 @@ library/
   catalog.json            generated index (tools/build_catalog.py)
   <brand>/
     official/             the brand's own simulations / first-party looks
-      luts/               .cube files (with the tier's LICENSE/README)
+      luts/               gzip-compressed `.cube.gz` files (with the tier's LICENSE/README)
       recipes/            bare recipes, one per look
     community/            third-party recipes built on those looks
-      luts/               .cube files (baked packs; recipe-only packs omit)
+      luts/               gzip-compressed `.cube.gz` files (baked packs; recipe-only packs omit)
       recipes/
 ```
 
@@ -32,6 +32,8 @@ Rules:
   README states).
 - Ungrouped house examples live in the repo-root `recipes/` and list
   last, under "examples".
+
+LUTs are losslessly gzip-compressed; recipes refer to `.cube.gz` paths. The CLI and browser decompress them when loading a look. Maintainer bake/import tools write the same format.
 
 The CLI reads this layout directly (`opendazz list`, `opendazz apply
 --look <name|id>`); `catalog.json` is the same data as one file for the

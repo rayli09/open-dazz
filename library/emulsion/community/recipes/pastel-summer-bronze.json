@@ -1,6 +1,6 @@
 {
   "name": "Pastel Summer Bronze",
-  "baseLut": "../luts/pastel-summer-bronze.cube",
+  "baseLut": "../luts/pastel-summer-bronze.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Vibrant Color Pop",
-  "baseLut": "../luts/vibrant-color-pop.cube",
+  "baseLut": "../luts/vibrant-color-pop.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

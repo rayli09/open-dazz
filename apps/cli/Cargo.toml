@@ -13,3 +13,4 @@ opendazz-core = { path = "../../crates/opendazz-core" }
 image = { workspace = true }
 serde_json = { workspace = true }
 clap = { workspace = true }
+flate2 = "1"

@@ -1,6 +1,6 @@
 {
   "name": "London Grey Overcast",
-  "baseLut": "../luts/london-grey-overcast.cube",
+  "baseLut": "../luts/london-grey-overcast.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

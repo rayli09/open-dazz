@@ -1,6 +1,6 @@
 {
   "name": "Kodak Recording Film 2475",
-  "baseLut": "../luts/kodak-recording-film-2475.cube",
+  "baseLut": "../luts/kodak-recording-film-2475.cube.gz",
   "grain": {
     "amount": 0.54,
     "size": "large"

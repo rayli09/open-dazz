@@ -1,6 +1,6 @@
 {
   "name": "Vibrant Field Action",
-  "baseLut": "../luts/vibrant-field-action.cube",
+  "baseLut": "../luts/vibrant-field-action.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

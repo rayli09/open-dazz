@@ -1,6 +1,6 @@
 {
   "name": "Cinestill 800T Video",
-  "baseLut": "../luts/cinestill-800t-video.cube",
+  "baseLut": "../luts/cinestill-800t-video.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

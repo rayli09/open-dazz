@@ -1,6 +1,6 @@
 {
   "name": "Bromoil",
-  "baseLut": "../luts/bromoil.cube",
+  "baseLut": "../luts/bromoil.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

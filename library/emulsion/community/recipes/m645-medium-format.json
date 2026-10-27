@@ -1,6 +1,6 @@
 {
   "name": "M645 Medium Format",
-  "baseLut": "../luts/m645-medium-format.cube",
+  "baseLut": "../luts/m645-medium-format.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

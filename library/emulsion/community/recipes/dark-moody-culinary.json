@@ -1,6 +1,6 @@
 {
   "name": "Dark Moody Culinary",
-  "baseLut": "../luts/dark-moody-culinary.cube",
+  "baseLut": "../luts/dark-moody-culinary.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

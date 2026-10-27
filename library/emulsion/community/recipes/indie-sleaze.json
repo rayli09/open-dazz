@@ -1,6 +1,6 @@
 {
   "name": "Indie Sleaze",
-  "baseLut": "../luts/indie-sleaze.cube",
+  "baseLut": "../luts/indie-sleaze.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

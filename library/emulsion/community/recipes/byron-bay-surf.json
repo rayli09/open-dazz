@@ -1,6 +1,6 @@
 {
   "name": "Byron Bay Surf",
-  "baseLut": "../luts/byron-bay-surf.cube",
+  "baseLut": "../luts/byron-bay-surf.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

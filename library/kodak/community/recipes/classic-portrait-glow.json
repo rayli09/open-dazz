@@ -1,6 +1,6 @@
 {
   "name": "Classic Portrait Glow",
-  "baseLut": "../luts/classic-portrait-glow.cube",
+  "baseLut": "../luts/classic-portrait-glow.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

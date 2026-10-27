@@ -1,6 +1,6 @@
 {
   "name": "Urban Street",
-  "baseLut": "../luts/urban-street.cube",
+  "baseLut": "../luts/urban-street.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

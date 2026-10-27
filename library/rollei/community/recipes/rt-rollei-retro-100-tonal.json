@@ -1,6 +1,6 @@
 {
   "name": "Rollei Retro 100 Tonal",
-  "baseLut": "../luts/rt-rollei-retro-100-tonal.cube",
+  "baseLut": "../luts/rt-rollei-retro-100-tonal.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

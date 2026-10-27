@@ -1,6 +1,6 @@
 {
   "name": "Steve McCurry",
-  "baseLut": "../luts/steve-mccurry.cube",
+  "baseLut": "../luts/steve-mccurry.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

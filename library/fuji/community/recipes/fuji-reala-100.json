@@ -1,6 +1,6 @@
 {
   "name": "Fuji Reala 100",
-  "baseLut": "../luts/fuji-reala-100.cube",
+  "baseLut": "../luts/fuji-reala-100.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

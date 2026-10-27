@@ -1,6 +1,6 @@
 {
   "name": "Gold 200 Video",
-  "baseLut": "../luts/gold-200-video.cube",
+  "baseLut": "../luts/gold-200-video.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Michael Kenna",
-  "baseLut": "../luts/michael-kenna.cube",
+  "baseLut": "../luts/michael-kenna.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

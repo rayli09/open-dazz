@@ -1,6 +1,6 @@
 {
   "name": "K-Drama Cinematic",
-  "baseLut": "../luts/k-minus-drama-cinematic.cube",
+  "baseLut": "../luts/k-minus-drama-cinematic.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

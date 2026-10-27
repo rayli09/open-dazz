@@ -1,6 +1,6 @@
 {
   "name": "Ilford XP2",
-  "baseLut": "../luts/rt-ilford-xp2.cube",
+  "baseLut": "../luts/rt-ilford-xp2.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

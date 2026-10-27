@@ -1,6 +1,6 @@
 {
   "name": "Kodak Max 800",
-  "baseLut": "../luts/kodak-max-800.cube",
+  "baseLut": "../luts/kodak-max-800.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

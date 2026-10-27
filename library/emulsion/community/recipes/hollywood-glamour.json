@@ -1,6 +1,6 @@
 {
   "name": "Hollywood Glamour",
-  "baseLut": "../luts/hollywood-glamour.cube",
+  "baseLut": "../luts/hollywood-glamour.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

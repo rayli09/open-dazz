@@ -1,6 +1,6 @@
 {
   "name": "Ilford Delta 100",
-  "baseLut": "../luts/ilford-delta-100.cube",
+  "baseLut": "../luts/ilford-delta-100.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

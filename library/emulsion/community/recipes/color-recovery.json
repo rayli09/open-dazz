@@ -1,6 +1,6 @@
 {
   "name": "Color Recovery",
-  "baseLut": "../luts/color-recovery.cube",
+  "baseLut": "../luts/color-recovery.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

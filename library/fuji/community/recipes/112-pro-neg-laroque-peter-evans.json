@@ -1,7 +1,7 @@
 {
   "name": "Pro Neg LaRoque",
   "processing": "fujiPhotoV1",
-  "baseLut": "../../official/luts/pro neg std_sRGB.cube",
+  "baseLut": "../../official/luts/pro neg std_sRGB.cube.gz",
   "grain": {
     "amount": 0.25,
     "size": "small"

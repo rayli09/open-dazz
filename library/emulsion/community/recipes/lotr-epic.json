@@ -1,6 +1,6 @@
 {
   "name": "LOTR Epic",
-  "baseLut": "../luts/lotr-epic.cube",
+  "baseLut": "../luts/lotr-epic.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

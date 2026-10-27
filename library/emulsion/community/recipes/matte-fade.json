@@ -1,6 +1,6 @@
 {
   "name": "Matte Fade",
-  "baseLut": "../luts/matte-fade.cube",
+  "baseLut": "../luts/matte-fade.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

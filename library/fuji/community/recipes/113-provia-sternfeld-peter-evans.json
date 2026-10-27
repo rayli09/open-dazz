@@ -1,7 +1,7 @@
 {
   "name": "Provia Sternfeld",
   "processing": "fujiPhotoV1",
-  "baseLut": "../../official/luts/provia_sRGB.cube",
+  "baseLut": "../../official/luts/provia_sRGB.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

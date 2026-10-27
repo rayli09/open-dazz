@@ -1,6 +1,6 @@
 {
   "name": "South Island Fjords",
-  "baseLut": "../luts/south-island-fjords.cube",
+  "baseLut": "../luts/south-island-fjords.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

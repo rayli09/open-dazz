@@ -1,6 +1,6 @@
 {
   "name": "Cool Modern Interior",
-  "baseLut": "../luts/cool-modern-interior.cube",
+  "baseLut": "../luts/cool-modern-interior.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

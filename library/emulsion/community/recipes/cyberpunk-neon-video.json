@@ -1,6 +1,6 @@
 {
   "name": "Cyberpunk Neon Video",
-  "baseLut": "../luts/cyberpunk-neon-video.cube",
+  "baseLut": "../luts/cyberpunk-neon-video.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

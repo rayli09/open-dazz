@@ -1,6 +1,6 @@
 {
   "name": "Ricoh Superior 100 (Negative Film)",
-  "baseLut": "../luts/ricoh-superior-100-negative-film.cube",
+  "baseLut": "../luts/ricoh-superior-100-negative-film.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

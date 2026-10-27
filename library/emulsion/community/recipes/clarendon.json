@@ -1,6 +1,6 @@
 {
   "name": "Clarendon",
-  "baseLut": "../luts/clarendon.cube",
+  "baseLut": "../luts/clarendon.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

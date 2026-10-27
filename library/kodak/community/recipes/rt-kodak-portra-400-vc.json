@@ -1,6 +1,6 @@
 {
   "name": "Kodak Portra 400 VC",
-  "baseLut": "../luts/rt-kodak-portra-400-vc.cube",
+  "baseLut": "../luts/rt-kodak-portra-400-vc.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

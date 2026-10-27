@@ -1,6 +1,6 @@
 {
   "name": "Desert Luxury",
-  "baseLut": "../luts/desert-luxury.cube",
+  "baseLut": "../luts/desert-luxury.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

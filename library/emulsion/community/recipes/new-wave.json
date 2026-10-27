@@ -1,6 +1,6 @@
 {
   "name": "New Wave",
-  "baseLut": "../luts/new-wave.cube",
+  "baseLut": "../luts/new-wave.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Polaroid PX-680 Warm",
-  "baseLut": "../luts/rt-polaroid-px-680-warm.cube",
+  "baseLut": "../luts/rt-polaroid-px-680-warm.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

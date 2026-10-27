@@ -1,6 +1,6 @@
 {
   "name": "Fuji Velvia 100 Generic",
-  "baseLut": "../luts/rt-fuji-velvia-100-generic.cube",
+  "baseLut": "../luts/rt-fuji-velvia-100-generic.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

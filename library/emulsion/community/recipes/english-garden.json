@@ -1,6 +1,6 @@
 {
   "name": "English Garden",
-  "baseLut": "../luts/english-garden.cube",
+  "baseLut": "../luts/english-garden.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Lomo LC-A",
-  "baseLut": "../luts/lomo-lc-minus-a.cube",
+  "baseLut": "../luts/lomo-lc-minus-a.cube.gz",
   "grain": {
     "amount": 0.342,
     "size": "small"

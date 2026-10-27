@@ -1,6 +1,6 @@
 {
   "name": "Kodak Royal Gold 400",
-  "baseLut": "../luts/kodak-royal-gold-400.cube",
+  "baseLut": "../luts/kodak-royal-gold-400.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Ilford HP5 Plus Expired",
-  "baseLut": "../luts/ilford-hp5-plus-expired.cube",
+  "baseLut": "../luts/ilford-hp5-plus-expired.cube.gz",
   "grain": {
     "amount": 0.525,
     "size": "small"

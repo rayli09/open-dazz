@@ -1,6 +1,6 @@
 {
   "name": "Cinestill 800T",
-  "baseLut": "../luts/cinestill-800t.cube",
+  "baseLut": "../luts/cinestill-800t.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

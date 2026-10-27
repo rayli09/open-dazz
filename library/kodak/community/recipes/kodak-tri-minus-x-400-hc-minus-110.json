@@ -1,6 +1,6 @@
 {
   "name": "Kodak Tri-X 400 HC-110",
-  "baseLut": "../luts/kodak-tri-minus-x-400-hc-minus-110.cube",
+  "baseLut": "../luts/kodak-tri-minus-x-400-hc-minus-110.cube.gz",
   "grain": {
     "amount": 0.54,
     "size": "small"

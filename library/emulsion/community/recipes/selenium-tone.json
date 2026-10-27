@@ -1,6 +1,6 @@
 {
   "name": "Selenium Tone",
-  "baseLut": "../luts/selenium-tone.cube",
+  "baseLut": "../luts/selenium-tone.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

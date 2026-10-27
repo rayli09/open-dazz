@@ -1,6 +1,6 @@
 {
   "name": "Parisian Morning",
-  "baseLut": "../luts/parisian-morning.cube",
+  "baseLut": "../luts/parisian-morning.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

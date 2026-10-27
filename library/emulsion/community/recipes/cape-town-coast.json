@@ -1,6 +1,6 @@
 {
   "name": "Cape Town Coast",
-  "baseLut": "../luts/cape-town-coast.cube",
+  "baseLut": "../luts/cape-town-coast.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

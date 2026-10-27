@@ -1,6 +1,6 @@
 {
   "name": "Kodak Portra 160NC",
-  "baseLut": "../luts/kodak-portra-160nc.cube",
+  "baseLut": "../luts/kodak-portra-160nc.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

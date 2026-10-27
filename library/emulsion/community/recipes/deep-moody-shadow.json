@@ -1,6 +1,6 @@
 {
   "name": "Deep Moody Shadow",
-  "baseLut": "../luts/deep-moody-shadow.cube",
+  "baseLut": "../luts/deep-moody-shadow.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

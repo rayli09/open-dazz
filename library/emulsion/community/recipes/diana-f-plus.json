@@ -1,6 +1,6 @@
 {
   "name": "Diana F+",
-  "baseLut": "../luts/diana-f-plus.cube",
+  "baseLut": "../luts/diana-f-plus.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

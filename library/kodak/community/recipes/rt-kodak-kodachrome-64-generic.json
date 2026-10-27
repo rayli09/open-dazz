@@ -1,6 +1,6 @@
 {
   "name": "Kodak Kodachrome 64 Generic",
-  "baseLut": "../luts/rt-kodak-kodachrome-64-generic.cube",
+  "baseLut": "../luts/rt-kodak-kodachrome-64-generic.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

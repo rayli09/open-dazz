@@ -1,6 +1,6 @@
 {
   "name": "Fan Ho",
-  "baseLut": "../luts/fan-ho.cube",
+  "baseLut": "../luts/fan-ho.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

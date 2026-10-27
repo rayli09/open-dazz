@@ -1,6 +1,6 @@
 {
   "name": "Salt Print",
-  "baseLut": "../luts/salt-print.cube",
+  "baseLut": "../luts/salt-print.cube.gz",
   "grain": {
     "amount": 0.252,
     "size": "small"

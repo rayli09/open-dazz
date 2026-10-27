@@ -1,6 +1,6 @@
 {
   "name": "Fresh Pastel",
-  "baseLut": "../luts/fresh-pastel.cube",
+  "baseLut": "../luts/fresh-pastel.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,7 +1,7 @@
 {
   "name": "Acros",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/mono-ye.cube",
+  "baseLut": "../hald-bases/luts/mono-ye.cube.gz",
   "grain": {
     "amount": 0.25,
     "size": "small"

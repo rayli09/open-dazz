@@ -1,6 +1,6 @@
 {
   "name": "Bergger Pancro 400",
-  "baseLut": "../luts/bergger-pancro-400.cube",
+  "baseLut": "../luts/bergger-pancro-400.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

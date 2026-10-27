@@ -1,6 +1,6 @@
 {
   "name": "Velvia 50 Video",
-  "baseLut": "../luts/velvia-50-video.cube",
+  "baseLut": "../luts/velvia-50-video.cube.gz",
   "grain": {
     "amount": 0.045,
     "size": "small"

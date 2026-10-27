@@ -1,6 +1,6 @@
 {
   "name": "Kodak Ektar 100 +1",
-  "baseLut": "../luts/kodak-ektar-100-plus-1.cube",
+  "baseLut": "../luts/kodak-ektar-100-plus-1.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

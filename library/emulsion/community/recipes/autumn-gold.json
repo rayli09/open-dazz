@@ -1,6 +1,6 @@
 {
   "name": "Autumn Gold",
-  "baseLut": "../luts/autumn-gold.cube",
+  "baseLut": "../luts/autumn-gold.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

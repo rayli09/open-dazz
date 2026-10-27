@@ -1,6 +1,6 @@
 {
   "name": "WWII Newsreel",
-  "baseLut": "../luts/wwii-newsreel.cube",
+  "baseLut": "../luts/wwii-newsreel.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

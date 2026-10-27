@@ -1,6 +1,6 @@
 {
   "name": "Ilford HP5",
-  "baseLut": "../luts/rt-ilford-hp5.cube",
+  "baseLut": "../luts/rt-ilford-hp5.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

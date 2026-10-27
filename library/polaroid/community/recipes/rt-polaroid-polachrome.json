@@ -1,6 +1,6 @@
 {
   "name": "Polaroid Polachrome",
-  "baseLut": "../luts/rt-polaroid-polachrome.cube",
+  "baseLut": "../luts/rt-polaroid-polachrome.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

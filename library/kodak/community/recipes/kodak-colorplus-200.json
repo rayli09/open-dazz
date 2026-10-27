@@ -1,6 +1,6 @@
 {
   "name": "Kodak ColorPlus 200",
-  "baseLut": "../luts/kodak-colorplus-200.cube",
+  "baseLut": "../luts/kodak-colorplus-200.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

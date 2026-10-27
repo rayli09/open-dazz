@@ -1,6 +1,6 @@
 {
   "name": "Fuji Superia 400",
-  "baseLut": "../luts/rt-fuji-superia-400.cube",
+  "baseLut": "../luts/rt-fuji-superia-400.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

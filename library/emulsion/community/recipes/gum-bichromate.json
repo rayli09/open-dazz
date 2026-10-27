@@ -1,6 +1,6 @@
 {
   "name": "Gum Bichromate",
-  "baseLut": "../luts/gum-bichromate.cube",
+  "baseLut": "../luts/gum-bichromate.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

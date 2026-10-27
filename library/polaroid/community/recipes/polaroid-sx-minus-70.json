@@ -1,6 +1,6 @@
 {
   "name": "Polaroid SX-70",
-  "baseLut": "../luts/polaroid-sx-minus-70.cube",
+  "baseLut": "../luts/polaroid-sx-minus-70.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

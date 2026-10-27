@@ -1,6 +1,6 @@
 {
   "name": "Kodacolor VR 200",
-  "baseLut": "../luts/kodacolor-vr-200.cube",
+  "baseLut": "../luts/kodacolor-vr-200.cube.gz",
   "grain": {
     "amount": 0.405,
     "size": "small"

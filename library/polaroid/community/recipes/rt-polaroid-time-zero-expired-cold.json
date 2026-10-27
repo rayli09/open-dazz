@@ -1,6 +1,6 @@
 {
   "name": "Polaroid Time Zero (Expired) Cold",
-  "baseLut": "../luts/rt-polaroid-time-zero-expired-cold.cube",
+  "baseLut": "../luts/rt-polaroid-time-zero-expired-cold.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

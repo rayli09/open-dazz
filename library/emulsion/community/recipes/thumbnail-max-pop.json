@@ -1,6 +1,6 @@
 {
   "name": "Thumbnail Max Pop",
-  "baseLut": "../luts/thumbnail-max-pop.cube",
+  "baseLut": "../luts/thumbnail-max-pop.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

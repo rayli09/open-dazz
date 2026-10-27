@@ -1,6 +1,6 @@
 {
   "name": "Bright & Airy Wedding",
-  "baseLut": "../luts/bright-airy-wedding.cube",
+  "baseLut": "../luts/bright-airy-wedding.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Faded Summer Expired",
-  "baseLut": "../luts/faded-summer-expired.cube",
+  "baseLut": "../luts/faded-summer-expired.cube.gz",
   "grain": {
     "amount": 0.439,
     "size": "small"

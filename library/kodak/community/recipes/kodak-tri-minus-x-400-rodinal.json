@@ -1,6 +1,6 @@
 {
   "name": "Kodak Tri-X 400 Rodinal",
-  "baseLut": "../luts/kodak-tri-minus-x-400-rodinal.cube",
+  "baseLut": "../luts/kodak-tri-minus-x-400-rodinal.cube.gz",
   "grain": {
     "amount": 0.63,
     "size": "small"

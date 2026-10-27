@@ -1,6 +1,6 @@
 {
   "name": "Kentmere Pan 400",
-  "baseLut": "../luts/kentmere-pan-400.cube",
+  "baseLut": "../luts/kentmere-pan-400.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

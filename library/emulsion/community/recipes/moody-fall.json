@@ -1,6 +1,6 @@
 {
   "name": "Moody Fall",
-  "baseLut": "../luts/moody-fall.cube",
+  "baseLut": "../luts/moody-fall.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

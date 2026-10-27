@@ -2,6 +2,7 @@
 // bun tools/check_wasm_photo.mjs cases.json
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { gunzipSync } from "node:zlib";
 import { loadWasm } from "./load-wasm.mjs";
 const { apply } = await loadWasm(new URL("../apps/web/src/pkg/", import.meta.url).pathname);
 
@@ -10,7 +11,7 @@ const results = [];
 for (const c of cases) {
   const input = new Uint8Array(Buffer.from(c.input, "base64"));
   const expected = Buffer.from(c.expected, "base64");
-  const output = apply(input, c.width, c.height, JSON.stringify(c.recipe), readFileSync(c.cube, "utf8"));
+  const output = apply(input, c.width, c.height, JSON.stringify(c.recipe), (c.cube.endsWith(".gz") ? gunzipSync(readFileSync(c.cube)).toString("utf8") : readFileSync(c.cube, "utf8")));
   let sum = 0, max = 0;
   assert.equal(output.length, input.length);
   for (let i = 0; i < output.length; i++) {

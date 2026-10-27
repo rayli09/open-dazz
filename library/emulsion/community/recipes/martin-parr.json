@@ -1,6 +1,6 @@
 {
   "name": "Martin Parr",
-  "baseLut": "../luts/martin-parr.cube",
+  "baseLut": "../luts/martin-parr.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

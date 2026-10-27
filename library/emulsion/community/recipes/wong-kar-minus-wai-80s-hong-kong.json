@@ -1,6 +1,6 @@
 {
   "name": "Wong Kar-Wai 80s Hong Kong",
-  "baseLut": "../luts/wong-kar-minus-wai-80s-hong-kong.cube",
+  "baseLut": "../luts/wong-kar-minus-wai-80s-hong-kong.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

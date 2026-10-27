@@ -1,6 +1,6 @@
 {
   "name": "X-Pro II",
-  "baseLut": "../luts/x-minus-pro-ii.cube",
+  "baseLut": "../luts/x-minus-pro-ii.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

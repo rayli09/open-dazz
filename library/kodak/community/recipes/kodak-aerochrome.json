@@ -1,6 +1,6 @@
 {
   "name": "Kodak Aerochrome",
-  "baseLut": "../luts/kodak-aerochrome.cube",
+  "baseLut": "../luts/kodak-aerochrome.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

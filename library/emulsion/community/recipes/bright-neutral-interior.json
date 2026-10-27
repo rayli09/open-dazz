@@ -1,6 +1,6 @@
 {
   "name": "Bright Neutral Interior",
-  "baseLut": "../luts/bright-neutral-interior.cube",
+  "baseLut": "../luts/bright-neutral-interior.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

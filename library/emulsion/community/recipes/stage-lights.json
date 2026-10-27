@@ -1,6 +1,6 @@
 {
   "name": "Stage Lights",
-  "baseLut": "../luts/stage-lights.cube",
+  "baseLut": "../luts/stage-lights.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kodak T-Max 3200",
-  "baseLut": "../luts/kodak-t-minus-max-3200.cube",
+  "baseLut": "../luts/kodak-t-minus-max-3200.cube.gz",
   "grain": {
     "amount": 0.495,
     "size": "small"

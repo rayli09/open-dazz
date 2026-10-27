@@ -1,6 +1,6 @@
 {
   "name": "Summer of Love",
-  "baseLut": "../luts/summer-of-love.cube",
+  "baseLut": "../luts/summer-of-love.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Moody Cinematic Film - Creator Tuned",
-  "baseLut": "../luts/moody-cinematic-film-minus-creator-tuned.cube",
+  "baseLut": "../luts/moody-cinematic-film-minus-creator-tuned.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

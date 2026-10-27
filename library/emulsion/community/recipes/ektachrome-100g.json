@@ -1,6 +1,6 @@
 {
   "name": "Ektachrome 100G",
-  "baseLut": "../luts/ektachrome-100g.cube",
+  "baseLut": "../luts/ektachrome-100g.cube.gz",
   "grain": {
     "amount": 0.045,
     "size": "small"

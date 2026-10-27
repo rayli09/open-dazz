@@ -1,6 +1,6 @@
 {
   "name": "Fuji 100 Industrial",
-  "baseLut": "../luts/fuji-100-industrial.cube",
+  "baseLut": "../luts/fuji-100-industrial.cube.gz",
   "grain": {
     "amount": 0.108,
     "size": "small"

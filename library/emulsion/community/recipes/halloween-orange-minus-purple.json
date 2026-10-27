@@ -1,6 +1,6 @@
 {
   "name": "Halloween Orange-Purple",
-  "baseLut": "../luts/halloween-orange-minus-purple.cube",
+  "baseLut": "../luts/halloween-orange-minus-purple.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

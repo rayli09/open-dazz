@@ -1,6 +1,6 @@
 {
   "name": "Golden Hour Endless",
-  "baseLut": "../luts/golden-hour-endless.cube",
+  "baseLut": "../luts/golden-hour-endless.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

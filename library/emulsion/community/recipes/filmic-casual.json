@@ -1,6 +1,6 @@
 {
   "name": "Filmic Casual",
-  "baseLut": "../luts/filmic-casual.cube",
+  "baseLut": "../luts/filmic-casual.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

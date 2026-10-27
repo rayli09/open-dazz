@@ -1,6 +1,6 @@
 {
   "name": "Kodachrome 64",
-  "baseLut": "../luts/kodachrome-64.cube",
+  "baseLut": "../luts/kodachrome-64.cube.gz",
   "grain": {
     "amount": 0.072,
     "size": "small"

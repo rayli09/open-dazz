@@ -1,6 +1,6 @@
 {
   "name": "Kodachrome Mid-Century",
-  "baseLut": "../luts/kodachrome-mid-minus-century.cube",
+  "baseLut": "../luts/kodachrome-mid-minus-century.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kodak Ultramax 400 +2",
-  "baseLut": "../luts/kodak-ultramax-400-plus-2.cube",
+  "baseLut": "../luts/kodak-ultramax-400-plus-2.cube.gz",
   "grain": {
     "amount": 0.54,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Deep Forest Green",
-  "baseLut": "../luts/deep-forest-green.cube",
+  "baseLut": "../luts/deep-forest-green.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

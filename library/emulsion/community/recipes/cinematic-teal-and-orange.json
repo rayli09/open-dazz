@@ -1,6 +1,6 @@
 {
   "name": "Cinematic Teal and Orange",
-  "baseLut": "../luts/cinematic-teal-and-orange.cube",
+  "baseLut": "../luts/cinematic-teal-and-orange.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

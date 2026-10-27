@@ -1,6 +1,6 @@
 {
   "name": "Night Sky Landscape",
-  "baseLut": "../luts/night-sky-landscape.cube",
+  "baseLut": "../luts/night-sky-landscape.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

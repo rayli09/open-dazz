@@ -1,6 +1,6 @@
 {
   "name": "Sebastiao Salgado",
-  "baseLut": "../luts/sebastiao-salgado.cube",
+  "baseLut": "../luts/sebastiao-salgado.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Ilford HP5 Plus Stand Dev",
-  "baseLut": "../luts/ilford-hp5-plus-stand-dev.cube",
+  "baseLut": "../luts/ilford-hp5-plus-stand-dev.cube.gz",
   "grain": {
     "amount": 0.282,
     "size": "small"

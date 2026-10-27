@@ -1,6 +1,6 @@
 {
   "name": "Fuji FP-100c",
-  "baseLut": "../luts/rt-fuji-fp-100c.cube",
+  "baseLut": "../luts/rt-fuji-fp-100c.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

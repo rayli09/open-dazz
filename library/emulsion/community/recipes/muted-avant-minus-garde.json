@@ -1,6 +1,6 @@
 {
   "name": "Muted Avant-Garde",
-  "baseLut": "../luts/muted-avant-minus-garde.cube",
+  "baseLut": "../luts/muted-avant-minus-garde.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

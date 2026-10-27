@@ -1,6 +1,6 @@
 {
   "name": "Overhead Clean",
-  "baseLut": "../luts/overhead-clean.cube",
+  "baseLut": "../luts/overhead-clean.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

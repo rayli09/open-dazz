@@ -1,6 +1,6 @@
 {
   "name": "Kodak Ektachrome 100 VS Generic",
-  "baseLut": "../luts/rt-kodak-ektachrome-100-vs-generic.cube",
+  "baseLut": "../luts/rt-kodak-ektachrome-100-vs-generic.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

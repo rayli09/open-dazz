@@ -1,6 +1,6 @@
 {
   "name": "Ilford HPS 800",
-  "baseLut": "../luts/rt-ilford-hps-800.cube",
+  "baseLut": "../luts/rt-ilford-hps-800.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

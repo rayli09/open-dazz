@@ -1,6 +1,6 @@
 {
   "name": "Polaroid 690 Warm",
-  "baseLut": "../luts/rt-polaroid-690-warm.cube",
+  "baseLut": "../luts/rt-polaroid-690-warm.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

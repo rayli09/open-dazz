@@ -1,6 +1,6 @@
 {
   "name": "Dramatic Monochrome",
-  "baseLut": "../luts/dramatic-monochrome.cube",
+  "baseLut": "../luts/dramatic-monochrome.cube.gz",
   "grain": {
     "amount": 0.495,
     "size": "small"

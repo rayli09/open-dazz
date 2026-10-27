@@ -1,6 +1,6 @@
 {
   "name": "Fujifilm Eterna Bleach Bypass (base simulation)",
-  "baseLut": "../luts/bleach bypass_sRGB.cube",
+  "baseLut": "../luts/bleach bypass_sRGB.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"
@@ -15,7 +15,7 @@
     "tempShift": 0,
     "tintShift": 0
   },
-  "source": "abpy/FujifilmCameraProfiles \u2014 DCP LookTable baked to .cube",
+  "source": "abpy/FujifilmCameraProfiles \u2014 DCP LookTable baked to .cube.gz",
   "license": "CC BY-NC-SA 4.0",
   "provenance": {
     "note": "Bare simulation LUT, all engine params zero. Upstream notes these assume a linear-contrast input; on contrasty JPEGs expect a stronger look than in-camera.",

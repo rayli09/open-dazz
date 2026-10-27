@@ -1,6 +1,6 @@
 {
   "name": "VHS Synthwave Video",
-  "baseLut": "../luts/vhs-synthwave-video.cube",
+  "baseLut": "../luts/vhs-synthwave-video.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Neon Synthwave",
-  "baseLut": "../luts/neon-synthwave.cube",
+  "baseLut": "../luts/neon-synthwave.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

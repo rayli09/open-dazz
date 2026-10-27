@@ -1,6 +1,6 @@
 {
   "name": "Pushed CineStill 800T",
-  "baseLut": "../luts/pushed-cinestill-800t.cube",
+  "baseLut": "../luts/pushed-cinestill-800t.cube.gz",
   "grain": {
     "amount": 0.495,
     "size": "small"

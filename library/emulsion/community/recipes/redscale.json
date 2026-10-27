@@ -1,6 +1,6 @@
 {
   "name": "Redscale",
-  "baseLut": "../luts/redscale.cube",
+  "baseLut": "../luts/redscale.cube.gz",
   "grain": {
     "amount": 0.378,
     "size": "small"

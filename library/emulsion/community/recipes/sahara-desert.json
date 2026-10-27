@@ -1,6 +1,6 @@
 {
   "name": "Sahara Desert",
-  "baseLut": "../luts/sahara-desert.cube",
+  "baseLut": "../luts/sahara-desert.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

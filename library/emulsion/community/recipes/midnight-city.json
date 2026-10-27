@@ -1,6 +1,6 @@
 {
   "name": "Midnight City",
-  "baseLut": "../luts/midnight-city.cube",
+  "baseLut": "../luts/midnight-city.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

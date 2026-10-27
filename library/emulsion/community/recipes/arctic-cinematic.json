@@ -1,6 +1,6 @@
 {
   "name": "Arctic Cinematic",
-  "baseLut": "../luts/arctic-cinematic.cube",
+  "baseLut": "../luts/arctic-cinematic.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

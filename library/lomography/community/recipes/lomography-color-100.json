@@ -1,6 +1,6 @@
 {
   "name": "Lomography Color 100",
-  "baseLut": "../luts/lomography-color-100.cube",
+  "baseLut": "../luts/lomography-color-100.cube.gz",
   "grain": {
     "amount": 0.216,
     "size": "small"

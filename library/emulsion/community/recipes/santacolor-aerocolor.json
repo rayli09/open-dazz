@@ -1,6 +1,6 @@
 {
   "name": "SantaColor Aerocolor",
-  "baseLut": "../luts/santacolor-aerocolor.cube",
+  "baseLut": "../luts/santacolor-aerocolor.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

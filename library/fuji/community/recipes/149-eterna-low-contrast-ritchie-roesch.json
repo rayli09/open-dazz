@@ -1,7 +1,7 @@
 {
   "name": "Eterna Low Contrast",
   "processing": "fujiPhotoV1",
-  "baseLut": "../../official/luts/eterna_sRGB.cube",
+  "baseLut": "../../official/luts/eterna_sRGB.cube.gz",
   "grain": {
     "amount": 0.55,
     "size": "small"

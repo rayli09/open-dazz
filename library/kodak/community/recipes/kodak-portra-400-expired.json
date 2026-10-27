@@ -1,6 +1,6 @@
 {
   "name": "Kodak Portra 400 Expired",
-  "baseLut": "../luts/kodak-portra-400-expired.cube",
+  "baseLut": "../luts/kodak-portra-400-expired.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

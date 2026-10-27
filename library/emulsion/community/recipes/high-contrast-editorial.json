@@ -1,6 +1,6 @@
 {
   "name": "High Contrast Editorial",
-  "baseLut": "../luts/high-contrast-editorial.cube",
+  "baseLut": "../luts/high-contrast-editorial.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

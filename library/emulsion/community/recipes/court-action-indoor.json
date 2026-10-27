@@ -1,6 +1,6 @@
 {
   "name": "Court Action Indoor",
-  "baseLut": "../luts/court-action-indoor.cube",
+  "baseLut": "../luts/court-action-indoor.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

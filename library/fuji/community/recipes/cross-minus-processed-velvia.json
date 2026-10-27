@@ -1,6 +1,6 @@
 {
   "name": "Cross-Processed Velvia",
-  "baseLut": "../luts/cross-minus-processed-velvia.cube",
+  "baseLut": "../luts/cross-minus-processed-velvia.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

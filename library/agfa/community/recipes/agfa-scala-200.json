@@ -1,6 +1,6 @@
 {
   "name": "Agfa Scala 200",
-  "baseLut": "../luts/agfa-scala-200.cube",
+  "baseLut": "../luts/agfa-scala-200.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

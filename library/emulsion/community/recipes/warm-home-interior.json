@@ -1,6 +1,6 @@
 {
   "name": "Warm Home Interior",
-  "baseLut": "../luts/warm-home-interior.cube",
+  "baseLut": "../luts/warm-home-interior.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

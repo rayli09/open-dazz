@@ -1,6 +1,6 @@
 {
   "name": "Fuji Fortia SP 50",
-  "baseLut": "../luts/fuji-fortia-sp-50.cube",
+  "baseLut": "../luts/fuji-fortia-sp-50.cube.gz",
   "grain": {
     "amount": 0.045,
     "size": "small"

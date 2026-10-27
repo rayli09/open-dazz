@@ -1,6 +1,6 @@
 {
   "name": "McBling Heyday",
-  "baseLut": "../luts/mcbling-heyday.cube",
+  "baseLut": "../luts/mcbling-heyday.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Haze Removal",
-  "baseLut": "../luts/haze-removal.cube",
+  "baseLut": "../luts/haze-removal.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

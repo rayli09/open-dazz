@@ -1,6 +1,6 @@
 {
   "name": "Ilford Pan F Plus 50",
-  "baseLut": "../luts/ilford-pan-f-plus-50.cube",
+  "baseLut": "../luts/ilford-pan-f-plus-50.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

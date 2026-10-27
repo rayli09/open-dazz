@@ -1,6 +1,6 @@
 {
   "name": "Pinhole",
-  "baseLut": "../luts/pinhole.cube",
+  "baseLut": "../luts/pinhole.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

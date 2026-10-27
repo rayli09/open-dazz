@@ -1,6 +1,6 @@
 {
   "name": "Tri-X 400 Video",
-  "baseLut": "../luts/tri-minus-x-400-video.cube",
+  "baseLut": "../luts/tri-minus-x-400-video.cube.gz",
   "grain": {
     "amount": 0.387,
     "size": "small"

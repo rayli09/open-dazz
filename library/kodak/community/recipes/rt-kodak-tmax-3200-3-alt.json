@@ -1,6 +1,6 @@
 {
   "name": "Kodak TMAX 3200 3 Alt",
-  "baseLut": "../luts/rt-kodak-tmax-3200-3-alt.cube",
+  "baseLut": "../luts/rt-kodak-tmax-3200-3-alt.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

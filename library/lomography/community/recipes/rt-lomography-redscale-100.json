@@ -1,6 +1,6 @@
 {
   "name": "Lomography Redscale 100",
-  "baseLut": "../luts/rt-lomography-redscale-100.cube",
+  "baseLut": "../luts/rt-lomography-redscale-100.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

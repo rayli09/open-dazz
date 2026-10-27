@@ -1,7 +1,7 @@
 {
   "name": "Monochrome Sepia",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/sepia.cube",
+  "baseLut": "../hald-bases/luts/sepia.cube.gz",
   "grain": {
     "amount": 0.55,
     "size": "small"

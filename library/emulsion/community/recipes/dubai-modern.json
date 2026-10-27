@@ -1,6 +1,6 @@
 {
   "name": "Dubai Modern",
-  "baseLut": "../luts/dubai-modern.cube",
+  "baseLut": "../luts/dubai-modern.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

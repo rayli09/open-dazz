@@ -1,6 +1,6 @@
 {
   "name": "Polaroid PX-70",
-  "baseLut": "../luts/rt-polaroid-px-70.cube",
+  "baseLut": "../luts/rt-polaroid-px-70.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

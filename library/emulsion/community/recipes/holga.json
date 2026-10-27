@@ -1,6 +1,6 @@
 {
   "name": "Holga",
-  "baseLut": "../luts/holga.cube",
+  "baseLut": "../luts/holga.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

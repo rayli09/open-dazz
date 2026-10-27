@@ -1,6 +1,6 @@
 {
   "name": "Kodak Technical Pan",
-  "baseLut": "../luts/kodak-technical-pan.cube",
+  "baseLut": "../luts/kodak-technical-pan.cube.gz",
   "grain": {
     "amount": 0.045,
     "size": "small"

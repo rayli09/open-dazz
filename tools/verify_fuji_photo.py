@@ -9,6 +9,7 @@ No corpus downloads or source mutations. Outputs go to ignored verify-out.
 import argparse
 import base64
 import hashlib
+import gzip
 import json
 import subprocess
 from pathlib import Path
@@ -67,9 +68,19 @@ def main():
             recipe = json.loads(rp.read_text())
             old_bytes = git("show", f"{baseline}:{rel}")
             old_recipe = json.loads(old_bytes)
-            assert {k:v for k,v in recipe.items() if k != "processing"} == old_recipe, "baseline recipe changed beyond processing"
+            comparable = {k:v for k,v in recipe.items() if k != "processing"}
+            comparable["baseLut"] = old_recipe["baseLut"]
+            assert comparable == old_recipe, "baseline recipe changed beyond processing and LUT compression"
             lp = (rp.parent / recipe["baseLut"]).resolve()
-            assert git("show", f"{baseline}:{lp.relative_to(ROOT)}") == lp.read_bytes(), "comparison requires identical LUTs"
+            old_lut_path = (rp.parent / old_recipe["baseLut"]).resolve()
+            old_lut = git("show", f"{baseline}:{old_lut_path.relative_to(ROOT)}")
+            if old_lut_path.suffix == ".gz": old_lut = gzip.decompress(old_lut)
+            assert old_lut == gzip.decompress(lp.read_bytes()), "comparison requires identical LUTs"
+            plain_lut = out / "baseline.cube"
+            plain_lut.write_bytes(old_lut)
+            comparison_recipe = dict(recipe, baseLut=str(plain_lut))
+            comparison_recipe_path = out / "comparison-recipe.json"
+            comparison_recipe_path.write_text(json.dumps(comparison_recipe))
             entry = {
                 "sample": str(src.relative_to(ROOT)), "input_sha256": digest(src.read_bytes()),
                 "look": name, "recipe": rel, "recipe_before_sha256": digest(old_bytes),
@@ -77,7 +88,7 @@ def main():
             }
             for version, binary in (("before", before), ("after", after)):
                 dest = out / f"sample-{sample}-{i}-{version}.png"
-                subprocess.run([str(binary), "apply", str(src), str(dest), "--recipe", str(rp)], cwd=ROOT, check=True, stdout=subprocess.DEVNULL)
+                subprocess.run([str(binary), "apply", str(src), str(dest), "--recipe", str(comparison_recipe_path)], cwd=ROOT, check=True, stdout=subprocess.DEVNULL)
                 im = Image.open(dest).convert("RGB")
                 roi = im.crop((420, 370, 820, 790)) if sample == 1 else im
                 entry[version] = {"output_sha256": digest(dest.read_bytes()), "whole_image": metrics(im), "face_crop" if sample == 1 else "landscape": metrics(roi)}
@@ -101,7 +112,10 @@ def main():
     for name, rel in LOOKS.items():
         rp = ROOT / rel
         r = json.loads(rp.read_text())
-        r["baseLut"] = str((rp.parent / r["baseLut"]).resolve())
+        compressed_lut = (rp.parent / r["baseLut"]).resolve()
+        plain_lut = out / "measurement.cube"
+        plain_lut.write_bytes(gzip.decompress(compressed_lut.read_bytes()))
+        r["baseLut"] = str(plain_lut)
         r["grain"]["amount"] = 0
         temp_recipe = out / "measurement-recipe.json"
         temp_recipe.write_text(json.dumps(r))

@@ -1,6 +1,6 @@
 {
   "name": "Kodak Panatomic-X 32",
-  "baseLut": "../luts/kodak-panatomic-minus-x-32.cube",
+  "baseLut": "../luts/kodak-panatomic-minus-x-32.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

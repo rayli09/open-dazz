@@ -1,6 +1,6 @@
 {
   "name": "Fuji Superia 200 XPRO",
-  "baseLut": "../luts/rt-fuji-superia-200-xpro.cube",
+  "baseLut": "../luts/rt-fuji-superia-200-xpro.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

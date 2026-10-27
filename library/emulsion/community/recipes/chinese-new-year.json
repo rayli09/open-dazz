@@ -1,6 +1,6 @@
 {
   "name": "Chinese New Year",
-  "baseLut": "../luts/chinese-new-year.cube",
+  "baseLut": "../luts/chinese-new-year.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

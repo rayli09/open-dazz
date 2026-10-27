@@ -1,11 +1,18 @@
+fn read_gzip(path: &std::path::Path) -> std::io::Result<String> {
+    use std::io::Read;
+    let mut text = String::new();
+    flate2::read::GzDecoder::new(std::fs::File::open(path)?).read_to_string(&mut text)?;
+    Ok(text)
+}
+
 use opendazz_core::Lut3d;
 use palette::{color_difference::Ciede2000, Lab};
 use std::path::PathBuf;
 
 fn load(stem: &str) -> Lut3d {
     let mut p = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    p.push(format!("../../library/fuji/official/luts/{stem}_sRGB.cube"));
-    let text = std::fs::read_to_string(&p)
+    p.push(format!("../../library/fuji/official/luts/{stem}_sRGB.cube.gz"));
+    let text = read_gzip(&p)
         .unwrap_or_else(|e| panic!("read {}: {e}", p.display()));
     Lut3d::parse_cube(&text).expect("parse cube")
 }

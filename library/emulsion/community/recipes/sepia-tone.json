@@ -1,6 +1,6 @@
 {
   "name": "Sepia Tone",
-  "baseLut": "../luts/sepia-tone.cube",
+  "baseLut": "../luts/sepia-tone.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

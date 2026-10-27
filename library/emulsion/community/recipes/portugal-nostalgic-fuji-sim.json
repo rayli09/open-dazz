@@ -1,6 +1,6 @@
 {
   "name": "Portugal Nostalgic (Fuji Sim)",
-  "baseLut": "../luts/portugal-nostalgic-fuji-sim.cube",
+  "baseLut": "../luts/portugal-nostalgic-fuji-sim.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

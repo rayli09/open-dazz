@@ -1,6 +1,6 @@
 {
   "name": "Lomography Metropolis",
-  "baseLut": "../luts/lomography-metropolis.cube",
+  "baseLut": "../luts/lomography-metropolis.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Color Decisive Moment",
-  "baseLut": "../luts/color-decisive-moment.cube",
+  "baseLut": "../luts/color-decisive-moment.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

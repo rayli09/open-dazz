@@ -1,6 +1,6 @@
 {
   "name": "Graduation",
-  "baseLut": "../luts/graduation.cube",
+  "baseLut": "../luts/graduation.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

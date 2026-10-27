@@ -1,6 +1,6 @@
 {
   "name": "Fuji Sensia 100",
-  "baseLut": "../luts/fuji-sensia-100.cube",
+  "baseLut": "../luts/fuji-sensia-100.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

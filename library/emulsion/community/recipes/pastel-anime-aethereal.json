@@ -1,6 +1,6 @@
 {
   "name": "Pastel Anime Aethereal",
-  "baseLut": "../luts/pastel-anime-aethereal.cube",
+  "baseLut": "../luts/pastel-anime-aethereal.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

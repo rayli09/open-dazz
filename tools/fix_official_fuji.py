@@ -24,6 +24,7 @@ one; decoding without re-encoding crushes midtones.)
 Idempotent: refuses to run on cubes that already carry the
 re-based marker.
 """
+import gzip
 import json, os
 import numpy as np
 
@@ -40,7 +41,7 @@ def srgb_enc(c):
 
 def load_cube(path):
     size, data = None, []
-    for line in open(path):
+    for line in gzip.open(path, "rt"):
         if MARKER in line:
             raise SystemExit(f"{path}: already re-based, refusing to run twice")
         if line.startswith("LUT_3D_SIZE"):
@@ -73,7 +74,7 @@ def sample_grid(cube, pts):
 
 def write_cube(path, arr_rgba, title):
     size = arr_rgba.shape[0]
-    with open(path, "w") as fp:
+    with gzip.open(path, "wt") as fp:
         fp.write(f"# {title}\n# {MARKER} by tools/fix_official_fuji.py\n")
         fp.write(f"LUT_3D_SIZE {size}\n")
         for b in range(size):
@@ -87,12 +88,12 @@ def main():
     lin = np.linspace(0, 1, size)
     grid = np.stack(np.meshgrid(lin, lin, lin, indexing="ij"), -1)  # [r][g][b]
     for fn in sorted(os.listdir(LUT_DIR)):
-        if not fn.endswith("_sRGB.cube"):
+        if not fn.endswith("_sRGB.cube.gz"):
             continue
         path = os.path.join(LUT_DIR, fn)
         cube = load_cube(path)
         composed = srgb_enc(sample_grid(cube, srgb_dec(grid)))
-        write_cube(path, composed, fn.replace("_sRGB.cube", "")
+        write_cube(path, composed, fn.replace("_sRGB.cube.gz", "")
                    + " — abpy/FujifilmCameraProfiles (CC BY-NC-SA 4.0),")
         print(f"re-based {fn}")
     # provenance: mark each official recipe

@@ -1,6 +1,6 @@
 {
   "name": "Lark",
-  "baseLut": "../luts/lark.cube",
+  "baseLut": "../luts/lark.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Light and Airy Fine Art",
-  "baseLut": "../luts/light-and-airy-fine-art.cube",
+  "baseLut": "../luts/light-and-airy-fine-art.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

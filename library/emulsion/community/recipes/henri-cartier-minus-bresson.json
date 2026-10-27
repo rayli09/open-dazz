@@ -1,6 +1,6 @@
 {
   "name": "Henri Cartier-Bresson",
-  "baseLut": "../luts/henri-cartier-minus-bresson.cube",
+  "baseLut": "../luts/henri-cartier-minus-bresson.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

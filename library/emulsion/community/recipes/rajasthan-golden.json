@@ -1,6 +1,6 @@
 {
   "name": "Rajasthan Golden",
-  "baseLut": "../luts/rajasthan-golden.cube",
+  "baseLut": "../luts/rajasthan-golden.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

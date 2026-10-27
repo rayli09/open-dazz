@@ -1,6 +1,6 @@
 {
   "name": "Kodak HIE (HS Infra)",
-  "baseLut": "../luts/rt-kodak-hie-hs-infra.cube",
+  "baseLut": "../luts/rt-kodak-hie-hs-infra.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

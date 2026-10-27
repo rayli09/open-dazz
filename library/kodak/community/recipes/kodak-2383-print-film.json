@@ -1,6 +1,6 @@
 {
   "name": "Kodak 2383 Print Film",
-  "baseLut": "../luts/kodak-2383-print-film.cube",
+  "baseLut": "../luts/kodak-2383-print-film.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

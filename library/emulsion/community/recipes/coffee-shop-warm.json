@@ -1,6 +1,6 @@
 {
   "name": "Coffee Shop Warm",
-  "baseLut": "../luts/coffee-shop-warm.cube",
+  "baseLut": "../luts/coffee-shop-warm.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

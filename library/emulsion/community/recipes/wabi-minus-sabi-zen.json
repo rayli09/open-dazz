@@ -1,6 +1,6 @@
 {
   "name": "Wabi-Sabi Zen",
-  "baseLut": "../luts/wabi-minus-sabi-zen.cube",
+  "baseLut": "../luts/wabi-minus-sabi-zen.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Gingham",
-  "baseLut": "../luts/gingham.cube",
+  "baseLut": "../luts/gingham.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

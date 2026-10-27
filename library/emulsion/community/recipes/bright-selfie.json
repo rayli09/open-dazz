@@ -1,6 +1,6 @@
 {
   "name": "Bright Selfie",
-  "baseLut": "../luts/bright-selfie.cube",
+  "baseLut": "../luts/bright-selfie.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

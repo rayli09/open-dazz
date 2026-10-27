@@ -1,6 +1,6 @@
 {
   "name": "Fuji Neopan Acros 100",
-  "baseLut": "../luts/rt-fuji-neopan-acros-100.cube",
+  "baseLut": "../luts/rt-fuji-neopan-acros-100.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

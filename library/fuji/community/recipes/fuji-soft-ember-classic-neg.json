@@ -1,6 +1,6 @@
 {
   "name": "Fuji Soft Ember (Classic Neg)",
-  "baseLut": "../luts/fuji-soft-ember-classic-neg.cube",
+  "baseLut": "../luts/fuji-soft-ember-classic-neg.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

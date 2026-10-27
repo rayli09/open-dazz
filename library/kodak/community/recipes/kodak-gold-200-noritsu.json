@@ -1,6 +1,6 @@
 {
   "name": "Kodak Gold 200 Noritsu",
-  "baseLut": "../luts/kodak-gold-200-noritsu.cube",
+  "baseLut": "../luts/kodak-gold-200-noritsu.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

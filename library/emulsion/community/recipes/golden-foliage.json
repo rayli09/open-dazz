@@ -1,6 +1,6 @@
 {
   "name": "Golden Foliage",
-  "baseLut": "../luts/golden-foliage.cube",
+  "baseLut": "../luts/golden-foliage.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

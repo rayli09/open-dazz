@@ -1,6 +1,6 @@
 {
   "name": "Classic Cuban Negative",
-  "baseLut": "../luts/classic-cuban-negative.cube",
+  "baseLut": "../luts/classic-cuban-negative.cube.gz",
   "grain": {
     "amount": 0.405,
     "size": "large"

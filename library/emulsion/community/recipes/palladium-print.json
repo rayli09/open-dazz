@@ -1,6 +1,6 @@
 {
   "name": "Palladium Print",
-  "baseLut": "../luts/palladium-print.cube",
+  "baseLut": "../luts/palladium-print.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

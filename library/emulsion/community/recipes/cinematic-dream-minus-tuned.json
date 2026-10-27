@@ -1,6 +1,6 @@
 {
   "name": "Cinematic Dream - Tuned",
-  "baseLut": "../luts/cinematic-dream-minus-tuned.cube",
+  "baseLut": "../luts/cinematic-dream-minus-tuned.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

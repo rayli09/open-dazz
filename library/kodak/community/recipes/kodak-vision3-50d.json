@@ -1,6 +1,6 @@
 {
   "name": "Kodak Vision3 50D",
-  "baseLut": "../luts/kodak-vision3-50d.cube",
+  "baseLut": "../luts/kodak-vision3-50d.cube.gz",
   "grain": {
     "amount": 0.108,
     "size": "small"

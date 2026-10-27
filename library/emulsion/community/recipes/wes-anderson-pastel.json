@@ -1,6 +1,6 @@
 {
   "name": "Wes Anderson Pastel",
-  "baseLut": "../luts/wes-anderson-pastel.cube",
+  "baseLut": "../luts/wes-anderson-pastel.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

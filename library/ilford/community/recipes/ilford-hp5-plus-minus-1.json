@@ -1,6 +1,6 @@
 {
   "name": "Ilford HP5 Plus -1",
-  "baseLut": "../luts/ilford-hp5-plus-minus-1.cube",
+  "baseLut": "../luts/ilford-hp5-plus-minus-1.cube.gz",
   "grain": {
     "amount": 0.219,
     "size": "small"

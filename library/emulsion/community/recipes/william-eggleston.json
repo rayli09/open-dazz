@@ -1,6 +1,6 @@
 {
   "name": "William Eggleston",
-  "baseLut": "../luts/william-eggleston.cube",
+  "baseLut": "../luts/william-eggleston.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kyoto Temple",
-  "baseLut": "../luts/kyoto-temple.cube",
+  "baseLut": "../luts/kyoto-temple.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

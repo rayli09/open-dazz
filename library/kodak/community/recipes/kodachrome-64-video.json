@@ -1,6 +1,6 @@
 {
   "name": "Kodachrome 64 Video",
-  "baseLut": "../luts/kodachrome-64-video.cube",
+  "baseLut": "../luts/kodachrome-64-video.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

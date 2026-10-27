@@ -1,7 +1,7 @@
 {
   "name": "Leica M10 Monochrome",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/mono-g.cube",
+  "baseLut": "../hald-bases/luts/mono-g.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

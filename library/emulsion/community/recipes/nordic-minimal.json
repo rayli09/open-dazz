@@ -1,6 +1,6 @@
 {
   "name": "Nordic Minimal",
-  "baseLut": "../luts/nordic-minimal.cube",
+  "baseLut": "../luts/nordic-minimal.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

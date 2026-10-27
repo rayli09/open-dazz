@@ -1,6 +1,6 @@
 {
   "name": "AgfaChrome RS 100",
-  "baseLut": "../luts/agfachrome-rs-100.cube",
+  "baseLut": "../luts/agfachrome-rs-100.cube.gz",
   "grain": {
     "amount": 0.072,
     "size": "small"

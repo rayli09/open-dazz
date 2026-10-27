@@ -1,6 +1,6 @@
 {
   "name": "Fuji Provia 400F",
-  "baseLut": "../luts/fuji-provia-400f.cube",
+  "baseLut": "../luts/fuji-provia-400f.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

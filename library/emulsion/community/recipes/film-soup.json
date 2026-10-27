@@ -1,6 +1,6 @@
 {
   "name": "Film Soup",
-  "baseLut": "../luts/film-soup.cube",
+  "baseLut": "../luts/film-soup.cube.gz",
   "grain": {
     "amount": 0.432,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Polaroid 667",
-  "baseLut": "../luts/rt-polaroid-667.cube",
+  "baseLut": "../luts/rt-polaroid-667.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

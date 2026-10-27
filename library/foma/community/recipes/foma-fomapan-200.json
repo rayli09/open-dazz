@@ -1,6 +1,6 @@
 {
   "name": "Foma Fomapan 200",
-  "baseLut": "../luts/foma-fomapan-200.cube",
+  "baseLut": "../luts/foma-fomapan-200.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

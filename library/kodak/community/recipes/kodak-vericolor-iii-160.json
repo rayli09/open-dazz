@@ -1,6 +1,6 @@
 {
   "name": "Kodak Vericolor III 160",
-  "baseLut": "../luts/kodak-vericolor-iii-160.cube",
+  "baseLut": "../luts/kodak-vericolor-iii-160.cube.gz",
   "grain": {
     "amount": 0.198,
     "size": "small"

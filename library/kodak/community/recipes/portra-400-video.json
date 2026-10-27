@@ -1,6 +1,6 @@
 {
   "name": "Portra 400 Video",
-  "baseLut": "../luts/portra-400-video.cube",
+  "baseLut": "../luts/portra-400-video.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

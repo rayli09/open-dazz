@@ -14,6 +14,7 @@ Names that duplicate an existing look in the same brand are
 skipped and reported. Axis order is verified per file: the pure-red
 node of the table must map to a red-dominant output.
 """
+import gzip
 import json, os, re, sys
 import numpy as np
 from PIL import Image
@@ -59,7 +60,7 @@ def resample(table: np.ndarray, size: int = 33) -> np.ndarray:
 
 def write_cube(path, arr, title):
     size = arr.shape[0]
-    with open(path, "w") as fp:
+    with gzip.open(path, "wt") as fp:
         fp.write(f'TITLE "{title}"\nLUT_3D_SIZE {size}\n')
         for b in range(size):
             for g in range(size):
@@ -144,11 +145,11 @@ def main():
                 slug = "rt-" + slugify(name)
                 # brand prefix inside the filename duplicates the folder
                 # for some stocks ("Kodak Kodachrome 25"); keep as-is.
-                write_cube(f"{out_luts}/{slug}.cube", cube,
+                write_cube(f"{out_luts}/{slug}.cube.gz", cube,
                            f"{name} — RawTherapee Film Simulation Collection")
                 recipe = {
                     "name": name,
-                    "baseLut": f"../luts/{slug}.cube",
+                    "baseLut": f"../luts/{slug}.cube.gz",
                     "grain": {"amount": 0, "size": "small"},
                     "halation": 0,
                     "tone": {"highlight": 0, "shadow": 0, "color": 0},

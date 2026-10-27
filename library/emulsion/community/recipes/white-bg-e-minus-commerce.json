@@ -1,6 +1,6 @@
 {
   "name": "White BG E-Commerce",
-  "baseLut": "../luts/white-bg-e-minus-commerce.cube",
+  "baseLut": "../luts/white-bg-e-minus-commerce.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

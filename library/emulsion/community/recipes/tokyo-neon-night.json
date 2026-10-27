@@ -1,6 +1,6 @@
 {
   "name": "Tokyo Neon Night",
-  "baseLut": "../luts/tokyo-neon-night.cube",
+  "baseLut": "../luts/tokyo-neon-night.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

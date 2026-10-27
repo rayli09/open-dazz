@@ -1,6 +1,6 @@
 {
   "name": "Spanish Costa",
-  "baseLut": "../luts/spanish-costa.cube",
+  "baseLut": "../luts/spanish-costa.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

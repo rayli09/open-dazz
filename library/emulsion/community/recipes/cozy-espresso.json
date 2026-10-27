@@ -1,6 +1,6 @@
 {
   "name": "Cozy Espresso",
-  "baseLut": "../luts/cozy-espresso.cube",
+  "baseLut": "../luts/cozy-espresso.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

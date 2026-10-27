@@ -1,6 +1,6 @@
 {
   "name": "Solarization",
-  "baseLut": "../luts/solarization.cube",
+  "baseLut": "../luts/solarization.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

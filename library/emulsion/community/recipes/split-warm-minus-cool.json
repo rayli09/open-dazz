@@ -1,6 +1,6 @@
 {
   "name": "Split Warm-Cool",
-  "baseLut": "../luts/split-warm-minus-cool.cube",
+  "baseLut": "../luts/split-warm-minus-cool.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

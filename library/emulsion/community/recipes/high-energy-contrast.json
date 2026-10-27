@@ -1,6 +1,6 @@
 {
   "name": "High Energy Contrast",
-  "baseLut": "../luts/high-energy-contrast.cube",
+  "baseLut": "../luts/high-energy-contrast.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

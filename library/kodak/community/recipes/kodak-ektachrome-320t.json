@@ -1,6 +1,6 @@
 {
   "name": "Kodak Ektachrome 320T",
-  "baseLut": "../luts/kodak-ektachrome-320t.cube",
+  "baseLut": "../luts/kodak-ektachrome-320t.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

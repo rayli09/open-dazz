@@ -1,7 +1,7 @@
 {
   "name": "Night",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/acros-ye.cube",
+  "baseLut": "../hald-bases/luts/acros-ye.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

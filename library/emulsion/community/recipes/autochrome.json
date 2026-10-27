@@ -1,6 +1,6 @@
 {
   "name": "Autochrome",
-  "baseLut": "../luts/autochrome.cube",
+  "baseLut": "../luts/autochrome.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

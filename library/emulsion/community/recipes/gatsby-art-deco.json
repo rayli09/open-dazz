@@ -1,6 +1,6 @@
 {
   "name": "Gatsby Art Deco",
-  "baseLut": "../luts/gatsby-art-deco.cube",
+  "baseLut": "../luts/gatsby-art-deco.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "CCCP Nostalgia",
-  "baseLut": "../luts/cccp-nostalgia.cube",
+  "baseLut": "../luts/cccp-nostalgia.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

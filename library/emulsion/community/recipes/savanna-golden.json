@@ -1,6 +1,6 @@
 {
   "name": "Savanna Golden",
-  "baseLut": "../luts/savanna-golden.cube",
+  "baseLut": "../luts/savanna-golden.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

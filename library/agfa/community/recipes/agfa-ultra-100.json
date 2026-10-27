@@ -1,6 +1,6 @@
 {
   "name": "Agfa Ultra 100",
-  "baseLut": "../luts/agfa-ultra-100.cube",
+  "baseLut": "../luts/agfa-ultra-100.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

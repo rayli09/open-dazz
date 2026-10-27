@@ -1,6 +1,6 @@
 {
   "name": "Classic Timeless Wedding",
-  "baseLut": "../luts/classic-timeless-wedding.cube",
+  "baseLut": "../luts/classic-timeless-wedding.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Epic Landscape",
-  "baseLut": "../luts/epic-landscape.cube",
+  "baseLut": "../luts/epic-landscape.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Cindy Sherman",
-  "baseLut": "../luts/cindy-sherman.cube",
+  "baseLut": "../luts/cindy-sherman.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

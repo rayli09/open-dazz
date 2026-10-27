@@ -1,6 +1,6 @@
 {
   "name": "Fuji Superia X-TRA 400",
-  "baseLut": "../luts/fuji-superia-x-minus-tra-400.cube",
+  "baseLut": "../luts/fuji-superia-x-minus-tra-400.cube.gz",
   "grain": {
     "amount": 0.279,
     "size": "small"

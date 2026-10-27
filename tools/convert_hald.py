@@ -9,11 +9,12 @@ identity check would explode instead of landing at quantization level.
 
 Usage: uv run --with numpy --with pillow python tools/convert_hald.py \
     /tmp/hald-dl [--size 32]
-Writes library/fuji/community/hald-bases/luts/*.cube for the 9 B&W bases
+Writes library/fuji/community/hald-bases/luts/*.cube.gz for the 9 B&W bases
 the Fuji community recipes need (Acros family, Monochrome family, Sepia).
 Source: Stuart Sowerby's Fujifilm X-Trans III set via cedeber/hald-clut
 (GPL-3.0 — see the LICENSE/README committed alongside the output).
 """
+import gzip
 import argparse
 from pathlib import Path
 import numpy as np
@@ -66,7 +67,7 @@ def write_cube(path, lut, title):
     flat = lut.transpose(2, 1, 0, 3).reshape(-1, 3)
     for row in flat:
         lines.append(" ".join(f"{v:.4f}".rstrip("0").rstrip(".") or "0" for v in row))
-    path.write_text("\n".join(lines) + "\n")
+    path.write_bytes(gzip.compress(("\n".join(lines) + "\n").encode(), mtime=0))
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("src"); ap.add_argument("--size", type=int, default=32)
@@ -82,9 +83,9 @@ def main():
     outdir.mkdir(parents=True, exist_ok=True)
     for stem, slug in FILES.items():
         lut = trilinear(load_hald(src / f"{stem}.png"), args.size)
-        write_cube(outdir / f"{slug}.cube", lut, f"Fuji XTrans III {stem} (Sowerby Hald, converted)")
+        write_cube(outdir / f"{slug}.cube.gz", lut, f"Fuji XTrans III {stem} (Sowerby Hald, converted)")
         gray_dev = np.abs(lut[..., 0] - lut[..., 1]).max() * 255
-        print(f"  {slug}.cube written (max R-G deviation {gray_dev:.1f}/255)")
+        print(f"  {slug}.cube.gz written (max R-G deviation {gray_dev:.1f}/255)")
 
 if __name__ == "__main__":
     main()

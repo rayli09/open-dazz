@@ -1,6 +1,6 @@
 {
   "name": "Cozy Reading",
-  "baseLut": "../luts/cozy-reading.cube",
+  "baseLut": "../luts/cozy-reading.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

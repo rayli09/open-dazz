@@ -1,6 +1,6 @@
 {
   "name": "Nashville",
-  "baseLut": "../luts/nashville.cube",
+  "baseLut": "../luts/nashville.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

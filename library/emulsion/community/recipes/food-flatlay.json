@@ -1,6 +1,6 @@
 {
   "name": "Food Flatlay",
-  "baseLut": "../luts/food-flatlay.cube",
+  "baseLut": "../luts/food-flatlay.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

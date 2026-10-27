@@ -1,6 +1,6 @@
 {
   "name": "Gregory Crewdson",
-  "baseLut": "../luts/gregory-crewdson.cube",
+  "baseLut": "../luts/gregory-crewdson.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

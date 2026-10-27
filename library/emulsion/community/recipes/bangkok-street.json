@@ -1,6 +1,6 @@
 {
   "name": "Bangkok Street",
-  "baseLut": "../luts/bangkok-street.cube",
+  "baseLut": "../luts/bangkok-street.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

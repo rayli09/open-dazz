@@ -1,6 +1,6 @@
 {
   "name": "Nan Goldin",
-  "baseLut": "../luts/nan-goldin.cube",
+  "baseLut": "../luts/nan-goldin.cube.gz",
   "grain": {
     "amount": 0.252,
     "size": "small"

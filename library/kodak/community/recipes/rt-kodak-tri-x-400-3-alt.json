@@ -1,6 +1,6 @@
 {
   "name": "Kodak TRI-X 400 3 Alt",
-  "baseLut": "../luts/rt-kodak-tri-x-400-3-alt.cube",
+  "baseLut": "../luts/rt-kodak-tri-x-400-3-alt.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

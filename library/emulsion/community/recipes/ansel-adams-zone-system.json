@@ -1,6 +1,6 @@
 {
   "name": "Ansel Adams Zone System",
-  "baseLut": "../luts/ansel-adams-zone-system.cube",
+  "baseLut": "../luts/ansel-adams-zone-system.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Calotype",
-  "baseLut": "../luts/calotype.cube",
+  "baseLut": "../luts/calotype.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

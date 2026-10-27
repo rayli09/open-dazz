@@ -259,8 +259,17 @@ fn load_recipe_and_lut(recipe_path: &Path) -> Result<(opendazz_core::Recipe, Opt
     let lut = match &r.base_lut {
         Some(rel) => {
             let lut_path = recipe_path.parent().unwrap_or(Path::new(".")).join(rel);
-            let text = std::fs::read_to_string(&lut_path)
+            let bytes = std::fs::read(&lut_path)
                 .map_err(|e| format!("cannot read LUT {}: {}", lut_path.display(), e))?;
+            let text = if lut_path.extension().is_some_and(|ext| ext == "gz") {
+                use std::io::Read;
+                let mut text = String::new();
+                flate2::read::GzDecoder::new(&bytes[..]).read_to_string(&mut text)
+                    .map_err(|e| format!("cannot decompress LUT {}: {}", lut_path.display(), e))?;
+                text
+            } else {
+                String::from_utf8(bytes).map_err(|e| format!("invalid LUT {}: {}", lut_path.display(), e))?
+            };
             let lut = opendazz_core::Lut3d::parse_cube(&text)
                 .map_err(|e| format!("cannot parse LUT {}: {}", lut_path.display(), e))?;
             Some(lut)

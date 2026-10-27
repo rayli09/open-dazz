@@ -1,6 +1,6 @@
 {
   "name": "Daguerreotype",
-  "baseLut": "../luts/daguerreotype.cube",
+  "baseLut": "../luts/daguerreotype.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

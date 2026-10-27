@@ -1,6 +1,6 @@
 {
   "name": "Cinematic Dream Look",
-  "baseLut": "../luts/cinematic-dream-look.cube",
+  "baseLut": "../luts/cinematic-dream-look.cube.gz",
   "grain": {
     "amount": 0.198,
     "size": "small"

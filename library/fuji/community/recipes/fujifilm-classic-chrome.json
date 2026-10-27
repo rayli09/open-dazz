@@ -1,6 +1,6 @@
 {
   "name": "Fujifilm Classic Chrome",
-  "baseLut": "../luts/fujifilm-classic-chrome.cube",
+  "baseLut": "../luts/fujifilm-classic-chrome.cube.gz",
   "grain": {
     "amount": 0.203,
     "size": "small"

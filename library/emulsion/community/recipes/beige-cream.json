@@ -1,6 +1,6 @@
 {
   "name": "Beige Cream",
-  "baseLut": "../luts/beige-cream.cube",
+  "baseLut": "../luts/beige-cream.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

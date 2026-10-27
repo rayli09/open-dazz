@@ -1,6 +1,6 @@
 {
   "name": "Punk Rock",
-  "baseLut": "../luts/punk-rock.cube",
+  "baseLut": "../luts/punk-rock.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

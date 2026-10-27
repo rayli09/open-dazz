@@ -1,6 +1,6 @@
 {
   "name": "Marrakech Souk",
-  "baseLut": "../luts/marrakech-souk.cube",
+  "baseLut": "../luts/marrakech-souk.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

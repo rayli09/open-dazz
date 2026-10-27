@@ -1,6 +1,6 @@
 {
   "name": "CineStill 50D",
-  "baseLut": "../luts/cinestill-50d.cube",
+  "baseLut": "../luts/cinestill-50d.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

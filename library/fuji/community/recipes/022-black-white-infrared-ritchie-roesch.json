@@ -1,7 +1,7 @@
 {
   "name": "Black & White Infrared",
   "processing": "fujiPhotoV1",
-  "baseLut": "../hald-bases/luts/acros-r.cube",
+  "baseLut": "../hald-bases/luts/acros-r.cube.gz",
   "grain": {
     "amount": 0.55,
     "size": "large"

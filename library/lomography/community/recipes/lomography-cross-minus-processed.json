@@ -1,6 +1,6 @@
 {
   "name": "Lomography Cross-Processed",
-  "baseLut": "../luts/lomography-cross-minus-processed.cube",
+  "baseLut": "../luts/lomography-cross-minus-processed.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

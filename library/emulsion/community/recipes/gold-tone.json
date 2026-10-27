@@ -1,6 +1,6 @@
 {
   "name": "Gold Tone",
-  "baseLut": "../luts/gold-tone.cube",
+  "baseLut": "../luts/gold-tone.cube.gz",
   "grain": {
     "amount": 0.315,
     "size": "small"

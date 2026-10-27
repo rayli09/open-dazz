@@ -1,6 +1,6 @@
 {
   "name": "Kodak Elite Color 200",
-  "baseLut": "../luts/rt-kodak-elite-color-200.cube",
+  "baseLut": "../luts/rt-kodak-elite-color-200.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

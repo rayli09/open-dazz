@@ -1,6 +1,6 @@
 {
   "name": "Adox Silvermax 21",
-  "baseLut": "../luts/adox-silvermax-21.cube",
+  "baseLut": "../luts/adox-silvermax-21.cube.gz",
   "grain": {
     "amount": 0.072,
     "size": "small"

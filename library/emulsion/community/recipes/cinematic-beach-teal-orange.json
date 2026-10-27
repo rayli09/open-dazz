@@ -1,6 +1,6 @@
 {
   "name": "Cinematic Beach Teal & Orange",
-  "baseLut": "../luts/cinematic-beach-teal-orange.cube",
+  "baseLut": "../luts/cinematic-beach-teal-orange.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "K-Pop Vibrant",
-  "baseLut": "../luts/k-minus-pop-vibrant.cube",
+  "baseLut": "../luts/k-minus-pop-vibrant.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

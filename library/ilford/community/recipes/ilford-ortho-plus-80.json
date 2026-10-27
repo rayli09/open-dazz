@@ -1,6 +1,6 @@
 {
   "name": "Ilford Ortho Plus 80",
-  "baseLut": "../luts/ilford-ortho-plus-80.cube",
+  "baseLut": "../luts/ilford-ortho-plus-80.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

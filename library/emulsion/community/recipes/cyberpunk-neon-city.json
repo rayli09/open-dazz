@@ -1,6 +1,6 @@
 {
   "name": "Cyberpunk Neon City",
-  "baseLut": "../luts/cyberpunk-neon-city.cube",
+  "baseLut": "../luts/cyberpunk-neon-city.cube.gz",
   "grain": {
     "amount": 0.405,
     "size": "small"

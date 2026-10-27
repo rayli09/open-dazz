@@ -1,6 +1,6 @@
 {
   "name": "Beach Bright",
-  "baseLut": "../luts/beach-bright.cube",
+  "baseLut": "../luts/beach-bright.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

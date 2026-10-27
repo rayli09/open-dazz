@@ -1,6 +1,6 @@
 {
   "name": "Tim Walker",
-  "baseLut": "../luts/tim-walker.cube",
+  "baseLut": "../luts/tim-walker.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

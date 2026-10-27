@@ -1,6 +1,6 @@
 {
   "name": "Fuji Astia 100F",
-  "baseLut": "../luts/fuji-astia-100f.cube",
+  "baseLut": "../luts/fuji-astia-100f.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

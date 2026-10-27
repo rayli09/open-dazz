@@ -1,6 +1,6 @@
 {
   "name": "Diwali Festive",
-  "baseLut": "../luts/diwali-festive.cube",
+  "baseLut": "../luts/diwali-festive.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

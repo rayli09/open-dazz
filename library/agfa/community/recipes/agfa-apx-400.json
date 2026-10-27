@@ -1,6 +1,6 @@
 {
   "name": "Agfa APX 400",
-  "baseLut": "../luts/agfa-apx-400.cube",
+  "baseLut": "../luts/agfa-apx-400.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

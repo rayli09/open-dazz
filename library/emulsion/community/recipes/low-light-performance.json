@@ -1,6 +1,6 @@
 {
   "name": "Low Light Performance",
-  "baseLut": "../luts/low-light-performance.cube",
+  "baseLut": "../luts/low-light-performance.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

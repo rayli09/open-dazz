@@ -1,6 +1,6 @@
 {
   "name": "Rollei Ortho 25",
-  "baseLut": "../luts/rt-rollei-ortho-25.cube",
+  "baseLut": "../luts/rt-rollei-ortho-25.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

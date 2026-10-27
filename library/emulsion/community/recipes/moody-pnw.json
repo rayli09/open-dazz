@@ -1,6 +1,6 @@
 {
   "name": "Moody PNW",
-  "baseLut": "../luts/moody-pnw.cube",
+  "baseLut": "../luts/moody-pnw.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

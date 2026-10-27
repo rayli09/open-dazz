@@ -1,6 +1,6 @@
 {
   "name": "Agfa Precisa 100",
-  "baseLut": "../luts/rt-agfa-precisa-100.cube",
+  "baseLut": "../luts/rt-agfa-precisa-100.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

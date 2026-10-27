@@ -1,6 +1,6 @@
 {
   "name": "Fuji Velvia 100",
-  "baseLut": "../luts/fuji-velvia-100.cube",
+  "baseLut": "../luts/fuji-velvia-100.cube.gz",
   "grain": {
     "amount": 0.045,
     "size": "small"

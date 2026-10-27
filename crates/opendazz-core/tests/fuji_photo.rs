@@ -5,14 +5,25 @@ use opendazz_core::recipe::Processing;
 use opendazz_core::{apply_recipe, Lut3d, Recipe};
 use std::path::PathBuf;
 
+fn read_gzip(path: &std::path::Path) -> std::io::Result<String> {
+    use std::io::Read;
+    if path.extension().is_some_and(|ext| ext == "gz") {
+        let mut text = String::new();
+        flate2::read::GzDecoder::new(std::fs::File::open(path)?).read_to_string(&mut text)?;
+        Ok(text)
+    } else {
+        std::fs::read_to_string(path)
+    }
+}
+
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 fn load(path: &str) -> (Recipe, Lut3d) {
     let path = root().join(path);
     let recipe = Recipe::from_json(&std::fs::read_to_string(&path).unwrap()).unwrap();
-    let cube = std::fs::read_to_string(
-        path.parent()
+    let cube = read_gzip(
+        &path.parent()
             .unwrap()
             .join(recipe.base_lut.as_ref().unwrap()),
     )

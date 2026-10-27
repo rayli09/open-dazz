@@ -1,6 +1,6 @@
 {
   "name": "Wes Anderson Pastel Video",
-  "baseLut": "../luts/wes-anderson-pastel-video.cube",
+  "baseLut": "../luts/wes-anderson-pastel-video.cube.gz",
   "grain": {
     "amount": 0.153,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kodak Ektachrome 400X",
-  "baseLut": "../luts/kodak-ektachrome-400x.cube",
+  "baseLut": "../luts/kodak-ektachrome-400x.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

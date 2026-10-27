@@ -1,6 +1,6 @@
 {
   "name": "Spring Garden",
-  "baseLut": "../luts/spring-garden.cube",
+  "baseLut": "../luts/spring-garden.cube.gz",
   "grain": {
     "amount": 0.09,
     "size": "small"

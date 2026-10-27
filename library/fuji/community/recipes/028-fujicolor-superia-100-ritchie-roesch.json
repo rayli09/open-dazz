@@ -1,7 +1,7 @@
 {
   "name": "Fujicolor Superia 100",
   "processing": "fujiPhotoV1",
-  "baseLut": "../../official/luts/classic neg_sRGB.cube",
+  "baseLut": "../../official/luts/classic neg_sRGB.cube.gz",
   "grain": {
     "amount": 0.25,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Ferrania Solaris FG 400",
-  "baseLut": "../luts/ferrania-solaris-fg-400.cube",
+  "baseLut": "../luts/ferrania-solaris-fg-400.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

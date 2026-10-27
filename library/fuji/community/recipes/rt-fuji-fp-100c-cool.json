@@ -1,6 +1,6 @@
 {
   "name": "Fuji FP-100c Cool",
-  "baseLut": "../luts/rt-fuji-fp-100c-cool.cube",
+  "baseLut": "../luts/rt-fuji-fp-100c-cool.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

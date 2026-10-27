@@ -1,6 +1,6 @@
 {
   "name": "Cross-Processed Velvia Video",
-  "baseLut": "../luts/cross-minus-processed-velvia-video.cube",
+  "baseLut": "../luts/cross-minus-processed-velvia-video.cube.gz",
   "grain": {
     "amount": 0.153,
     "size": "small"

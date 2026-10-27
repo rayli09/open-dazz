@@ -1,6 +1,6 @@
 {
   "name": "Miami Vice",
-  "baseLut": "../luts/miami-vice.cube",
+  "baseLut": "../luts/miami-vice.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

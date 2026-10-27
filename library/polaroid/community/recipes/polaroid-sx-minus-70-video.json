@@ -1,6 +1,6 @@
 {
   "name": "Polaroid SX-70 Video",
-  "baseLut": "../luts/polaroid-sx-minus-70-video.cube",
+  "baseLut": "../luts/polaroid-sx-minus-70-video.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

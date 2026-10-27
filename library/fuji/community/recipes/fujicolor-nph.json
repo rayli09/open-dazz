@@ -1,6 +1,6 @@
 {
   "name": "Fujicolor NPH",
-  "baseLut": "../luts/fujicolor-nph.cube",
+  "baseLut": "../luts/fujicolor-nph.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

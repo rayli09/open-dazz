@@ -1,6 +1,6 @@
 {
   "name": "Fujicolor C200",
-  "baseLut": "../luts/fujicolor-c200.cube",
+  "baseLut": "../luts/fujicolor-c200.cube.gz",
   "grain": {
     "amount": 0.27,
     "size": "small"

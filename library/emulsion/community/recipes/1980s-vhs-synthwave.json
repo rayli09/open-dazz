@@ -1,6 +1,6 @@
 {
   "name": "1980s VHS Synthwave",
-  "baseLut": "../luts/1980s-vhs-synthwave.cube",
+  "baseLut": "../luts/1980s-vhs-synthwave.cube.gz",
   "grain": {
     "amount": 0.405,
     "size": "small"

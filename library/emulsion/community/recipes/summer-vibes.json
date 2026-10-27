@@ -1,6 +1,6 @@
 {
   "name": "Summer Vibes",
-  "baseLut": "../luts/summer-vibes.cube",
+  "baseLut": "../luts/summer-vibes.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

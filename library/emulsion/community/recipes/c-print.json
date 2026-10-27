@@ -1,6 +1,6 @@
 {
   "name": "C Print",
-  "baseLut": "../luts/c-print.cube",
+  "baseLut": "../luts/c-print.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

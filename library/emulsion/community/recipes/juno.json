@@ -1,6 +1,6 @@
 {
   "name": "Juno",
-  "baseLut": "../luts/juno.cube",
+  "baseLut": "../luts/juno.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

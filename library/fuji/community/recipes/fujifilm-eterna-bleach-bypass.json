@@ -1,6 +1,6 @@
 {
   "name": "Fujifilm Eterna Bleach Bypass",
-  "baseLut": "../luts/fujifilm-eterna-bleach-bypass.cube",
+  "baseLut": "../luts/fujifilm-eterna-bleach-bypass.cube.gz",
   "grain": {
     "amount": 0.36,
     "size": "small"

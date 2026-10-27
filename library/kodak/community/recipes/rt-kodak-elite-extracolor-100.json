@@ -1,6 +1,6 @@
 {
   "name": "Kodak Elite ExtraColor 100",
-  "baseLut": "../luts/rt-kodak-elite-extracolor-100.cube",
+  "baseLut": "../luts/rt-kodak-elite-extracolor-100.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

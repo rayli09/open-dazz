@@ -1,6 +1,6 @@
 {
   "name": "Italian Riviera",
-  "baseLut": "../luts/italian-riviera.cube",
+  "baseLut": "../luts/italian-riviera.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

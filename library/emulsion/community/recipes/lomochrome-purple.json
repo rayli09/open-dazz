@@ -1,6 +1,6 @@
 {
   "name": "Lomochrome Purple",
-  "baseLut": "../luts/lomochrome-purple.cube",
+  "baseLut": "../luts/lomochrome-purple.cube.gz",
   "grain": {
     "amount": 0.441,
     "size": "small"

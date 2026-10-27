@@ -1,6 +1,6 @@
 {
   "name": "Getting Ready",
-  "baseLut": "../luts/getting-ready.cube",
+  "baseLut": "../luts/getting-ready.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

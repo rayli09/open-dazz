@@ -1,6 +1,6 @@
 {
   "name": "Fuji Pro 800Z",
-  "baseLut": "../luts/rt-fuji-800z.cube",
+  "baseLut": "../luts/rt-fuji-800z.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

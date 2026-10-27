@@ -1,6 +1,6 @@
 {
   "name": "Fujifilm Acros",
-  "baseLut": "../luts/fujifilm-acros.cube",
+  "baseLut": "../luts/fujifilm-acros.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

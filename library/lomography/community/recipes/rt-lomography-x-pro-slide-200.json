@@ -1,6 +1,6 @@
 {
   "name": "Lomography X-Pro Slide 200",
-  "baseLut": "../luts/rt-lomography-x-pro-slide-200.cube",
+  "baseLut": "../luts/rt-lomography-x-pro-slide-200.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

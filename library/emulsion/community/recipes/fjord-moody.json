@@ -1,6 +1,6 @@
 {
   "name": "Fjord Moody",
-  "baseLut": "../luts/fjord-moody.cube",
+  "baseLut": "../luts/fjord-moody.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

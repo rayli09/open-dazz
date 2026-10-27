@@ -1,6 +1,6 @@
 {
   "name": "Kodak Gold 200 Expired 30yr",
-  "baseLut": "../luts/kodak-gold-200-expired-30yr.cube",
+  "baseLut": "../luts/kodak-gold-200-expired-30yr.cube.gz",
   "grain": {
     "amount": 0.612,
     "size": "small"

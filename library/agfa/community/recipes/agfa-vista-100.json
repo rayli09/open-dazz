@@ -1,6 +1,6 @@
 {
   "name": "Agfa Vista 100",
-  "baseLut": "../luts/agfa-vista-100.cube",
+  "baseLut": "../luts/agfa-vista-100.cube.gz",
   "grain": {
     "amount": 0.108,
     "size": "small"

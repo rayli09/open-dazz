@@ -1,6 +1,6 @@
 {
   "name": "Alex Webb",
-  "baseLut": "../luts/alex-webb.cube",
+  "baseLut": "../luts/alex-webb.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

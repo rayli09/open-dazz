@@ -1,6 +1,6 @@
 {
   "name": "Kodak Portra 800 HC",
-  "baseLut": "../luts/rt-kodak-portra-800-hc.cube",
+  "baseLut": "../luts/rt-kodak-portra-800-hc.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

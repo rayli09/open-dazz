@@ -1,6 +1,6 @@
 {
   "name": "Moody PNW Video",
-  "baseLut": "../luts/moody-pnw-video.cube",
+  "baseLut": "../luts/moody-pnw-video.cube.gz",
   "grain": {
     "amount": 0.198,
     "size": "small"

@@ -19,3 +19,4 @@ ntsc-rs = { path = "../ntsc-rs", features = ["rayon"] }
 
 [dev-dependencies]
 palette = "0.7"
+flate2 = "1"

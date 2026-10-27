@@ -1,6 +1,6 @@
 {
   "name": "Fuji NPS 160 Pulled",
-  "baseLut": "../luts/fuji-nps-160-pulled.cube",
+  "baseLut": "../luts/fuji-nps-160-pulled.cube.gz",
   "grain": {
     "amount": 0.162,
     "size": "small"

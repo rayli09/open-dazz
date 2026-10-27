@@ -1,6 +1,6 @@
 {
   "name": "Moody Editorial Wedding",
-  "baseLut": "../luts/moody-editorial-wedding.cube",
+  "baseLut": "../luts/moody-editorial-wedding.cube.gz",
   "grain": {
     "amount": 0.18,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Rollei Retro 80S",
-  "baseLut": "../luts/rollei-retro-80s.cube",
+  "baseLut": "../luts/rollei-retro-80s.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Super 8 Home Movie",
-  "baseLut": "../luts/super-8-home-movie.cube",
+  "baseLut": "../luts/super-8-home-movie.cube.gz",
   "grain": {
     "amount": 0.45,
     "size": "small"

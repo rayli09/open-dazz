@@ -1,6 +1,6 @@
 {
   "name": "Ilford Delta 3200 Microphen",
-  "baseLut": "../luts/ilford-delta-3200-microphen.cube",
+  "baseLut": "../luts/ilford-delta-3200-microphen.cube.gz",
   "grain": {
     "amount": 0.63,
     "size": "large"

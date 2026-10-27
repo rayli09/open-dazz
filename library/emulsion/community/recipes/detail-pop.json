@@ -1,6 +1,6 @@
 {
   "name": "Detail Pop",
-  "baseLut": "../luts/detail-pop.cube",
+  "baseLut": "../luts/detail-pop.cube.gz",
   "grain": {
     "amount": 0.0,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Kodachrome Blue",
-  "baseLut": "../luts/kodachrome-blue.cube",
+  "baseLut": "../luts/kodachrome-blue.cube.gz",
   "grain": {
     "amount": 0.135,
     "size": "small"

@@ -1,6 +1,6 @@
 {
   "name": "Fujicolor Superia Premium 400",
-  "baseLut": "../luts/fujicolor-superia-premium-400.cube",
+  "baseLut": "../luts/fujicolor-superia-premium-400.cube.gz",
   "grain": {
     "amount": 0.225,
     "size": "small"

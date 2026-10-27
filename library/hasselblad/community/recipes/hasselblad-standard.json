@@ -1,6 +1,6 @@
 {
   "name": "Hasselblad Standard (HNCS)",
-  "baseLut": "../luts/hasselblad-standard.cube",
+  "baseLut": "../luts/hasselblad-standard.cube.gz",
   "grain": {
     "amount": 0,
     "size": "small"

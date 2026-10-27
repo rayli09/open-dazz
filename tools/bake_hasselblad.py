@@ -16,6 +16,7 @@ upstream generator does (V-Gamut 0.730/0.280, 0.165/0.840,
 constants as they appear in the upstream generator
 (cut 0.181, b 0.00873, c 0.241514, d 0.598206; linear leg 5.6x+0.125).
 """
+import gzip
 import json, math, os
 import numpy as np
 
@@ -80,7 +81,7 @@ def compose(src_cube, size=33):
 
 def write_cube(path, arr, title):
     size = arr.shape[0]
-    with open(path, "w") as f:
+    with gzip.open(path, "wt") as f:
         f.write(f'TITLE "{title}"\nLUT_3D_SIZE {size}\n')
         for b in range(size):
             for g in range(size):
@@ -109,11 +110,11 @@ def main():
         print(f"{slug}: gray spread {spread:.4f}, monotonic {mono}, "
               f"white -> {ramp[-1].round(3)}")
         assert spread < 0.03 and mono
-        write_cube(f"{OUT_DIR}/luts/{slug}.cube", out,
+        write_cube(f"{OUT_DIR}/luts/{slug}.cube.gz", out,
                    f"{name} — HNCS via V-Log-Alchemy, re-based to sRGB input")
         recipe = {
             "name": name,
-            "baseLut": f"../luts/{slug}.cube",
+            "baseLut": f"../luts/{slug}.cube.gz",
             "grain": {"amount": 0, "size": "small"},
             "halation": 0,
             "tone": {"highlight": 0, "shadow": 0, "color": 0},
