@@ -14,10 +14,20 @@ export default defineConfig(({ mode }) => ({
       const library = join(options.dir, "library");
       const manifest = readFileSync(join(library, "lut-manifest.json"));
       const hash = createHash("sha256").update(manifest).digest("hex");
-      const response = await fetch(`https://dazz-assets.openpromo.app/manifests/${hash}.json`);
-      if (!response.ok || !Buffer.from(await response.arrayBuffer()).equals(manifest)) {
-        throw new Error("LUT assets are not published; run the bucket publisher before building");
+      const url = `https://dazz-assets.openpromo.app/manifests/${hash}.json`;
+      let verified = false, lastStatus = "unavailable";
+      for (let attempt = 0; attempt < 6; attempt++) {
+        try {
+          const response = await fetch(url, { cache: "no-store" });
+          lastStatus = `HTTP ${response.status}`;
+          if (response.ok && Buffer.from(await response.arrayBuffer()).equals(manifest)) {
+            verified = true;
+            break;
+          }
+        } catch (error) { lastStatus = String(error); }
+        if (attempt < 5) await new Promise(resolve => setTimeout(resolve, 2000));
       }
+      if (!verified) throw new Error(`LUT assets are not published (${lastStatus}); run the bucket publisher before building`);
       function removeLuts(dir: string) {
         for (const entry of readdirSync(dir, { withFileTypes: true })) {
           const file = join(dir, entry.name);
