@@ -24,6 +24,8 @@ Caps: width 854, duration **120s**, zero downloads.
 
 ## Compat path — `apps/web/src/video.ts` (ffmpeg.wasm, self-hosted)
 
+The WASM core is stored gzip-compressed and decompressed when the compatibility path starts; it is never loaded for photo-only use.
+
 Everything the fast path can't prove: Firefox + HEVC, Chromium
 builds without H.264, exotic containers. Chunked rawvideo
 round-trips through MEMFS; audio re-encoded to AAC. Duration

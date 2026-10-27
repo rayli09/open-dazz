@@ -53,7 +53,7 @@ for lid in ids:
         continue
     thumb = Image.open(developed).convert("RGB").crop(crop)
     thumb.thumbnail((420, 420))
-    thumb.save(dest, "WEBP", quality=88)
+    thumb.save(dest, "WEBP", quality=75, method=6)
     done += 1
 print(f"thumbs: {done}/{len(ids)}")
 temp.cleanup()

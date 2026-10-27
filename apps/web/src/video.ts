@@ -51,11 +51,22 @@ export async function getFFmpeg(): Promise<FFmpeg> {
         FFmpeg: new () => FFmpeg;
       };
       const inst = new mod.FFmpeg();
-      await (inst.load as (cfg: Record<string, string>) => Promise<boolean>)({
-        coreURL: "/ffmpeg/ffmpeg-core.js",
-        wasmURL: "/ffmpeg/ffmpeg-core.wasm",
-        classWorkerURL: "/ffmpeg/worker.js",
-      });
+      const response = await fetch("/ffmpeg/ffmpeg-core.wasm.gz");
+      if (!response.ok) throw new Error(`Unable to load video engine: HTTP ${response.status}`);
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      const wasm = bytes[0] === 0x1f && bytes[1] === 0x8b
+        ? await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer()
+        : bytes;
+      const wasmURL = URL.createObjectURL(new Blob([wasm], { type: "application/wasm" }));
+      try {
+        await (inst.load as (cfg: Record<string, string>) => Promise<boolean>)({
+          coreURL: "/ffmpeg/ffmpeg-core.js",
+          wasmURL,
+          classWorkerURL: "/ffmpeg/worker.js",
+        });
+      } finally {
+        URL.revokeObjectURL(wasmURL);
+      }
       if (generation !== workerGeneration) { inst.terminate(); throw new Error("cancelled"); }
       ff = inst;
       return inst;

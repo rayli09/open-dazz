@@ -4,8 +4,8 @@
     {
       "name": "fuji-silver",
       "library_file_id": "libfile_965c0d3fb1108191ad9beb1e21df0b7d",
-      "original": "design/camera-assets/originals/fuji-silver.png",
-      "sha256": "1592b3b973b6b192a0b95dbeb4de77a564c09c1439ba50a6d28680e533aa3989",
+      "original": "design/camera-assets/originals/fuji-silver.webp",
+      "sha256": "cd639e915dcd6a2f7e86f855749e0edcdc7500988efe14b9e2c9a4e32fc741a3",
       "dimensions": [
         1536,
         1024
@@ -30,8 +30,8 @@
     {
       "name": "street-compact",
       "library_file_id": "libfile_1796ecd734fc81919a97c2c030eedb8e",
-      "original": "design/camera-assets/originals/street-compact.png",
-      "sha256": "81c0eff7938c069d71653a580d1dd3c9f4b2a33d57b7223988f37341d838fcbd",
+      "original": "design/camera-assets/originals/street-compact.webp",
+      "sha256": "7c421d40511e73c0c0be9516048e09086c57b60a920ebfa4038da7a9e90bc17f",
       "dimensions": [
         1536,
         1024
@@ -56,8 +56,8 @@
     {
       "name": "instant-ivory",
       "library_file_id": "libfile_7861f6fbdb24819198000a0f43c9626f",
-      "original": "design/camera-assets/originals/instant-ivory.png",
-      "sha256": "c26ef85c7132c547f84159b84a90b228edba68e9e099aa053d712c6db10cfcd2",
+      "original": "design/camera-assets/originals/instant-ivory.webp",
+      "sha256": "2f64c471bdca6b612e58804e7a5220b5b3568e623367f031e93869a80da39683",
       "dimensions": [
         1536,
         1024
@@ -82,8 +82,8 @@
     {
       "name": "cx405-camcorder",
       "library_file_id": "libfile_418c0e8d7b648191afcd5a73670da395",
-      "original": "design/camera-assets/originals/cx405-camcorder.png",
-      "sha256": "13a386e6acb7bff25c92c8ff116124194c84ad14ff0d7cd0855f539ae2947432",
+      "original": "design/camera-assets/originals/cx405-camcorder.webp",
+      "sha256": "211ae59fd4598ed37c04733860dd49675f74e070f6b70adabfdb6904f581ed60",
       "dimensions": [
         1536,
         1024
@@ -108,8 +108,8 @@
     {
       "name": "leica-rangefinder",
       "library_file_id": "libfile_26b1ea2d6dac8191a3ec26a720027bae",
-      "original": "design/camera-assets/originals/leica-rangefinder.png",
-      "sha256": "afe17061e93e244e7456e9f07b003bf5a33ceeafc6ceb0da59a7e06b4b5da0cd",
+      "original": "design/camera-assets/originals/leica-rangefinder.webp",
+      "sha256": "37ff6cb3af63e12ab8b8ead8c403b878224a354ba1b19c135ef04b4caef958c7",
       "dimensions": [
         1536,
         1024
@@ -134,8 +134,8 @@
     {
       "name": "hasselblad-medium-format",
       "library_file_id": "libfile_b8a3f835e9c48191b171fd0fd0b29269",
-      "original": "design/camera-assets/originals/hasselblad-medium-format.png",
-      "sha256": "afe9d1196c456f98281c790fa0018421426b78200dd3033dda53c745f830d401",
+      "original": "design/camera-assets/originals/hasselblad-medium-format.webp",
+      "sha256": "cb0c84b599219085dad4464648bdd4247649e02a3caaf702f85d28e188176c3b",
       "dimensions": [
         1536,
         1024
@@ -160,8 +160,8 @@
     {
       "name": "nokia-n95",
       "source": "Original image generation; studio family reference cx405-camcorder. Not a product photograph or calibrated device reference.",
-      "original": "design/camera-assets/originals/nokia-n95.png",
-      "sha256": "55dd64c5d2caa5b7f0d3195320d89d38feaac5fab6a7c94a8f4dc9e86fc916b1",
+      "original": "design/camera-assets/originals/nokia-n95.webp",
+      "sha256": "afd5280ef829d5f772d25083fc1d42e41d7d5003330e87d53d10dc58ddf3355d",
       "dimensions": [
         1536,
         1024
@@ -186,8 +186,8 @@
     {
       "name": "iphone-4s",
       "source": "Original image generation; studio family reference cx405-camcorder. Not a product photograph or calibrated device reference.",
-      "original": "design/camera-assets/originals/iphone-4s.png",
-      "sha256": "93451ae2aafe3c01b5e0fc1052115e4e3426f420fbc3fda3832f5fb1baf8d7a1",
+      "original": "design/camera-assets/originals/iphone-4s.webp",
+      "sha256": "f9f14de0af245b44f63e57e72830c098103c9e150cf5949b087bcba4bb0fe0dc",
       "dimensions": [
         1536,
         1024
