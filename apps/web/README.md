@@ -4,7 +4,7 @@ Live app: **https://opendazz.vercel.app**. Vite, TypeScript and Tailwind serve a
 
 ## Run locally
 
-Use Bun 1.4.3, matching CI. The repository owns the Bun workspace and lockfile; these commands remain supported from `web/`:
+Use Bun 1.4.3, matching CI. The repository owns the Bun workspace and lockfile; these commands remain supported from `apps/web/`:
 
 ```sh
 bun install --frozen-lockfile
@@ -21,7 +21,7 @@ After changing Rust engine code, rebuild the WASM package from the **repository 
 
 ```sh
 wasm-pack build crates/opendazz-wasm --target bundler \
-  --out-dir ../../web/src/pkg
+  --out-dir ../../apps/web/src/pkg
 ```
 
 Both `.d.ts` files in `src/pkg/` come from wasm-bindgen; the client imports their typed JS entry. CI rebuilds bindings with the CLI version matching `Cargo.lock` and rejects declaration drift (`tools/check-wasm-declarations.sh` from the root). `bun run typecheck` checks strict client types and generated-binding contracts.
@@ -33,7 +33,7 @@ Both `.d.ts` files in `src/pkg/` come from wasm-bindgen; the client imports thei
 - **Preview/export:** compare original and processed pixels; Export renders the selected original photo as PNG in a cancellable worker, or the complete filtered clip as MP4 with audio when supported. Both modes preserve photo profiles; video uses the legacy processing override.
 - **Media dock:** import multiple files with the picker or Uppy drag/drop. Each item keeps its own look, sliders, comparison and playback position in a Zustand session store. Arrow keys select, Alt+arrows reorder and Delete removes; touch controls and 30-second removal undo are available.
 - **Player:** Video.js HTML components provide accessible play/pause, seeking, time, mute/volume and filtered fullscreen. The live WASM preview uses up to a 480px long edge at about 12 fps and source audio; original comparison is explicitly labelled. Export remains a separate complete-clip render, including CX405 audio processing.
-- **Assets:** `scripts/sync-library.mjs` copies `../library` before dev/build. Recipes and LUTs are fetched when needed. Original generated camera artwork and responsive derivatives are documented in `../design/camera-assets/manifest.json`.
+- **Assets:** `scripts/sync-library.mjs` copies `../../library` before dev/build. Recipes and LUTs are fetched when needed. Original generated camera artwork and responsive derivatives are documented in `../../design/camera-assets/manifest.json`.
 - **Style:** shared Graphite camera materials in `src/camera-controls.css` and `src/workshop-material.css`; the main editor and isolated `materials.html` study share controls. Pro provides a strength dial, native sliders and direct numeric input.
 
 ## Browser limits
@@ -46,6 +46,6 @@ Video takes the WebCodecs route when supported (up to **120 seconds**) and other
 
 ## Validation and hosting
 
-[Testing](../docs/TESTING.md) covers type/binding checks, original-size downloads, retry/recovery, media/player state and phone simulations. Browser regressions are bounded Chromium checks; real-device Safari/HEIC/HDR and long-video certification remains outstanding.
+[Testing](../../docs/TESTING.md) covers type/binding checks, original-size downloads, retry/recovery, media/player state and phone simulations. Browser regressions are bounded Chromium checks; real-device Safari/HEIC/HDR and long-video certification remains outstanding.
 
-Production frontend root: `web`; build command: `bun run build`. Existing hosting settings and Git integration are managed separately. Documentation changes do not rename hosting projects or modify infrastructure. See the root [license and credits](../README.md#license) before reusing bundled looks.
+Production frontend root: `apps/web`; build command: `bun run build`. Existing hosting settings and Git integration are managed separately. Documentation changes do not rename hosting projects or modify infrastructure. See the root [license and credits](../../README.md#license) before reusing bundled looks.

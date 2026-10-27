@@ -12,7 +12,7 @@ rustup target add aarch64-apple-darwin
 bun run desktop:build -- --bundles app
 ```
 
-`apps/desktop/src-tauri/` shares the root Cargo workspace and lockfile with `apps/cli/` and `crates/`. Portable default members keep normal CLI/engine checks free of GUI toolchain requirements; desktop has dedicated macOS checks. Its Bun package owns the Tauri CLI and invokes the shared frontend in `web/`, producing `web/dist-desktop/`. The desktop build keeps thin LTO scoped to its Cargo invocation; the core/WASM release profile stays unchanged.
+`apps/desktop/src-tauri/` shares the root Cargo workspace and lockfile with `apps/cli/` and `crates/`. Portable default members keep normal CLI/engine checks free of GUI toolchain requirements; desktop has dedicated macOS checks. Its Bun package owns the Tauri CLI and invokes the shared frontend in `apps/web/`, producing `apps/web/dist-desktop/`. The desktop build keeps thin LTO scoped to its Cargo invocation; the core/WASM release profile stays unchanged.
 
 Desktop builds remove external font links and bundle the LUTs, thumbnails, samples, FFmpeg runtime and WASM locally. The app uses system font fallbacks offline. Bundled LUT packs retain individual licenses, including non-commercial/share-alike terms; see [library licensing](../library/README.md). Code/vendor notices are bundled under `Contents/Resources/licenses/`.
 

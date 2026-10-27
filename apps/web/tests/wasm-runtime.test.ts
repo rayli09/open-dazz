@@ -1,10 +1,10 @@
 import { test } from "bun:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { loadWasm } from "../../tools/load-wasm.mjs";
+import { loadWasm } from "../../../tools/load-wasm.mjs";
 import { RecipeSchema } from "../src/schemas.ts";
 import { recipeForMedia } from "../src/recipe-for-media.ts";
-const root = new URL("../../", import.meta.url);
+const root = new URL("../../../", import.meta.url);
 const engine = await loadWasm(new URL("../src/pkg/", import.meta.url).pathname);
 
 test("Bun executes the committed browser WASM and preserves display-sRGB LUT input", () => {

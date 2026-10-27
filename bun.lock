@@ -12,7 +12,7 @@
         "@tauri-apps/cli": "2",
       },
     },
-    "web": {
+    "apps/web": {
       "name": "opendazz-web",
       "version": "0.0.0",
       "dependencies": {
@@ -274,7 +274,7 @@
 
     "opendazz-desktop": ["opendazz-desktop@workspace:apps/desktop"],
 
-    "opendazz-web": ["opendazz-web@workspace:web"],
+    "opendazz-web": ["opendazz-web@workspace:apps/web"],
 
     "p-queue": ["p-queue@9.3.5", "", { "dependencies": { "eventemitter3": "^5.0.4", "p-timeout": "^7.0.0" } }, "sha512-Lki/zhXFVmDhesBUn/yHRLW9Bte7mE7xoFHzTR8sIomV7a2z+LxYAPkGvdfidNiu4fKSfjtawixxSHcZci5QcQ=="],
 

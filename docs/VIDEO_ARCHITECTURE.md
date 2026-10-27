@@ -12,7 +12,7 @@ encoded audio packets passed through untouched, and the only
 FFmpeg code in it a minimal libavcodec Wasm used solely as an
 AAC *encoder*.
 
-## Fast path — `web/src/video-webcodecs.ts` (Mediabunny)
+## Fast path — `apps/web/src/video-webcodecs.ts` (Mediabunny)
 
 Taken when a probe proves all of: the file is readable, the
 video track's decoder config is supported, and an H.264 encoder
@@ -22,7 +22,7 @@ samples → canvas (rotation/flip/PAR/scale applied by the sample)
 window. AAC audio is copied packet-for-packet (bit-identical).
 Caps: width 854, duration **120s**, zero downloads.
 
-## Compat path — `web/src/video.ts` (ffmpeg.wasm, self-hosted)
+## Compat path — `apps/web/src/video.ts` (ffmpeg.wasm, self-hosted)
 
 Everything the fast path can't prove: Firefox + HEVC, Chromium
 builds without H.264, exotic containers. Chunked rawvideo

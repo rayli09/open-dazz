@@ -151,7 +151,7 @@ fn nonzero_wb_retains_highlight_gradation_through_real_fuji_luts() {
 
 #[test]
 fn bright_skin_recipe_has_less_channel_clipping_on_actual_public_portrait() {
-    let input = image::open(root().join("web/public/samples/sample-1.jpg"))
+    let input = image::open(root().join("apps/web/public/samples/sample-1.jpg"))
         .unwrap()
         .to_rgb8();
     // Fixed face/forehead crop of the repository's licensed portrait.

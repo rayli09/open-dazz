@@ -16,9 +16,9 @@ bun run build
 bun run preview
 ```
 
-The root Cargo workspace includes the native apps and shared crates; default members cover the portable CLI/engine/WASM checks. Desktop Rust/packaging/runtime gates run separately on Apple Silicon macOS, without requiring Linux GTK/WebKit for these checks. Cargo and Bun use their root lockfiles; the existing `web/` install/build entry remains supported.
+The root Cargo workspace includes the native apps and shared crates; default members cover the portable CLI/engine/WASM checks. Desktop Rust/packaging/runtime gates run separately on Apple Silicon macOS, without requiring Linux GTK/WebKit for these checks. Cargo and Bun use their root lockfiles; the frontend install/build entry is `apps/web/`.
 
-The bindgen CLI must match the dependency in `Cargo.lock`. The declaration check rebuilds Rust bindings and compares both committed `.d.ts` files; the web build checks strict app types and generated-ABI contracts. After engine changes, regenerate the complete JS/WASM/declaration package as described in [web development](../web/README.md). Keep `web/src/pkg/` committed so frontend builds do not require Rust.
+The bindgen CLI must match the dependency in `Cargo.lock`. The declaration check rebuilds Rust bindings and compares both committed `.d.ts` files; the web build checks strict app types and generated-ABI contracts. After engine changes, regenerate the complete JS/WASM/declaration package as described in [web development](../apps/web/README.md). Keep `apps/web/src/pkg/` committed so frontend builds do not require Rust.
 
 Native tests include [LUT/color guardrails](COLOR_TEST_CASES.md), ΔE/golden conformance, Fuji photo behavior, frozen legacy video bytes, phone frame determinism and CX405 reference pixels. Keep `crates/opendazz-core/tests/fixtures/`: RGB frames and CSVs are required test inputs, not generated delivery evidence. Do not weaken thresholds or refresh goldens merely to make a test pass.
 
@@ -55,7 +55,7 @@ Harnesses generate their own fixtures and write captures/downloads/JSON under `/
 - `tools/fetch_test_images.sh` and `tools/render_test_images.py` prepare the optional CC0 RAW corpus described in [tests/images](../tests/images/README.md). RAW/render directories are ignored. Rendering needs rawpy, NumPy and Pillow.
 - With that corpus and `cargo build --release -p opendazz-cli`, run `tools/verify_filters.py`, `tools/verify_emulsion.py` or `tools/verify_fuji_bw.py` using NumPy/Pillow. They retain the numeric assertions and write only to ignored `tools/verify-out/` subdirectories. No old metrics cache is required.
 - `tools/verify_fuji_photo.py --help` describes paired native comparisons against an explicit baseline ref/binary. `--check-wasm` also checks native/WASM pixels and alpha using `check_wasm_photo.mjs`. Output defaults to ignored `tools/verify-out/fuji-photo-v1/`.
-- `bun tools/check_ci_wasm_video.mjs web/src/pkg tools/verify-out/wasm-video` probes odd/even frame sizes and alpha through the actual binding. Outputs are scratch RGBA files for comparison.
+- `bun tools/check_ci_wasm_video.mjs apps/web/src/pkg tools/verify-out/wasm-video` probes odd/even frame sizes and alpha through the actual binding. Outputs are scratch RGBA files for comparison.
 - `tools/gen_cx_ref.py` records the CX405 golden-generation procedure against the separate `camcorder-pipeline` v1.2 reference checkout; its external local paths must be configured before deliberately regenerating fixtures. Normal tests consume committed goldens and do not run this generator.
 
 Library import/bake/catalog/thumbnail tools intentionally modify production packs or derived assets; they are maintainer operations, not routine test setup. Preserve per-pack licenses/provenance, camera originals and their [source manifest](../design/camera-assets/manifest.json). Current recipes expect display-sRGB LUT ingress; recipe photo profiles must not change legacy video rendering. [Architecture](CORE_ARCHITECTURE.md) and [video routes](VIDEO_ARCHITECTURE.md) describe the boundaries.

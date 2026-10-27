@@ -2,7 +2,7 @@ import { test } from "bun:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { CatalogSchema, RecipeSchema, fetchJson } from "../src/schemas";
-const root = new URL("../../", import.meta.url);
+const root = new URL("../../../", import.meta.url);
 
 test("the full shipped catalog and every referenced recipe satisfy ingress schemas", () => {
   const catalog = CatalogSchema.parse(

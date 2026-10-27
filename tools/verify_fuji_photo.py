@@ -60,7 +60,7 @@ def main():
         "comparisons": [],
     }
     for sample in (1, 2):
-        src = ROOT / f"web/public/samples/sample-{sample}.jpg"
+        src = ROOT / f"apps/web/public/samples/sample-{sample}.jpg"
         tiles = []
         for i, (name, rel) in enumerate(LOOKS.items()):
             rp = ROOT / rel
@@ -94,7 +94,7 @@ def main():
             draw.text((x + 5, y + 6), f"{list(LOOKS)[i]} / {version}", fill="black")
         sheet.save(out / f"sample-{sample}-comparison.jpg", quality=94)
     # Separate grain-free measurement isolates the tone/WB acceptance gate.
-    face = Image.open(ROOT / "web/public/samples/sample-1.jpg").crop((420, 370, 820, 790))
+    face = Image.open(ROOT / "apps/web/public/samples/sample-1.jpg").crop((420, 370, 820, 790))
     face.save(out / "face-input.png")
     manifest["grain_free_face"] = []
     wasm_cases = []
@@ -126,7 +126,7 @@ def main():
         cases_path.write_text(json.dumps(wasm_cases))
         result = subprocess.check_output(["bun",str(ROOT/"tools/check_wasm_photo.mjs"),str(cases_path)],cwd=ROOT)
         manifest["wasm_native_parity"] = json.loads(result)
-        manifest["browser_wasm_sha256"] = digest((ROOT/"web/src/pkg/opendazz_wasm_bg.wasm").read_bytes())
+        manifest["browser_wasm_sha256"] = digest((ROOT/"apps/web/src/pkg/opendazz_wasm_bg.wasm").read_bytes())
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     print(json.dumps(manifest["grain_free_face"], indent=2))
     print(f"Fresh comparisons and hashed manifest: {out}")

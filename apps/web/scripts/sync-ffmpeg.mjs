@@ -1,4 +1,4 @@
-// Copy the ffmpeg.wasm runtime into web/public/ffmpeg so the web
+// Copy the ffmpeg.wasm runtime into apps/web/public/ffmpeg so the web
 // app can load it from its own origin. Why not import it through
 // the bundle: @ffmpeg/ffmpeg's worker.js imports its sibling ESM
 // files by relative path, which breaks once Vite flattens them

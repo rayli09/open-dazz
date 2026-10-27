@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { loadWasm } from "./load-wasm.mjs";
-const { apply } = await loadWasm(new URL("../web/src/pkg/", import.meta.url).pathname);
+const { apply } = await loadWasm(new URL("../apps/web/src/pkg/", import.meta.url).pathname);
 
 const cases = JSON.parse(readFileSync(process.argv[2], "utf8"));
 const results = [];

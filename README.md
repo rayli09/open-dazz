@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="web/public/logo.svg" width="72" height="72" alt="OpenDazz aperture logo" />
+  <img src="apps/web/public/logo.svg" width="72" height="72" alt="OpenDazz aperture logo" />
 </p>
 <h1 align="center">OpenDazz</h1>
 <p align="center">A local-first film simulation workshop for photos and video.</p>
@@ -25,11 +25,11 @@ bun run preview
 Open the URL printed by Vite. CLI help (stable Rust, from the repo root):
 `cargo run --release -p opendazz-cli -- --help`.
 
-Workspaces: [web frontend](web/), [Apple Silicon desktop](apps/desktop/), [CLI](apps/cli/) and [shared Rust crates](crates/). Cargo and Bun each use one root lockfile; the desktop bundles the same web/WASM engine.
+Workspaces: [web frontend](apps/web/), [Apple Silicon desktop](apps/desktop/), [CLI](apps/cli/) and [shared Rust crates](crates/). Cargo and Bun each use one root lockfile; the desktop bundles the same web/WASM engine.
 
 ## Docs
 
-[Development & limits](web/README.md) · [CLI & looks](library/README.md) · [Recipes](recipes/README.md) · [Testing](docs/TESTING.md) · [macOS desktop & installer](docs/DESKTOP.md)
+[Development & limits](apps/web/README.md) · [CLI & looks](library/README.md) · [Recipes](recipes/README.md) · [Testing](docs/TESTING.md) · [macOS desktop & installer](docs/DESKTOP.md)
 
 ## License
 

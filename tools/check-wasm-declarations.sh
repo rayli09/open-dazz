@@ -13,6 +13,6 @@ trap 'rm -rf "$output"' EXIT
 wasm-bindgen target/wasm32-unknown-unknown/release/opendazz_wasm.wasm \
   --target bundler --typescript --out-dir "$output" --out-name opendazz_wasm
 for declaration in opendazz_wasm.d.ts opendazz_wasm_bg.wasm.d.ts; do
-  diff -u "web/src/pkg/$declaration" "$output/$declaration"
+  diff -u "apps/web/src/pkg/$declaration" "$output/$declaration"
 done
 echo "Committed public and raw WASM declarations match Rust-generated bindings ($version)."

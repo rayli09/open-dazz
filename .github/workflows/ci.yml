@@ -9,13 +9,13 @@ jobs:
         with:
           bun-version: 1.4.3
       - run: bun install --frozen-lockfile
-      - name: Existing web install entry uses the root lockfile
+      - name: Frontend install entry uses the root lockfile
         run: bun install --frozen-lockfile
-        working-directory: web
+        working-directory: apps/web
       - run: bun test
-        working-directory: web
+        working-directory: apps/web
       - run: bun run build
-        working-directory: web
+        working-directory: apps/web
   rust:
     runs-on: ubuntu-latest
     steps:

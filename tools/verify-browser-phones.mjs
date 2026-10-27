@@ -16,8 +16,8 @@ ff("-f", "lavfi", "-i", "testsrc2=size=240x320:rate=12", "-t", "1.5", "-c:v", "l
 ff("-i", `${out}/wide.mp4`, "-c:v", "copy", "-c:a", "libopus", `${out}/opus.mkv`);
 // Explicitly tagged fixtures avoid FFmpeg's BT.601 vs browser BT.709 fallback
 // disagreement on untagged source YUV. References must use the same color matrix.
-ff("-loop", "1", "-i", `${root}/web/public/samples/sample-1.jpg`, "-vf", "scale=384:576,crop=360:480:x=12:y=48+20*sin(t)", "-r", "12", "-t", "2", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", `${out}/scene.mp4`);
-const engine = await loadWasm(`${root}/web/src/pkg`);
+ff("-loop", "1", "-i", `${root}/apps/web/public/samples/sample-1.jpg`, "-vf", "scale=384:576,crop=360:480:x=12:y=48+20*sin(t)", "-r", "12", "-t", "2", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", `${out}/scene.mp4`);
+const engine = await loadWasm(`${root}/apps/web/src/pkg`);
 const hash = a => createHash("sha256").update(a).digest("hex");
 const browser = await chromium.launch({ executablePath: process.env.BROWSER_BIN || "/usr/bin/chromium", headless: true, args: ["--no-sandbox"] });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, acceptDownloads: true });
@@ -130,7 +130,7 @@ try {
     await save('scene-4s.mp4');
     await capture('natural-scene-4s');
     checks.push('both phone looks render a moving natural portrait fixture, not only test bars');
-    await page.locator('#file').setInputFiles(`${root}/web/public/samples/sample-1.jpg`);
+    await page.locator('#file').setInputFiles(`${root}/apps/web/public/samples/sample-1.jpg`);
     await ready();
     await page.locator('[data-simple-media="photo"]').click();
     await ready();

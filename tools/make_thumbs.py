@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Pre-render a preview thumbnail for every catalog look (Sample I scene).
 
-626 CLI invocations take ~35 s. Output: web/public/thumbs/<id with / -> __>.webp
+626 CLI invocations take ~35 s. Output: apps/web/public/thumbs/<id with / -> __>.webp
 Re-run after importing new looks; existing thumbs are skipped unless --force.
 For photo-v1: python3 tools/make_thumbs.py --processing fujiPhotoV1 --force
 """
@@ -22,10 +22,10 @@ args = ap.parse_args()
 cat = json.loads((root / "library/catalog.json").read_text())
 # Thumbs preview each look on the default sample (Sample I portrait),
 # using a 3:2 face-focused crop so the cards stay comparable.
-p = Image.open(root / "web/public/samples/sample-1.jpg")
+p = Image.open(root / "apps/web/public/samples/sample-1.jpg")
 w, h = p.size
 crop = (int(w * 0.08), int(h * 0.02), int(w * 0.98), int(h * 0.02 + (w * 0.90) * 2 / 3))
-out = root / "web/public/thumbs"
+out = root / "apps/web/public/thumbs"
 out.mkdir(parents=True, exist_ok=True)
 binp = root / "target/release/opendazz"
 looks = [l for d in cat["brands"].values() for tier in d["tiers"].values() for l in tier]
@@ -46,7 +46,7 @@ for lid in ids:
         continue
     # Develop at the same resolution as the sample preview, then shrink.
     # Developing a 420px crop first made grain disproportionately heavy.
-    r = subprocess.run([str(binp), "apply", str(root / "web/public/samples/sample-1.jpg"), str(developed), "--look", lid],
+    r = subprocess.run([str(binp), "apply", str(root / "apps/web/public/samples/sample-1.jpg"), str(developed), "--look", lid],
                        capture_output=True, text=True, cwd=root)
     if r.returncode != 0:
         print("FAIL", lid, r.stderr.strip()[:120])

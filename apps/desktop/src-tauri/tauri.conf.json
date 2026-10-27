@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "identifier": "com.rayli09.opendazz",
   "build": {
-    "beforeBuildCommand": "bun run --cwd ../../web build:desktop",
-    "beforeDevCommand": "bun run --cwd ../../web build:desktop && bun run --cwd ../../web preview --host 127.0.0.1 --port 4173 --strictPort",
+    "beforeBuildCommand": "bun run --cwd ../web build:desktop",
+    "beforeDevCommand": "bun run --cwd ../web build:desktop && bun run --cwd ../web preview --host 127.0.0.1 --port 4173 --strictPort",
     "devUrl": "http://127.0.0.1:4173",
-    "frontendDist": "../../../web/dist-desktop"
+    "frontendDist": "../../web/dist-desktop"
   },
   "app": {
     "windows": [],

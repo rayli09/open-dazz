@@ -9,7 +9,7 @@ target/
 tests/images/src/
 tests/images/rendered/
 tools/verify-out/
-web/public/ffmpeg/
+apps/web/public/ffmpeg/
 
 # One-off verification reports/captures belong in tools/verify-out/ or /tmp.
 /docs/verification/
@@ -17,6 +17,6 @@ web/public/ffmpeg/
 /QA-verification.md
 /QA-verificaiton.md
 
-web/dist-desktop/
+apps/web/dist-desktop/
 apps/desktop/src-tauri/gen/
-web/public/samples/desktop-smoke.mp4
+apps/web/public/samples/desktop-smoke.mp4

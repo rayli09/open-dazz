@@ -16,12 +16,12 @@
       ],
       "derivatives": [
         {
-          "path": "web/public/cameras/fuji-silver-384.webp",
+          "path": "apps/web/public/cameras/fuji-silver-384.webp",
           "bytes": 26866,
           "sha256": "758f32519bca41a5ed5b7241317eee780b4d8ba2db85f6e69bb24069a64343f9"
         },
         {
-          "path": "web/public/cameras/fuji-silver-768.webp",
+          "path": "apps/web/public/cameras/fuji-silver-768.webp",
           "bytes": 87934,
           "sha256": "73f121bf8f0150a6d12e04bc5524be07d6b7b1fd0a99d09c16368ec8e855b0cb"
         }
@@ -42,12 +42,12 @@
       ],
       "derivatives": [
         {
-          "path": "web/public/cameras/street-compact-384.webp",
+          "path": "apps/web/public/cameras/street-compact-384.webp",
           "bytes": 21474,
           "sha256": "b0d064eb283d9a4c5cd29f0fa1d7fc140f8f6d400f6a8e3a8569ab28c92b98a3"
         },
         {
-          "path": "web/public/cameras/street-compact-768.webp",
+          "path": "apps/web/public/cameras/street-compact-768.webp",
           "bytes": 74664,
           "sha256": "03619ddaab9bc39d5851ed92f10629e3b411606662f49384d05866ab416a0efd"
         }
@@ -68,12 +68,12 @@
       ],
       "derivatives": [
         {
-          "path": "web/public/cameras/instant-ivory-384.webp",
+          "path": "apps/web/public/cameras/instant-ivory-384.webp",
           "bytes": 17408,
           "sha256": "7bb32e1940e3d5fe4d6bf9f7a2a4d4fba13fec16c7ab322fda764ebc7f1b034b"
         },
         {
-          "path": "web/public/cameras/instant-ivory-768.webp",
+          "path": "apps/web/public/cameras/instant-ivory-768.webp",
           "bytes": 46012,
           "sha256": "9b81a188a2459da242e0891b25ac63d5d5c622c2debc072bcac90fcdc8b84c9b"
         }
@@ -94,12 +94,12 @@
       ],
       "derivatives": [
         {
-          "path": "web/public/cameras/cx405-camcorder-384.webp",
+          "path": "apps/web/public/cameras/cx405-camcorder-384.webp",
           "bytes": 13466,
           "sha256": "b13fb8a3ef49de3f8dedc9bd3739ea48eb90b5269d077337c3fc2172821f50ba"
         },
         {
-          "path": "web/public/cameras/cx405-camcorder-768.webp",
+          "path": "apps/web/public/cameras/cx405-camcorder-768.webp",
           "bytes": 35242,
           "sha256": "1e6f24a20e112a8b251ea2fe300dfe5ca6fb8e96f9e048039ab9b784c8bb26a4"
         }
@@ -120,12 +120,12 @@
       ],
       "derivatives": [
         {
-          "path": "web/public/cameras/leica-rangefinder-384.webp",
+          "path": "apps/web/public/cameras/leica-rangefinder-384.webp",
           "bytes": 19534,
           "sha256": "b72d7c73a623f7be1c92f230cbf4fa045d2e2a263807828220752b39a800bd49"
         },
         {
-          "path": "web/public/cameras/leica-rangefinder-768.webp",
+          "path": "apps/web/public/cameras/leica-rangefinder-768.webp",
           "bytes": 60768,
           "sha256": "294aee0f543c7fd23fdf170a3707f5d664e1909d15b5b4009cbd81ad5edc3d37"
         }
@@ -146,12 +146,12 @@
       ],
       "derivatives": [
         {
-          "path": "web/public/cameras/hasselblad-medium-format-384.webp",
+          "path": "apps/web/public/cameras/hasselblad-medium-format-384.webp",
           "bytes": 19438,
           "sha256": "3233ea598e043133ac57d698ea4d38d85204bf7982787882215a861bfa1c684a"
         },
         {
-          "path": "web/public/cameras/hasselblad-medium-format-768.webp",
+          "path": "apps/web/public/cameras/hasselblad-medium-format-768.webp",
           "bytes": 64262,
           "sha256": "004b61a762c96e6095a4ac34a3fa7155e8e7978f437cf53a5b63671fcb2a3d9c"
         }
@@ -172,12 +172,12 @@
       ],
       "derivatives": [
         {
-          "path": "web/public/cameras/nokia-n95-384.webp",
+          "path": "apps/web/public/cameras/nokia-n95-384.webp",
           "bytes": 13702,
           "sha256": "554496fe44a077d22ac4c879be3439ac3dbdffa456f7d92908c9d23d4a4f65a1"
         },
         {
-          "path": "web/public/cameras/nokia-n95-768.webp",
+          "path": "apps/web/public/cameras/nokia-n95-768.webp",
           "bytes": 34682,
           "sha256": "11bb8d81f81bde37556f902a045e6bfd6e40bc42a93b35f667461d6d3d6f13d2"
         }
@@ -198,12 +198,12 @@
       ],
       "derivatives": [
         {
-          "path": "web/public/cameras/iphone-4s-384.webp",
+          "path": "apps/web/public/cameras/iphone-4s-384.webp",
           "bytes": 12308,
           "sha256": "5430d165b8faf9317370e1a2b09847504456aebc7407a05c015e89f5150c1b2b"
         },
         {
-          "path": "web/public/cameras/iphone-4s-768.webp",
+          "path": "apps/web/public/cameras/iphone-4s-768.webp",
           "bytes": 30238,
           "sha256": "2b3372873a8e8f9e258716bb89e9172e39f1304af67bee8ce0d8ffd0720c13da"
         }

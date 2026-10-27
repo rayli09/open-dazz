@@ -5,7 +5,7 @@ Fails loudly (exit 1) on any problem. Checks:
   1. catalog.json parses; ids are unique; every entry's recipe exists.
   2. Every recipe JSON parses; every referenced .cube exists, parses,
      and its data count matches LUT_3D_SIZE^3 * 3.
-  3. Every catalog id has a thumbnail under web/public/thumbs/.
+  3. Every catalog id has a thumbnail under apps/web/public/thumbs/.
   4. (with --render) every look applies cleanly via the CLI to a
      small test image and produces a changed, non-degenerate output.
 """
@@ -23,7 +23,7 @@ def main() -> int:
     ids = [l["id"] for l in looks]
     if len(ids) != len(set(ids)):
         problems.append("duplicate ids in catalog")
-    thumbs = set(os.listdir(os.path.join(ROOT, "web", "public", "thumbs")))
+    thumbs = set(os.listdir(os.path.join(ROOT, "apps", "web", "public", "thumbs")))
     n_cube = 0
     for l in looks:
         rp = os.path.join(ROOT, l["recipe"])

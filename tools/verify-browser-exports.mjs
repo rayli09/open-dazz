@@ -73,7 +73,7 @@ async function ready() {
   });
 }
 async function photo() {
-  await page.locator("#file").setInputFiles(`${root}/web/public/samples/sample-1.jpg`);
+  await page.locator("#file").setInputFiles(`${root}/apps/web/public/samples/sample-1.jpg`);
   await ready();
 }
 async function look(id) {
@@ -156,7 +156,7 @@ try {
   assert.equal(downloads, beforeCancel);
   console.log("cancel", await state());
   await page.locator("#btn-export-simple").click();
-  await page.locator("#file").setInputFiles(`${root}/web/public/samples/sample-2.jpg`);
+  await page.locator("#file").setInputFiles(`${root}/apps/web/public/samples/sample-2.jpg`);
   await ready();
   await page.waitForTimeout(600);
   assert.equal(downloads, beforeCancel);
@@ -227,7 +227,7 @@ try {
   const beforePhotoSwitch = downloads;
   await page.locator("#btn-export-simple").click();
   await page.evaluate(() => document.querySelector("#btn-export-simple").click());
-  await page.locator("#file").setInputFiles(`${root}/web/public/samples/sample-2.jpg`);
+  await page.locator("#file").setInputFiles(`${root}/apps/web/public/samples/sample-2.jpg`);
   await ready();
   await page.waitForTimeout(500);
   assert.equal(downloads, beforePhotoSwitch, "stale PNG downloaded");

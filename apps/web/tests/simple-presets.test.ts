@@ -6,7 +6,7 @@ import { artKeyForRecipe, cameraAsset, useArtworkFallback } from "../src/camera-
 import { CatalogSchema, RecipeSchema } from "../src/schemas.ts";
 import { recipeForMedia } from "../src/recipe-for-media.ts";
 
-const root = new URL("../../", import.meta.url);
+const root = new URL("../../../", import.meta.url);
 const catalog = CatalogSchema.parse(JSON.parse(readFileSync(new URL("library/catalog.json",root),"utf8")));
 const looks = new Map(Object.values(catalog.brands).flatMap(b=>Object.values(b.tiers).flat()).map(l=>[l.id,l]));
 
@@ -62,7 +62,7 @@ test("approved art has optimized alpha WebP candidates; unknown and video art us
     const asset=cameraAsset(key)!;assert.ok(asset);
     assert.ok(asset.srcset.includes("384w") && asset.srcset.includes("768w"));
     for(const width of [384,768]) {
-      const path=new URL(`web/public/cameras/${key}-${width}.webp`,root);assert.ok(existsSync(path));
+      const path=new URL(`apps/web/public/cameras/${key}-${width}.webp`,root);assert.ok(existsSync(path));
       const bytes=readFileSync(path);assert.equal(bytes.toString("ascii",0,4),"RIFF");assert.equal(bytes.toString("ascii",8,12),"WEBP");
       assert.ok(bytes.includes(Buffer.from("ALPH")),`${key} lost alpha`);
     }

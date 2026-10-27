@@ -112,8 +112,8 @@ try {
   await page
     .locator("#file")
     .setInputFiles([
-      `${root}/web/public/samples/sample-1.jpg`,
-      `${root}/web/public/samples/sample-2.jpg`,
+      `${root}/apps/web/public/samples/sample-1.jpg`,
+      `${root}/apps/web/public/samples/sample-2.jpg`,
       `${out}/clip.mp4`,
     ]);
   await page.waitForFunction(() => document.querySelectorAll(".dock-item").length === 4);
@@ -320,7 +320,7 @@ try {
     "touch-sized reorder controls and dock keyboard selection/reorder preserve identities",
   );
   // Real DataTransfer import: one duplicate, one unsupported and two distinct files.
-  const imageBase64 = readFileSync(`${root}/web/public/samples/sample-2.jpg`).toString("base64"),
+  const imageBase64 = readFileSync(`${root}/apps/web/public/samples/sample-2.jpg`).toString("base64"),
     videoBase64 = readFileSync(`${out}/clip.mp4`).toString("base64");
   const transfer = await page.evaluateHandle(
     ({ image, video }) => {
@@ -399,7 +399,7 @@ try {
   await page.locator("#file").setInputFiles({
     name: "delayed.jpg",
     mimeType: "image/jpeg",
-    buffer: readFileSync(`${root}/web/public/samples/sample-1.jpg`),
+    buffer: readFileSync(`${root}/apps/web/public/samples/sample-1.jpg`),
   });
   await page.waitForFunction(() => document.querySelectorAll(".dock-item").length === 7);
   const delayed = await selectedId();
