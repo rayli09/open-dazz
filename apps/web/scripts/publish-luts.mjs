@@ -1,7 +1,7 @@
 // Publish immutable content-addressed LUTs before a Vercel production build.
 import { S3Client } from "bun";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -44,4 +44,7 @@ if (!(await marker.exists())) {
   });
   if (!response.ok) throw new Error(`Failed publishing LUT manifest: HTTP ${response.status}`);
 }
+const publishedManifest = Buffer.from(await marker.arrayBuffer());
+if (!publishedManifest.equals(manifestBytes)) throw new Error("Published LUT manifest does not match build input");
+writeFileSync(join(root, "apps/web/public/library/.lut-published"), manifestHash);
 console.log(`LUT assets: ${entries.length} verified, ${uploaded} uploaded; manifest ${manifestHash}`);

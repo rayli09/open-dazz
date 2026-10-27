@@ -16,7 +16,13 @@ export default defineConfig(({ mode }) => ({
       const hash = createHash("sha256").update(manifest).digest("hex");
       const url = `https://dazz-assets.openpromo.app/manifests/${hash}.json`;
       let verified = false, lastStatus = "unavailable";
-      for (let attempt = 0; attempt < 6; attempt++) {
+      if (process.env.VERCEL_ENV === "production") {
+        // The publisher verified the marker over authenticated R2. Some build
+        // datacenters are challenged by the public Cloudflare hostname.
+        verified = readFileSync(join(library, ".lut-published"), "utf8") === hash;
+        rmSync(join(library, ".lut-published"));
+      }
+      for (let attempt = 0; !verified && process.env.VERCEL_ENV !== "production" && attempt < 6; attempt++) {
         try {
           const response = await fetch(url, { cache: "no-store" });
           lastStatus = `HTTP ${response.status}`;
