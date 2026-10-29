@@ -9,7 +9,7 @@ recipes and notices remain in each deployment. Development and desktop builds
 keep all LUTs local; desktop does not need the public bucket.
 
 Before a Vercel production build, `apps/web/scripts/publish-luts.mjs` checks and
-uploads missing objects and an immutable manifest marker to the `opendazz-luts` R2 bucket. Every web production build verifies that marker before omitting the local LUTs: Vercel uses its authenticated publisher, while other builds check the public endpoint. It uses the production
+uploads missing objects and an immutable manifest marker to the `opendazz-luts` R2 bucket. Every web production build verifies that marker before omitting the local LUTs: Vercel uses its authenticated publisher, while other builds check the public endpoint. CI is the one exception: it sets `OPENDAZZ_SKIP_LUT_VERIFY=1` because GitHub runners are challenged by the public hostname (HTTP 403) even when the manifest is published, and CI artifacts are never deployed — the Vercel gate remains strict. It uses the production
 Vercel environment's bucket-scoped `DAZZ_R2_ACCESS_KEY` and `DAZZ_R2_API_TOKEN`;
 never commit or expose either credential. Missing credentials or upload errors
 fail the build instead of publishing a release with missing LUTs. Content-addressed

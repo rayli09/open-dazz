@@ -22,6 +22,15 @@ export default defineConfig(({ mode }) => ({
         verified = readFileSync(join(library, ".lut-published"), "utf8") === hash;
         rmSync(join(library, ".lut-published"));
       }
+      if (!verified && process.env.OPENDAZZ_SKIP_LUT_VERIFY === "1") {
+        // Explicit opt-out for non-deployment builds (CI): GitHub runners are
+        // challenged by the public Cloudflare hostname (HTTP 403) even when
+        // the manifest is published, so the check can never pass there. The
+        // deployment gate stays strict — Vercel verifies over authenticated
+        // R2 above, and any other production build verifies the endpoint.
+        console.warn("[remote-luts] OPENDAZZ_SKIP_LUT_VERIFY=1: skipping the publication check; LUTs are still stripped from the output");
+        verified = true;
+      }
       for (let attempt = 0; !verified && process.env.VERCEL_ENV !== "production" && attempt < 6; attempt++) {
         try {
           const response = await fetch(url, { cache: "no-store" });

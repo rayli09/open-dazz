@@ -16,6 +16,12 @@ jobs:
         working-directory: apps/web
       - run: bun run build
         working-directory: apps/web
+        env:
+          # GitHub runners get HTTP 403 from the public LUT host's Cloudflare
+          # challenge even when the manifest is published, and CI artifacts
+          # are never deployed. The Vercel production build remains the
+          # strict gate (authenticated R2 verification in vite.config.ts).
+          OPENDAZZ_SKIP_LUT_VERIFY: '1'
   rust:
     runs-on: ubuntu-latest
     steps:
