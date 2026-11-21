@@ -1,0 +1,1167 @@
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+/home/hatch/workspace/open-dazz-exact/exact/target/web-runs/test-NdFDKx/dist/.gen: app.js 6429 B, app.css 4824 B, 0 warnings
+  own plan code by component (shared bodies counted per use): Opendazz: 2068 B (1 instance)
+/home/hatch/workspace/open-dazz-exact/exact/target/web-runs/test-NdFDKx/dist: app-BuCxlzad.js 144184 B, built
+warning: patch `accesskit_windows v0.35.2 (/home/hatch/workspace/exact-study/vendor/accesskit-windows)` was not used in the crate graph
+warning: patch `fontique v0.11.1 (/home/hatch/workspace/exact-study/vendor/fontique)` was not used in the crate graph
+warning: patch `parley v0.11.1 (/home/hatch/workspace/exact-study/vendor/parley)` was not used in the crate graph
+warning: patch `wgpu-hal v30.0.1 (/home/hatch/workspace/exact-study/vendor/wgpu-hal)` was not used in the crate graph
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+web: opendazz served at http://127.0.0.1:33831/ (--port <n> or EXACT_PORT picks the port)
+test "the recipe list loads with nothing selected": ok
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+test "tapping a recipe names it in the preview": ok
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+test "export says it is a placeholder": ok
+3 passed, 0 failed
+target sweep failed (/home/hatch/workspace/open-dazz-exact/exact/target/.exact-sweep.log):
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+72 |   writeFileSync(probe, 'x');
+73 |   resetAccess(probe);
+74 |   readFileSync(probe);
+75 |   const seen = statSync(probe).atimeMs > RESET * 1000;
+76 |   rmSync(probe);
+77 |   if (!seen) throw new Error(`${target}: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use`);
+                            ^
+error: /home/hatch/workspace/open-dazz-exact/exact/target: this filesystem does not record reads (noatime), so the sweep cannot tell which units builds use
+      at assertAccessTimes (/home/hatch/workspace/exact-study/scripts/sweep.mjs:77:24)
+      at sweep (/home/hatch/workspace/exact-study/scripts/sweep.mjs:90:5)
+
+Bun v1.4.4 (Linux x64)
+exact: a feedback note stays in .exact/ and goes to Expo (https://exact-diaries.ccheever-0f6.workers.dev) only as this project's answer allows (bun exact.mjs feedback status says it); EXACT_FEEDBACK=0 or bun exact.mjs feedback never stops it.
+exact: if this was unclear or slow, tell the exact2 team in one line: bun exact.mjs feedback note "<what happened>"

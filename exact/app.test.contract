@@ -1,0 +1,12 @@
+test "the recipe list loads with nothing selected"
+  expect tree has "root"
+  expect tree has "recipe-cinestill/community/cinestill-800t"
+  expect text "preview-text" == "No recipe selected."
+
+test "tapping a recipe names it in the preview"
+  tap "select-cinestill/community/cinestill-800t"
+  expect text "preview-text" == "Preview: Cinestill 800T"
+
+test "export says it is a placeholder"
+  tap "export"
+  expect text "export-note" == "Export is a placeholder: no file is written yet."

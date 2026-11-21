@@ -1,0 +1,97 @@
+generation 1 · epoch 2 · incarnation 1 · clock 0 ms · 96 nodes
+View#1 [root]
+  View#2
+    View#3
+      Text#4 "OpenDazz"
+    List#5
+      View#6
+        View#7
+          View#8
+            View#9 [preview]
+              Text#10 [preview-text] "No recipe selected."
+              Text#11 "Placeholder: no photo is loaded and no look is applied."
+          View#12
+            Control#13 [export] (press)
+              Text#14 "Export"
+      View#15
+        View#16
+          Text#17 "Recipes"
+        View#18
+          View#19 [recipe-example-faded-warm]
+            Control#20 [select-example-faded-warm] (press)
+              Text#21 "Faded Warm (example)"
+          View#22 [recipe-adox/community/adox-color-implosion]
+            Control#23 [select-adox/community/adox-color-implosion] (press)
+              Text#24 "Adox Color Implosion"
+          View#25 [recipe-adox/community/adox-silvermax-21]
+            Control#26 [select-adox/community/adox-silvermax-21] (press)
+              Text#27 "Adox Silvermax 21"
+          View#28 [recipe-agfa/community/agfa-apx-100]
+            Control#29 [select-agfa/community/agfa-apx-100] (press)
+              Text#30 "Agfa APX 100"
+          View#31 [recipe-agfa/community/agfa-apx-25]
+            Control#32 [select-agfa/community/agfa-apx-25] (press)
+              Text#33 "Agfa APX 25"
+          View#34 [recipe-agfa/community/agfa-apx-400]
+            Control#35 [select-agfa/community/agfa-apx-400] (press)
+              Text#36 "Agfa APX 400"
+          View#37 [recipe-agfa/community/agfa-optima-100]
+            Control#38 [select-agfa/community/agfa-optima-100] (press)
+              Text#39 "Agfa Optima 100"
+          View#40 [recipe-agfa/community/agfa-optima-200]
+            Control#41 [select-agfa/community/agfa-optima-200] (press)
+              Text#42 "Agfa Optima 200"
+          View#43 [recipe-agfa/community/rt-agfa-precisa-100]
+            Control#44 [select-agfa/community/rt-agfa-precisa-100] (press)
+              Text#45 "Agfa Precisa 100"
+          View#46 [recipe-agfa/community/agfa-scala-200]
+            Control#47 [select-agfa/community/agfa-scala-200] (press)
+              Text#48 "Agfa Scala 200"
+          View#49 [recipe-agfa/community/agfa-ultra-100]
+            Control#50 [select-agfa/community/agfa-ultra-100] (press)
+              Text#51 "Agfa Ultra 100"
+          View#52 [recipe-agfa/community/rt-agfa-ultra-color-100]
+            Control#53 [select-agfa/community/rt-agfa-ultra-color-100] (press)
+              Text#54 "Agfa Ultra Color 100"
+          View#55 [recipe-agfa/community/agfa-vista-100]
+            Control#56 [select-agfa/community/agfa-vista-100] (press)
+              Text#57 "Agfa Vista 100"
+          View#58 [recipe-agfa/community/agfa-vista-200]
+            Control#59 [select-agfa/community/agfa-vista-200] (press)
+              Text#60 "Agfa Vista 200"
+          View#61 [recipe-agfa/community/agfa-vista-400]
+            Control#62 [select-agfa/community/agfa-vista-400] (press)
+              Text#63 "Agfa Vista 400"
+          View#64 [recipe-agfa/community/agfachrome-rs-100]
+            Control#65 [select-agfa/community/agfachrome-rs-100] (press)
+              Text#66 "AgfaChrome RS 100"
+          View#67 [recipe-bergger/community/bergger-pancro-400]
+            Control#68 [select-bergger/community/bergger-pancro-400] (press)
+              Text#69 "Bergger Pancro 400"
+          View#70 [recipe-cinestill/community/cinestill-400d]
+            Control#71 [select-cinestill/community/cinestill-400d] (press)
+              Text#72 "CineStill 400D"
+          View#73 [recipe-cinestill/community/cinestill-50d]
+            Control#74 [select-cinestill/community/cinestill-50d] (press)
+              Text#75 "CineStill 50D"
+          View#76 [recipe-cinestill/community/cinestill-800t]
+            Control#77 [select-cinestill/community/cinestill-800t] (press)
+              Text#78 "Cinestill 800T"
+          View#79 [recipe-cinestill/community/cinestill-800t-video]
+            Control#80 [select-cinestill/community/cinestill-800t-video] (press)
+              Text#81 "Cinestill 800T Video"
+          View#82 [recipe-emulsion/community/1980s-vhs-synthwave]
+            Control#83 [select-emulsion/community/1980s-vhs-synthwave] (press)
+              Text#84 "1980s VHS Synthwave"
+          View#85 [recipe-emulsion/community/albumen-print]
+            Control#86 [select-emulsion/community/albumen-print] (press)
+              Text#87 "Albumen Print"
+          View#88 [recipe-emulsion/community/alec-soth]
+            Control#89 [select-emulsion/community/alec-soth] (press)
+              Text#90 "Alec Soth"
+          View#91 [recipe-emulsion/community/alex-webb]
+            Control#92 [select-emulsion/community/alex-webb] (press)
+              Text#93 "Alex Webb"
+          View#94 [recipe-emulsion/community/ansel-adams-zone-system]
+            Control#95 [select-emulsion/community/ansel-adams-zone-system] (press)
+              Text#96 "Ansel Adams Zone System"

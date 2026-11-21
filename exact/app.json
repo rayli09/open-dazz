@@ -1,0 +1,28 @@
+{
+  "host": {
+    "web": {},
+    "linux": {}
+  },
+  "deploy": {
+    "store": {
+      "web": "0",
+      "linux": "0"
+    }
+  },
+  "$schema": ".exact/checkout/scripts/app.schema.json",
+  "name": "OpenDazz",
+  "short_name": "OpenDazz",
+  "id": "app.opendazz",
+  "start_url": "/",
+  "display": "standalone",
+  "app": {
+    "id": "app.opendazz",
+    "name": "OpenDazz"
+  },
+  "rust": {
+    "data": {
+      "crate": "opendazz-data",
+      "type": "opendazz_data::OpenDazz"
+    }
+  }
+}
